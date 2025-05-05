@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Esse arquivo é usado pelo processo de publicação/pacote do seu projeto Web. É possível personalizar o comportamento deste processo
+ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAsHT7auAzwUGKWMsZKeTE0gAAAAACAAAAAAAQZgAAAAEAACAAAAD/Lf2VXAi6FXgzqbu96NThQU9+jbJbbCMrxFuWtEkNigAAAAAOgAAAAAIAACAAAAAMPFGMieQi+ugauMP0Wa0UT0oOAeG1B2HjGw564VBfhoAAAABF8ql1YVhcyN/R59hZmrq5DSuEINNKu+87f0xf2AT0Ig6WCECNASO6kTmrMApguoHH3L1Z3D7kl2QB7rUO7yF9dYD9aoo6fXrNVjyNUe9xMrFLmfj6PsZDdB+BgAzS9ptgnjk+f+DDLHltdkoCgzmLY/J8edbc2zAd5pHrN5XVh0AAAABuqvls9ac3wpUuM6BmwMmvvoFaVKd4dhFgAgJ3a+H6yPOGt/FyI8TdhLYfIAcyrjnjbTHIIRpStAFhrWE/vG+S</EncryptedPassword>
+    <History>True|2024-11-28T21:51:59.4252294Z||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="ConnectionDb">
+      <Value>Server=agilium-base-demo1.mysql.database.azure.com%3b port=3306%3b UserID=usragilium%3bPassword=Abc%40123456%3bDatabase=agilium_base%3bSslMode=Required</Value>
+    </DestinationConnectionStrings>
+    <DestinationConnectionStrings Include="dbIdentityContextConnection">
+      <Value>Server=agilium-base-demo1.mysql.database.azure.com%3b port=3306%3b UserID=usragilium%3bPassword=Abc%40123456%3bDatabase=agilium_base%3bSslMode=Required</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

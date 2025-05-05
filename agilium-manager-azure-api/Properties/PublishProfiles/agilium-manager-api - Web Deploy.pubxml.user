@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Esse arquivo é usado pelo processo de publicação/pacote do seu projeto Web. É possível personalizar o comportamento deste processo
+ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAsHT7auAzwUGKWMsZKeTE0gAAAAACAAAAAAAQZgAAAAEAACAAAACgM6tzQGXMX+ol+wMdB617rlcmmPjURLenxqM2RVipOQAAAAAOgAAAAAIAACAAAAA0MUuhCA6Gt4oOhF9gPERSluVa0MSD8jI9xh/7R61b7oAAAABhi3JTCMit+mTgf4MtfFZc9fzevzyihs21L/UhmYvm3nV1d9WZnYA6fUZFxSL/OhHyJimqA3d5oM1svqFPjOmtdLFYcPDQfJK5uelzLojI4eYG076f3ntQkO7VYDPoyUifXnqVrac2Kl/2hH2eq0BI3lYShUqt2vmKf/2WbSY+zEAAAAAZNhq5TPPfrUcgV96YcCpLIRD/loT2JAABxU1YNmN3uJdv74YCMrC0F8L25S153ySLyYwCez9XPL6Sp9LZnwW2</EncryptedPassword>
+    <History>True|2024-11-28T21:47:07.6632669Z||;True|2024-11-28T18:09:24.7651971-03:00||;True|2024-11-28T18:07:12.7427309-03:00||;True|2024-11-28T18:05:03.2810685-03:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=localhost%3bDatabase=agilium_base%3bUid=root%3bport=3306</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,189 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.InventarioViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Inventario";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Inventario </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="Index" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Data
+                </th>
+                <th style="">
+                    Descrição
+                </th>
+                <th>
+                    Estoque
+                </th>
+                <th>
+                    Tipo Analise
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                var ativo = "";
+                var classeAtivo = "";
+                if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Cancelada)
+                {
+                    ativo = "Cancelada";
+                    classeAtivo = "text-danger";
+                }
+                else if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao)
+                {
+                    ativo = "Execução";
+                    classeAtivo = "text-info";
+                }
+                else if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Concluida)
+                {
+                    ativo = "Concluída";
+                    classeAtivo = "text-success";
+                }
+                else
+                {
+                    ativo = "Aberta";
+                    classeAtivo = "text-default";
+                }
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeEstoque)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoAnalise)
+                    </td>
+                    <td>
+                        <span class="@classeAtivo ">
+                            @Html.Raw(ativo)
+                        </span>
+                      
+                    </td>
+                    <td class="text-right">
+                        @{string id = item.Id.ToString();}
+                        <div class="btn-group show">
+                            <button type="button" class="btn btn-default">Ações</button>
+                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu" style="">
+                                @if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao)
+                                {                              
+                                    <a href="#" class="dropdown-item" onclick="Concluir('@id')">Concluir</a>
+                                }
+                                @if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta && item.TipoAnalise == agilium.webapp.manager.mvc.Enums.ETipoAnalise.Manual)
+                                {
+                                    <a href="#" class="dropdown-item" onclick="Inventariar('@id')" title="Mudar a situação para em execucao" id="btinventariar" name="btinventariar">Executar</a>
+                                }                       
+                                @if (( item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao) 
+                                    && item.TipoAnalise == agilium.webapp.manager.mvc.Enums.ETipoAnalise.Manual)
+                                {
+                                    <a asp-action="IndexItemEdit" asp-route-id="@item.Id" class="dropdown-item">Editar Itens</a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item" asp-action="IndexItem" asp-route-id="@item.Id" title="Itens do inventário">Itens</a>
+                                }
+
+                                <div class="dropdown-divider"></div>
+                                @if ((item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta || item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao)
+                                        && item.TipoAnalise == agilium.webapp.manager.mvc.Enums.ETipoAnalise.Manual)
+                                {
+                                    <a href="#" class="dropdown-item" onclick="CadastroProdutoEstoque()">Todos Produtos Estoque</a>
+
+                                    <a class="dropdown-item" asp-action="IncluirProdutosDisponiveisInventario" asp-route-id="@item.Id">Incluir Itens</a>
+                                    <a class="dropdown-item" asp-action="DeleteItemInventario" asp-route-id="@item.Id">Apagar Itenns</a>
+
+                                }
+                            </div>
+                        </div>
+                     
+                       @* *@
+                       
+                        @if (item.Situacao != agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Cancelada)
+                        {
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                        }                       
+                        @if(item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta || 
+                                item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao)
+                        {
+                            <a class="btn btn-danger" asp-action="Cancelar" asp-route-id="@item.Id" title="Cancelar"><spam class="fa fa-trash"></spam></a>
+                        }
+                        
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="7">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/inventario.js"></script>
+
+ }

@@ -1,0 +1,387 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.VendaReportViewModel.VendasReportViewModel
+
+@{
+    ViewData["Title"] = "Relatório Detalhado de Venda";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Relatorio Detalhado Venda </a>
+        </div>
+    </article>
+</section>
+<br/>
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmRelatVendaDet" class="sidebar-form" method="get" novalidate>
+              <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    @*    <div class="row">
+        @foreach (var item in Model.Vendas.OrderByDescending(x => x.Sequencial))
+        {
+            <div class="col-md-4">
+                <div class="card card-primary collapsed-card">
+                    <div class="card-header">
+                        <h4 class="card-title">@item.Sequencial - @item.DataVenda.ToString("dd/MM/yyyy") @item.Total.ToString("N")</h4>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="card-comment">
+                            <span class="description-text">Operador:</span>
+                            <span class="description-header">@item.Operador</span>
+                            
+                        </div>
+                        <div class="card-comment">
+                            <span class="description-text">PDV:</span>
+                            <span class="description-header">@item.Pdv</span>
+                        </div>
+                        <div class="card-comment">
+                            <span class="description-text">Seq. Caixa:</span>
+                            <span class="description-header">@item.SeqCaixa</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@item.Valor.ToString("N")</h5>
+                                    <span class="description-text">Valor</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@item.Devolucao.ToString("N")</h5>
+                                    <span class="description-text">Desconto</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@item.Acrescimo.ToString("N")</h5>
+                                    <span class="description-text">Acrescimos</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 border-right">
+                                <div class="description-block">
+                                    <h5 class="description-header">@item.Desconto.ToString("N")</h5>
+                                    <span class="description-text">Desconto</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>*@
+    <div class="row">
+        <div class="col-4">
+            <div class="card collapsed-card">
+                <div class="card-header">
+                  
+                    <h4 class="card-title">
+                        <i class="fas fa-coins"></i>
+                        Total das Vendas por Moeda
+                    </h4>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Moeda</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var moeda in Model.TotalMoedas)
+                            {
+                                var valor = moeda.Valor.ToString("N");
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => moeda.Moeda)
+                                    </td>
+                                    <td>
+                                        @Html.Raw(valor)
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card card-danger collapsed-card">
+                <div class="card-header">
+                    
+                    <h4 class="card-title">
+                        <i class="fas fa-dollar-sign"></i>
+                        Totalização
+                    </h4>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Quantidade</th>
+                                <th>Valor</th>
+                                <th>Acréscimo</th>
+                                <th>Desconto</th>
+                                <th>Devoluções</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.Raw(Model.TotalQuantidade.ToString("N"))
+                                </td>
+                                <td>
+                                    @Html.Raw(Model.SubTotal.ToString("N"))
+                                </td>
+                                <td>
+                                    @Html.Raw(Model.TotalAcrescimo.ToString("N"))
+                                </td>
+                                <td>
+                                    @Html.Raw(Model.TotalDesconto.ToString("N"))
+                                </td>
+                                <td>
+                                    @Html.Raw(Model.TotalDevolucao.ToString("N"))
+                                </td>
+                                <td>
+                                    @Html.Raw(Model.ValorTotal.ToString("N"))
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+      <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Seq.
+                </th>               
+                <th>
+                    Data
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Acréscimos
+                </th>
+                <th>
+                    Descontos
+                </th>
+                <th>
+                    Devolução
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Seq. Caixa
+                </th>
+               
+                <th>
+                    Operador
+                </th>
+                <th>
+                    Ponto de Venda
+                </th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Vendas.OrderByDescending(x => x.DataVenda).OrderByDescending(x=>x.Sequencial))
+            {   
+                var data = item.DataVenda.ToString("dd/MM/yyyy");
+                var valor = item.Valor.ToString("N") ;
+                var valorDesc = item.Desconto.ToString("N");
+                var valorAcresc = item.Acrescimo.ToString("N");
+                var total = item.Total.ToString("N");
+                var valorDevolucao = item.Devolucao.ToString("N");
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sequencial)
+                    </td>                   
+                    <td>
+                        @Html.Raw(data)
+                    </td>                 
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+                    <td>
+                        @Html.Raw(valor)
+                    </td>
+                    <td>
+                        @Html.Raw(valorAcresc)
+                    </td>
+                    <td>
+                        @Html.Raw(valorDesc)
+                    </td>
+                    <td>
+                        @Html.Raw(valorDevolucao)
+                    </td>
+                    <td>
+                        @Html.Raw(total)
+                    </td>                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SeqCaixa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Operador)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pdv)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                    <td colspan="5">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Quantidade</th>
+                                    <th>Total</th>
+                                    <th>Situação</th>
+                                </tr>                 
+                            </thead>
+                            <tbody>
+                                @foreach(var produto in item.Itens)
+                                {
+                                    var valorUnitario = produto.ValorUnitario.ToString("N");
+                                    var valorTotal = produto.Total.ToString("N");
+                                    var quant = produto.Quantidade.ToString("N");
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => produto.Produto)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(valorUnitario)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(quant)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(valorTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => produto.Situacao)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9"></td>
+                    <td colspan="2">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Moeda</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var moeda in item.Moedas)
+                                {
+                                    var valorMoeda = moeda.Valor.ToString("N");
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => moeda.Moeda)
+                                        </td>
+                                        <td>
+                                            @Html.Raw(valorMoeda)
+                                        </td>
+                                    </tr>
+                                }
+                                
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            
+
+        </tfoot>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

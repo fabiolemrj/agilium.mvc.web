@@ -1,0 +1,97 @@
+﻿
+@model agilium.webapp.manager.mvc.ViewModels.RegisterModel
+@{
+    ViewData["Title"] = "Registro novo usuário"; 
+    Layout = null;
+}
+
+
+<h1>@ViewData["Title"]</h1>
+
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agilium Painel</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+
+</head>
+
+<body class="hold-transition login-page">
+    <div class="register-box1" style="width: 600px;">
+        <div class="lockscreen-logo">
+            <a href="#">Agilium Painel</a>
+        </div>
+        <vc:Summary></vc:Summary>
+        <div class="card">
+            <div class="card-body login-card-body">
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <h4>Criar nova conta.</h4>
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Nome"></label>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CPF"></label>
+                        <input asp-for="CPF" class="form-control" />
+                        <span asp-validation-for="CPF" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input type="password" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input type="password" asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <!-- AdminLTE App -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+</body>
+</html>
+
+
+@**@
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

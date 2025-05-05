@@ -1,0 +1,123 @@
+﻿@model List<agilium.webapp.manager.mvc.ViewModels.VendaReportViewModel.VendaDiferencaCaixaReport>
+
+@{
+    ViewData["Title"] = "Relatório de Diferença de Caixa";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Relatorio Diferença caixa</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmRelatVendaDiferenca" class="sidebar-form" method="get" novalidate>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<table class="table table-hover">
+    <thead class="table thead-dark">
+        <tr>
+            <th>
+                Seq.
+            </th>
+            <th>
+                Operador
+            </th>
+            <th>
+                Valor
+            </th>
+            <th>
+                Classificação
+            </th>
+            <th>
+                Data/hora Abertura
+            </th>
+            <th>
+                Data/hora Fechamento
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var classificacao = "Faltando";
+            var classe = "text-danger";
+
+            if(item.Classificacao != 1)
+            {
+                classificacao = "Sobrando";
+                classe = "text-success";
+            }
+
+            <tr>
+                <td>
+                    @Html.Raw(item.SQCAIXA)
+                </td>
+                <td>
+                    @Html.Raw(item.NMFUNC)
+                </td>
+                <td>
+                    @Html.Raw(item.Valor.ToString("N"))
+                </td>
+                <td>
+                    <span class="@classe">@Html.Raw(classificacao)</span>                    
+                </td>
+                <td>
+                    @Html.Raw(item.DTHRABT.ToString("dd/MM/yyyy"))
+                </td>
+                <td>
+                    @Html.Raw(item.DTHRFECH.ToString("dd/MM/yyyy"))
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

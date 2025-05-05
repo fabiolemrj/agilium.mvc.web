@@ -1,0 +1,523 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.CompraViewModel.ImportacaoXmlNFE.NFeProc
+@{
+    ViewData["Title"] = "Importação Arquivo XML NFe";
+}
+<div id="resultado">
+    <h5>@ViewData["Title"]</h5>
+    <hr />
+    <section class="barra-de-menu-principal">
+        <div class="barra-de-botoes-menu-principal">
+
+            <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+            <a href="#" type="button" title="Salvar dados" id="btnSalvar" class="salvar" onclick="Salvar()"><span class="fa fa-save sns-tool-action"></span></a>
+
+            <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        </div>
+
+        <article>
+            <div class="barra-de-posicao-atual" id="breadcrumb">
+                <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+                <a href="@Url.Action("Index","Compra")"><i class="fa fa-dashboard"></i> Compra</a> /
+                <a href="#">XML NFE</a>
+            </div>
+        </article>
+    </section>
+    <br />
+    <div class="callout callout-danger">
+        <h4>Dados da NFE do arquivo XML selecionado, que será importado para o cadastro de compras!</h4>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Importar" id="frmXMLImportada" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+                <vc:Summary></vc:Summary>
+
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Compra</span>
+                            <span class="info-box-number">@ViewBag.NomeCompra</span>
+                        </div>
+                    </div>
+              
+                <div class="card" id="labelcardGerais">
+                    <div class="card-header">
+                        <h3 class="card-title text-warning">Conferência</h3>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" asp-for="idCompra" />
+                         <input type="hidden" asp-for="sucesso" />
+                        <input type="hidden" asp-for="ProtNFe.versao" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.tpAmb" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.chNFe" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.cStat" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.dhRecbto" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.digVal" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.nProt" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.verAplic" />
+                        <input type="hidden" asp-for="ProtNFe.InfProt.xMotivo" />
+
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorOutros" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorICMS" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIPI" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorTotalTributacao" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorBaseCalculoCst" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorBaseCalculoICMS" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorDesconto" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorFrete" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorICMSRetido" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorSeguro" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorTotal" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorTotalProduto" />
+
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.infRespTec.email" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.infRespTec.xContato" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.infRespTec.fone" />
+                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.infRespTec.CNPJ" />
+
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="form-group">
+                                    <input asp-for="CaminhoArquivo" class="form-control" readonly />
+                                    <input type="hidden" asp-for="CaminhoArquivo" />
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <button type="button" class="nav-link btn btn-outline-secondary" name="selecionarArquivo" id="selecionarArquivo" title="importar arquivo XML NFe" onclick="AbrirArquivo()"><i class="fas fa-file-import"></i></button>
+                                </div>
+                            </div>
+                             <div class="col-2">
+                                <div class="form-group">
+                                    <input type="file" class="form-control importar" accept="text/xml" id="arquivoNFe" name="arquivoNFe" onchange="ImportarArquivo(this.value);" style="visibility:hidden" />
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-primary card-outline card-outline-tabs">
+                            <div class="card-header p-0 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link  active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Identificação</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Emitente</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Destinatario</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Itens</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-infCompl-tab" data-toggle="pill" href="#custom-tabs-four-infCompl" role="tab" aria-controls="custom-tabs-four-infCompl" aria-selected="false">Dados adicionais</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="custom-tabs-four-total-tab" data-toggle="pill" href="#custom-tabs-four-total" role="tab" aria-controls="custom-tabs-four-total" aria-selected="false">Impostos</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-four-tabContent">
+                                    <div class="tab-pane fade  active show" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.natOp" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.natOp" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.natOp" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.nNF" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.nNF" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.nNF" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.serie" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.serie" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.serie" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.dhEmi" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.dhEmi" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Identificacao.dhEmi" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xNome" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xNome" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xNome" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xFant" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xFant" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.xFant" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.CNPJ" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.CNPJ" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.CNPJ" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.IE" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.IE" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.CNPJ" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Endereço
+                                                    </div>
+                                                    <div class="card-body">
+                                                         <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.CEP" />
+                                                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xPais" />
+                                                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.cPais" />
+                                                        <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.fone" />
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xLgr" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xLgr" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xLgr" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.nro" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.nro" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.nro" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xBairro" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xBairro" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xBairro" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xMun" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xMun" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.xMun" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.UF" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.UF" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Emitente.Endereco.UF" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.xNome" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.xNome" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.xNome" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.CNPJ" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.CNPJ" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.CNPJ" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.email" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.email" class="form-control" readonly />
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.email" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Endereço
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-10">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xLgr" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xLgr" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xLgr" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.nro" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.nro" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.nro" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xBairro" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xBairro" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xBairro" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xMun" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xMun" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.xMun" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <div class="form-group">
+                                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.UF" id="labelDatacompra"></label>
+                                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.UF" class="form-control" readonly />
+                                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.Destinatario.Endereco.UF" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+
+                                        <table class="table table-hover">
+                                            <thead class="table thead-dark">
+                                                <tr>
+                                                    <th>Item</th>
+                                                    <th style="min-width:200px">Descrição produto</th>
+                                                    <th>Unidade</th>
+                                                    <th>Quant.</th>
+                                                    <th>Vl Unitario</th>
+                                                    <th>Vl. Total</th>
+                                                    <th>Cod. EAN</th>
+                                                    <th>Cod. NCM</th>
+                                                    <th>Cod. CFOP</th>
+                                                    <th>Cod. CEST</th>
+                                                    <th>BC ICMS</th>
+                                                    <th>Vl ICMS</th>
+                                                    <th>ICMS ST</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @for (int i = 0; i < Model.NotaFiscalEletronica.InformacoesNFe.Detalhe.Count;i++)
+                                                {
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.CST" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vICMS" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.modBC" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.pICMS" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vBC" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.orig" />
+
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.COFINS.COFINSAliq.vBC" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.COFINS.COFINSAliq.CST" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.COFINS.COFINSAliq.vCOFINS" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.COFINS.COFINSAliq.pCOFINS" />
+                                                    
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.vTotTrib" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.Pis.PISAliq.CST" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.Pis.PISAliq.vBC" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.Pis.PISAliq.vPIS" />
+                                                    <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.Pis.PISAliq.pPIS" />
+                                            
+                                                    <tr>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].nItem" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].nItem</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.xProd" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.xProd</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.uCom" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.uCom</span>
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.qCom" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.qCom</span>
+                                                            
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.vUnCom" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.vUnCom</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.cEAN" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.cEAN</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.qCom" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.qCom</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.NCM" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.NCM</span>
+                                                       
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.CFOP" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.CFOP</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.CEST" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].Produto.CEST</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vBC" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vBC</span>
+                                                        </td>
+                                                           <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vICMS" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.CST</span>
+                                                        </td>
+                                                        <td>
+                                                            <input type="hidden" asp-for="@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vICMS" />
+                                                            <span>@Model.NotaFiscalEletronica.InformacoesNFe.Detalhe[i].imposto.ICMS.ICMS00.vICMS</span>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-four-infCompl" role="tabpanel" aria-labelledby="custom-tabs-four-infCompl-tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.InformacaoAdicional.infCpl" id="labelDatacompra"></label>
+                                                    <textarea class="form-control" rows="6" asp-for="NotaFiscalEletronica.InformacoesNFe.InformacaoAdicional.infCpl" readonly></textarea>
+                                                    <input type="hidden" asp-for="NotaFiscalEletronica.InformacoesNFe.InformacaoAdicional.infCpl" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="custom-tabs-four-total" role="tabpanel" aria-labelledby="custom-tabs-four-total-tab">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorBaseCalculoICMS" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorBaseCalculoICMS" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorICMS" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorICMS" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                              <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIcmsSub" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIcmsSub" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                              <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIcmsSub" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIcmsSub" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorFrete" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorFrete" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                              <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorSeguro" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorSeguro" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                              <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorDesconto" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorDesconto" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                              <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorOutros" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorOutros" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIPI" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorIPI" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                             <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorTotal" id="labelDatacompra"></label>
+                                                    <input asp-for="NotaFiscalEletronica.InformacoesNFe.TotalNFE.IcmsTotal.ValorTotal" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-primary" id="btnSendForm" style="visibility:hidden" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/compra.js"></script>
+
+    <script>
+
+    </script>
+ }

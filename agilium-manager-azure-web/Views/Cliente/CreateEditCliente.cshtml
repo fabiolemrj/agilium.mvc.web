@@ -1,0 +1,230 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Cliente.ClienteViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = inclusao ? "Novo" : "Editar";
+    ViewData["Title"] = "Cliente";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Cliente")"><i class="fa fa-dashboard"></i> Clientes</a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="@ViewBag.acao" id="CreateEditCliente" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="TipoPessoa" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (ViewBag.operacao == "I")
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" id="labelCodigo"></label>
+                                <input asp-for="Codigo" class="form-control" size="6" />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        @if (ViewBag.operacao == "E")
+                        {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="TipoPessoa" id="labeltpPessoa"></label>
+                                    <select asp-for="TipoPessoa"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoPessoa>()"
+                                            class="form-control" disabled id="tpPessoaInput"></select>
+                                    <span asp-validation-for="TipoPessoa" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="TipoPessoa" id="labeltpPessoa"></label>
+                                    <select asp-for="TipoPessoa"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoPessoa>()"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="TipoPessoa" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        }
+                    
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label asp-for="Nome" id="labelRazSoc"></label>
+                                <input asp-for="Nome" class="form-control" size="70" />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="PublicaEmail" id="labelativo"></label>
+                                <select asp-for="PublicaEmail"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="PublicaEmail" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="PublicaSMS" id="labelativo"></label>
+                                <select asp-for="PublicaSMS"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="PublicaSMS" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        @if (ViewBag.operacao == "E")
+                        {                           
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Situacao" id="labelativo"></label>
+                                        <select asp-for="Situacao"
+                                            asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EAtivo>()"
+                                                class="form-control"></select>
+                                        <span asp-validation-for="Situacao" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-3">
+                                <input type="hidden" asp-for="Situacao" />
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="divPF">
+                            @await Html.PartialAsync("_clientePF.cshtml")
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="divPJ">
+                            @await Html.PartialAsync("_clientePJ.cshtml")
+                        </div>
+                    </div>
+                    <div class="card card-primary card-outline card-tabs">
+                        <div class="card-header p-0 pt-1">
+                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tabEndereco" data-toggle="pill" href="#divTabEndereco" role="tab" aria-controls="divTabEndereco" aria-selected="true">Endereço</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tabEnderecoCobranca" data-toggle="pill" href="#divTabEnderecoCobranca" role="tab" aria-controls="divTabEnderecoCobranca" aria-selected="false">Endereço Cobrança</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tabEnderecoFaturamento" data-toggle="pill" href="#divTabEnderecoFaturamento" role="tab" aria-controls="divTabEnderecoFaturamento" aria-selected="false">Endereço Faturamento</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tabEnderecoEntrega" data-toggle="pill" href="#divTabEnderecoEntrega" role="tab" aria-controls="divTabEnderecoEntrega" aria-selected="false">Endereço Entrega</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="tab-pane fade show active" id="divTabEndereco" role="tabpanel" aria-labelledby="tabEndereco">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @await Html.PartialAsync("_endereco.cshtml")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="divTabEnderecoCobranca" role="tabpanel" aria-labelledby="tabEnderecoCobranca">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @await Html.PartialAsync("_enderecoCobranca.cshtml")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="divTabEnderecoFaturamento" role="tabpanel" aria-labelledby="tabEnderecoFaturamento">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @await Html.PartialAsync("_enderecoFaturamento.cshtml")
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="divTabEnderecoEntrega" role="tabpanel" aria-labelledby="tabEnderecoEntrega">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @await Html.PartialAsync("_enderecoEntrega.cshtml")
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>                  
+                    @if (!inclusao)
+                    {
+                        <div class="row">
+                            <div class="col-md-12" id="ContatoTarget">
+                                @await Html.PartialAsync("_contatos.cshtml")
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@*<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>*@
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/cliente.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            SetModal();
+        });
+    </script>
+ }

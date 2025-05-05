@@ -1,0 +1,89 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.AdicionarListaProdutosDisponiveisViewModel
+@using agilium.webapp.manager.mvc.Extensions
+@{
+    ViewData["Title"] = "Produtos Disponiveis para Inventario";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+            <a href="#"> Incluir Produtos </a>
+        </div>
+    </article>
+</section>
+<form asp-action="IncluirProdutosDisponiveisInventario" class="sidebar-form" method="post">
+    <div class="card">
+        <div class="card-head">
+            <div class="col-md-12" id="areaFiltro">
+                <vc:Summary></vc:Summary>
+                <input type="hidden" asp-for="idInventario" />
+                <input type="hidden" asp-for="IDEMPRESA" />
+                <input type="hidden" asp-for="Situacao" />
+                <input type="hidden" asp-for="NomeInventario" />
+                <div class="row">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Inventário</span>
+                            <span class="info-box-number">@Model.NomeInventario</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="resultado">
+                <table class="table table-hover" id="tabela">
+                    <thead class="table thead-dark">
+                        <tr>
+                            <th>Codigo</th>
+                            <th style="min-width:300px">
+                                Produto
+                            </th>
+                            <th>Seleção</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Produtos.Count; i++)
+                        {
+                            <tr>
+
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Produtos[i].Codigo" class="form-control" />
+                                    @Model.Produtos[i].Codigo
+                                </td>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Produtos[i].Nome" class="form-control" />
+                                    @Model.Produtos[i].Nome
+                                </td>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Produtos[i].Id" class="form-control" />
+                                    <input type="checkbox" asp-for="@Model.Produtos[i].Selecionado">
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/inventario.js"></script>
+
+ }

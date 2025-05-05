@@ -1,0 +1,77 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Cliente.ClienteViewModel
+
+    <div class="">
+    <input type="hidden" asp-for="EnderecoFaturamento.Id" />
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Cep" class="control-label" id="labelCep"></label>
+                    <input asp-for="EnderecoFaturamento.Cep" class="form-control cep faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Cep" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Logradouro" class="control-label" id="labelEndereco"></label>
+                <input asp-for="EnderecoFaturamento.Logradouro" class="form-control Logradouro faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Logradouro" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Numero" class="control-label" id="labelNumero"></label>
+                <input asp-for="EnderecoFaturamento.Numero" class="form-control faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Numero" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Complemento" class="control-label" id="labelComplemento"></label>
+                <input asp-for="EnderecoFaturamento.Complemento" class="form-control faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Complemento" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Bairro" class="control-label" id="labelBairro"></label>
+                <input asp-for="EnderecoFaturamento.Bairro" class="form-control Bairro faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Bairro" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Cidade" class="control-label" id="labelCidade"></label>
+                <input asp-for="EnderecoFaturamento.Cidade" class="form-control Cidade faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.Cidade" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.Uf" class="control-label" id="labelUf"></label>
+                    <select asp-for="EnderecoFaturamento.Uf"
+                            asp-items="ViewBag.estados"
+                        class="form-control Uf faturamento"></select>
+                    <span asp-validation-for="EnderecoFaturamento.Uf" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-10">
+                <div class="form-group">
+                    <label asp-for="EnderecoFaturamento.PontoReferencia" class="control-label" id="labelPontoRef"></label>
+                <input asp-for="EnderecoFaturamento.PontoReferencia" class="form-control faturamento" />
+                    <span asp-validation-for="EnderecoFaturamento.PontoReferencia" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>

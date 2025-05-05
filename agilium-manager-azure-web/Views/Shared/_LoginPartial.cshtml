@@ -1,0 +1,91 @@
+﻿
+@inject agilium.webapp.manager.mvc.Interfaces.IAspNetUser appUser
+
+
+@{
+    var token = appUser.ObterUserId();
+}
+    <ul class="navbar-nav ml-auto">
+        @if (appUser.EstaAutenticado())
+        {
+      
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-user mr-2"></i>
+                    @appUser.ObterUserNome()
+
+
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                   
+                    <div class="dropdown-divider"></div>
+                    <a class="nav-link text-dark" id="changePassword" asp-controller="Identidade" asp-action="mudarsenha">
+                        <i class="fas fa-retweet mr-2"></i>Alterar Senha
+                    </a>
+                    <a class="nav-link text-dark" id="usuario" asp-controller="Usuario" asp-action="ObterUsuario" asp-route-idUserAspNet="@appUser.ObterUserId()">
+                        <i class="fas fa-address-book mr-2"></i>Editar Perfil
+                    </a>
+                    <a class="nav-link text-dark" id="fotoPerfil" asp-controller="Usuario" asp-action="ExibirImagemUsuario" asp-route-idUserAspNet="@appUser.ObterUserId()">
+                        <i class="fas fa-user-circle mr-2"></i>Foto do Perfil
+                      </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="nav-link text-dark" id="logout1" asp-controller="Identidade" asp-action="logout">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                    </a>
+                  
+                </div>
+            </li>
+        }
+        else
+        {
+            @*<li class="nav-item">
+                <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>*@
+
+            <li class="nav-item">
+                <a class="nav-link text-dark" id="login" asp-controller="Identidade" asp-action="Login"> Login</a>
+                @*  <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>*@
+            </li>
+        }
+
+
+        <!-- Notifications Dropdown Menu -->
+
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+
+            </a>
+        </li>
+        @*<li class="nav-item">
+            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                <i class="fas fa-th-large"></i>
+            </a>
+        </li>*@
+    </ul>
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        ObterFoto();
+    })
+
+     function ObterFoto() {
+              const id ="@appUser.ObterUserId()";
+        //alert(id);
+        $.get('/Usuario/ExibirImagemUsuarioJson?idUserAspNet=' + id, null, function (response) {
+            var objeto = JSON.parse(JSON.stringify(response));
+            if (objeto.error) {
+                alert(objeto.error)
+                return;
+            }
+
+            $("#fotoUsuario").attr("src", objeto.imagem);
+
+        }).fail(function (err) {
+            toastr.error('ERRO: ' + err);
+        });
+        }
+</script>

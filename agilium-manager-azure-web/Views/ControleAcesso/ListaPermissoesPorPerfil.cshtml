@@ -1,0 +1,58 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.CaManagerViewModel.CaPermissaoPerfilViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Permissões";
+
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="PerfilManagerIndex" asp-controller="ControleAcesso"><i class="fa fa-dashboard"></i> Perfil </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Permissões </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="ListaPermissoesPorPerfil" class="sidebar-form" method="post">
+            <div class="row">
+                <div class="info-box" id="areaPerfil">
+                    <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Perfil</span>
+                        <span class="info-box-number">@Model.Perfil.Descricao</span>
+             
+                        <input type="hidden" asp-for="Perfil.IdPerfil" />
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+            <div class="col-12">
+                <div class="card">
+                    <div class="row">                   
+                        <div id="tree"></div>
+                    </div>                  
+                </div>
+            </div>
+                      
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Ferramentas/perfil.js"></script>
+    
+    <script type="text/javascript">
+      
+    </script>
+}

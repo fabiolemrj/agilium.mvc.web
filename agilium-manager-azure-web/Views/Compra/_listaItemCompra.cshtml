@@ -1,0 +1,121 @@
+﻿@model IEnumerable<agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraItemViewModel>
+
+@{
+    var importada = false;
+    importada = (ViewBag.importada != null || ViewData["importada"] != null)? (ViewBag.importada || (bool)ViewData["importada"] == true): false;
+ 
+}
+<div>
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>Cod Produto</th>
+                <th style="width:300px">Produto</th>
+                <th>Estoque</th>
+                <th>Quant.</th>
+                <th>Unid.</th>
+                <th>Rel Compra/venda</th>
+                <th>Valor Unitário</th>
+                <th>Valor Total</th>
+                <th>Preço Venda</th>
+                <th>CFOP</th>
+                <th>Estoque</th>
+                <th>Descr. NF</th>
+                <th>CEST</th>
+                <th>NCM</th>
+                <th>EAN</th>
+                <th>CST ICMS</th>
+                <th>CST Cofins</th>
+                <th>CST PIS</th>
+                <th>CST IPI</th>
+                <th>Impostos</th>
+                @*   <th>Aliq. ICMS</th>
+                <th>Aliq. Cofins</th>
+                <th>Aliq. PIS</th>
+                <th>Aliq. IPI</th>
+                <th>Base Calc. ICMS</th>
+                <th>Base Calc. Cofins</th>
+                <th>Base Calc. PIS</th>
+                <th>Base Calc. IPI</th>
+                <th>Valor ICMS</th>
+                <th>Valor IPI</th>
+                <th>Valor PIS</th>
+                <th>Valor Cofins</th>
+                <th>Valor Outros</th>*@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x => x.CodigoProdutoFornecedor))
+            {
+                var valorAliquotaIcms = item.ValorAliquotaIcms.HasValue ? item.ValorAliquotaIcms.Value : 0;
+                var valorAliquotaCofins = item.ValorAliquotaCofins.HasValue ? item.ValorAliquotaCofins.Value : 0;
+                var valorAliquotaIpi = item.ValorAliquotaIpi.HasValue ? item.ValorAliquotaIpi.Value : 0;
+                var valorAliquotaPis = item.ValorAliquotaPis.HasValue ? item.ValorAliquotaPis.Value : 0;
+                var valorBaseCalculoCofins = item.ValorBaseCalculoCofins.HasValue ? item.ValorBaseCalculoCofins.Value : 0;
+                var valorBaseCalculoIcms = item.ValorBaseCalculoIcms.HasValue ? item.ValorBaseCalculoIcms.Value : 0;
+                var valorBaseCalculoIpi = item.ValorBaseCalculoIpi.HasValue ? item.ValorBaseCalculoIpi.Value : 0;
+                var valorBaseCalculoPis = item.ValorBaseCalculoPis.HasValue ? item.ValorBaseCalculoPis.Value : 0;
+                var valorBaseRetido = item.ValorBaseRetido.HasValue ? item.ValorBaseRetido.Value : 0;
+                var valorCofins = item.ValorCofins.HasValue ? item.ValorCofins.Value : 0;
+                var valorIcms = item.ValorIcms.HasValue ? item.ValorIcms.Value : 0;
+                var valorIpi = item.ValorIpi.HasValue ? item.ValorIpi.Value : 0;
+                var valorNovoPrecoVenda = item.ValorNovoPrecoVenda.HasValue ? item.ValorNovoPrecoVenda.Value : 0;
+                var valorUnitario = item.ValorUnitario.HasValue ? item.ValorUnitario.Value : 0;
+                var valorTotal = item.ValorTotal.HasValue ? item.ValorTotal.Value : 0;
+                var valorPis = item.ValorPis.HasValue ? item.ValorPis.Value : 0;
+                var valorOUTROS = item.ValorOUTROS.HasValue ? item.ValorOUTROS.Value : 0;
+
+                var impostos = valorAliquotaIcms + valorAliquotaCofins + valorAliquotaIpi + valorAliquotaPis + valorAliquotaPis + valorBaseCalculoCofins +
+                valorBaseCalculoIcms + valorBaseCalculoIpi + valorBaseCalculoPis + valorBaseRetido + valorCofins + valorIcms + valorIcms + valorIpi +
+                valorPis;
+
+                <tr>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoProdutoFornecedor)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NomeProduto)</td>
+                    <td> @Html.DisplayFor(modelItem => item.NomeEstoque)</td>
+                    <td> @Html.DisplayFor(modelItem => item.Quantidade)</td>
+                    <td> @Html.DisplayFor(modelItem => item.SGUN)</td>
+                    <td> @Html.DisplayFor(modelItem => item.Relacao)</td>
+                    <td> @Html.Raw(valorUnitario.ToString("N"))</td>
+                    <td> @Html.Raw(valorTotal.ToString("N"))</td>
+                    <td> @Html.Raw(valorNovoPrecoVenda.ToString("N"))</td>
+                    <td> @Html.DisplayFor(modelItem => item.NumeroCFOP)</td>
+                    <td> @Html.DisplayFor(modelItem => item.NomeEstoque)</td>
+                    <td> @Html.DisplayFor(modelItem => item.DescricaoProdutoCompra)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoCEST)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoNCM)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoEan)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoCstIcms)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoCstCofins)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
+                    <td> @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
+                    <td> @Html.Raw(impostos.ToString("N"))</td>
+                    @*         <td> @Html.Raw(valorAliquotaIcms?.ToString("N"))</td>
+                <td> @Html.Raw(valorAliquotaCofins?.ToString("N"))</td>
+                <td> @Html.Raw(valorAliquotaPis?.ToString("N"))</td>
+                <td> @Html.Raw(valorAliquotaIpi?.ToString("N"))</td>
+                <td> @Html.Raw(valorBaseRetido?.ToString("N"))</td>
+                <td> @Html.Raw(valorBaseCalculoIcms?.ToString("N"))</td>
+                <td> @Html.Raw(valorBaseCalculoCofins?.ToString("N"))</td>
+                <td> @Html.Raw(valorBaseCalculoPis?.ToString("N"))</td>
+                <td> @Html.Raw(valorBaseCalculoIpi?.ToString("N"))</td>
+                <td> @Html.Raw(valorIpi?.ToString("N"))</td>
+                <td> @Html.Raw(valorPis?.ToString("N"))</td>
+                <td> @Html.Raw(valorCofins?.ToString("N"))</td>
+                <td> @Html.Raw(valorOUTROS?.ToString("N"))</td>*@
+                    <td>
+                        <a class="btn btn-default" asp-action="EditarItemModal" asp-route-id="@item.Id" title="Editar dados básicos do item" data-modal-local="0"><spam class="fas fa-edit"></spam></a>
+                       
+                        @if (!importada)
+                        {
+                            <a class="btn btn-warning" asp-action="EditarItem" asp-route-id="@item.Id" title="Editar item Completo"><spam class="fa fa-pencil-alt"></spam></a>
+                            <a class="btn btn-danger" asp-action="Apagar" asp-route-id="@item.Id" title="Apagar Item"><spam class="fas fa-window-close"></spam></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

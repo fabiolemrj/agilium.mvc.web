@@ -1,0 +1,95 @@
+﻿@model List<agilium.webapp.manager.mvc.ViewModels.EstoqueViewModel.EstoqueHistoricoViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Historico de Movimentação Estoque";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Index" asp-controller="Produto" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Produto"><i class="fa fa-dashboard"></i> Produto </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Movimentação Estoque </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="ListaPreco" class="sidebar-form" method="get">
+            <div class="row">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Produto</span>
+                        <span class="info-box-number">@ViewBag.NomeProduto</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Quantidade
+                </th>
+                <th>
+                    Usuario
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var tipo = item.TipoHistorico == 1? "Entrada":"Saída";
+                
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHora)
+                    </td>
+                    <td>
+                        @Html.Raw(tipo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeUsuario)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/produto.js"></script>
+ }

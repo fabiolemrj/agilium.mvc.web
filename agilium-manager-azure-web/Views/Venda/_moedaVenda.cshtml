@@ -1,0 +1,50 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.VendaViewModel.VendaDetalhesViewModel
+
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Moeda
+                </th>
+                <th>
+                    Valor Pago
+                </th>
+                <th>
+                    Troco
+                </th>
+                <th>
+                    NSU
+                </th>
+                <th>
+                    Parcelas
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.VendaMoedas)
+            {
+                var valorFnal = item.ValorPago.HasValue ? item.ValorPago.Value.ToString("N") : "";
+                var troco = item.ValorTroco.HasValue ? item.ValorTroco.Value.ToString("N") : "";
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MoedaNome)
+                    </td>
+                    <td>
+                        @Html.Raw(valorFnal)
+                    </td>
+                    <td>
+                        @Html.Raw(troco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NSU)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroParcela)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

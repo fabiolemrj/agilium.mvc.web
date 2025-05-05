@@ -1,0 +1,105 @@
+﻿@model List<agilium.webapp.manager.mvc.ViewModels.Cliente.ClientePrecoViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Preço do produto Diferenciado por cliente";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="AdicionarPrecoCliente" asp-route-idProduto="@ViewBag.idProduto" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Index" asp-controller="Produto" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Produto"><i class="fa fa-dashboard"></i> Produto </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Preço diferenciado por cliente </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="ListaPreco" class="sidebar-form" method="get">
+            <div class="row">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Produto</span>
+                        <span class="info-box-number">@ViewBag.NomeProduto</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Diferença
+                </th>
+                <th>
+                    Tipo Valor
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Valor Final
+                </th>
+                <th>
+                    Incluido por
+                </th>
+                <th>
+                    Data/Hora
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var preco = item.Valor;
+                var valorFinal = item.ValorFinal;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeCliente)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescricaoTipoDiferenca)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescricaoTipoValor)
+                    </td>
+                    <td>
+                        @Html.Raw(preco.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.Raw(valorFinal.ToString("C"))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usuario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Datahora)
+                    </td>
+                    <td class="text-right">
+                        <a asp-action="DeleteClientePreco" class="btn btn-danger" title="Apagar " asp-route-id="@item.Id"><spam class="fa fa-trash"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

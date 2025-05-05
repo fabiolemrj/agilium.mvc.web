@@ -1,0 +1,90 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.EmpresasAssociadasViewModel
+
+@{
+    Layout = null;
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = "Autorização de Empresa";
+    ViewData["Title"] = operacao;
+}
+
+
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AssociarEmpresa" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="formEmpresaAuth">
+            <vc:Summary></vc:Summary>
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">Empresas Associadas</h3>
+                </div>
+                <div class="card-body">
+                    <div class="callout callout-success">
+                        <h5><i class="fas fa-user mr-1"></i> @Model.UsuarioSelecionado</h5>
+                    </div>
+                    @if (!Model.EmpresasSelecao.Any())
+                    {
+                        <h5 class="text-danger">Não existe(m) Empresa(s) cadastrada(s)</h5>
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Model.EmpresasSelecao.Count(); i++)
+                        {
+                            <div class="form-group clearfix">
+                                <div class="icheck-primary d-inline">
+                                    <input type="hidden" asp-for="@Model.EmpresasSelecao[i].IDEMPRESA" />
+                                    <input type="hidden" asp-for="@Model.EmpresasSelecao[i].IDUSUARIO" />
+
+                                    <div class="form-group clearfix">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox" asp-for="@Model.EmpresasSelecao[i].Selecionado">
+                                            <label asp-for="@Model.EmpresasSelecao[i].Selecionado">
+                                                @Model.EmpresasSelecao[i].NomeEmpresa
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                    @*@foreach (var item in Model.EmpresasSelecao)
+        {
+            <div class="form-group clearfix">
+                <div class="icheck-primary d-inline">
+                    <input type="checkbox" asp-for="@item.Selecionado">
+                    <label asp-for="@item.Selecionado">
+                        @item.NomeEmpresa
+                    </label>
+                </div>
+            </div>
+        }*@
+
+                    <div class="form-group">
+                        <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+
+                <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+                    <i class="fas fa-window-close"></i>
+                </a>
+
+                <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvarModal" title="Confirmar operação">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+      
+</script>

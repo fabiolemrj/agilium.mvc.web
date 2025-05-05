@@ -1,0 +1,182 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.ProdutoViewModel.ProdutoViewModel
+@{
+    ViewData["Title"] = "Produto";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Produto")"><i class="fa fa-dashboard"></i> Produto</a> /
+            <a href="#"> Apagar </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="callout callout-danger">
+    <h3>Você deseja realmente apagar este Produto?</h3>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form id="frmDeleteDep" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="idEmpresa" />
+            <input type="hidden" asp-for="Nome" />
+            <input type="hidden" asp-for="Situacao" />
+            <input type="hidden" asp-for="Codigo" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">Apagar Registro</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" id="labelCodigo"></label>
+                                <input asp-for="Codigo" class="form-control" disabled />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="Situacao" id="labelativo"></label>
+                                    <select asp-for="Situacao"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EAtivo>()"
+                                            class="form-control" disabled></select>
+                                    <span asp-validation-for="Situacao" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="idEmpresa" id="labelEmpresa"></label>
+                                <select asp-for="idEmpresa"
+                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="idEmpresa" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="Nome" id="labelDesc"></label>
+                                <input asp-for="Nome" class="form-control" disabled/>
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Volume" id="labelVolume"></label>
+                                <input asp-for="Volume" class="form-control" disabled/>
+                                <span asp-validation-for="Volume" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IDDEP" id="labelDep"></label>
+                                <select asp-for="IDDEP"
+                                        asp-items="@Model.Departamentos.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDDEP" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IDMARCA" id="labelMarca"></label>
+                                <select asp-for="IDMARCA"
+                                        asp-items="@Model.Marcas.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDMARCA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IDGRUPO" id="labelGrupo"></label>
+                                <select asp-for="IDGRUPO"
+                                        asp-items="@Model.Grupos.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDGRUPO" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IDSUBGRUPO" id="labelSubGrupo"></label>
+                                <select asp-for="IDSUBGRUPO"
+                                        asp-items="@Model.SubGrupos.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDSUBGRUPO" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Tipo" id="labelTipo"></label>
+                                <select asp-for="Tipo"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoProduto>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="Tipo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Categoria" id="labelCateg"></label>
+                                <select asp-for="Categoria"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ECategoriaProduto>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="Categoria" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="OrigemProduto" id="labelOrigem"></label>
+                                <select asp-for="OrigemProduto"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EOrigemProduto>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="OrigemProduto" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="~/local/cadastros/principal/produto.js"></script>
+
+    <script>
+
+        $(function () {
+            $('.money').mask('##0,00', { reverse: true });
+
+            // $('.percent').mask('##0,00', { reverse: true });
+        });
+    </script>
+ }

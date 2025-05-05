@@ -1,0 +1,8 @@
+is_global = true
+build_property.RootNamespace = agilium_manager_git_azure_infra
+build_property.ProjectDir = C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-git-azure-infra\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 

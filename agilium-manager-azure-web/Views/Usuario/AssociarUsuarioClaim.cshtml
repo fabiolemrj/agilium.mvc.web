@@ -1,0 +1,388 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+@model agilium.webapp.manager.mvc.ViewModels.AssociarUsuarioClaims
+
+@{
+
+    ViewData["Title"] = "Associar Usuário a Claims";
+
+    TempData.Keep("lista");
+}
+
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a asp-action="Index" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action" id="btnSalvar" onclick="Salvar()"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("ObterTodosUsuarios","Usuario")"><i class="fa fa-dashboard"></i> Usuarios </a> /
+            <a href="#">Associar Usuario a Claims</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form  id="frmEdit" >
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idUserAspNet" id="idUserAspNet"/>
+            <input type="hidden" asp-for="AcoesClaims" />
+
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Usuario Selecionado</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Nome" class="control-label" id="labelnome"></label>
+                                <input asp-for="Nome" class="form-control" readonly />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="claimSelecionada" class="control-label" id="labelClaim"></label>
+                                <select asp-for="claimSelecionada"
+                                        asp-items="ViewBag.claims"
+                                        class="form-control" id="claimSelecionada">
+                                    <option value="">Selecione um item</option>
+                                </select>
+                                <span asp-validation-for="claimSelecionada" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="card" id="lbAcoesDisp">
+                            <div class="card-header">
+                                Ações
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        @foreach (var acao in Model.AcoesClaims)
+                                        {
+                                            <input type="hidden" name="AcoesClaims.Index" value="@acao.Acao" />
+                                            <div class="col-md-2">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox" data-switch-a id="acao" asp-for="@acao.Selecao" value="@acao.Acao">
+                                                    <label class="control-label">@acao.Acao</label>
+
+                                                    @*<input type="checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success"
+                                                        data-on-text="Sim" data-off-text="Não" asp-for="@acao.Selecao" value="@acao.Acao">*@
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-app" id="btnAdicionar" onclick="Adicionar()">
+                        <i class="fas fa-plus-circle"></i> Adicionar
+                    </a>
+                </div>
+            </div>
+
+        </form>
+       @* @await Html.PartialAsync("_ListaAcoes", Model.Claims)*@
+        <partial name="_ListaAcoes" for="Claims"/>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        });
+
+    });
+</script>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="~/js/dknotus-tour.min.js"></script>
+    <script>
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+
+                Tour.run([
+                   
+                    {
+                        element: $('#btnReturn'),
+                        content: '<strong><div align="center" class="text-info">Retornar</div></strong><p><div align="center">Retornar para tela anterior.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#btnSalvar'),
+                        content: '<strong><div align="center" class="text-info">Salvar</div></strong><p><div align="center">Faz a gravação das claims para o usuario selecionado.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#breadcrumb'),
+                        content: '<strong><div align="center" class="text-info">Bread Crumb</div></strong><p><div align="center">Link para retornar a paginas anteriores.</div></p>',
+                        position: 'left'
+                    },
+                    {
+                        element: $('#labelcardGerais'),
+                        content: '<strong><div align="center" class="text-info">Usuario Selecionado</div></strong><p><div align="center">Area de dados do usuario selecionado.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelnome'),
+                        content: '<strong><div align="center" class="text-info">Nome do Usuário</div></strong><p><div align="center">Nome do usuario selecionado.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#labelClaim'),
+                        content: '<strong><div align="center" class="text-info">Claims disponíveis</div></strong><p><div align="center">Relação das claims disponíveis para associação com usuario.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#lbAcoesDisp'),
+                        content: '<strong><div align="center" class="text-info">Ações disponíveis</div></strong><p><div align="center">Relação de ações disponíveis para a claim.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnAdicionar'),
+                        content: '<strong><div align="center" class="text-info">Adicionar claim</div></strong><p><div align="center">Adciona claim na lista de claims que serão atualizados para o usuário.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#lbAcoesClaimSelec'),
+                        content: '<strong><div align="center" class="text-info">Claims e Ações selecionadas</div></strong><p><div align="center">Lista de claims e ações selecionadas para atualização no usuário.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnRemover'),
+                        content: '<strong><div align="center" class="text-info">Remover Claim</div></strong><p><div align="center">Remove claims selecionadas da lista de claims que serão atualizadas.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#labelComplemento'),
+                        content: '<strong><div align="center" class="text-info">Complemento</div></strong><p><div align="center">Complemento do logradouro do cliente .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelCep'),
+                        content: '<strong><div align="center" class="text-info">CEP</div></strong><p><div align="center">CEP do logradouro do cliente .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelBairro'),
+                        content: '<strong><div align="center" class="text-info">Bairro</div></strong><p><div align="center">Bairro onde se localiza o logradouro do cliente .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelCidade'),
+                        content: '<strong><div align="center" class="text-info">Cidade</div></strong><p><div align="center">Cidade onde se localiza o logradouro do cliente .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelUf'),
+                        content: '<strong><div align="center" class="text-info">Estados</div></strong><p><div align="center">Lista de estados para selecionar onde se localiza o logradouro do cliente .</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#btnSalvaProduto'),
+                        content: '<strong><div align="center" class="text-info">Salvar</div></strong><p><div align="center">Salva os dados do Cliente.</div></p>',
+                        position: 'right'
+                    },
+                ]);
+            });
+        });
+
+
+        function Adicionar() {
+            var claim = $('#claimSelecionada').val();
+            if (claim === "" || claim == undefined || claim == null) {
+                toastr.error('selecione um item (CLAIM) na lista');
+                LimparAcoesSelecionadas();
+                return;
+            }
+
+            var myColumnDefs = [];
+            var contaSelecao = 0;
+            $('input[data-switch-a]').each(function () {
+                if (this.checked) {
+                    contaSelecao++;
+                    myColumnDefs.push({ 'Selecao': true, 'Acao': $(this).val() })
+                } else {
+                    myColumnDefs.push({ 'Selecao': false, 'Acao': $(this).val() })
+                }
+            });
+
+            if (contaSelecao == 0) {
+                toastr.error('Selecione no mínimo uma ação para a Claim');
+                LimparAcoesSelecionadas();
+                return;
+            }
+
+            var data1 = {
+                'Claim': claim,
+                'AcoesClaims': myColumnDefs
+            };
+            var data = JSON.stringify(data1)
+
+          
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/AdicionarAcao",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+                    if (objeto.error) {
+                        toastr.error('Não foi possível incluir a CLAIM, pois já existe na lista');
+                    }
+                    MontarResultado(objeto);
+                    LimparAcoesSelecionadas();
+                    console.log('sucesso');
+
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                    alert(e.statusText);
+                }
+            });
+        }
+
+        const LimparAcoesSelecionadas = () => {
+
+            $('input[data-switch-a]').each(function () {
+                $(this).prop('checked', false);
+          
+            });
+
+            $('#claimSelecionada').val('');
+        }
+
+        function Remover() {
+            var myColumnDefs = [];
+            $('input[data-remove]').each(function (idx) {
+                if (this.checked) {
+                    var lb = "#valclaim" + idx;
+                    var claim = $(lb).val();
+                    myColumnDefs.push(claim)
+                }
+            });
+
+
+            var data = JSON.stringify(myColumnDefs);
+            var objPost = { "objetosAdd": data };
+
+            if (myColumnDefs.length < 1) {
+                toastr.error('Selecione no mínimo um item para ser excluído da lista de Claims selecionadas');
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/RemoverAcao",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+
+                    MontarResultado(objeto);
+                    console.log('sucesso');
+
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                    alert(e.statusText);
+                }
+            });
+        }
+
+        function MontarResultado(data) {
+            var resultado = "<div>";
+            $.map(data.lista, function (item, idx) {
+                resultado += " <div class='row'>";
+                    resultado += " <div class='col-md-2'>";
+                resultado += "<div class='form-group'>";
+                resultado += "<div class='custom-control custom-checkbox'>";
+                            resultado += " <input class='custom-control-input' type='checkbox' data-remove  name='claim" + idx + "' id='claim" + idx + "'>";
+                            resultado += " <input type='hidden' name='valclaim" + idx + "' id='valclaim" + idx + "' value='" + item.claim+"'>";
+                            resultado += " <label  class='custom-control-label' for='claim" + idx + "' name='lbclaim" + idx + "' id='lbclaim" + idx + "'>" + item.claim + ":</label>";
+                        resultado += " </div>";
+                resultado += " </div>";
+                resultado += " </div>";
+                
+                $.map(item.claimValue, function (acao, idx2) {
+                    resultado += " <div class='col-2'>";
+                    resultado += " <div class='info-box bg-info'>";
+                    resultado += "<div class='info-box-content'>";
+                        //if (idx2 > 0) resultado += " - ";
+                    resultado += "<div class='info-box-text'>";    
+                        resultado += acao;
+                    resultado += " </div>";
+                    resultado += " </div>";
+                    resultado += " </div>";
+                    resultado += " </div>";
+                    });
+             
+                //resultado += " </div>";
+                resultado += " </div>";
+                resultado += " </div>"
+            });
+            resultado += " </div>"
+            $("#resultado").html(resultado);
+        }
+
+        function Salvar() {
+            var id = $('#idUserAspNet').val();
+            $.get('/Usuario/SalvarClaim?idUser=' + id, null, function (response) {
+                var objeto = JSON.parse(JSON.stringify(response));
+                if (objeto.error) {
+                    var msg = "Erro ao atualizar claims";
+                    if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                        msg = objeto.msg;
+                    toastr.error(msg);
+                    MontarResultado(objeto);
+
+                    return;
+                }
+                window.location = response;
+
+            }).fail(function (err) {
+                toastr.error('ERRO: '+err);
+            });
+        }
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+}
+
+
+<script src="~/dist/js/jquery.mask.js"></script>

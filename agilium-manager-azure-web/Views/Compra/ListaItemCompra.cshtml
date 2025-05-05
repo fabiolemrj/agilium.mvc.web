@@ -1,0 +1,65 @@
+﻿@model IEnumerable<agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraItemViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+<link rel="stylesheet" href="~/css/scroll_Horizontal.css">
+
+@{
+    ViewData["Title"] = "Itens da Compra";
+    var importada = ViewBag.importada;
+}
+<div id="">
+    <h5>@ViewData["Title"]</h5>
+    <hr />
+    <section class="barra-de-menu-principal">
+        <div class="barra-de-botoes-menu-principal">
+            @if (!importada)
+            {
+                <a asp-action="AdicionarItem" asp-route-idCompra="@ViewBag.idCompra" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+                <a asp-action="Importar" class="ImportarXML" asp-route-idCompra="@ViewBag.idCompra" data-idcompra="@ViewBag.idCompra" type="button" as title="Importar XML NFE" id="btnImportar"><span class="fas fa-file-import"></span></a>
+            }
+            <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+            <a asp-action="Index" asp-controller="Compra" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+        </div>
+
+        <article>
+            <div class="barra-de-posicao-atual" id="breadcrumb">
+                <a asp-action="Index" asp-controller="Home"> Início</a> /
+                <a asp-action="Index" asp-controller="Compra"><i class="fa fa-dashboard"></i> Compra </a> /
+                <a href="#"><i class="fa fa-dashboard"></i> Itens </a>
+            </div>
+        </article>
+    </section>
+    <br />
+    <div class="row">
+        <div class="col-md-12" id="areaFiltro">
+            <form asp-action="ListaItemCompra" class="sidebar-form" method="get">
+
+                <div class="row">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Compra</span>
+                            <span class="info-box-number">@ViewBag.NomeCompra</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+            </form>
+        </div>
+    </div>
+    @*<div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">*@
+    <div id="ContatoTarget" class="col-md-12">
+ @*       @await Html.PartialAsync("_listaItemCompra", Model,new ViewDataDictionary(ViewData){ { "import", importada } })*@
+        <partial name="_listaItemCompra" model="Model"></partial>
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/local/processo/compra.js"></script>
+
+ }

@@ -1,0 +1,72 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.SelecionarPerfilViewModel
+
+@{
+    Layout = null;
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = "Selecionar Perfil";
+}
+<div class="modal-header bg-primary">
+    <h5 class="modal-title">@operacao</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="SelecionarPerfil" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="frmSelecionaEmpresa">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="IdAspNetUser" />
+            <div class="card">
+                <div class="card-header">
+                        <h3 class="card-title text-success">Perfil Usuario</h3>
+                   </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="NomeUsuario" class="control-label" id="labelDescricao"></label>
+                                <input asp-for="NomeUsuario" class="form-control" disabled />
+                                <span asp-validation-for="NomeUsuario" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="PerfilAtual" class="control-label" id="labelDescricao"></label>
+                                <input asp-for="PerfilAtual" class="form-control" disabled />
+                                <span asp-validation-for="PerfilAtual" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="idPerfil" class="control-label" id="idtpcontato"></label>
+                         
+                            <select asp-for="idPerfil" asp-items="ViewBag.Perfil" class="form-control">
+                                <option value="0" disabled>Selecione um item</option>
+                            </select>
+                            <span asp-validation-for="idPerfil" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-end">
+
+                <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+                    <i class="fas fa-window-close"></i>
+                </a>
+
+                <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvarModal" title="Confirmar operação">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

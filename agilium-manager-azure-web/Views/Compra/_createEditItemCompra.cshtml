@@ -1,0 +1,544 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraItemViewModel
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = inclusao ? "Novo" : "Editar";
+    ViewData["Title"] = "Item de Compra";
+    var importada = ViewBag.importada;
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Compra"><i class="fa fa-dashboard"></i> Compra </a> /
+            <a asp-action="ListaItemCompra" asp-controller="Compra" asp-route-idCompra="@Model.IDCOMPRA"><i class="fa fa-dashboard"></i> Item </a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="@ViewBag.acao" id="frmCreateEditItemCompra" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" asp-route-idCompra="@Model.IDCOMPRA">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IDCOMPRA" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (ViewBag.operacao == "I")
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="nomecompra">Compra</label>
+                                <input class="form-control" value="@ViewBag.NomeCompra" id="nomecompra" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDPRODUTO" id="labelproduto"></label>
+                                <select asp-for="IDPRODUTO"
+                                        asp-items="@Model.Produtos.Select(x => new SelectListItem(){Text = x.Nome, Value = x.Id.ToString()})"
+                                        class="form-control">
+                                     <option value="">-*****-</option>
+                                 </select>                             
+                                <span asp-validation-for="IDPRODUTO" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDESTOQUE" id="labelEstoque"></label>
+                                <select asp-for="IDESTOQUE"
+                                        asp-items="@Model.Estoques.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                        class="form-control">
+                                    <option value="">-*****-</option>
+                                    </select>
+                                <span asp-validation-for="IDESTOQUE" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="DescricaoProdutoCompra" id="labelDescProdNF"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="DescricaoProdutoCompra" class="form-control" size="100" />
+                                }
+                                else
+                                {
+                                    <input asp-for="DescricaoProdutoCompra" class="form-control" size="100" disabled/>
+                                    <input type="hidden" asp-for="DescricaoProdutoCompra" />
+
+                                }
+                                <span asp-validation-for="DescricaoProdutoCompra" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Quantidade" id="labelQuant"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="Quantidade" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="Quantidade" />
+                                    <input asp-for="Quantidade" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="Quantidade" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="SGUN" id="labelUnid"></label>
+                                <select asp-for="SGUN"
+                                        asp-items="@Model.Unidades.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                        class="form-control">
+                                    <option value="">-*****-</option>
+                                    </select>
+                                <span asp-validation-for="SGUN" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Relacao" id="labelrelacao"></label>
+                                <input asp-for="Relacao" class="form-control" />
+                                <span asp-validation-for="Relacao" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorUnitario" id="labelvlunit"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorUnitario" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorUnitario" />
+                                    <input asp-for="ValorUnitario" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorUnitario" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorTotal" id="labelvltotal"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorTotal" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorTotal" />
+                                    <input asp-for="ValorTotal" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorTotal" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorNovoPrecoVenda" id="labelnovovalorvenda"></label>
+                              
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorNovoPrecoVenda" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorNovoPrecoVenda" />
+                                    <input asp-for="ValorNovoPrecoVenda" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorNovoPrecoVenda" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoEan" id="labelcodean"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoEan" class="form-control" size="50"/>
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoEan" />
+                                    <input asp-for="CodigoEan" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoEan" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoNCM" id="labelcodncm"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoNCM" class="form-control" size="20" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoNCM" />
+                                    <input asp-for="CodigoNCM" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoNCM" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoCEST" id="labelcest"></label>
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoCEST" class="form-control" size="20"/>
+
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoCEST" />
+                                    <input asp-for="CodigoCEST" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoCEST" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DataValidade" id="labeldtvalidade"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="DataValidade" class="form-control" type="date" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="DataValidade" />
+                                    <input asp-for="DataValidade" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="DataValidade" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NumeroCFOP" id="labelcfop"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="NumeroCFOP" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="NumeroCFOP" />
+                                    <input asp-for="NumeroCFOP" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="NumeroCFOP" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoCstIcms" id="labelcsticms"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoCstIcms" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoCstIcms" />
+                                    <input asp-for="CodigoCstIcms" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoCstIcms" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoCstCofins" id="labelcstcofins"></label>
+                             
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoCstCofins" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoCstCofins" />
+                                    <input asp-for="CodigoCstCofins" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoCstCofins" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CodigoCstIpi" id="labelcstcofins"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="CodigoCstIpi" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="CodigoCstIpi" />
+                                    <input asp-for="CodigoCstIpi" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="CodigoCstIpi" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorBaseRetido" id="labelvlbaseretido"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorBaseRetido" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorBaseRetido" />
+                                    <input asp-for="ValorBaseRetido" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorBaseRetido" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorAliquotaIcms" id="labelvlaliqicms"></label>
+                                  
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorAliquotaIcms" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorAliquotaIcms" />
+                                    <input asp-for="ValorAliquotaIcms" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorAliquotaIcms" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorAliquotaCofins" id="labelvlalqcofins"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorAliquotaCofins" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorAliquotaCofins" />
+                                    <input asp-for="ValorAliquotaCofins" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorAliquotaCofins" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorAliquotaPis" id="labelvlaliqpis"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorAliquotaPis" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorAliquotaPis" />
+                                    <input asp-for="ValorAliquotaPis" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorAliquotaPis" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorAliquotaIpi" id="labelaliqipi"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorAliquotaIpi" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorAliquotaIpi" />
+                                    <input asp-for="ValorAliquotaIpi" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorAliquotaIpi" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorBaseCalculoCofins" id="labelcalccofins"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorBaseCalculoCofins" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorBaseCalculoCofins" />
+                                    <input asp-for="ValorBaseCalculoCofins" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorBaseCalculoCofins" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorBaseCalculoIcms" id="labelcalcicms"></label>
+                               
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorBaseCalculoIcms" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorBaseCalculoIcms" />
+                                    <input asp-for="ValorBaseCalculoIcms" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorBaseCalculoIcms" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorBaseCalculoIpi" id="labelcalcipi"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorBaseCalculoIpi" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorBaseCalculoIpi" />
+                                    <input asp-for="ValorBaseCalculoIpi" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorBaseCalculoIpi" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorBaseCalculoPis" id="labelcalcpis"></label>
+                                
+                                @if (!ViewBag.importada){
+                                    <input asp-for="ValorBaseCalculoPis" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorBaseCalculoPis" />
+                                    <input asp-for="ValorBaseCalculoPis" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorBaseCalculoPis" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorIcms" id="labelvlicms"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorIcms" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorIcms" />
+                                    <input asp-for="ValorIcms" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorIcms" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorIpi" id="labelvlipi"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorIpi" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorIpi" />
+                                    <input asp-for="ValorIpi" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorIpi" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorPis" id="labelvlpis"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorPis" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorPis" />
+                                    <input asp-for="ValorPis" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorPis" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorCofins" id="labelvlcofins"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorCofins" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorCofins" />
+                                    <input asp-for="ValorCofins" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorCofins" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="ValorOUTROS" id="labelvloutros"></label>
+                                
+                                @if (!ViewBag.importada)
+                                {
+                                    <input asp-for="ValorOUTROS" class="form-control" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="ValorOUTROS" />
+                                    <input asp-for="ValorOUTROS" class="form-control" disabled />
+                                }
+                                <span asp-validation-for="ValorOUTROS" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/compra.js"></script>
+
+ }

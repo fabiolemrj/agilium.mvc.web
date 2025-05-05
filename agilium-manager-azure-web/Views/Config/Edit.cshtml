@@ -1,0 +1,653 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Config.ConfigCamposViewModel
+
+@{
+    ViewData["Title"] = "Configuração";
+}
+<link rel="stylesheet" href="~/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="#"> Configuração </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Edit" id="frmConfig" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="IdEmpresa" />
+            <div class="card card-primary card-outline card-outline-tabs">
+                <div class="card-header p-0 border-bottom-0">
+                    <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-geral" data-toggle="pill" href="#custom-tab-geral" role="tab" aria-controls="custom-tab-geral" aria-selected="true">Gerais</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-empresa" data-toggle="pill" href="#custom-tab-empresa" role="tab" aria-controls="custom-tab-empresa" aria-selected="false">Empresa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-caixa" data-toggle="pill" href="#custom-tab-caixa" role="tab" aria-controls="custom-tab-caixa" aria-selected="false">Caixa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-nfce" data-toggle="pill" href="#custom-tab-nfce" role="tab" aria-controls="custom-tab-nfce" aria-selected="false">NFC-e</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab=contab" data-toggle="pill" href="#custom-tab-contab" role="tab" aria-controls="custom-tab-contab" aria-selected="false">Controle Contabeis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-cores" data-toggle="pill" href="#custom-tab-cores" role="tab" aria-controls="custom-tab-cores" aria-selected="false">Cores e Temas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tab-email" data-toggle="pill" href="#custom-tab-email" role="tab" aria-controls="custom-tab-email" aria-selected="false">E-mail</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-four-tabContent">
+                        <div class="tab-pane fade active show" id="custom-tab-geral" role="tabpanel" aria-labelledby="tab-geral">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0">Estoque</div>
+                                        <div class="card-body">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label asp-for="ESTOQUE_PERMITENEGATIVO" id="labelCodigo"></label>
+                                                    <input type="hidden" asp-for="ESTOQUE_PERMITENEGATIVO.CHAVE" />
+                                                    <input type="hidden" asp-for="ESTOQUE_PERMITENEGATIVO.IDEMPRESA" />
+                                                    <select asp-for="ESTOQUE_PERMITENEGATIVO.VALOR"
+                                                            asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                                            class="form-control"></select>
+                                                    <span asp-validation-for="ESTOQUE_PERMITENEGATIVO" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0">Certificado Digital</div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label asp-for="CERTIFICADO_CAMINHO" id="labeltpempresa"></label>
+                                                        <input type="file" id="caminho_certificado" asp-for="CERTIFICADO_CAMINHO.Arquivo" hidden />
+                                                        <input type="hidden" asp-for="CERTIFICADO_CAMINHO.CHAVE" />
+                                                        <input type="hidden" asp-for="CERTIFICADO_CAMINHO.IDEMPRESA" />
+                                                        <div class="input-group mb-3">
+                                                            <div class="input-group-prepend">
+                                                                <button type="button" class="btn btn-block btn-outline-secondary" onclick="carregarArquivo()"><i class="fa fa-search"></i></button>
+                                                            </div>
+                                                            <input asp-for="CERTIFICADO_CAMINHO.VALOR" class="form-control" />
+                                                        </div>
+                                                        <span asp-validation-for="CERTIFICADO_CAMINHO" class="text-danger"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label asp-for="CERTIFICADO_SENHA" id="labeltpempresa"></label>
+                                                        <input type="hidden" asp-for="CERTIFICADO_SENHA.CHAVE" />
+                                                        <input type="hidden" asp-for="CERTIFICADO_SENHA.IDEMPRESA" />
+                                                        <input asp-for="CERTIFICADO_SENHA.VALOR" class="form-control" type="password" />
+                                                        <span asp-validation-for="CERTIFICADO_SENHA" class="text-danger"></span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tab-empresa" role="tabpanel" aria-labelledby="tab-empresa">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0">Empresa</div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-6 col-xl-4">
+                                                    <div class="card mb-2">
+                                                        <img class="card-img-top" src="~/dist/img/photo1.png" alt="Dist Photo 2">
+                                                        <div class="card-img-overlay d-flex flex-column justify-content-center">
+                                                            <h5 class="card-title text-primary">Logo</h5>
+                                                            <p class="card-text pb-2 pt-1 text-white">
+                                                                Lorem ipsum dolor sit amet.
+                                                            </p>
+                                                        </div>
+                                                        <button type="button" class="btn btn-block btn-outline-primary">Carregar Logo</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-6 col-xl-4">
+                                                    <div class="card mb-2">
+                                                        <img class="card-img-top" src="~/dist/img/photo2.png" alt="Dist Photo 2">
+                                                        <div class="card-img-overlay d-flex flex-column justify-content-center">
+                                                            <h5 class="card-title text-primary">Fundo PDV</h5>
+                                                            <p class="card-text pb-2 pt-1 text-white">
+                                                                Lorem ipsum dolor sit amet.
+                                                            </p>
+                                                        </div>
+                                                        <button type="button" class="btn btn-block btn-outline-primary">Carregar Fundo PDV</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-6 col-xl-4">
+                                                    <div class="card mb-2">
+                                                        <img class="card-img-top" src="~/dist/img/photo3.jpg" alt="Dist Photo 3">
+                                                        <div class="card-img-overlay">
+                                                            <h5 class="card-title text-primary">Logo NFCe</h5>
+                                                            <p class="card-text pb-1 pt-1 text-white">
+                                                                Lorem ipsum dolor.
+                                                            </p>
+                                                        </div>
+                                                        <button type="button" class="btn btn-block btn-outline-primary">Carregar Logo NFCe</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tab-caixa" role="tabpanel" aria-labelledby="tab-caixa">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header border-0">Caixa</div>
+                                        <div class="card-body">
+                                            <div class="col-md-5">
+                                                <div class="form-group">
+                                                    <label asp-for="CAIXA_TPABERTURA" id="labelCodigo"></label>
+                                                    <input type="hidden" asp-for="CAIXA_TPABERTURA.CHAVE" />
+                                                    <input type="hidden" asp-for="CAIXA_TPABERTURA.IDEMPRESA" />
+                                                    <select asp-for="CAIXA_TPABERTURA.VALOR"
+                                                            asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoAberturaCaixa>()"
+                                                            class="form-control"></select>
+                                                    <span asp-validation-for="CAIXA_TPABERTURA" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="form-group">
+                                                    <input type="hidden" asp-for="CAIXA_VLSUPRIMENTO.CHAVE" />
+                                                    <input type="hidden" asp-for="CAIXA_DSSUPRIMENTO.CHAVE" />
+                                                    <input type="hidden" asp-for="CAIXA_DSSUPRIMENTO.IDEMPRESA" />
+                                                    <input type="hidden" asp-for="CAIXA_VLSUPRIMENTO.IDEMPRESA" />
+                                                    <div class="col-md-5">
+                                                        <label asp-for="CAIXA_VLSUPRIMENTO" id="labelcaixavlsuprimento"></label>
+                                                        <input type="text" asp-for="CAIXA_TPABERTURA.VALOR" class="form-control" />
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <label asp-for="CAIXA_DSSUPRIMENTO" id="labelDsSuprimento"></label>
+                                                        <input type="text" asp-for="CAIXA_DSSUPRIMENTO.VALOR" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tab-nfce" role="tabpanel" aria-labelledby="tab-nfce">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label asp-for="NFCE_AMBIENTE" id="labelCodigo"></label>
+                                    <input type="hidden" asp-for="NFCE_AMBIENTE.CHAVE" />
+                                    <input type="hidden" asp-for="NFCE_AMBIENTE.IDEMPRESA" />
+                                    <select asp-for="NFCE_AMBIENTE.VALOR"
+                                            asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoAmbiente>()"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="NFCE_AMBIENTE" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="card">
+                                        <div class="card-header">Produção</div>
+
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_MODELO" id="labelnfceModelo"></label>
+                                                        <input type="hidden" asp-for="NFCE_MODELO.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_MODELO.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_MODELO.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_MODELO" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_SERIE" id="labelnfceSerie"></label>
+                                                        <input type="hidden" asp-for="NFCE_SERIE.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_SERIE.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_SERIE.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_SERIE" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_ULTEMITIDA" id="labelnfceserie"></label>
+                                                        <input type="hidden" asp-for="NFCE_ULTEMITIDA.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_ULTEMITIDA.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_ULTEMITIDA.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_ULTEMITIDA" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_NATOP" id="labelnfceModelo"></label>
+                                                        <input type="hidden" asp-for="NFCE_NATOP.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_NATOP.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_NATOP.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_NATOP" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card">
+                                        <div class="card-header">Homologação</div>
+
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_MODELO_HOMOL" id="labelnfceModelo"></label>
+                                                        <input type="hidden" asp-for="NFCE_MODELO_HOMOL.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_MODELO_HOMOL.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_MODELO_HOMOL.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_MODELO_HOMOL" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_SERIE_HOMOL" id="labelnfceSerie"></label>
+                                                        <input type="hidden" asp-for="NFCE_SERIE_HOMOL.IDEMPRESA" />
+                                                        <input type="hidden" asp-for="NFCE_SERIE_HOMOL.CHAVE" />
+                                                        <input type="text" asp-for="NFCE_SERIE_HOMOL.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_SERIE_HOMOL" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_ULTEMITIDA_HOMOL" id="labelnfceserie"></label>
+                                                        <input type="hidden" asp-for="NFCE_ULTEMITIDA_HOMOL.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_ULTEMITIDA_HOMOL.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_ULTEMITIDA_HOMOL.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_ULTEMITIDA_HOMOL" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label asp-for="NFCE_NATOP_HOMOL" id="labelnfceModelo"></label>
+                                                        <input type="hidden" asp-for="NFCE_NATOP_HOMOL.CHAVE" />
+                                                        <input type="hidden" asp-for="NFCE_NATOP_HOMOL.IDEMPRESA" />
+                                                        <input type="text" asp-for="NFCE_NATOP_HOMOL.VALOR" class="form-control" />
+                                                        <span asp-validation-for="NFCE_NATOP_HOMOL" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane fade" id="custom-tab-contab" role="tabpanel" aria-labelledby="custom-tab-contab">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label asp-for="CONTA_REALIZARCONTROLE" id="labelRealizaControle"></label>
+                                    <input type="hidden" asp-for="CONTA_REALIZARCONTROLE.CHAVE" />
+                                    <input type="hidden" asp-for="CONTA_REALIZARCONTROLE.IDEMPRESA" />
+                                    <select asp-for="CONTA_REALIZARCONTROLE.VALOR"
+                                            asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="CONTA_REALIZARCONTROLE" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label asp-for="CONTA_IDCONTAESTOQUE" id="labelContaEstoque"></label>
+                                    <input type="hidden" asp-for="CONTA_IDCONTAESTOQUE.CHAVE" />
+                                    <input type="hidden" asp-for="CONTA_IDCONTAESTOQUE.IDEMPRESA" />
+                                    <input type="text" asp-for="CONTA_IDCONTAESTOQUE.VALOR" class="form-control" />
+                                    <span asp-validation-for="CONTA_IDCONTAESTOQUE" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label asp-for="CONTA_IDCONTAFORNECEDOR" id="labelContaidfornec"></label>
+                                    <input type="hidden" asp-for="CONTA_IDCONTAFORNECEDOR.CHAVE" />
+                                    <input type="hidden" asp-for="CONTA_IDCONTAFORNECEDOR.IDEMPRESA" />
+                                    <input type="text" asp-for="CONTA_IDCONTAFORNECEDOR.VALOR" class="form-control" />
+                                    <span asp-validation-for="CONTA_IDCONTAFORNECEDOR" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label asp-for="CONTA_IDCONTACLIENTE" id="labelContaidfornec"></label>
+                                    <input type="hidden" asp-for="CONTA_IDCONTACLIENTE.CHAVE" />
+                                    <input type="hidden" asp-for="CONTA_IDCONTACLIENTE.IDEMPRESA" />
+                                    <input type="text" asp-for="CONTA_IDCONTACLIENTE.VALOR" class="form-control" />
+                                    <span asp-validation-for="CONTA_IDCONTACLIENTE" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tab-cores" role="tabpanel" aria-labelledby="custom-tab-cores">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="COR_TEMA" id="labelDsSuprimento"></label>
+                                    <input type="hidden" asp-for="COR_TEMA.CHAVE" />
+                                    <input type="hidden" asp-for="COR_TEMA.IDEMPRESA" />
+                                    <select asp-for="COR_TEMA.VALOR" class="form-control">
+                                        <option value="Luna (Azul)">Luna (Azul)</option>
+                                        <option value="Obsidian (Preto e Cinza)">Obsidian(Preto e Cinza)</option>
+                                        <option value="Silver (Prata)">Silver (Prata)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-6">
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Cores de Fundo</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_INICIAL" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_INICIAL.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_INICIAL.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_INICIAL.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_FINAL" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_FINAL.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_FINAL.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_FINAL.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Cores Zebradas</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_ZEBRADA" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_ZEBRADA.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_ZEBRADA.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_ZEBRADA.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_FONTE_ZEBRADA" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_FONTE_ZEBRADA.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_FONTE_ZEBRADA.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_FONTE_ZEBRADA.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="card card-info">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Cores do Arquivo de Excel</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_FONTE_ZEBRADA_EXCEL" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_FONTE_ZEBRADA_EXCEL.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_FONTE_ZEBRADA_EXCEL.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_FONTE_ZEBRADA_EXCEL.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_FUNDO_TIT_EXCEL" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_FUNDO_TIT_EXCEL.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_FUNDO_TIT_EXCEL.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_FUNDO_TIT_EXCEL.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label asp-for="COR_FONTE_TIT_EXCEL" id="labelDsSuprimento"></label>
+                                                        <input type="hidden" asp-for="COR_FONTE_TIT_EXCEL.CHAVE" />
+                                                        <input type="hidden" asp-for="COR_FONTE_TIT_EXCEL.IDEMPRESA" />
+                                                        <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                                            <input type="text" asp-for="COR_FONTE_TIT_EXCEL.VALOR" class="form-control" data-original-title="" title="">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="tab-pane fade" id="custom-tab-email" role="tabpanel" aria-labelledby="custom-tab-email">
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label asp-for="MAIL_SMTP" id="labelContaEstoque"></label>
+                                        <input type="hidden" asp-for="MAIL_SMTP.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_SMTP.IDEMPRESA" />
+                                        <input type="text" asp-for="MAIL_SMTP.VALOR" class="form-control" />
+                                        <span asp-validation-for="MAIL_SMTP" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label asp-for="MAIL_POP" id="labelContaEstoque"></label>
+                                        <input type="hidden" asp-for="MAIL_POP.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_POP.IDEMPRESA" />
+                                        <input type="text" asp-for="MAIL_POP.VALOR" class="form-control" />
+                                        <span asp-validation-for="MAIL_POP" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label asp-for="MAIL_PORTA_SMTP" id="labelContaEstoque"></label>
+                                                <input type="hidden" asp-for="MAIL_PORTA_SMTP.CHAVE" />
+                                                ]<input type="hidden" asp-for="MAIL_PORTA_SMTP.IDEMPRESA" />
+                                                <input type="text" asp-for="MAIL_PORTA_SMTP.VALOR" class="form-control" />
+                                                <span asp-validation-for="MAIL_PORTA_SMTP" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label asp-for="MAIL_PORTA_POP" id="labelContaEstoque"></label>
+                                                <input type="hidden" asp-for="MAIL_PORTA_POP.CHAVE" />
+                                                <input type="hidden" asp-for="MAIL_PORTA_POP.IDEMPRESA" />
+                                                <input type="text" asp-for="MAIL_PORTA_POP.VALOR" class="form-control" />
+                                                <span asp-validation-for="MAIL_PORTA_POP" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label asp-for="MAIL_AUTENTICA" id="labelRealizaControle"></label>
+                                        <input type="hidden" asp-for="MAIL_AUTENTICA.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_AUTENTICA.IDEMPRESA" />
+                                        <select asp-for="MAIL_AUTENTICA.VALOR"
+                                                asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                                class="form-control"></select>
+                                        <span asp-validation-for="MAIL_AUTENTICA" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-6">
+                                        <label asp-for="MAIL_SSL" id="labelRealizaControle"></label>
+                                        <input type="hidden" asp-for="MAIL_SSL.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_SSL.IDEMPRESA" />
+                                        <select asp-for="MAIL_SSL.VALOR"
+                                                asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                                class="form-control"></select>
+                                        <span asp-validation-for="MAIL_SSL" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+
+                                        <label asp-for="MAIL_EMAIL" id="labelContaEstoque"></label>
+                                        <input type="hidden" asp-for="MAIL_EMAIL.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_EMAIL.IDEMPRESA" />
+                                        <input type="text" asp-for="MAIL_EMAIL.VALOR" class="form-control" />
+                                        <span asp-validation-for="MAIL_EMAIL" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label asp-for="MAIL_USUARIO" id="labelContaEstoque"></label>
+                                                <input type="hidden" asp-for="MAIL_USUARIO.CHAVE" />
+                                                <input type="hidden" asp-for="MAIL_USUARIO.IDEMPRESA" />
+                                                <input type="text" asp-for="MAIL_USUARIO.VALOR" class="form-control" />
+                                                <span asp-validation-for="MAIL_USUARIO" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label asp-for="MAIL_SENHA" id="labelContaEstoque"></label>
+                                                <input type="hidden" asp-for="MAIL_SENHA.CHAVE" />
+                                                <input type="hidden" asp-for="MAIL_SENHA.IDEMPRESA" />
+                                                <input type="password" asp-for="MAIL_SENHA.VALOR" class="form-control" />
+                                                <span asp-validation-for="MAIL_SENHA" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+
+                                        <label asp-for="MAIL_REMETENTE" id="labelContaEstoque"></label>
+                                        <input type="hidden" asp-for="MAIL_REMETENTE.CHAVE" />
+                                        <input type="hidden" asp-for="MAIL_REMETENTE.IDEMPRESA" />
+                                        <input type="text" asp-for="MAIL_REMETENTE.VALOR" class="form-control" />
+                                        <span asp-validation-for="MAIL_REMETENTE" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/dist/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Ferramentas/config.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.my-colorpicker1').colorpicker();
+
+            $('.my-colorpicker1 .fa-palette').css('color', event.color.toString());
+        });
+
+        $('#caminho_certificado').change(function (e) {
+
+            const fileName = e.target.files[0].name;
+
+            $("#CERTIFICADO_CAMINHO_VALOR").val(fileName);
+
+        });
+
+        const carregarArquivo = () => {
+
+            $("#caminho_certificado").click();
+        }
+
+    </script>
+}

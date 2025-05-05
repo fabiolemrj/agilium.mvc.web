@@ -1,0 +1,292 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.ControleAcesso.CreateModeloViewModel
+
+@{
+    ViewData["Title"] = "Modelo - Controle de Acesso";
+}
+
+<h5>@ViewData["Title"]</h5>
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="PerfilIndex" asp-controller="ControleAcesso" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action" id="btnSalvar"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="PerfilIndex" asp-controller="ControleAcesso" ><i class="fa fa-dashboard"></i> Perfis </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Editar Perfil</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12" id="areaFiltro">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Permissões por Perfil</h3>
+            </div>
+            <div class="card-body">
+                <form class="sidebar-form" method="post">
+                    <input type="hidden" asp-for="idPerfil" id="idPerfil" name="idPerfil" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Perfil" class="control-label" id="labelDescricao"></label>
+                                <input asp-for="Perfil" class="form-control" readonly />
+                                <span asp-validation-for="Perfil" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group clearfix">
+                                <div class="icheck-primary d-inline">
+                                    <input type="checkbox" id="customCheckbox2" onclick="SelecaoTodos()">
+                                    <label for="customCheckbox2">
+                                        Selecionar Todos
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                                           
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div id="divGridResultado">
+
+                                <table class="table table table-striped table-hover">
+                                    <thead class="table thead-dark">
+                                        <tr>
+                                            <th style="min-width: 400px;" id="descrItem">
+                                                Permissões
+                                            </th>
+                                            <th style="min-width: 100px;" id="con">Consultar</th>
+                                            <th style="min-width: 100px;" id="inc">Incluir</th>
+                                            <th style="min-width: 100px;" id="alt">Alterar</th>
+                                            <th style="min-width: 100px;" id="exc">Excluir</th>
+                                            <th style="min-width: 100px;" id="rel">Relatorio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Permissoes.Count; i++)
+                                        {
+                                          
+                                                var idAcao = $"acao{i}";
+                                                var idIncluir = $"incluir{i}";
+                                                var idAlterar = $"alterar{i}";
+                                                var idExcluir = $"excluir{i}";
+                                                var idRelat = $"relat{i}";
+
+                                                <input type="hidden" asp-for="@Model.Permissoes[i].idPermissao" />
+                                            <input type="hidden" asp-for="@Model.Permissoes[i].idPerfil" />
+                                            <input type="hidden" asp-for="@Model.Permissoes[i].Id" />
+                                            <tr>
+                                                <td>                                                
+                                                    <label for="@Model.Permissoes[i].Permissao" class="control-label" id="labelPermissao">@Model.Permissoes[i].Permissao</label>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group clearfix">
+                                                        <div class="icheck-primary d-inline">
+                                                            <input type="checkbox" asp-for="@Model.Permissoes[i].selecaoConsulta" data-switch-a>
+                                                            <label asp-for="@Model.Permissoes[i].selecaoConsulta">
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group clearfix">
+                                                        <div class="icheck-primary d-inline">
+                                                            <input type="checkbox" asp-for="@Model.Permissoes[i].selecaoIncluir" data-switch-a>
+                                                            <label asp-for="@Model.Permissoes[i].selecaoIncluir"></label>
+                                                        </div>                                                        
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group clearfix">
+                                                        <div class="icheck-primary d-inline">
+                                                            <input type="checkbox" asp-for="@Model.Permissoes[i].selecaoAlterar" data-switch-a>
+                                                            <label asp-for="@Model.Permissoes[i].selecaoAlterar">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <div class="form-group clearfix">
+                                                        <div class="icheck-primary d-inline">
+                                                            <input type="checkbox"  asp-for="@Model.Permissoes[i].selecaoExcluir" data-switch-a>
+                                                            <label asp-for="@Model.Permissoes[i].selecaoExcluir">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group clearfix">
+                                                        <div class="icheck-primary d-inline">
+                                                            <input type="checkbox" asp-for="@Model.Permissoes[i].selecaoRelatorio" data-switch-a>
+                                                            <label asp-for="@Model.Permissoes[i].selecaoRelatorio">
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        });
+
+    });
+</script>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+    <script>
+        $(function () {
+
+            $("#Cep").mask("99.999-999");
+            $("#Cnpj").mask("99.999.999/9999-99");
+        });
+
+        $('#btnSalvar').click(function () {
+
+            on();
+            // GravarModelo($("#idPerfil").val());
+            $('#btnSendForm').click();
+            off();
+        });
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+
+                Tour.run([
+                    {
+                        element: $('#btnReturn'),
+                        content: '<strong><div align="center" class="text-info">Botão Voltar</div></strong><p><div align="center">Voltar para pagina anterior.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnSalvar'),
+                        content: '<strong><div align="center" class="text-info">Botão Salvar</div></strong><p><div align="center">Confirmar gravação dos dados.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#breadcrumb'),
+                        content: '<strong><div align="center" class="text-info">Breadcrumb</div></strong><p><div align="center">Area de Breadcrumb para navegação.</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#labelDescricao'),
+                        content: '<strong><div align="center" class="text-info">Perfil</div></strong><p><div align="center">Descrição do Perfil em edição.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#divGridResultado'),
+                        content: '<strong><div align="center" class="text-info">Lista de Itens de Permissões</div></strong><p><div align="center">Lista de itens de permissões que poderá ser dado autorização de acesso ao perfil.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#descrItem'),
+                        content: '<strong><div align="center" class="text-info">Descrição da permissão</div></strong><p><div align="center">Descrição da permissão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#inc'),
+                        content: '<strong><div align="center" class="text-info">Campo Incluir</div></strong><p><div align="center">Permissão de inclusão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#alt'),
+                        content: '<strong><div align="center" class="text-info">Campo Alterar</div></strong><p><div align="center">Permissão de alteração.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#exc'),
+                        content: '<strong><div align="center" class="text-info">Campo Excluir</div></strong><p><div align="center">Permissão de exclusão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#rel'),
+                        content: '<strong><div align="center" class="text-info">Campo Relatório</div></strong><p><div align="center">Permissão de visualização/impressão de Relatório.</div></p>',
+                        position: 'top'
+                    },
+                ]);
+            });
+        });
+
+        async function SelecaoTodos() {
+            $('input[data-switch-a]').each(function (idx) {
+                if ($("#customCheckbox2").is(':checked')) {
+                    $(this).prop('checked', true);
+                }
+
+            })
+        }
+
+        async function GravarModelo(id) {
+            let myColumnDefs = [];
+            let contaSelecao = 0;
+            $('input[data-switch-a]').each(function (idx) {
+
+                if (this.checked) {
+                    contaSelecao++;
+                    myColumnDefs.push($(this).val());
+                }
+            });
+
+            const data = {
+                'idPerfil': id,
+                'permissoes': myColumnDefs
+            };
+
+            const objetoJSON = JSON.stringify(data);
+            const objPost = { "objetosAdd": objetoJSON }
+            $.ajax({
+                type: 'get',
+                data: objPost,
+                dataType: 'json',
+                url: "/ControleAcesso/CreateModeloJSON",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                    console.error(e);
+                    alert(e);
+                }
+            });
+        }
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+}

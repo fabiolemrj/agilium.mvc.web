@@ -1,0 +1,175 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.PlanoContaViewModel.PlanoContaLancamentoViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Planos de Contas - Lançamentos";
+    //double saldoTotal = 0;
+    //if (ViewBag.Saldo != null)
+    //{
+    //    Double.TryParse(ViewBag.Saldo, out saldoTotal);
+    //}
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="@Url.Action("Index","PlanoConta")"><i class="fa fa-dashboard"></i> Plano de Conta </a> /
+            <a href="#"> Lançamentos </a>
+        </div>
+    </article>
+</section>
+<br />
+
+<div class="row">
+    <div class="col-lg-4 col-6">
+
+        <div class="small-box bg-info disabled color-palette">
+            <div class="inner">
+                <h3>@ViewBag.Saldo.ToString("N")<sup style="font-size: 20px">$</sup></h3>
+                <p> @ViewBag.Conta</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a class="small-box-footer">
+               Saldo
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexlanc" asp-action="IndexLancamentos" class="sidebar-form" method="get" asp-route-idConta="@ViewBag.idConta" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <input type="hidden" name="idConta" id="idConta" value="@ViewBag.idConta" />
+           @* <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000"  />
+                        <div class="invalid-feedback">
+                           Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000"  />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Valor
+                </th>               
+                <th>
+                    Tipo
+                </th>         
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                var sentido = item.Tipo == agilium.webapp.manager.mvc.Enums.ETipoContaLancacmento.Debito ? "bg-danger disabled color-palette" : "bg-success disabled color-palette";
+                var saldo = item.Valor;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataHora)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescricaoLancamento)
+                    </td>
+                    <td>
+                        @Html.Raw(saldo.ToString("C"))
+                    </td>
+                    <td class="@sentido">
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr >
+                <td colspan="4">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            @{
+                                for (var i = 1; i < Model.TotalPages + 1; i++)
+                                {
+                                    if (i == Model.PageIndex)
+                                    {
+                                        <li class="page-item active">
+                                            <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idConta="@ViewBag.idConta">@i <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-ps="@Model.PageSize" asp-route-page="@i" asp-route-q="@Model.Query" asp-route-idConta="@ViewBag.idConta">@i</a></li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </nav>
+                </td>
+           
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Financeiro/planoConta.js"></script>
+  <script>
+
+   
+  </script>
+ }

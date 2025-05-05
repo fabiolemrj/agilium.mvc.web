@@ -1,0 +1,223 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+@using agilium.webapp.manager.mvc.Extensions
+@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.UserFull>
+@{
+    ViewData["Title"] = "Gerenciamento de Usuários";
+
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturnCliente"></span></a>
+        <a asp-action="Registro" asp-controller="Identidade" title="Cadastrar novo usuario"><span class="fa fa-plus-square sns-tool-action" id="btnNovo"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a> Usuarios </a>
+        </div>
+    </article>
+</section>
+<br />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="ObterTodosUsuarios" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelFiltro">
+                    @*<input asp-for="Filtro" class="form-control" title="Pesquisar usuário" placeholder="Pesquisar usuario por nome..." />*@
+                    <input class="form-control" title="Pesquisar usuário" type="text" id="q" name="q" value="@ViewBag.Pesquisa" placeholder="Pesquisar usuario por nome...">
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar por usuarios" asp-route-ps="@Model.PageSize" asp-route-page="@Model.PageSize" asp-route-q="@Model.Query">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+
+
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover" id="divGridResultado">
+        <thead class="table thead-dark">
+            <tr>
+                <th id="listaNome" style="min-width: 300px">
+                    <label class="form-label">Nome</label>
+                </th>
+                <th id="listaEmail">
+                    <label class="form-label">E-mail</label>
+                </th>
+                 <th id="listaEmail">
+                <label class="form-label">Perfil</label>
+            </th>
+           
+                <th id="listaAtivo" style="width: 100px">
+                    Situação
+                </th>
+            
+                <th id="listaAcoes" style="max-width: 300px; text-align:right"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                var habilitarUsuarioAtivo = item.AtivoBool ? "" : "disabled";
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.nome)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PerfilDescricao)
+                    </td>
+                    <td>
+                        @if (item.AtivoBool)
+                        {
+                            <span class="text-success">Ativo</span>
+
+                        }
+                        else
+                        {
+                            <span class="text-danger">Inativo</span>
+
+                        }
+                    </td>
+                    <td class="text-right">
+                        @* if (item.AtivoBool)
+                    {
+                        <a class="btn btn-default" asp-action="SelecionarPerfil" asp-route-id="@item.idUserAspNet" title="Perfil" data-modal=""><spam class="far fa-id-card"></spam></a>
+
+                    } *@
+                        <a class="btn btn-warning" asp-action="ObterUsuario" asp-route-idUserAspNet="@item.idUserAspNet" title="Editar Usuario" id="btnEditarClaim"><spam class="fa fa-pencil-alt"></spam></a>
+                        @*<a class="btn btn-secondary @habilitarUsuarioAtivo" asp-action="ListaUsuariosClaims" asp-route-id="@item.idUserAspNet" title="Gerenciar Claims" id="btnGerenciarClaim"><spam class="fas fa-check-double"></spam></a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="5">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+<script src="~/js/Usuarios.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+       
+        $(document).ready(function () {
+            SetModal();
+
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            });
+
+            $('#formEmpresaAuth').submit(function (e) {
+                e.preventDefault();
+                $('#myModal').modal('hide');
+                return false;
+            });
+        });
+
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+                Tour.run([
+                    {
+                        element: $('#btnVoltar'),
+                        content: '<strong><div align="center" class="text-info">Botão de Voltar</div></strong><p><div align="center">Retorna a pagina anterior.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnNovo'),
+                        content: '<strong><div align="center" class="text-info">Botão de Adicionar</div></strong><p><div align="center">Adiciona novo registro de usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('.barra-de-posicao-atual'),
+                        content: '<strong><div align="center" class="text-info">Bread Crumb</div></strong><p><div align="center">Caminho de telas percorridos até a tela atual.</div></p>',
+                        position: 'left'
+                    },
+
+                    {
+                        element: $('#labelFiltro'),
+                        content: '<strong><div align="center" class="text-info">Cliente</div></strong><p><div align="center">Filtro para pesquisa de usuarios por nome.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#search-btn'),
+                        content: '<strong><div align="center" class="text-info">Botão de Busca</div></strong><p><div align="center">Botão de pesquisa de clientes.</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#divGridResultado'),
+                        content: '<strong><div align="center" class="text-info">Resultado</div></strong><p><div align="center">Retorna lista de usuarios.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#listaNome'),
+                        content: '<strong><div align="center" class="text-info">Nome do usuario</div></strong><p><div align="center">Coluna com campo Nome do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#listaEmail'),
+                        content: '<strong><div align="center" class="text-info">Email</div></strong><p><div align="center">Coluna com campo Email usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#listaBtAtivo'),
+                        content: '<strong><div align="center" class="text-info">Mudar situação</div></strong><p><div align="center">Coluna com botão para mudar a situação do usuário (inativar/ativar).</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#listaAcoes'),
+                        content: '<strong><div align="center" class="text-info">Ações</div></strong><p><div align="center">Coluna com botão de ações relacionados ao usuário (Editar, gerenciar claims e afins).</div></p>',
+                        position: 'top'
+                    },
+                ]);
+            });
+        });
+
+
+    </script>
+}

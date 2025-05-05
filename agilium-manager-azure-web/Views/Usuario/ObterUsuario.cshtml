@@ -1,0 +1,344 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+@model agilium.webapp.manager.mvc.ViewModels.UserFull
+
+@{
+    ViewData["Title"] = "Cadastro de Usuário";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturnCliente"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action" id="btnSalvarCliente"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("ObterTodosUsuarios","Usuario")"><i class="fa fa-dashboard"></i> Usuarios </a> /
+            <a href="#"> Editar Usuario</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="ObterUsuario" id="frmEdit" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idUserAspNet" />
+            <input type="hidden" asp-for="Foto" />
+
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Dados Gerais</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="nome" class="control-label" id="labelnome"></label>
+                                <input asp-for="nome" class="form-control" />
+                                <span asp-validation-for="nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="Usuario" class="control-label" id="labelUsuario"></label>
+                                <input asp-for="Usuario" class="form-control" />
+                                <span asp-validation-for="Usuario" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group float-md-right">
+                                <label asp-for="AtivoBool" class="control-label" id="labelAtivoBool"></label>
+                                <input type="checkbox" asp-for="AtivoBool" class="form-control"
+                                       data-bootstrap-switch data-off-color="danger" data-on-color="success"
+                                       data-on-text="Sim" data-off-text="Não">
+                                <span asp-validation-for="AtivoBool" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="idperfilManager" id="labelEmpresa"></label>
+                                <select asp-for="idperfilManager" asp-items="@ViewBag.Perfis" class="form-control">
+                                    <option value="">***</option>
+                                </select>
+                                <span asp-validation-for="idperfilManager" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                       
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="email" class="control-label" id="labelEmail"></label>
+                                <input asp-for="email" class="form-control" readonly />
+                                <span asp-validation-for="email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label asp-for="cel" class="control-label" id="labelcel"></label>
+                                <input asp-for="cel" class="form-control" />
+                                <span asp-validation-for="cel" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label asp-for="tel1" class="control-label" id="labelTelefone"></label>
+                                <input asp-for="tel1" class="form-control" />
+                                <span asp-validation-for="tel1" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label asp-for="cpf" class="control-label" id="labelcpf"></label>
+                                <input asp-for="cpf" class="form-control" />
+                                <span asp-validation-for="cpf" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label asp-for="dtnasc" class="control-label" id="labeldtnasc"></label>
+                                <input asp-for="dtnasc" class="form-control" />
+                                <span asp-validation-for="dtnasc" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="card" id="labelcardEndereco">
+                            <div class="card-header">
+                                <h3 class="card-title">Endereço</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label asp-for="cep" class="control-label" id="labelCep"></label>
+                                            <input asp-for="cep" class="form-control" id="Cep" name="Cep" />
+                                            <span asp-validation-for="cep" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <label asp-for="ender" class="control-label" id="labelEndereco"></label>
+                                            <input asp-for="ender" class="form-control" />
+                                            <span asp-validation-for="ender" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label asp-for="num" class="control-label" id="labelNumero"></label>
+                                            <input asp-for="num" class="form-control" />
+                                            <span asp-validation-for="num" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="compl" class="control-label" id="labelComplemento"></label>
+                                            <input asp-for="compl" class="form-control" />
+                                            <span asp-validation-for="compl" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="bairro" class="control-label" id="labelBairro"></label>
+                                            <input asp-for="bairro" class="form-control" />
+                                            <span asp-validation-for="bairro" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label asp-for="cidade" class="control-label" id="labelCidade"></label>
+                                            <input asp-for="cidade" class="form-control" />
+                                            <span asp-validation-for="cidade" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="form-group">
+                                            <label asp-for="uf" class="control-label" id="labelUf"></label>
+                                            <select asp-for="uf"
+                                                    asp-items="ViewBag.estados"
+                                                    class="form-control"></select>
+                                            <span asp-validation-for="uf" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        });
+
+    });
+</script>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="~/js/dknotus-tour.min.js"></script>
+    <script>
+        $(function () {
+
+            $("#Cep").mask("99.999-999");
+            $("#Cnpj").mask("99.999.999/9999-99");
+            $('#dtnasc').mask('99/99/9999', { placeholder: "dd/MM/yyyy" });
+        });
+
+        $('#btnSalvar').click(function () {
+
+            var formValido = $("#frmEdit").valid();
+            if (formValido) {
+                //if (ValidarFormulario()) {
+                on();
+
+                $('#btnSendForm').click();
+                //}
+            }
+        });
+
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+
+                Tour.run([
+                    {
+                        element: $('#btnVoltar'),
+                        content: '<strong><div align="center" class="text-info">Botão de Voltar</div></strong><p><div align="center">Retorna a pagina anterior.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnSalvar'),
+                        content: '<strong><div align="center" class="text-info">Botão de Salvar</div></strong><p><div align="center">Salvar registros.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('.barra-de-posicao-atual'),
+                        content: '<strong><div align="center" class="text-info">Bread Crumb</div></strong><p><div align="center">Caminho de telas percorridos até a tela atual.</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#labelcardGerais'),
+                        content: '<strong><div align="center" class="text-info">Dados Gerais</div></strong><p><div align="center">Area com campos com dados gerais do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelnome'),
+                        content: '<strong><div align="center" class="text-info">Nome</div></strong><p><div align="center">Informa o Nome completo do usuario.</div></p>',
+                        position: 'top'
+                    },                  
+                    {
+                        element: $('#labelAtivoBool'),
+                        content: '<strong><div align="center" class="text-info">Ativo</div></strong><p><div align="center">Informa se a situação do usuario é ATIVO.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelUsuario'),
+                        content: '<strong><div align="center" class="text-info">Nome simplificado</div></strong><p><div align="center">Informa o nome simplificado do usuario</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelcel'),
+                        content: '<strong><div align="center" class="text-info">Numero do telefone celular</div></strong><p><div align="center">Numero do telefone celular.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelTelefone'),
+                        content: '<strong><div align="center" class="text-info">Telefone</div></strong><p><div align="center">Numero do telefone do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelEmail'),
+                        content: '<strong><div align="center" class="text-info">Email</div></strong><p><div align="center">Endereço de email do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelcpf'),
+                        content: '<strong><div align="center" class="text-info">CPF</div></strong><p><div align="center">Numero do CPF do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labeldtnasc'),
+                        content: '<strong><div align="center" class="text-info">Data de Nascimento</div></strong><p><div align="center">Data de nascimento do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelcardEndereco'),
+                        content: '<strong><div align="center" class="text-info">Endereço do usuario</div></strong><p><div align="center">Area com dados do endereço do usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelEndereco'),
+                        content: '<strong><div align="center" class="text-info">Logradouro</div></strong><p><div align="center">Descrição do logradouro do usuario (rua, avenida, esytrada e etc...).</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelNumero'),
+                        content: '<strong><div align="center" class="text-info">Numero endereço</div></strong><p><div align="center">Numero do logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelComplemento'),
+                        content: '<strong><div align="center" class="text-info">Complemento</div></strong><p><div align="center">Complemento do logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelCep'),
+                        content: '<strong><div align="center" class="text-info">CEP</div></strong><p><div align="center">CEP do logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelBairro'),
+                        content: '<strong><div align="center" class="text-info">Bairro</div></strong><p><div align="center">Bairro onde se localiza o logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelCidade'),
+                        content: '<strong><div align="center" class="text-info">Cidade</div></strong><p><div align="center">Cidade onde se localiza o logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelUf'),
+                        content: '<strong><div align="center" class="text-info">Estados</div></strong><p><div align="center">Lista de estados para selecionar onde se localiza o logradouro do usuario .</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#btnSalvaProduto'),
+                        content: '<strong><div align="center" class="text-info">Salvar</div></strong><p><div align="center">Salva os dados do usuario.</div></p>',
+                        position: 'right'
+                    },
+                ]);
+            });
+        });
+    </script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+}
+
+
+<script src="~/dist/js/jquery.mask.js"></script>

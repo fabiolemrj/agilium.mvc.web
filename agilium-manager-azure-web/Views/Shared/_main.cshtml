@@ -1,0 +1,1001 @@
+﻿
+@inject agilium.webapp.manager.mvc.Interfaces.IAspNetUser appUser
+
+@*@inject Agilium.Administrativo.Web.Services.ServicoGenerico serviceGenerico*@
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agilium Painel</title>
+
+    <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="~/font/NightMachine-rwMB.ttf" type="text/css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <!-- Theme style -->
+   
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/chart.js/Chart.css" />
+    <link rel="stylesheet" href="~/css/toastr.css" />
+    <link href="~/dist/plugins/sweetalert2/sweetalert2.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+ 
+     
+</head>
+
+<body class="hold-transition sidebar-mini text-md accent-navy">
+    @*<div id="overlay" onclick="off()">
+            <img id="imgLoader" src="~/Images/ajax-loader.gif" alt="Aguarde o carregamento..." />
+
+        </div>*@
+
+    <div id="overlay">
+        <div class="loader">
+            <img id="imgLoader" src="~/Images/loading-gif-png-5.gif" alt="Aguarde o carregamento..." />
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-light navbar-warning">
+            <!-- Left navbar links -->
+            <a class="text-lg-left">
+                @*<img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">*@
+                <h4><span>Manager</span></h4>
+            </a>
+
+            <!-- Right navbar links -->
+            @*<partial name="_LoginPartial" />*@
+            <div class="ml-auto">
+                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                    <i class="fas fa-expand-arrows-alt"></i>
+
+                </a>
+            </div>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+
+        <aside class="main-sidebar sidebar-light-navy elevation-4">
+            <!-- Brand Logo -->
+            <a class="brand-link navbar-warning" asp-controller="Home" asp-action="Index">
+                <img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="fonteLogoAgilium">AGILIUM </span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+                    <div>
+                        <nav class="navbar">
+                            <div class="image">
+                                <img id="fotoUsuario" src="~/Images/user_generic2.png" class=" card-img-user-top img-rounded elevation-2" alt="Foto do usuario logado">
+                            </div>
+                            <a class="nav-link" data-toggle="collapse" href="#"
+                               data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                               aria-expanded="false" aria-label="Toggle navigation">
+                                <div class="info">
+                                    <div class="d-block">     @appUser.ObterUserNome()</div>
+                                </div>
+                            </a>
+                        </nav>
+                        <br />
+                        <div class="">
+
+                            <div class="collapse" id="navbarToggleExternalContent">
+                                <div>
+                                    <a class="nav-link text-dark" id="changePassword" asp-controller="Identidade" asp-action="mudarsenha">
+                                        <i class="fas fa-retweet mr-2"></i>Alterar Senha
+                                    </a>
+                                    <a class="nav-link text-dark" id="usuario" asp-controller="Usuario" asp-action="ObterUsuario" asp-route-idUserAspNet="@appUser.ObterUserId()">
+                                        <i class="fas fa-address-book mr-2"></i>Editar Perfil
+                                    </a>
+                                    <a class="nav-link text-dark" id="fotoPerfil" asp-controller="Usuario" asp-action="ExibirImagemUsuario" asp-route-idUserAspNet="@appUser.ObterUserId()">
+                                        <i class="fas fa-user-circle mr-2"></i>Foto do Perfil
+                                    </a>
+
+                                    @*<a class="nav-link text-dark" id="logout1" asp-controller="Identidade" asp-action="logout">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                            </a>*@
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col" data-widget="sidebar-search">
+                        <div class="form-group">
+                            <select id="cbEmpresaUsuario" class="form-control" >
+                                <option value="-1">** Selecionar Empresa **</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-user-lock"></i>
+                                <p>
+                                    <i class="nav-icon right fas fa-angle-left"></i>Controle de acesso
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Usuario" asp-action="ObterTodosUsuarios">
+                                        <i class="fas fa-user-friends nav-icon"></i>
+                                        Usuarios
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                            <ul class="nav nav-treeview">
+                            @*     <li class="nav-item">
+                                    <a class="nav-link" asp-controller="ControleAcesso" asp-action="PerfilIndex">
+                                        <i class="fas fa-check-double nav-icon"></i>
+                                        Perfil
+                                    </a>
+                                </li> *@
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="ControleAcesso" asp-action="PerfilManagerIndex">
+                                        <i class="fas fa-check-double nav-icon"></i>
+                                        Perfil
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                       
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fas fa-file"></i>
+                                <p>
+                                    Cadastros
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Principal
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Empresa" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Empresas
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Fornecedor" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Fornecedor
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Cliente" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Cliente
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Funcionario" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Funcionário
+                                                </p>
+                                            </a>
+                                            <a asp-controller="Produto" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Produto
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Auxiliares
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Unidade" asp-action="IndexPagination">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Unidade
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexGrupo">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Grupo de Produto
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Estoque" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Estoque
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Devolucao" asp-action="IndexMotivos">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Motivo de Devolução
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexDepartamentos">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Departamentos
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexMarcas">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Marcas de produtos
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Ponto de Venda
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="pontovenda" asp-action="index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    PDV
+                                                </p>
+                                            </a>
+                                            <a asp-controller="Moeda" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Moeda
+                                                </p>
+                                            </a>
+                                            <a asp-controller="FormaPagamento" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Forma Pagamento
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Site Mercado
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-action="IndexProduto" asp-controller="SiteMercado" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Produtos disponibilizados
+                                                </p>
+                                            </a>
+                                            <a asp-action="IndexMoeda" asp-controller="SiteMercado" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Associar Moeda Pag.
+                                                </p>
+                                            </a>
+                                            <a href="#" class="nav-link indisponivel">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Pedidos importados
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>
+                                    Processos
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Turno
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="Turno" asp-action="IndexTurnos" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Historico
+                                                </p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Estoque
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-action="Index" asp-controller="Compra" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Compras
+                                                </p>
+                                            </a>
+                                            <a asp-action="Index" asp-controller="Perda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Perdas / Sobras
+                                                </p>
+                                            </a>
+                                            <a asp-action="Index" asp-controller="Inventario" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Inventário
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Ponto de Venda
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="Caixa" asp-action="IndexCaixa" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Caixa
+                                                </p>
+                                            </a>
+                                            <a asp-controller="venda" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Vendas
+                                                </p>
+                                            </a>
+                                            <a asp-controller="devolucao" asp-action="index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Devolução de Produtos
+                                                </p>
+                                            </a>
+                                            <a asp-controller="vale" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Controle de Vales
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-dollar-sign"></i>
+                                <p>
+                                    Financeiro
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Contas
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="PlanoConta" asp-action="Index" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Planos de Contas
+                                                </p>
+                                            </a>
+                                            <a asp-controller="Conta" asp-action="IndexContaPagar" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Contas a pagar
+                                                </p>
+                                            </a>
+                                            <a asp-controller="Conta" asp-action="IndexContaReceber" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Contas a receber
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="CategoriaFinanceira" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Categoria Financeira
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Fiscal
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="NotaFiscal" asp-action="IndexNFInutil" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Inutilização de NFCe
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>
+                                    Ferramentas
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                @*<li class="nav-item">
+                                <a class="nav-link" asp-controller="Config" asp-action="Edit" asp-route-idEmpresa="170125212778496001">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                Editar Configurações de sistema
+                                </p>
+                                </a>
+                                </li>*@
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Config" asp-action="Index">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Configurações de sistema
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Config" asp-action="IndexConfigImagem">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Configurações Imagens
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="Log" asp-action="Index">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>Log</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-print"></i>
+                                <p>
+                                    Relatórios
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Vendas
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-action="ReportVendaDetalhada" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Venda detalhada
+                                                </p>
+                                            </a>
+                                            <a asp-action="ReportVendaSimples" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Venda Simplificada
+                                                </p>
+                                            </a>
+                                            <a asp-action="ReportVendaDiferenca" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Diferença de caixa
+                                                </p>
+                                            </a>                                        
+                                            <a asp-action="ReportVendaRanking" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Ranking de vendas
+                                                </p>
+                                            </a>
+                                            <a asp-action="ReportVendaFornecedor" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Vendas por fornecedor
+                                                </p>
+                                            </a>
+                                            <a class="nav-link indisponivel">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    BI Vendas
+                                                </p>
+                                            </a>
+                                            <a asp-action="ReportVendaMoeda" asp-controller="Venda" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Venda por moeda
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Estoque
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-action="ReportEstoquePosicao" asp-controller="Estoque"  class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Posição de estoque geral
+                                                </p>
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Diversos
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link indisponivel">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    DRE Sintético
+                                                </p>
+                                            </a>
+                                            <a href="#" class="nav-link indisponivel">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    DRE Analítico
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item bg-gray-light">
+                            <a class="nav-link text-dark" id="logout1" asp-controller="Identidade" asp-action="logout">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                            </a>
+
+
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+                @* </div> *@
+                <!-- /.sidebar -->
+</aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <div class="conteudo content">
+                <div class="container-fluid">
+                    @RenderBody()
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                Ambiente: Homologação
+            </div>
+            <!-- Default to the left -->
+            <div>Data do Sistema: @DateTime.Now.ToString("dd/MM/yyyy")</div>
+        </footer>
+
+    </div>
+    <div id="myModal" class="modal fade in">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div id="myModalContent"></div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="idEmpresaSelec" value="-1" >
+
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <!-- Bootstrap 4 -->
+    <!-- AdminLTE App -->
+    <script src="~/js/site.js"></script>
+
+     @* <script src="~/js/jquery-3.3.1.min.js"></script>oi *@
+    @* <script src="~/local/gijgo.min.js"></script> *@
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- jQuery -->
+    @* <script src="~/dist/plugins/jquery/jquery.min.js"></script> *@
+    <!-- Bootstrap 4 -->
+    <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/dist/plugins/chart.js/Chart.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/dist/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/dist/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/jszip/jszip.min.js"></script>
+    <script src="~/dist/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/dist/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/js/dknotus-tour.min.js"></script>
+    <script src="~/dist/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+    <script src="~/dist/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script src="~/js/toastr.min.js"></script>
+    <script src="~/dist/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/js/toastr.min.js"></script>
+    <script src="~/dist/js/jqueryInputMask.js"></script>
+
+    <!--forms-->
+    <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    
+    @*<script src="~/dist/js/demo.js"></script>
+        <script src="~/dist/js/pages/dashboard.js"></script>*@
+
+    @RenderSection("Scripts", required: false)
+
+<script>
+
+        function SelecionarEmpresa() {
+            $('#cbEmpresaUsuario').change(function () {
+                const id = $(this).val();
+                $('a').attr('asp-route-idEmpresa', $(this).val());
+                $('#idEmpresaSelec').val(id);
+                ObterIdEmpresaSelecionada();
+            });
+        }
+        function SetModal() {
+
+            $(document).ready(function () {
+                $(function () {
+                    $.ajaxSetup({ cache: false });
+
+                    $("a[data-modal]").on("click",
+                        function (e) {
+                            $('#myModalContent').load(this.href,
+                                function () {
+                                    $('#myModal').modal({
+                                        keyboard: true
+                                    },
+                                        'show');
+                                    bindForm(this);
+                                });
+                            return false;
+                        });
+                });
+            });
+        }
+
+        function bindForm(dialog) {
+            $('form', dialog).submit(function () {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        if (result.success) {
+                            $('#myModal').modal('hide');
+                            if(result.url){
+                                   $('#ContatoTarget').load(result.url); // Carrega o resultado HTML para a div demarcada
+                            }else{
+                                $('#ContatoTarget').html(result);
+                            }
+                         
+
+                              Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sucesso',
+                                            text: 'Operação realizada com sucesso'
+                                        });
+                        } else {
+                            $('#myModalContent').html(result);
+                            bindForm(dialog);
+                        }
+                    }
+                });
+
+                SetModal();
+                return false;
+            });
+        }
+
+         $(document).ready(function () {
+
+                //Renderiza a mensagem que retorna da controller
+             if ("@ViewBag.TipoMensagem" != '') {
+                 ModalMensagem("@ViewBag.TipoMensagem", "@Html.Raw(ViewBag.Mensagem)");
+             }
+             else if ("@TempData["TipoMensagem"]" != '')
+             {
+                  ModalMensagem("@TempData["TipoMensagem"]","@TempData["Mensagem"]");
+             }
+
+             ObterFoto();
+
+            // ObterIdEmpresaSelecionada();
+
+             ObterEmpresaUsuario();
+             SelecionarEmpresa();
+         });
+
+        function ObterFoto() {
+              const id ="@appUser.ObterUserId()";
+        //alert(id);
+            $.get('/Usuario/ExibirImagemUsuarioJson?idUserAspNet=' + id, null, function (response) {
+                var objeto = JSON.parse(JSON.stringify(response));
+                if (objeto.error) {
+                    alert(objeto.error)
+                    return;
+                }
+
+                if (objeto.imagem != "" && objeto.imagem != undefined && objeto.imagem != null)
+                    $("#fotoUsuario").attr("src", objeto.imagem);
+
+            }).fail(function (err) {
+                toastr.error('ERRO: ' + err);
+            });
+        }
+
+        function ObterIdEmpresaSelecionada() {
+            const idEmpresaSelecionada = $('#cbEmpresaUsuario').val();
+
+            $.get('/Usuario/SelecionarEmpresa?idEmpresaSelecionada=' + idEmpresaSelecionada, null, function (response) {
+                var objeto = JSON.parse(JSON.stringify(response));
+                if (objeto.error) {
+                    alert(objeto.error)
+                    return;
+                }
+
+                if (objeto.idSelecionado) {
+                    
+                    return objeto.idSelecionado
+                }
+
+                return "-1";
+            });
+        }
+
+        function ObterEmpresaUsuario() {
+            const id = "@appUser.ObterUserId()";
+            
+
+            $.get('/Usuario/ObterEmpresasUsuarioJson?idUserAspNet=' + id, null, function (response) {
+                var objeto = JSON.parse(JSON.stringify(response));
+                if (objeto.error) {
+                    alert(objeto.error)
+                    return;
+                }
+               
+                var $select = $('#cbEmpresaUsuario');
+
+                objeto.lista.map(item => {
+                    //if (item.idempresa == objeto.idEmpresaSelecionada)
+                    //    alert(objeto.idEmpresaSelecionada);
+
+                    $select.append('<option value=' + item.idempresa +'>' + item.nomeEmpresa + '</option>');
+                });
+
+                if (objeto.idEmpresaSelecionada && objeto.idEmpresaSelecionada !== '' && $select.val() !== objeto.idEmpresaSelecionada)
+                    $select.val(objeto.idEmpresaSelecionada);
+
+            }).fail(function (err) {
+                toastr.error('ERRO: ' + err);
+            });
+        }
+
+        function on() {
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function ModalMensagem(tipoModal, mensagemModal) {
+            var _tipoModal;
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "10000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            switch (tipoModal) {
+
+                case "warning":
+                    toastr.warning(mensagemModal)
+                    break;
+                case "danger":
+                    toastr.error(mensagemModal)
+                    break;
+                case "info":
+                    toastr.info(mensagemModal)
+                    break;
+                case "success":
+                    toastr.success(mensagemModal)
+                    break;
+
+                default:
+                    toastr.success(mensagemModal)
+                    break;
+            }
+        }
+
+        //$('#modal-dialog').on('show', function () {
+        //    var link = $(this).data('link'),
+        //        confirmBtn = $(this).find('.confirm');
+        //})
+
+
+        $('#btnYes').click(function () {
+
+            // handle form processing here
+
+            alert('submit form');
+            $('form').submit();
+
+        });
+
+        $(".indisponivel").click(function(){
+            ModalMensagem("danger", "Recurso Indisponível para versão Web");
+        });
+</script>
+
+</body>
+</html>

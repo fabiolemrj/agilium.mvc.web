@@ -1,0 +1,39 @@
+﻿@model List<agilium.webapp.manager.mvc.ViewModels.ClaimSelecionada>
+    <div id="resultadoListaClaimAtual">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th style="width:200px">Claim</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><dt class="text-primary">@Html.DisplayFor(modelItem => item.claim)</dt></td>
+                        <td>
+                            <div class="row">
+
+                                @foreach (var acao in item.ClaimValue)
+                                {
+                                    <div class="col-md-2 mb-3">
+                                        <button type="button" class="btn btn-outline-primary btn-block btn-sm" title="Remover ação"
+                                                onclick="Remover('@acao','@item.claim') ">
+                                            <i class="fas fa-trash-alt"></i> @acao
+                                        </button>
+                                    </div>
+
+                                }
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+ 
+    </div>

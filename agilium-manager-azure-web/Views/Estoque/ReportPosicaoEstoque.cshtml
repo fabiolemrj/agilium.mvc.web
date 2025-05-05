@@ -1,0 +1,126 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.EstoqueViewModel.FiltroEstoquePosicao
+
+@{
+    ViewData["Title"] = "Relatório de Posição de Estoque";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Relatorio Posição estoque</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmRelatPosicaoEstoque" class="sidebar-form" method="post" novalidate>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label id="labelEstoque"></label>
+                        <select asp-for="IdEstoque"
+                                asp-items="@Model.Estoques.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                class="form-control"></select>
+                        <span asp-validation-for="IdEstoque" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<table class="table table-hover">
+    <thead class="table thead-dark">
+        <tr>
+            <th>
+                Codigo.
+            </th>
+            <th>
+                Produto
+            </th>
+            <th>
+                Grupo Produto
+            </th>
+            <th>
+                Total Estoque
+            </th>
+            <th>
+                Custo Médio
+            </th>
+            <th>
+                Valor Financ.
+            </th>
+            <th>
+                Quant. Mínima
+            </th>
+            <th>
+                Situação
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Lista)
+        {
+            var classificacao = "Normal";
+            var classe = "text-success";
+            if(item.Situacao == 2)
+            {
+                classificacao = "Abaixo do mínimo";
+                classe = "text-danger";
+            }
+
+                        
+            <tr>
+                <td>
+                    @Html.Raw(item.CdProduto)
+                </td>
+                <td>
+                    @Html.Raw(item.NMProduto)
+                </td>
+                  <td>
+                    @Html.Raw(item.NmGrupo)
+                </td>
+                  <td>
+                    @Html.Raw(item.Quantidade.ToString("N"))
+                </td>
+                <td>
+                    @Html.Raw(item.VlCustoMedio.ToString("N"))
+                </td>
+                 <td>
+                    @Html.Raw(item.VlFinanc.ToString("N"))
+                </td>
+                 <td>
+                    @Html.Raw(item.NuQtdMin.ToString("N"))
+                </td>
+                <td>
+                    <span class="@classe">@Html.Raw(classificacao)</span>                    
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

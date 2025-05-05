@@ -1,0 +1,298 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+<link rel="stylesheet" href="~/dist/plugins/select2/css/select2.css">
+@model agilium.webapp.manager.mvc.ViewModels.DuplicarUsuarioClaimViewModel
+
+@{
+
+    ViewData["Title"] = "Duplicar por Usuario";
+
+    TempData.Keep("lista");
+}
+
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("ObterTodosUsuarios","Usuario")"><i class="fa fa-dashboard"></i> Usuarios </a> /
+            <a href="#">Duplicar Claims por Usuario</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form id="frmEdit" asp-action="ListaClaimUsuarioCopia">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idUserAspNet" id="idUserAspNet" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Usuario Selecionado</h3>
+                    <div class="card-tools">
+                        <ul class="nav nav-pills ml-auto">
+                            <li class="nav-item">
+                                @*<a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fas fa-clone sns-tool-action" id="btnSalvar" onclick="Selecionar()"></span></a>*@
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Nome" class="control-label" id="labelnome"></label>
+                                <input asp-for="Nome" class="form-control" readonly />
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="idUserSelecionado" class="control-label" id="labelUserSelecionado"></label>
+                                <select asp-for="idUserSelecionado"
+                                        asp-items="ViewBag.Usuarios"
+                                        class="form-control" onchange='selecionaId()'></select>
+                                <span asp-validation-for="idUserSelecionado" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+        </form>
+        <div class="card card-primary">
+            <div class="card-header">
+                <h4 class="card-title w-100">
+                    <a class="d-block w-100 collapsed" data-toggle="collapse" href="#collapseClaim">Claims do Usuario</a>
+                </h4>
+            </div>
+            <div id="collapseClaim">
+                <div class="card-body">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Condensed Full Width Table</h3>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Task</th>
+                                        <th>Progress</th>
+                                        <th style="width: 40px">Label</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Update software</td>
+                                        <td>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-danger">55%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.</td>
+                                        <td>Clean database</td>
+                                        <td>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar bg-warning" style="width: 70%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-warning">70%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3.</td>
+                                        <td>Cron job running</td>
+                                        <td>
+                                            <div class="progress progress-xs progress-striped active">
+                                                <div class="progress-bar bg-primary" style="width: 30%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-primary">30%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4.</td>
+                                        <td>Fix and squish bugs</td>
+                                        <td>
+                                            <div class="progress progress-xs progress-striped active">
+                                                <div class="progress-bar bg-success" style="width: 90%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success">90%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+
+        @await Html.PartialAsync("_ClaimsPorUsuarioSelec", Model.ClaimsSelecionadas)
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/dist/plugins/select2/js/select2.js"></script>
+    <!-- Select2 -->
+    <script>
+
+        $('#btnSalvar').click(function () {
+            var formValido = $("#frmEdit").valid();
+            if (formValido) {
+                //if (ValidarFormulario()) {
+                on();
+                $('#btnSendForm').click();
+                //}
+            }
+        });
+
+
+        $(function () {
+            $('.select2').select2();
+            $(".select2").select2({
+                theme: "classic"
+            });
+        });
+
+        $('.select2').select2({
+            dropdownCssClass: "bigdrop",
+            placeholder: 'Select an option'
+        });
+
+        function selecionaId() {
+            var id = $("#idUserSelecionado").val();
+            var idUserAspNet = $("#idUserAspNet").val();
+
+            var data1 = {
+                'idOrigem': id,
+                'idDestino': idUserAspNet
+            };
+            var data = JSON.stringify(data1);
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/ListaClaimUsuarioCopiaRetorno",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+                    if (objeto.error) {
+                        toastr.error('Error');
+                    }
+                    //alert(objeto.lenght);
+                    MontarResultado2(objeto);
+                   // MontarResultado(objeto);
+
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                    alert(e.statusText);
+                }
+            });
+        }
+
+        function MontarResultado2(data) {
+            var resultado = "";
+
+            resultado += "<table class='table table-hover' id='divGridResultado2'>";
+            resultado += "<thead class='table thead-dark'>";
+            resultado += "<tr>";
+            resultado += "<th>Claim</th>";
+            resultado += "<th>Ações</th>";
+            resultado += "</tr>";
+            resultado += "</thead>";
+            resultado += "<tbody>";
+            $.map(data.lista, function (item, idx) {
+                resultado += "  <tr>";
+                resultado += " <td>";
+                resultado += "  <dt>" + item.claim + "</dt>";
+                resultado += " </td>";
+                resultado += " <td>";
+                resultado += " <div class='row'>"
+                $.map(item.claimValue, function (acao, idx2) {
+                    resultado += "<div class='col-md-2'>";
+                    resultado += "<dd>" + acao + "</dd>";
+                    resultado += "</div>";
+                });
+                resultado += "</div>";
+                resultado += " </td>";
+                resultado += "  </tr>";
+            });
+            resultado += "</tbody>";
+            resultado += "</table>";
+            resultado += "";
+            $("#resultado").html(resultado);
+        }
+
+        function MontarResultado(data) {
+            var resultado = "";
+
+            resultado += "<table class='table table-hover' id='divGridResultado'>";
+            resultado += "<thead class='table thead-dark'>";
+            resultado += "<tr>";
+            resultado += "<th>Claim</th>";
+            resultado += "<th>Ações</th>";
+            resultado += "</tr>";
+            resultado += "</thead>";
+            resultado += "<tbody>";
+            $.map(data.lista, function (item, idx) {
+               
+                resultado += "  <tr>";
+                resultado += " <td>";
+                resultado += "  <dt>" + item.claim + "</dt>";
+                resultado += " </td>";
+                resultado += " <td>";
+                resultado += " <div class='row'>"
+                $.map(item.claimValue, function (acao, idx2) {
+                    resultado += "<div class='col-md-2'>";
+                    resultado += "<div class='info-box mb-2 bg-light'>";
+                    resultado += "<span class='info-box-icon'><i class='fas fa-check-circle'></i></span>";
+                    resultado += "<div class='info-box-content'>";
+                    resultado += "<span class='info-box-text'>" + acao + "</span>";
+                    resultado += "</div>";
+                    resultado += "</div>";
+                    resultado += "</div>";
+                });
+                resultado += "</div>";
+                resultado += " </td>";
+                resultado += "  </tr>";
+            }); 
+            resultado += "</tbody>";
+            resultado += "</table>";
+            resultado += "";
+            $("#resultado").html(resultado);
+        }
+
+
+    </script>
+
+
+}

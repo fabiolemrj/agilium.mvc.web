@@ -1,0 +1,167 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.Config.EditarChaveValorViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Configurações";
+    var ehCor = false;
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        @*<a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>*@
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Configurações </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="Index" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <input type="hidden" value="@ViewBag.idEmpresa" id="idEmpresa" name="idEmpresa" />
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar configurações por chave" placeholder="Pesquisar pela CHAVE..." name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden" asp-route-idEmpresa="@ViewBag.idEmpresa"></button>
+
+        </form>
+
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Chave
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Classificação
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List.OrderBy(x => x.Classificacao).OrderBy(x => x.Label))
+            {
+
+                ehCor = item.Chave.Trim().ToUpper().Contains("COR")? true:false;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Chave)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Label)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Classificacao)
+                </td>
+                <td>
+
+                    @if (item.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.SimNao)
+                    {
+                        if (item.Valor == "1")
+                        {<span class="text-success">Sim</span>}
+                        else
+                        {<span class="text-danger">Não</span>}
+
+                    }
+                    else if (item.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.TipoAmbiente)
+                    {
+                        if (item.Valor == "Homologacao")
+                        {<span>Homologação</span>}
+                        else
+                        {<span>Produção</span>}
+                    }
+                    else if (item.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.TipoAberturaCaixa)
+                    {
+                        if (item.Valor == "1")
+                        {<span>Abrir com saldo do caixa anterior</span>}
+                        else
+                        {<span>Abrir com saldo zerado</span>}
+                    }
+                    else
+                    {
+                        @if (ehCor)
+                        {
+                            var cor = @item.Valor;
+                            if (cor.Trim().ToUpper().Contains("LUNA"))
+                            {
+                                cor = "#4474C2";
+                            }
+                            else if (cor.Trim().ToUpper().Contains("SILVER"))
+                            {
+                                cor = "#96A0B0";
+                            }
+                            else if (cor.Trim().ToUpper().Contains("OBSIDIAN"))
+                            {
+                                cor = "#4F4F4F";
+                            }
+                            <span class="info-box-icon elevation-1" style="background-color:@cor">
+                                @item.Valor
+                            </span>
+                        }
+                        else
+                        {
+                            @item.Valor
+                        }
+
+                    }
+
+
+
+                </td>
+                <td class="text-right">
+                    @{
+                        var acao = "EditItem";
+                        var caption = "Editar configuração";
+                        if (item.Chave.Trim().ToUpper().Contains("CERTIFICADO_CAMINHO"))
+                        {
+                            acao = "EditCertificado";
+                            caption = "Editar Certificado";
+                        }
+                     }
+                  <a class="btn btn-warning" asp-action="@acao" asp-route-chave="@item.Chave" asp-route-idEmpresa="@item.IdEmpresa" title="@caption"><spam class="fa fa-pencil-alt"></spam></a>
+                    @*<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CHAVE" asp-route-idEmpresa="@item.IDEMPRESA" title="Apagar"><spam class="fa fa-trash"></spam></a>*@
+                </td>
+            </tr>
+
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+<script src="~/local/Ferramentas/config.js"></script>

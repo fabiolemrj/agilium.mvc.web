@@ -1,0 +1,147 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.ValeViewModel.ValeViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Vales";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Vale </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="Index" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por nome do cliente" placeholder="Pesquisar por nome do cliente..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Codigo Barra
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th class=""></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                var ativo = item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoVale.Ativo;
+                var data = item.DataHora.HasValue ? item.DataHora.Value.ToString("dd/MM/yyyy") : "";
+                var classeAtivo = "";
+                if (item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoVale.Ativo)
+                {
+                    classeAtivo = "text-info";
+                }
+                else if(item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoVale.Utilizado)
+                {
+                    classeAtivo = "text-success";
+                }
+                else
+                {
+                    classeAtivo = "text-danger";
+                }
+
+                var valor = item.Valor.HasValue ? item.Valor.Value : 0;
+                
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.Raw(data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClienteNome)
+                    </td>                  
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                    <td>
+                        @Html.Raw(valor.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodigoBarra)
+                    </td>
+                    <td>
+                        <span class="@classeAtivo"> @Html.DisplayFor(modelItem => item.Situacao)</span>
+                    </td>              
+
+                    <td class="text-right">
+                        @if(ativo)
+                        {
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                            <a class="btn btn-danger" asp-action="Cancel" asp-route-id="@item.Id" title="Cancelar Vale"><spam class="fas fa-window-close"></spam></a>
+                        }                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="8">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/vale.js"></script>
+    <script>
+
+
+    </script>
+ }

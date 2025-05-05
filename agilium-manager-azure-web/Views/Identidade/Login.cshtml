@@ -1,0 +1,225 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.UsuarioLogin
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Login de usuário";
+}
+
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agilium Painel</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/toastr.css" />
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-box">
+            
+          
+        </div>
+        <div class="login-logo">
+            <img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="logoLogin brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="fonteLogoAgilium">AGILIUM MANAGER</span>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Faça login para iniciar sua sessão</p>
+
+                <form id="account" method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="input-group mb-3">
+                        <input asp-for="Email" class="form-control" placeholder="Usuario" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <div class="input-group-text">
+                            <span asp-validation-for="Email" class="fas fa-envelope text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-3" id="show_hide_password">
+                        <input type="password" asp-for="Password" class="form-control" placeholder="Senha" />
+                        <i asp-validation-for="Password" class="text-danger"></i>
+                        <div class="input-group-text" >
+                            <a href="">
+                                <span asp-validation-for="Password" class="fas fa-eye-slash text-danger"></span>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    Lembre-me
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+                @*<div class="social-auth-links text-center mb-3">
+                        <p>- OU -</p>
+                        <a href="#" class="btn btn-block btn-primary">
+                            <i class="fab fa-facebook mr-2"></i> Faça login usando o Facebook
+                        </a>
+                        <a href="#" class="btn btn-block btn-danger">
+                            <i class="fab fa-google-plus mr-2"></i>Faça login usando o Google+
+                        </a>
+                    </div>*@
+                <!-- /.social-auth-links -->
+
+                <p class="mb-1">
+                    <a id="forgot-password" asp-controller="Identidade" asp-action="EsqueciSenha">Esqueceu a senha?</a>
+                </p>
+                @*<p class="mb-0">
+                    <a asp-controller="Identidade" asp-action="registro" asp-route-returnUrl="@ViewData["ReturnUrl"]">Registre uma nova assinatura</a>
+                </p>*@
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <!-- AdminLTE App -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/js/toastr.min.js"></script>
+
+</body>
+</html>
+
+@*<section class="section-conten padding-y container" style="min-height:35vh">
+
+        <vc:Summary></vc:Summary>
+
+        <div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+
+            <div class="card-body">
+                <h4 class="card-title mb-4">Seja bem vindo!</h4>
+                <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input type="password" asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">Ainda não tem uma conta?<a asp-controller="Identidade" asp-action="Registro"> Criar uma conta</a></div>
+        </div>
+
+    </section>*@
+
+    <script>
+    $(document).ready(function () {
+
+        //Renderiza a mensagem que retorna da controller
+        if ("@ViewBag.TipoMensagem" != '') {
+            ModalMensagem("@ViewBag.TipoMensagem", "@Html.Raw(ViewBag.Mensagem)");
+        }
+        else if ("@TempData["TipoMensagem"]" != '') {
+            ModalMensagem("@TempData["TipoMensagem"]", "@TempData["Mensagem"]");
+        }
+    });
+
+    function ModalMensagem(tipoModal, mensagemModal) {
+        var _tipoModal;
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "showDuration": "1000",
+            "hideDuration": "1000",
+            "timeOut": "10000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        switch (tipoModal) {
+
+            case "warning":
+                toastr.warning(mensagemModal)
+                break;
+            case "danger":
+                toastr.error(mensagemModal)
+                break;
+            case "info":
+                toastr.info(mensagemModal)
+                break;
+            case "success":
+                toastr.success(mensagemModal)
+                break;
+
+            default:
+                toastr.success(mensagemModal)
+                break;
+        }
+    }
+
+    $(document).ready(function () {
+        $("#show_hide_password a").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password span').addClass("fa-eye-slash");
+                $('#show_hide_password span').removeClass("fa-eye");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password span').removeClass("fa-eye-slash");
+                $('#show_hide_password span').addClass("fa-eye");
+            }
+        });
+    });
+
+    </script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

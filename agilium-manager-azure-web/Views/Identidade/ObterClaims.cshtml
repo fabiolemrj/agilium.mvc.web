@@ -1,0 +1,134 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+@model agilium.webapp.manager.mvc.ViewModels.ListaClaims
+
+@{
+    ViewData["Title"] = "Lista de Claims";
+    int contador = 0;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a asp-action="NovaClaim" onclick="on()" title="Cadastrar Nova Claim"><span class="fa fa-plus-square sns-tool-action" id="btnNovoClaim"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="#"> Claims</a>
+        </div>
+    </article>
+</section>
+<br />
+
+@foreach (var item in Model.Claims)
+{
+    if (contador == 0)
+    {
+        @Html.Raw(" <div class='row'>")
+
+    }
+    else if (contador == 3)
+    {
+        contador = 0;
+    }
+
+    <div class="col-md-3 col-sm-6 col-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-info"><i class="fas fa-user-tag"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-number"> @Html.DisplayFor(modelItem => item.claimType)</span>
+            </div>
+        </div>
+
+    </div>
+    @if (contador == 3 || Model.Claims.LastOrDefault() == item)
+        @Html.Raw(" </div>")
+
+    contador++;
+}
+@*<table class="table table-hover" id="divGridResultado">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Claims.FirstOrDefault().claimType)
+                </th>
+                <th style="width: 200px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Claims)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.claimType)
+                    </td>
+
+                    <td class="text-right">
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>*@
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    $(function () {
+        $('#btnAjuda').click(function () {
+            Tour.run([
+                {
+                    element: $('#labelPromocao'),
+                    content: '<strong><div align="center" class="text-info">Cliente</div></strong><p><div align="center">Filtro para pesquisa de clientes por nome fantasia.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#labelContrato'),
+                    content: '<strong><div align="center" class="text-info">Código do Contrato</div></strong><p><div align="center">Lista os Códigos dos Contratos.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#btnPesqProduto'),
+                    content: '<strong><div align="center" class="text-info">Botão de Busca</div></strong><p><div align="center">Botão de pesquisa de clientes.</div></p>',
+                    position: 'left'
+                },
+                {
+                    element: $('#divGridResultado'),
+                    content: '<strong><div align="center" class="text-info">Resultado</div></strong><p><div align="center">Retorna os dados dos clientes.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#btnNovoCadastro'),
+                    content: '<strong><div align="center" class="text-info">Cadastro Cliente</div></strong><p><div align="center">Cadastra um novo Cliente.</div></p>',
+                    position: 'bottom'
+                },
+            ]);
+        });
+    });
+
+</script>

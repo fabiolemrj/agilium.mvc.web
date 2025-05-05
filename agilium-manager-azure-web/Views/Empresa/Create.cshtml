@@ -1,0 +1,262 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Empresa.EmpresaCreateViewModel
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = inclusao ? "Nova Empresa" : "Editar Empresa";
+    ViewData["Title"] = operacao;
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Empresa")"><i class="fa fa-dashboard"></i> Empresas</a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="@ViewBag.acao" id="frmCreateEmpresa" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (ViewBag.operacao == "I")
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CDEMPRESA" id="labelCodigo"></label>
+                                <input asp-for="CDEMPRESA" class="form-control" size="6" />
+                                <span asp-validation-for="CDEMPRESA" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="TPEMPRESA" id="labeltpempresa"></label>
+                                <select asp-for="TPEMPRESA"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoEmpresa>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="TPEMPRESA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="NMRZSOCIAL" id="labelRazSoc"></label>
+                                <input asp-for="NMRZSOCIAL" class="form-control" size="70" />
+                                <span asp-validation-for="NMRZSOCIAL" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="divNomeFantasia">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="NMFANTASIA" id="labelNomFant"></label>
+                                <input asp-for="NMFANTASIA" class="form-control" size="70" />
+                                <span asp-validation-for="NMFANTASIA" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NUCNPJ" id="labelCnpj"></label>
+                                <input asp-for="NUCNPJ" class="form-control cnpj" size="20" />
+                                <span asp-validation-for="NUCNPJ" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCREST" id="labelInscrEstad"></label>
+                                <input asp-for="DSINSCREST" class="form-control" size="20" />
+                                <span asp-validation-for="DSINSCREST" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCRESTVINC" id="labelInscrEstadVinc"></label>
+                                <input asp-for="DSINSCRESTVINC" class="form-control" size="20" />
+                                <span asp-validation-for="DSINSCRESTVINC" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCRMUN" id="labelInscrMunicip"></label>
+                                <input asp-for="DSINSCRMUN" class="form-control" size="20" />
+                                <span asp-validation-for="DSINSCRMUN" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label asp-for="CLIENTID_SITEMERCADO" id="labelClienteIdMerc"></label>
+                                <input asp-for="CLIENTID_SITEMERCADO" class="form-control" size="20" />
+                                <span asp-validation-for="CLIENTID_SITEMERCADO" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label asp-for="CLIENTSECRET_SITEMERCADO" id="labelClienteSecret_SM"></label>
+                                <input asp-for="CLIENTSECRET_SITEMERCADO" class="form-control" size="50" />
+                                <span asp-validation-for="CLIENTSECRET_SITEMERCADO" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group ">
+                                <label asp-for="IDLOJA_SITEMARCADO" id="labelLojaSM"></label>
+                                <input asp-for="IDLOJA_SITEMARCADO" class="form-control" size="20" />
+                                <span asp-validation-for="IDLOJA_SITEMARCADO" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NUCNAE" id="labelCnae"></label>
+                                <input asp-for="NUCNAE" class="form-control" size="10" />
+                                <span asp-validation-for="NUCNAE" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="IDCSC" id="labelIdCsc"></label>
+                                <input asp-for="IDCSC" class="form-control" size="10" />
+                                <span asp-validation-for="IDCSC" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CSC" id="labelCSC"></label>
+                                <input asp-for="CSC" class="form-control" size="10" />
+                                <span asp-validation-for="CSC" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NUREGJUNTACOM" id="labelJuntaCom"></label>
+                                <input asp-for="NUREGJUNTACOM" class="form-control" size="20" />
+                                <span asp-validation-for="NUREGJUNTACOM" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        @*<div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="NUCAPARM" id="labelNuCaparm"></label>
+                                    <input asp-for="NUCAPARM" class="form-control money" />
+                                    <span asp-validation-for="NUCAPARM" class="text-danger"></span>
+
+                                </div>
+                            </div>*@
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="CRT" id="labelCrt"></label>
+                                <select asp-for="CRT"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ECodigoRegimeTributario>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="CRT" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="NMDISTRIBUIDORA" id="labelDistrib"></label>
+                                <input asp-for="NMDISTRIBUIDORA" class="form-control" size="50" />
+                                <span asp-validation-for="NMDISTRIBUIDORA" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="STLUCROPRESUMIDO" id="labelLucroPres"></label>
+                                <select asp-for="STLUCROPRESUMIDO"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="STLUCROPRESUMIDO" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="STMICROEMPRESA" id="labelMicroEmp"></label>
+                                <select asp-for="STMICROEMPRESA"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="STMICROEMPRESA" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_endereco.cshtml")
+                        </div>
+                    </div>
+                    @if (!inclusao)
+                    {
+                        <div class="row">
+                            <div class="col-md-12" id="ContatoTarget">
+                                @await Html.PartialAsync("_contato.cshtml")
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+<script src="~/local/empresaCreate.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            SetModal();
+        });
+    </script>
+}

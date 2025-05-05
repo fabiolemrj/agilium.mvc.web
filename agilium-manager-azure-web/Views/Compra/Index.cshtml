@@ -1,0 +1,237 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+
+@{
+    ViewData["Title"] = "Compras";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>    
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Compra </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Código
+                </th>
+                <th class="colunaacao-mudarsituacao">
+                    Fornecedor
+                </th>
+                <th>
+                    Data Compra
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th>
+                    Turno
+                </th>
+                <th>
+                    Tipo Comprovante
+                </th>              
+                <th class="colunaacao-mudarsituacao">
+                    Nº NF
+                </th>             
+                <th>
+                    CFOP
+                </th>
+                <th>
+                    Total da compra
+                </th>
+                <th>
+                    Desconto
+                </th>
+                <th>
+                    Frete
+                </th>
+                <th>
+                    Seguro
+                </th>
+                <th>
+                    Isenção
+                </th>
+                <th>
+                    Impostos
+                </th>
+
+
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List.OrderByDescending(x => x.DataCompra))
+            {
+
+                var situacao = "text-info";
+
+                if (item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoCompra.Cancelada)
+                    situacao = "text-danger";
+                else if (item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoCompra.Efetivada)
+                    situacao = "text-success";
+
+                var dataCompra = item.DataCompra.HasValue ? item.DataCompra.Value.ToString("dd/MM/yyyy") : "";
+                var dataNF = item.DataNF.HasValue ? item.DataNF.Value.ToString("dd/MM/yyyy") : "";
+
+                var valorTotal = item.ValorTotal.HasValue ? item.ValorTotal.Value.ToString("N") : "0,00";
+                var valorOutros = item.ValorOutros.HasValue ? item.ValorOutros.Value.ToString("N") : "0,00";
+                var valorFrete = item.ValorFrete.HasValue ? item.ValorFrete.Value.ToString("N") : "0,00";
+                var valorSeguro = item.ValorSeguro.HasValue ? item.ValorSeguro.Value.ToString("N") : "0,00";
+                var valorIsencao = item.ValorIsencao.HasValue ? item.ValorIsencao.Value.ToString("N") : "0,00";
+                var valorDesconto = item.ValorDesconto.HasValue ? item.ValorDesconto.Value.ToString("N") : "0,00";
+                var valorICMS = item.ValorIcms.HasValue ? item.ValorIcms.Value.ToString("N") : "0,00";
+                var valorBaseICMS = item.ValorBaseCalculoIcms.HasValue ? item.ValorBaseCalculoIcms.Value.ToString("N") : "0,00";
+                var valorIcmsRetido = item.ValorIcmsRetido.HasValue ? item.ValorIcmsRetido.Value.ToString("N") : "0,00";
+                var valorBaseSub = item.ValorBaseCalculoSub.HasValue ? item.ValorBaseCalculoSub.Value.ToString("N") : "0,00";
+                var valorTotalProduto = item.ValorTotalProduto.HasValue ? item.ValorTotalProduto.Value.ToString("N") : "0,00";
+                var valorIpi = item.ValorIpi.HasValue ? item.ValorIpi.Value.ToString("N") : "0,00";
+                var valorImpostos = (item.ValorIcms.HasValue ? item.ValorIcms : 0) 
+                                    + (item.ValorBaseCalculoIcms.HasValue ? item.ValorBaseCalculoIcms : 0)
+                                    + (item.ValorBaseCalculoSub.HasValue ? item.ValorBaseCalculoSub : 0) 
+                                    + (item.ValorIpi.HasValue ? item.ValorIpi : 0)
+                                    + (item.ValorIcmsRetido.HasValue ? item.ValorIcmsRetido : 0);
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeFornecedor)
+                    </td>
+                    <td>
+                        @Html.Raw(dataCompra)
+                    </td>
+                    <td>
+                        <span class="@situacao">@Html.DisplayFor(modelItem => item.Situacao)</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeTurno)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoComprovante)
+                    </td>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroNF)
+                    </td>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroCFOP)
+                    </td>
+                    <td>
+                        @Html.Raw(valorTotal)
+                    </td>                 
+                    <td>
+                        @Html.Raw(valorDesconto)
+                    </td>
+                    <td>
+                        @Html.Raw(valorFrete)
+                    </td>
+                    <td>
+                        @Html.Raw(valorSeguro)
+                    </td>
+                    <td>
+                        @Html.Raw(valorIsencao)
+                    </td>                 
+                    <td>
+                        @Html.Raw(valorImpostos?.ToString("N"))
+                    </td>
+                    <td>
+
+                        @if (item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoCompra.Aberta)
+                        {
+                            <a class="btn btn-default" asp-action="ListaItemCompra" asp-route-idCompra="@item.Id" title="Itens da Compra"><spam class="fas fa-th-list"></spam></a>
+                            <a class="btn btn-info" asp-action="Efetivar" asp-route-id="@item.Id" title="Efetivar compra" data-idcompra="@item.Id"><spam class="fas fa-check-square"></spam></a>
+                            <a class="btn btn-secondary" asp-action="CadastroAutomaticoProduto" asp-route-id="@item.Id" title="Cadastro Automatico Produtos"><spam class="fas fa-tasks"></spam></a>
+                            <a class="btn btn-success" asp-action="Realizar" asp-route-id="@item.Id" title="Realizar Devolução"><spam class="fas fa-undo"></spam></a>
+                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+
+                        }
+                        <a class="btn btn-danger cancel" asp-action="Cancelar" asp-route-id="@item.Id" title="Cancelar Devolução" data-id="@item.Id" data-dev="@item.Codigo"><spam class="fas fa-window-close"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="15">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+@*<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Itens</h3>
+    </div>
+    <div class="card-body">
+       <div id="item"></div>
+    </div>
+</div>*@
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/compra.js"></script>
+
+ }

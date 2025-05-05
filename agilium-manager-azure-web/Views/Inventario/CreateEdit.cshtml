@@ -1,0 +1,142 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.InventarioViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = inclusao ? "Novo" : "Editar";
+    ViewData["Title"] = "Inventario";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="@ViewBag.acao" id="frmCreateEditInventario" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (ViewBag.operacao == "I")
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
+                                <select asp-for="IDEMPRESA"
+                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
+                                        class="form-control"></select>
+                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">               
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDESTOQUE" id="labelestoque"></label>
+                                <select asp-for="IDESTOQUE"
+                                        asp-items="@Model.Estoques.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                        class="form-control js-example-basic-single">
+                                    <option value="">-*****-</option>
+                                </select>
+                                <span asp-validation-for="IDESTOQUE" class="text-danger"></span>
+                            </div>
+                        </div>                        
+                    </div>                   
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" id="labelCodigo"></label>
+                                <input asp-for="Codigo" class="form-control" size="6" />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Data" id="labelData"></label>
+                                <input asp-for="Data" class="form-control" type="date" />
+                                <span asp-validation-for="Data" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Descricao" id="labelDescricao"></label>
+                                <input asp-for="Descricao" class="form-control" size="50" />
+                                <span asp-validation-for="Descricao" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Situacao" id="labelsituacao"></label>
+                                <select asp-for="Situacao"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESituacaoInventario>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="Situacao" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="TipoAnalise" id="labelTipoAnalise"></label>
+                                <select asp-for="TipoAnalise"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoAnalise>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="TipoAnalise" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Observacao" id="labelObs"></label>
+                                <textarea class="form-control" rows="3" asp-for="Observacao"></textarea>
+                                <span asp-validation-for="Observacao" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/inventario.js"></script>
+
+ }

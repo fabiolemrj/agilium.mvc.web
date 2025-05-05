@@ -1,0 +1,133 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.CaixaViewModel.CaixaMoedaViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Moedas recebidas no Caixa";
+
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="@Url.Action("IndexCaixa","Caixa")"><i class="fa fa-dashboard"></i> Caixa </a> /
+            <a href="#"> Moedas </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-lg-4 col-6">
+
+        <div class="small-box bg-info disabled color-palette">
+            <div class="inner">
+                <h3>@ViewBag.total.ToString("N")<sup style="font-size: 20px">$</sup></h3>
+                <p> &nbsp</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a class="small-box-footer">
+                Total
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" id="areaFiltro">
+        <form class="sidebar-form" method="get">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <h2 class="card-title text-default">@ViewBag.Caixa</h2>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Moeda
+                </th>
+                <th>
+                    Total Recebido (original)
+                </th>
+                <th>
+                    Valor Recebido (corrigido)
+                </th>
+                <th>
+                    Usuario Correção
+                </th>
+                <th>
+                    Corrigido em
+                </th>
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                var valorOriginal = item.ValorOriginal.HasValue ? item.ValorOriginal.Value.ToString("N") : "0,00";
+                var valorCorrigido = item.ValorCorrecao.HasValue ? item.ValorCorrecao.Value.ToString("N") : "0,00";
+                var dataCorrecao = item.DataCorrecao.HasValue ? item.DataCorrecao.Value.ToString("dd/MM/yyyy") : "";
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MoedaNome)
+                    </td>
+                    <td>
+                        @Html.Raw(valorOriginal)
+                    </td>
+                    <td>
+                        @Html.Raw(valorCorrigido)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioCorrecao)
+                    </td>
+                    <td>
+                        @Html.Raw(dataCorrecao)
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" asp-action="CorrecaoMoeda" asp-route-id="@item.Id" title="Correção de valor" asp-route-idCaixa="@item.IDCAIXA"><spam class="fa fa-pencil-alt"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            @{
+                                for (var i = 1; i < Model.TotalPages + 1; i++)
+                                {
+                                    if (i == Model.PageIndex)
+                                    {
+                                        <li class="page-item active">
+                                            <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idCaixa="@ViewBag.idCaixa">@i <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-ps="@Model.PageSize" asp-route-page="@i" asp-route-q="@Model.Query" asp-route-idCaixa="@ViewBag.idCaixa">@i</a></li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </nav>
+                </td>
+
+            </tr>
+
+        </tfoot>
+    </table>
+</div>

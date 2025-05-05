@@ -1,0 +1,52 @@
+﻿@inject agilium.webapp.manager.mvc.Interfaces.IAspNetUser appUser
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+
+@{
+    ViewData["Title"] = "Foto do Perfil";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ExibirImagemUsuario" id="frmEdit" method="post">
+            <vc:Summary></vc:Summary>
+            <div class="card card-widget widget-user shadow">
+                <div class="widget-user-header bg-info">
+                    <h3 class="widget-user-username">@appUser.ObterUserNome()</h3>
+                    <h5 class="widget-user-desc">@appUser.ObterUserEmail()</h5>
+                    <div class="card-tools float-md-right">
+                        <a href="#" type="button" title="Editar foto?" id="btnAjuda"><span class="fal fa-camera sns-tool-action"></span></a>
+                    </div>
+                </div>
+                <div class="widget-user-image">
+                    <img class="img-circle elevation-2" src="~/Images/fotoFabio3.jpeg" />
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">Situação</h5>
+                                <span class="description-text">Ativo</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 border-right">
+                            <div class="description-block">
+                                <h5 class="description-header">Nome Completo</h5>
+                                <span class="description-text">Fabio Lemos Leite</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="description-block">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.TurnoViewModel.TurnoIndexViewModel
+@{
+    ViewData["Title"] = "Fechar Turno";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("IndexTurnos","Turno")"><i class="fa fa-dashboard"></i> Turno </a> /
+            <a href="#"> Fechar </a>
+        </div>
+    </article>
+</section>
+    <br />
+    <div class="callout callout-danger">
+        <h3>Você deseja realmente Fechar o Turno?</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="DeleteContaPagar" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <vc:Summary></vc:Summary>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IDUSUARIOFIM" />
+                <input type="hidden" asp-for="IDUSUARIOINI" />
+                <input type="hidden" asp-for="IDEMPRESA" />
+                <input type="hidden" asp-for="DataInicial" />
+                <input type="hidden" asp-for="Data" />
+                <input type="hidden" asp-for="DataFinal" />
+                <input type="hidden" asp-for="Empresa" />
+                <input type="hidden" asp-for="NumeroTurno" />
+                <input type="hidden" asp-for="UsuarioFinal" />
+                <input type="hidden" asp-for="UsuarioInicial" />
+                <div class="card" id="labelcardGerais">
+                    <div class="card-header">
+                        <h3 class="card-title text-danger">Turno</h3>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="comment-text">
+                                    <span class="username" id="lbempresa">
+                                        Empresa:                                    
+                                    </span>
+                                <label>@Model.Empresa</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="comment-text">
+                                    <span class="username" id="lbturno">
+                                        Nº do Turno:
+                                    </span>
+                                <label>@Model.NumeroTurno</label>
+                                </div>
+                            </div>
+                        <div class="col-md-6">
+                            <div class="comment-text">
+                                <span class="username" id="lbdtturno">
+                                    Data do Turno:
+                                </span>
+                                <label>@Model.Data</label>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="comment-text">
+                                    <span class="username" id="lbusuarioAbert">
+                                        Usuario de Abertura:
+                                    </span>
+                                <labeL>@Model.UsuarioInicial</labeL>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="comment-text">
+                                    <span class="username" id="lbdtabert">
+                                        Data de Abertura:
+                                    </span>
+                                <label>@Model.DataInicial</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label asp-for="Obs" id="labelObs"></label>
+                                    <textarea class="form-control" rows="3" asp-for="Obs"></textarea>
+                                    <span asp-validation-for="Obs" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script src="~/local/processo/turno.js"></script>
+        <script>
+
+
+        </script>
+    }

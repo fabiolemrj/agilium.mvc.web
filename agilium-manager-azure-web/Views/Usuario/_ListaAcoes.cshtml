@@ -1,0 +1,43 @@
+﻿
+@model List<agilium.webapp.manager.mvc.ViewModels.ClaimSelecionada>
+
+
+    <div class="card" id="lbAcoesClaimSelec">
+        <div class="card-header">
+            <h3 class="card-title">Claims/Ações Selecionadas</h3>
+        </div>
+        <div class="card-body">
+            <div id="resultado">
+                <ul class="todo-list ui-sortable">
+                    @foreach (var item in Model)
+                    {
+                        <div class="row">
+                            <div class="icheck-primary d-inline ml-2">
+                                <input type="checkbox" value="" name="todo1" id="todoCheck1">
+                                <label for="todoCheck1">@item.claim : </label>
+                            </div>
+
+                            @foreach (var acao in item.ClaimValue)
+                            {
+                                @acao
+                                @if (item.ClaimValue.LastOrDefault() != acao)
+                                {
+                                    <span> - </span>
+                                }
+
+
+                            }
+                        </div>
+
+                    }
+                </ul>
+            </div>
+     
+        </div>
+        <div class="card-footer">
+                <a class="btn btn-app" id="btnRemover" onclick="Remover()">
+                    <i class="fas fa-trash-alt"></i> Apagar
+                </a>
+         
+        </div>
+    </div>

@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Principal";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Agilium Admin</h1>
+    <h1 class="display-5">Painel Administrativo de clientes</h1>
+</div>
+@*<button type="button" class="btn btn-info swalDefaultInfo">
+    Launch Info Toast
+</button>*@
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $('.swalDefaultInfo').click(function () {
+            ModalMensagem('warning', 'teste')
+        });
+    });
+</script>

@@ -1,0 +1,148 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.NotaFiscalViewModel.NotaFiscalnutilViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Inutilização de Notas Fiscais";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="CreateContaNFInutil" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Inutilização NF </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="IndexContaPagar" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Ano
+                </th>
+                <th>
+                    NF Inicial
+                </th>
+                <th>
+                    NF Final
+                </th>
+                <th>
+                    Modelo
+                </th>
+                <th>
+                    Serie
+                </th>
+                <th>
+                    Motivo
+                </th>
+                <th>
+                    Data Inutilização
+                </th>
+                <th>
+                    Protocolo
+                </th>
+                <th>
+                    Situação
+                </th>
+             
+                <th class=""></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                var situacao = "Prevista";
+                var classeSituacao = item.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoNFInutil.AguardandoEnvio ? "bg-danger color-palette" : "";
+
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ano)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroInicial)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroFinal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Modelo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Motivo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Protocolo)
+                    </td>                    
+                    <td class="@classeSituacao">
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+                        <td class="text-right">
+                        <a class="btn btn-success" asp-action="EnviarSefazNFInutil" asp-route-id="@item.Id" title="Enviar NFE Sefaz"><i class="fas fa-check-circle"></i></a>
+                            <a class="btn btn-warning" asp-action="EditNFInutil" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                            <a class="btn btn-danger" asp-action="DeleteNFInutil" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+                        </td>
+                   
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="14">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Financeiro/notaFiscalInutil.js"></script>
+
+ }

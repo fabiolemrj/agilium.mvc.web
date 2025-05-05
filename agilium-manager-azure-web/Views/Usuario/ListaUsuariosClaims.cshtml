@@ -1,0 +1,650 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<link rel="stylesheet" href="~/dist/plugins/select2/css/select2.css">
+@model agilium.webapp.manager.mvc.ViewModels.DuplicarUsuarioClaimViewModel
+
+@{
+
+    ViewData["Title"] = "Gerenciar Claims por Usuario";
+
+    TempData.Keep("lista");
+}
+
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action"></span></a>
+        @*<a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>*@
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("ObterTodosUsuarios","Usuario")"><i class="fa fa-dashboard"></i> Usuarios </a> /
+            <a href="#">Gerenciar Claims por Usuario</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form id="frmEdit" asp-action="ListaClaimUsuarioCopia">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idUserAspNet" id="idUserAspNet" />
+            <input type="hidden" asp-for="NomeUsuarioBase" id="NomeUsuarioBase" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Gerenciamento de Claims por Usuário</h3>
+                    <div class="card-tools">
+                        <ul class="nav nav-pills ml-auto">
+                            <li class="nav-item">
+                                @*<a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fas fa-clone sns-tool-action" id="btnSalvar" onclick="Selecionar()"></span></a>*@
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Nome" class="control-label" id="labelnome"></label>
+                                    <input asp-for="Nome" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="idUserSelecionado" class="control-label" id="labelUserSelecionado"></label>
+                                    <select asp-for="idUserSelecionado"
+                                            asp-items="ViewBag.Usuarios"
+                                            class="form-control" onchange='selecionaId()'>
+                                        <option value="">Selecione um item</option>
+                                    </select>
+
+                                    <span asp-validation-for="idUserSelecionado" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-1 align-self-end">
+                                <div class="form-group">
+                                    <button type="button" class="mt-auto btn btn-outline-dark btn-block btn-ms" id="btnVisualizarClaimsUusuarioBase" data-toggle="modal" data-target="#modal-default" title="Visualizar Claims do Usuario Base selecionado">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="claimSelecionada" class="control-label" id="labelClaim"></label>
+                                    <select asp-for="claimSelecionada"
+                                            asp-items="ViewBag.claims"
+                                            class="form-control" id="claimSelecionada">
+                                        <option value="">Selecione um item</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-1 align-self-end">
+                                <div class="form-group">
+                                    <button type="button" class="mt-auto btn btn-outline-primary btn-block btn-md" id="btnAddClaimIndividual" onclick="AdicionarClaim()" title="Adicionar claim e ações selecionas"><i class="fas fa-plus-circle"></i> </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group" id="divAcoes">
+                                    <label class="control-label" id="labelAcoes">Ações</label>
+                                    <div class="row">
+                                        @foreach (var acao in Model.AcoesClaims)
+                                        {
+                                            <input type="hidden" name="AcoesClaims.Index" value="@acao.Acao" />
+                                            <div class="col-md-3">
+                                                <div class="icheck-primary d-inline">
+                                                    <input type="checkbox" id="acao" asp-for="@acao.Selecao" value="@acao.Acao" data-switch-a>
+                                                    <label class="control-label">@acao.Acao</label>
+                                                </div>
+                                            </div>
+
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+        <div class="card card-primary" id="cardClaimAtualUsuario">
+            <div class="card-header">
+                <a class="mt-auto btn btn-outline-primary btn-block btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Claims Atuais do Usuário
+                </a>
+            </div>
+
+            <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                    @await Html.PartialAsync("_ListaClaimsAtuaisUsuario", Model.ClaimsAdicionadas)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@*modal de claims de usuario base selecionado*@
+<div class="modal fade show" id="modal-default" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header  bg-secondary">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <h4 class="modal-title">Claims do Usuário Base</h4>
+                        </div>
+                        <div class="col-8 ">
+                            <h4 class="modal-title"><div class="text-center" id="nomeBase"></div></h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="resultado2"></div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <div class="col-2 align-self-end">
+                    <div class="form-group">
+                        <button type="button" class="mt-auto btn btn-outline-dark btn-block btn-md"
+                                title="Clonar Claims do usuário base para o usuário selecionado"
+                                onclick="DuplicarClaimsPorUsuarios()">
+                            <i class="fas fa-clone"></i> Clonar Claims
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/dist/plugins/select2/js/select2.js"></script>
+
+    <!-- Select2 -->
+    <script>
+        $(document).ready(function () {
+            $('#nomeBase').html("** Nenhum Usuario Base Selecionado **");
+        });
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+                Tour.run([
+
+                    {
+                        element: $('#btnVoltar'),
+                        content: '<strong><div align="center" class="text-info">Botão de Voltar</div></strong><p><div align="center">Retorna a pagina anterior.</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#breadcrumb'),
+                        content: '<strong><div align="center" class="text-info">Bread Crumb</div></strong><p><div align="center">Lista de telas (caminho) abertas até a tela em questão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelcardGerais'),
+                        content: '<strong><div align="center" class="text-info">Resultado</div></strong><p><div align="center">Formulario com informaões do usuario selecionado para gerenciamento de claims.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelnome'),
+                        content: '<strong><div align="center" class="text-info">Nome do Usuário</div></strong><p><div align="center">Nome do usuario selecionado.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#labelUserSelecionado'),
+                        content: '<strong><div align="center" class="text-info">Usuario Base</div></strong><p><div align="center">Campo para selecionar o usuário como base para clonagem de claims.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnVisualizarClaimsUusuarioBase'),
+                        content: '<strong><div align="center" class="text-info">Botão de visualizar Claims Usuario Base</div></strong><p><div align="center">Abre janela com a lista de claims do usuario base selecionado. O botão "Clonar" existente realizar esta operação de clonagem</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#labelClaim'),
+                        content: '<strong><div align="center" class="text-info">Seleção de claims</div></strong><p><div align="center">Campo para selecionar que claim será adicionado individualmente ao usuario.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#divAcoes'),
+                        content: '<strong><div align="center" class="text-info">Seleção de Ações</div></strong><p><div align="center">Ações  relacionadas as claims que devem ser marcadas para inclusão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnAddClaimIndividual'),
+                        content: '<strong><div align="center" class="text-info">Botão de Adicionar Claim Selecionada</div></strong><p><div align="center">Adiciona ao usuario, a claim e ações seleciondas</div></p>',
+                        position: 'right'
+                    },
+                    {
+                        element: $('#cardClaimAtualUsuario'),
+                        content: '<strong><div align="center" class="text-info">Claims Atuais do Usuario</div></strong><p><div align="center">Lista com as claims atuais que o usuario selecionado possui.</div></p>',
+                        position: 'top'
+                    }
+
+                ]);
+            });
+        });
+
+        $('#btnSalvar').click(function () {
+            var formValido = $("#frmEdit").valid();
+            if (formValido) {
+                //if (ValidarFormulario()) {
+                on();
+                $('#btnSendForm').click();
+                //}
+            }
+        });
+
+        $(function () {
+            $('.select2').select2();
+            $(".select2").select2({
+                theme: "classic"
+            });
+        });
+
+        $('.select2').select2({
+            dropdownCssClass: "bigdrop",
+            placeholder: 'Select an option'
+        });
+
+        function selecionaId() {
+            var id = $("#idUserSelecionado").val();
+            var idUserAspNet = $("#idUserAspNet").val();
+
+
+            $('#nomeBase').html($("#idUserSelecionado option:selected").text());
+            if (id == "") {
+                $('#nomeBase').html("** Selecione um usuario base **");
+                return;
+            }
+                          
+            var data1 = {
+                'idOrigem': id,
+                'idDestino': idUserAspNet
+            };
+            var data = JSON.stringify(data1);
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/ListaClaimUsuarioCopiaRetorno",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+                    if (objeto.error) {
+                        var msg = "Erro ao selecionar usuario base";
+                        if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                            msg = objeto.msg;
+                        toastr.error(msg);
+                        return;
+                    }
+
+                    MontarResultado2(objeto);
+                    $('#collapseResultado').collapse();
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                }
+            });
+        }
+
+        const MontarListaClaimsAtual = (data) => {
+
+            var resultado = "";
+            resultado += "<table class='table table-sm'>";
+            resultado += "   <thead>";
+            resultado += "    <tr>";
+            resultado += " <th style='width:200px'>Claim</th>";
+            resultado += "<th>Ações</th>";
+            resultado += "</tr>";
+            resultado += "    </thead>";
+            resultado += "<tbody>";
+            if (data.lista.length > 0) {
+                $.map(data.lista, function (item, idx) {
+                    resultado += "<tr>";
+                    resultado += "<td><dt class='text-primary'>" + item.claim + "</dt></td>";
+                    resultado += "<td>";
+                    resultado += "<div class='row'>";
+                    $.map(item.claimValue, function (acao, idx2) {
+                        resultado += "<div class='col-md-2 mb-3'>";
+                        resultado += "<button type='button' class='btn btn-outline-primary btn-block btn-sm' title='Remover ação'";
+                        //resultado += "onclick='Remover( "+ acao + "','"+ item.claim + "')'>";
+                        resultado += ` onclick="Remover('${acao}','${item.claim}')">`;
+                        resultado += "<i class='fas fa-trash-alt'></i>" + acao;
+                        resultado += "</button>";
+                        resultado += "</div>";
+                    });
+                    resultado += "</div>";
+                    resultado += "</td>";
+                    resultado += "</tr>";
+                });
+            } else {
+                resultado += "<tr>";
+                resultado += "<td colspan='2'> Não existem claims para o usuário</td>";
+                resultado += "</tr>";
+            }
+
+            resultado += "</tbody>";
+            resultado += "</table>";
+            $("#resultadoListaClaimAtual").html(resultado);
+
+        }
+
+        function AtualizarListaClaimAtual(id) {
+
+            $.get('/Usuario/AtualizarListaClaimUsuarioAtual?id=' + id, null, function (response) {
+
+                var objeto = JSON.parse(JSON.stringify(response));
+                if (objeto.error) {
+                    var msg = "Erro ao atualizar claims";
+                    if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                        msg = objeto.msg;
+                    toastr.error(msg);
+
+                    return null;
+                }
+                MontarListaClaimsAtual(objeto);
+                return objeto;
+
+
+            }).fail(function (err) {
+                toastr.error('ERRO: ' + err);
+                return null;
+            });
+
+        }
+
+        function MontarResultado2(data) {
+            var resultado = "";
+
+            resultado += "<table class='table table-sm table-hover' id='divGridResultado2'>";
+            resultado += "<thead>";
+            resultado += "<tr>";
+            resultado += "<th>Claim</th>";
+            resultado += "<th>Ações</th>";
+            resultado += "</tr>";
+            resultado += "</thead>";
+            resultado += "<tbody>";
+            if (data.lista.length > 0) {
+                $.map(data.lista, function (item, idx) {
+                    resultado += "  <tr>";
+                    resultado += " <td>";
+                    resultado += "  <dt>" + item.claim + "</dt>";
+                    resultado += " </td>";
+                    resultado += " <td>";
+                    resultado += " <div class='row'>"
+                    $.map(item.claimValue, function (acao, idx2) {
+                        resultado += "<div class='col-md-2'>";
+                        resultado += "<dd>" + acao + "</dd>";
+                        resultado += "</div>";
+                    });
+                    resultado += "</div>";
+                    resultado += " </td>";
+                    resultado += "  </tr>";
+                });
+            } else {
+                resultado += "<tr>";
+                resultado += "<td colspan='2'> Não existem claims para o usuário</td>";
+                resultado += "</tr>";
+            }
+
+            resultado += "</tbody>";
+            resultado += "</table>";
+            $("#resultado2").html(resultado);
+        }
+
+        async function ConfirmaRemocao(acao, claim, idUserAspNet) {
+
+
+            var data1 = {
+                'IdUserAspNet': idUserAspNet,
+                'ClaimType': claim,
+                'ClaimValue': acao
+            };
+            var data = JSON.stringify(data1);
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/RemoverClaimIndividualPorUsuario",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+
+                    if (objeto.error) {
+                        var msg = "Erro ao remover claim";
+                        if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                            msg = objeto.msg;
+                        //toastr.error(msg);
+
+                        Swal.fire({
+                            title: 'Erro',
+                            text: 'Erro ao remover',
+                            incon: 'error'
+                        });
+                        return false;
+                    }
+
+                    MontarListaClaimsAtual(objeto);
+
+                    console.log('sucesso');
+
+                    Swal.fire(
+                        'Removido!',
+                        'Ação foi removida.',
+                        'success'
+                    );
+                    return true;
+                },
+                error: function (e) {
+                    Swal.fire({
+                        title: 'Erro',
+                        text: e,
+                        incon: 'error'
+                    });
+                    console.log(e);
+                    return false;
+                }
+            });
+        }
+
+        async function Remover(acao, claim) {
+            var idUserAspNet = $("#idUserAspNet").val();
+
+            var willdelete = await Swal.fire({
+                title: 'Remover Ação',
+                text: "Tem certeza que deseja remover esta ação da claim?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim',
+            });
+
+            if (willdelete.isConfirmed) {
+                await ConfirmaRemocao(acao, claim, idUserAspNet);
+
+
+
+            }
+
+        }
+
+        const AdicionarClaim = () => {
+
+            var idUserAspNet = $("#idUserAspNet").val();
+            var claim = $('#claimSelecionada').val();
+            if (claim === "" || claim == undefined || claim == null) {
+                toastr.error('selecione um item (CLAIM) na lista');
+                LimparAcoesSelecionadas();
+                return;
+            }
+
+            var myColumnDefs = [];
+            var contaSelecao = 0;
+            $('input[data-switch-a]').each(function (idx) {
+                if (this.checked) {
+                    contaSelecao++;
+                    myColumnDefs.push($(this).val());
+                }
+            });
+
+            if (contaSelecao == 0) {
+                toastr.error('Selecione no mínimo uma ação para a Claim');
+                LimparAcoesSelecionadas();
+                return;
+            }
+
+            var data1 = {
+                'IdUserAspNet': idUserAspNet,
+                'ClaimType': claim,
+                'ClaimValue': myColumnDefs
+            };
+            var data = JSON.stringify(data1)
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/AdicionarClaimIndividualPorUsuario",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+
+                    if (objeto.error) {
+                        var msg = "Erro ao tenta adicionar claim";
+                        if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                            msg = objeto.msg;
+                        toastr.error(msg);
+                        return;
+                    }
+                    MontarListaClaimsAtual(objeto);
+                    LimparAcoesSelecionadas();
+                    //var url = result + "?id=" + idUserAspNet;
+                    //window.location = url;
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                    alert(e.statusText);
+                }
+            });
+        }
+
+        const LimparAcoesSelecionadas = () => {
+
+            $('input[data-switch-a]').each(function () {
+                $(this).prop('checked', false);
+
+            });
+
+            $('#claimSelecionada').val('');
+        }
+
+        const DuplicarClaimsPorUsuarios = async () => {
+            var id = $("#idUserSelecionado").val();
+            var idUserAspNet = $("#idUserAspNet").val();
+            if (id == "" || id == undefined || id == null) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nenhum usuario base selecionado!'
+                });
+
+                return;
+            }
+
+            if (idUserAspNet == "" || idUserAspNet == undefined || idUserAspNet == null) {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Erro ao tentar clonar claims para o usuario selecionado !'
+                });
+
+                return;
+            }
+
+            var data1 = {
+                'idOrigem': id,
+                'idDestino': idUserAspNet
+            };
+
+            var data = JSON.stringify(data1);
+
+            var objPost = { "objetosAdd": data };
+
+            $.ajax({
+                type: 'POST',
+                data: objPost,
+                dataType: 'json',
+                url: "/Usuario/DuplicarClaimsPorUsuarioBase",
+                success: function (result) {
+                    var objeto = JSON.parse(JSON.stringify(result));
+                    if (objeto.error) {
+                        var msg = "Erro ao selecionar usuario base";
+                        if (objeto.msg != undefined && objeto.msg != '' && objeto.msg != null)
+                            msg = objeto.msg;
+                        toastr.error(msg);
+                        return;
+                    }
+
+                    MontarListaClaimsAtual(objeto);
+                    $("#modal-default").modal('hide');
+                    toastr.success("Claims clonadas com sucesso!");
+                },
+                error: function (e) {
+
+                    console.log('erro');
+                    alert(e.statusText);
+                }
+            });
+        }
+
+         
+    </script>
+
+
+}

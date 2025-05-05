@@ -1,0 +1,79 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Config.ChaveValorViewModel
+
+@{
+    ViewData["Title"] = "Configuração";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Config",new { idEmpresa =Model.IDEMPRESA })"><i class="fa fa-dashboard"></i> Configurações</a> /
+            <a href="#"> Editar Configuração Certificado </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form id="frmConfigCertif" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" enctype="multipart/form-data">
+
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="IDEMPRESA" />
+            <input type="hidden" asp-for="CHAVE" />
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Caminho Certificado Digital</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" >
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="VALOR" id="labelNomFant"></label>
+                                <input asp-for="VALOR" class="form-control" size="100" />
+                                <span asp-validation-for="VALOR" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="exampleInputFile">Certificado</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="exampleInputFile" asp-for="Arquivo">
+                                    <label class="custom-file-label" for="exampleInputFile">Selecione o certificado</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">Upload</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+      
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Ferramentas/config.js"></script>
+    <script src="~/dist/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script>
+    $(function () {
+        bsCustomFileInput.init();
+    });
+</script>

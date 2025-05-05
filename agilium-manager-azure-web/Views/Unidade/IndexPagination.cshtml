@@ -1,0 +1,118 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.UnidadeViewModel.UnidadeIndexViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Unidades";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Unidades </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="IndexPagination" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar Empresa por Razão Social" placeholder="Pesquisar Empresa por Razão Social..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+        </form>
+
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                var ativo = "";
+                var classeAtivo = "";
+                if (item.Ativo == agilium.webapp.manager.mvc.Enums.EAtivo.Ativo)
+                {
+                    ativo = "Ativo";
+                    classeAtivo = "btn btn-danger";
+                }
+                else
+                {
+                    ativo = "Inativo";
+                    classeAtivo = "btn btn-success";
+                }
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Codigo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+
+                <td>
+                    @if (item.Ativo == agilium.webapp.manager.mvc.Enums.EAtivo.Ativo)
+                    {<span class="text-success">Ativo</span>}
+                    else
+                    {<span class="text-danger">Inativo</span>}
+                </td>
+                <td class="text-right">
+                    @if (item.Ativo != agilium.webapp.manager.mvc.Enums.EAtivo.Ativo)
+                    {
+                        <a class="btn btn-default" asp-action="MudarSituacao" asp-route-id="@item.Id" title="Mudar Situacao"><spam class="fas fa-toggle-off"></spam></a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-default" asp-action="MudarSituacao" asp-route-id="@item.Id" title="Mudar Situacao"><spam class="fas fa-toggle-on"></spam></a>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                    }
+
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+                </td>
+            </tr>
+
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="3">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,131 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.SiteMercadoViewModel.ProdutoSiteMercadoViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Produtos Site Mercado";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="CreateProduto" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Produto Site Mercado </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12" id="areaFiltro">
+        <form asp-action="IndexProduto" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Disponivel Site
+                </th>
+                <th>
+                    Ultima Atualização
+                </th>
+                <th>
+                    Produto PDV
+                </th>
+                <th>
+                    Descrição SM
+                </th>
+                <th>
+                    Preço Venda
+                </th>
+                <th>
+                    Preço Promoção
+                </th>
+                <th>
+                    Quant. Atacado
+                </th>
+                <th>
+                    Preço Atacado
+                </th>
+                <th class=""></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {  
+                <tr>
+                    <td>
+                        @if (item.Validade == agilium.webapp.manager.mvc.Enums.EValidadeSiteMercado.Sim)
+                        {
+                            <span class="text-success">Sim</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Não</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.Raw(item.DataHora.HasValue?item.DataHora.Value.ToString("dd/MM/yyyy HH:mm:ss"):"")
+                    </td>
+                    <td>
+                        @Html.Raw(item.ProdutoPdv)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Descricao)
+                    </td>
+                    <td>
+                        @Html.Raw(item.ValorCompra.HasValue ? item.ValorCompra.Value.ToString("N"): 0.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.Raw(item.ValorPromocao.HasValue ?item.ValorPromocao.Value.ToString("N"): 0.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.Raw(item.QuantidadeAtacado.HasValue?item.QuantidadeAtacado.Value.ToString("N"): 0.ToString("N"))
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-warning" asp-action="EditProduto" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                        <a class="btn btn-danger" asp-action="DeleteProduto" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="9">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/siteMercado.js"></script>
+
+ }

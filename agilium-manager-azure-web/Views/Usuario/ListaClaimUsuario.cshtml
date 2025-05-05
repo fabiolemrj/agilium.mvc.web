@@ -1,0 +1,112 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+@model agilium.webapp.manager.mvc.ViewModels.ClaimsPorUsuarioViewModel
+
+@{
+
+    ViewData["Title"] = "Claims por Usuario";
+
+    TempData.Keep("lista");
+}
+
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action" id="btnSalvar" onclick="Salvar()"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("ObterTodosUsuarios","Usuario")"><i class="fa fa-dashboard"></i> Usuarios </a> /
+            <a href="#">Associar Usuario a Claims</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form id="frmEdit">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="idUserAspNet" id="idUserAspNet" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Usuario Selecionado</h3>
+                    <div class="card-tools">
+                        <ul class="nav nav-pills ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Selecione</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Nome" class="control-label" id="labelnome"></label>
+                                <input asp-for="Nome" class="form-control" readonly />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="table table-hover" id="divGridResultado">
+                            <thead class="table thead-dark">
+                                <tr>
+                                    <th>
+                                        Claim
+                                    </th>
+                                    <th>
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ClaimsSelecionadas)
+                                {
+
+                                    <tr>
+                                        <td>
+                                            <dt>@Html.DisplayFor(modelItem => item.claim)</dt> 
+                                        </td>
+                                        <td>
+                                            <div class="row">
+                                                @foreach (var acoes in item.ClaimValue)
+                                                {
+
+                                                    <div class="col-md-2">
+                                                        <div class="info-box mb-2 bg-light">
+                                                            <span class="info-box-icon"><i class="fas fa-check-circle"></i></span>
+                                                            <div class="info-box-content">
+                                                                <span class="info-box-text">@Html.DisplayFor(acao => acoes)</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                }
+                                            </div>
+                                            </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

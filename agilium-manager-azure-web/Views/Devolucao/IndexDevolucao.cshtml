@@ -1,0 +1,184 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.DevolucaoViewModel.DevolucaoViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Devolução";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Devolução </a>
+        </div>
+    </article>
+</section>
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Código
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Motivo
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Caixa Nº
+                </th>
+                <th>
+                    Venda Nº
+                </th>
+                <th>
+                    Data/Hora Venda
+                </th>
+                <th>
+                    Gerou vale?
+                </th>
+                <th>
+                    Observação
+                </th>
+
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List.OrderByDescending(x => x.DataHora))
+            {
+
+                var situacao = "text-info";
+
+                if (item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoDevolucao.Cancelada)
+                    situacao = "text-danger";
+                else if (item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoDevolucao.Realizada)
+                    situacao = "text-success";
+
+                var data = item.DataHora.HasValue ? item.DataHora.Value.ToString("dd/MM/yyyy") : "";
+                var valor = item.ValorTotal.HasValue ? item.ValorTotal.Value.ToString("N") : "0,00";
+                var gerouVale = item.IDVALE.HasValue ? "Sim" : "Não";
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        <span class="@situacao">@Html.DisplayFor(modelItem => item.Situacao)</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClienteNome)
+                    </td>
+                    <td>
+                        @Html.Raw(data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MotivoDevolucaoNome)
+                    </td>
+                    <td>
+                        @Html.Raw(valor)
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        @Html.Raw(gerouVale)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacao)
+                    </td>
+                    <td>
+                        @if (!item.IDVALE.HasValue)
+                        {
+                            <a class="btn btn-default" asp-action="GerarVale" asp-route-id="@item.Id" title="Gerar Vale" data-modal=""><spam class="fas fa-money-check-alt"></spam></a>
+                        }
+                        <a class="btn btn-default" asp-action="ObterItemDevolucao" asp-route-id="@item.Id" title="Itens da Devolução" data-modal=""><spam class="fas fa-th-list"></spam></a>
+                        <a class="btn btn-success" asp-action="RealizarDevolucao" asp-route-id="@item.Id" title="Realizar Devolução" data-modal=""><spam class="fas fa-check-circle"></spam></a>
+                        <a class="btn btn-warning" asp-action="EditDevolucao" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="12">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

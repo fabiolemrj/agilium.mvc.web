@@ -1,0 +1,188 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.ContaViewModel.ContaPagarViewModelIndex>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Contas a Pagar";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="CreateContaPagar" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Contas a Pagar </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="IndexContaPagar" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+           
+                <th>
+                    Data Pagamento
+                </th>
+                <th>
+                    Data Vencimento
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Conta
+                </th>
+                <th>
+                    Categoria
+                </th>
+                <th>
+                    Fornecedor
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Descontos
+                </th>
+                <th>
+                    Acréscimos
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Tipo Conta
+                </th>
+                <th>
+                    Parcela
+                </th>
+                <th class=""></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+                var situacao = "Prevista";
+                var classeSituacao = item.Situacao == 1 ? "" : "bg-success color-palette";
+                
+                if (item.DataVencimento == DateTime.Now && item.Situacao == 1)
+                    classeSituacao = "bg-warning color-palette";
+                else if (item.DataVencimento < DateTime.Now && item.Situacao == 1)
+                    classeSituacao = "bg-danger color-palette";
+
+                if (item.Situacao == 2)
+                    situacao = "Consolidada";
+
+                var valorConta = item.ValorConta.HasValue ? item.ValorConta.Value : 0 ;
+                var valorDesconto = item.ValorDesconto.HasValue ? item.ValorDesconto.Value : 0;
+                var valorAcrescimo = item.ValorAcrescimo.HasValue ? item.ValorAcrescimo.Value : 0;
+                var valorTotal = valorConta - valorDesconto + valorAcrescimo;
+                var dtPagamento = item.DataPagamento.HasValue ? item.DataPagamento.Value.ToString("dd/MM/yyyy"):"";
+                var dtVencimento = item.DataVencimento.HasValue ? item.DataVencimento.Value.ToString("dd/MM/yyyy") : "";
+                var dtCadastro = item.DatCadastro.HasValue ? item.DatCadastro.Value.ToString("dd/MM/yyyy") : "";
+                <tr>
+                   
+                    <td>
+                        @Html.Raw(dtPagamento)
+                    </td>
+                    <td>
+                        @Html.Raw(dtVencimento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Conta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoriaFinanceira)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fornecedor)
+                    </td>
+                    <td class="@classeSituacao">
+                        @Html.Raw(situacao)
+                    </td>
+                    <td>
+                        @Html.Raw(valorConta.ToString("C"))
+                    </td>
+                    <td>
+                        @Html.Raw(valorDesconto.ToString("C"))
+                    </td>
+                    <td>
+                        @Html.Raw(valorAcrescimo.ToString("C"))
+                    </td>
+                    <td>
+                        @Html.Raw(valorTotal.ToString("C"))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoConta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParcelaInicial)
+                    </td>
+                    @if(item.Situacao == 2){
+                    <td class="text-right">
+                        <a class="btn btn-danger" asp-action="DesConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Desconsolidar"><i class="fas fa-check-circle"></i></a>
+                    </td>
+                    }else{
+                    <td class="text-right">
+
+                        <a class="btn btn-success" asp-action="ConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Consolidar"><i class="fas fa-check-circle"></i></a>
+                        <a class="btn btn-warning" asp-action="EditContaPagar" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                        <a class="btn btn-danger" asp-action="DeleteContaPagar" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+                    </td>
+                    }
+                   
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+
+                <td colspan="14">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Financeiro/contaPagar.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+ }

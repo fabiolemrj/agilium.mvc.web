@@ -1,0 +1,79 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Contato.ContatoFornecedorViewModel
+
+@{
+    Layout = null;
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = "Contato Fornecedor";
+    ViewData["Title"] = operacao;
+}
+
+
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="@ViewBag.acao" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="frmCreateContatoFornec">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="IDCONTATO" />
+            <input type="hidden" asp-for="IDFORN" />
+            <div class="card">
+                <div class="card-header">
+                    @if (inclusao)
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="Contato.TPCONTATO" class="control-label" id="idtpcontato"></label>
+                            <select asp-for="Contato.TPCONTATO" class="form-control" asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoContato>()">
+                            </select>
+                            <span asp-validation-for="Contato.TPCONTATO" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Contato.DESCR1" class="control-label" id="labelDescricao"></label>
+                                <input asp-for="Contato.DESCR1" class="form-control" />
+                                <span asp-validation-for="Contato.DESCR1" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Contato.DESCR2" class="control-label" id="labelDescrAux"></label>
+                                <input asp-for="Contato.DESCR2" class="form-control" />
+                                <span asp-validation-for="Contato.DESCR2" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-end">
+
+                <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+                    <i class="fas fa-window-close"></i>
+                </a>
+
+                <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvarModal" title="Confirmar operação">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

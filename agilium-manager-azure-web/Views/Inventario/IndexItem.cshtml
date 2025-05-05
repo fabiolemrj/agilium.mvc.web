@@ -1,0 +1,144 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.ListaInventarioItemViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Itens do Inventario (Produtos)";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+
+<section class="barra-de-menu-principal">
+    
+    <div class="barra-de-botoes-menu-principal">
+     @*  
+        @if (Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao || Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta)
+        {
+            <a asp-action="Create" onclick="on()" title="Incluir Produto"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+            <a onclick="CadastroProdutoEstoque()" title="Cadastrar todos os Produtos do Estoque"><span class="far fa-list-alt sns-tool-action" id="btnAddTodosProdEstoque"></span></a>
+        }
+        @if (Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta && Model.TipoAnalise == agilium.webapp.manager.mvc.Enums.ETipoAnalise.Manual)
+        {
+            <a onclick="inventariar('@Model.idInventario')" data-id="@Model.idInventario" title="Inventariar"><span class="fas fa-clipboard sns-tool-action" id="btnInventariar"></span></a>
+        }
+
+        @if (Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao)
+        {
+            <a onclick="" title="Concluir Inventario"><span class="fas fa-check-square sns-tool-action" id="btnConcluirINventario"></span></a>
+        }  *@
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+             <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+               <a href="#"> Itens </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="card">
+    <div class="card-head">
+        <div class="col-md-12" id="areaFiltro">
+            <form asp-action="IndexItem" class="sidebar-form" method="get">
+                <input type="hidden" asp-for="idInventario" />
+                <div class="row">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Inventário</span>
+                            <span class="info-box-number">@Model.NomeInventario</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="divGridResultado">
+            <table class="table table-hover">
+                <thead class="table thead-dark">
+                    <tr>
+                        <th>
+                            Codigo
+                        </th>
+                        <th style="min-width:500px">
+                            Produto
+                        </th>
+                        <th>
+                            Data Analise
+                        </th>
+                        <th>
+                            Usuario Analise
+                        </th>
+                        <th>
+                            Custo Médio
+                        </th>
+                        <th>
+                            Quant. Apurada
+                        </th>
+                        <th>
+                            Quant. Estoque
+                        </th>
+                        <th>
+                            Perda/Sobra
+                        </th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Itens)
+                    {
+                        var classeAtivo = "text-success";
+                        double valorCustoMedio = item.ValorCustoMedio.HasValue ? item.ValorCustoMedio.Value : 0;
+                        double quantidadeApurada = item.QuantidadeAnalise.HasValue ? item.QuantidadeAnalise.Value : 0;
+                        double quantidadeEstoque = item.QuantidadeEstoque.HasValue ? item.QuantidadeEstoque.Value : 0;
+                        double perdaSobra = quantidadeEstoque - quantidadeApurada;
+                        if (perdaSobra < 0) 
+                        { 
+                            perdaSobra = perdaSobra * -1;
+                           classeAtivo = "text-danger";
+                        }
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CodigoProduto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NomeProduto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataHora)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NomeUsuarioAnalise)
+                            </td>
+                            <td>
+                                @Html.Raw(valorCustoMedio.ToString("N"))
+                            </td>
+                            <td>
+                                @Html.Raw(quantidadeApurada.ToString("N"))
+                            </td>
+                            <td>
+                                @Html.Raw(quantidadeEstoque.ToString("N"))
+                            </td>
+                            <td>
+                                <span class="@classeAtivo">
+                                    @Html.Raw(perdaSobra)
+                                </span>                               
+                            </td>                            
+                   
+                        </tr>
+                    }
+                </tbody>                
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/inventario.js"></script>
+
+ }

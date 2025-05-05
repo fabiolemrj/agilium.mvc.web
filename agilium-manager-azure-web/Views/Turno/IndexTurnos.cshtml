@@ -1,0 +1,156 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.TurnoViewModel.TurnoIndexViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Turnos";
+    //double saldoTotal = 0;
+    //if (ViewBag.Saldo != null)
+    //{
+    //    Double.TryParse(ViewBag.Saldo, out saldoTotal);
+            //}
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-controller="Turno" asp-action="AbrirTurno" type="button" title="Abrir Turno" id="btnAbrir"><span class="fas fa-play-circle sns-tool-action"></span></a>
+        <a asp-controller="Turno" asp-action="FecharTurno" type="button" title="Fechar Turno" id="btnFechar"><span class="fas fa-stop-circle sns-tool-action"></span></a>
+      
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Turno </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexTurno" class="sidebar-form" method="get" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+    
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Empresa
+                </th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Nº Turno
+                </th>
+                <th>
+                    Usuario Abertura
+                </th>
+                <th>
+                    Data Abertura
+                </th>
+                <th>
+                    Usuario Fechamento
+                </th>
+                <th>
+                    Data Fechamento
+                </th>
+                <th>
+                    Observação 
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                var data = item.Data.HasValue ? item.Data.Value.ToString("dd/MM/yyyy"):"";
+                var dataInicial = item.DataInicial.HasValue ? item.DataInicial.Value.ToString("dd/MM/yyyy"):"";
+                var dataFinal = item.DataFinal.HasValue ? item.DataFinal.Value.ToString("dd/MM/yyyy") : "";
+                var classe = !string.IsNullOrEmpty(dataFinal) ? "text-danger" : "";
+
+                <tr class="@classe">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Empresa)
+                    </td>
+                    <td>
+                        @Html.Raw(data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroTurno)
+                    </td>
+                    <td >
+                        @Html.DisplayFor(modelItem => item.UsuarioInicial)
+                    </td>
+                    <td>
+                        @Html.Raw(dataInicial)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UsuarioInicial)
+                    </td>
+                    <td>
+                        @Html.Raw(dataFinal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Obs)
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>               
+                <td colspan="8">
+                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                </td>
+
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/turno.js"></script>
+    <script>
+
+
+    </script>
+ }

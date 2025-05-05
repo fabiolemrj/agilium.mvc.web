@@ -1,0 +1,29 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.VendaViewModel.VendaEspelhoViewModel
+@{
+    ViewData["Title"] = "Espelho da Venda";
+}
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+<div class="info-box">
+    <span class="info-box-icon bg-info"><i class="fas fa-shopping-cart"></i></span>
+    <div class="info-box-content">
+        <span class="info-box-text">Venda</span>
+        <span class="info-box-number">@Model.SequencialVenda</span>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <textarea class="form-control" rows="20" asp-for="EspelhoVenda" readonly></textarea>
+    </div>
+</div>
+
+<div class="modal-footer justify-content-end">
+
+    <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+        <i class="fas fa-window-close"></i>
+    </a>
+</div>

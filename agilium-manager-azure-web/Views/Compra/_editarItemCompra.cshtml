@@ -1,0 +1,164 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraItemEditViewModel
+
+@{
+    var inclusao = ViewBag.operacao == "E";
+    var operacao = inclusao ? "Novo" : "Editar";
+    ViewData["Title"] = "Editar Item de Compra";
+    var importada = ViewBag.importada;
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+
+@*<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Compra"><i class="fa fa-dashboard"></i> Compra </a> /
+            <a asp-action="ListaItemCompra" asp-controller="Compra" asp-route-idCompra="@Model.IDCOMPRA"><i class="fa fa-dashboard"></i> Item </a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />*@
+<div >
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="EditarItemModal" id="frmEditItemCompra" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <vc:Summary></vc:Summary>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IDCOMPRA" />
+                    <input type="hidden" asp-for="CodigoProduto" />
+                    <div id="labelcardGerais">
+                     
+                        <div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label >Compra</label>
+                                        <input class="form-control" value="@ViewBag.NomeCompra" id="nomecompra" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IDPRODUTO" id="labelproduto"></label>
+                                        <select asp-for="IDPRODUTO"
+                                                asp-items="@Model.Produtos.Select(x => new SelectListItem(){Text = x.Nome, Value = x.Id.ToString()})"
+                                                class="form-control" onchange="BuscarProduto()">
+                                            <option value="">-*****-</option>
+                                        </select>
+                                        <span asp-validation-for="IDPRODUTO" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="IDESTOQUE" id="labelEstoque"></label>
+                                        <select asp-for="IDESTOQUE"
+                                                asp-items="@Model.Estoques.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                                class="form-control">
+                                            <option value="">-*****-</option>
+                                        </select>
+                                        <span asp-validation-for="IDESTOQUE" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label asp-for="DescricaoProdutoCompra" id="labelDescProdNF"></label>
+                                        <input asp-for="DescricaoProdutoCompra" class="form-control" size="100" disabled />
+                                        <input type="hidden" asp-for="DescricaoProdutoCompra" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Quantidade" id="labelQuant"></label>
+
+                                        <input type="hidden" asp-for="Quantidade" />
+                                        <input asp-for="Quantidade" class="form-control" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="SGUN" id="labelUnid"></label>
+                                        <select asp-for="SGUN"
+                                                asp-items="@Model.Unidades.Select(x => new SelectListItem(){Text = x.Descricao, Value = x.Id.ToString()})"
+                                                class="form-control">
+                                            <option value="">-*****-</option>
+                                        </select>
+                                        <span asp-validation-for="SGUN" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="Relacao" id="labelrelacao"></label>
+                                        <input asp-for="Relacao" class="form-control" />
+                                        <span asp-validation-for="Relacao" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="ValorUnitario" id="labelvlunit"></label>
+                                        <input type="hidden" asp-for="ValorUnitario" />
+                                        <input asp-for="ValorUnitario" class="form-control" disabled />
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="ValorTotal" id="labelvltotal"></label>
+                                        <input type="hidden" asp-for="ValorTotal" />
+                                        <input asp-for="ValorTotal" class="form-control" disabled />
+                                        <span asp-validation-for="ValorTotal" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label asp-for="ValorNovoPrecoVenda" id="labelnovovalorvenda"></label>
+                                        <input asp-for="ValorNovoPrecoVenda" class="form-control" />
+                                        <span asp-validation-for="ValorNovoPrecoVenda" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                    </div>
+                    <div class="modal-footer justify-content-end">
+
+                        <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+                            <i class="fas fa-window-close"></i>
+                        </a>
+
+                        <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvar" title="Confirmar operação">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/local/processo/compra.js"></script>
+   
+ }

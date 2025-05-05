@@ -1,0 +1,145 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.ListaInventarioItemViewModel
+
+@{
+    ViewData["Title"] = "Apagar Itens do Inventario (Produtos)";
+
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+        @if ((Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Execucao || Model.Situacao == agilium.webapp.manager.mvc.Enums.ESituacaoInventario.Aberta)
+                && Model.TipoAnalise == agilium.webapp.manager.mvc.Enums.ETipoAnalise.Manual)
+        {
+            <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+        }
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+            <a href="#"> Apagar Itens </a>
+        </div>
+    </article>
+</section>
+<br />
+<form id="frmEditarItemInventario" method="post">
+    <vc:Summary></vc:Summary>
+    <div class="card">
+        <div class="card-head">
+            <div class="col-md-12" id="areaFiltro">
+
+                <input type="hidden" asp-for="idInventario" />
+                <div class="row">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Inventário</span>
+                            <span class="info-box-number">@Model.NomeInventario</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="resultado">
+                <table class="table table-hover" id="tabela">
+                    <thead class="table thead-dark">
+                        <tr>
+                            <th style="min-width:400px">
+                                Produto
+                            </th>
+                            <th>
+                                Data Analise
+                            </th>
+                            <th>
+                                Usuario Analise
+                            </th>
+                            <th>
+                                Quant. Apurada
+                            </th>
+                            <th>
+                                Quant. Estoque
+                            </th>
+                            <th>
+                                Seleção
+                            </th>
+                        </tr>
+                    </thead>
+                    @*<partial name="_listaItemEdit" model="@Model.Itens"></partial>*@
+                    <tbody>
+                        @for (int i = 0; i < Model.Itens.Count; i++)
+                        {
+                            <input type="hidden" asp-for="@Model.Itens[i].IDINVENT" class="form-control" />
+                            <input type="hidden" asp-for="@Model.Itens[i].Id" class="form-control" />
+                            <input type="hidden" asp-for="@Model.Itens[i].IDPRODUTO" class="form-control" />
+                            <input type="hidden" asp-for="@Model.Itens[i].IDPERDA" class="form-control" />
+                            <input type="hidden" asp-for="@Model.Itens[i].ValorCustoMedio" class="form-control" />
+                            var nomeProduto = $"{@Model.Itens[i].CodigoProduto} - {@Model.Itens[i].NomeProduto}";
+
+                            var classeAtivo = "";
+                            double valorCustoMedio = @Model.Itens[i].ValorCustoMedio.HasValue ? @Model.Itens[i].ValorCustoMedio.Value : 0;
+                            double quantidadeApurada = @Model.Itens[i].QuantidadeAnalise.HasValue ? @Model.Itens[i].QuantidadeAnalise.Value : 0;
+                            double quantidadeEstoque = @Model.Itens[i].QuantidadeEstoque.HasValue ? @Model.Itens[i].QuantidadeEstoque.Value : 0;
+                            double perdaSobra = quantidadeEstoque - quantidadeApurada;
+                            var dataHora = @Model.Itens[i].DataHora.HasValue ? Model.Itens[i].DataHora.Value.ToString("dd/MM/yyyy") : "";
+
+                            var descPerda = "Sobra";
+                            if (!(perdaSobra > 0))
+                            {
+                                perdaSobra = perdaSobra * -1;
+                                classeAtivo = "bg-danger";
+                                descPerda = "Perda";
+                            }
+                            else if (perdaSobra > 0)
+                            {
+                                classeAtivo = "bg-success";
+                            }
+
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Itens[i].CodigoProduto" class="form-control" />
+                                    <input type="hidden" asp-for="@Model.Itens[i].NomeProduto" class="form-control" />
+                                    @nomeProduto
+                                </td>
+
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Itens[i].DataHora" class="form-control" />
+                                    @dataHora
+                                </td>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Itens[i].NomeUsuarioAnalise" class="form-control" />
+                                    <input type="hidden" asp-for="@Model.Itens[i].IDUSUARIOANALISE" class="form-control" />
+                                    @Model.Itens[i].NomeUsuarioAnalise
+                                </td>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Itens[i].QuantidadeAnalise" class="form-control" />
+                                    @quantidadeApurada
+                                </td>
+                                <td>
+                                    <input type="hidden" asp-for="@Model.Itens[i].QuantidadeEstoque" class="form-control" />
+                                    @quantidadeEstoque
+                                </td>
+                                <td>
+                                       <input type="checkbox" asp-for="@Model.Itens[i].Selecionado">
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+        <script src="~/local/processo/inventario.js"></script>
+
+ }

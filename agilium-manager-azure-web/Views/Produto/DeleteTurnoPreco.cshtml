@@ -1,0 +1,98 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.TurnoViewModel.TurnoPrecoViewModel
+@using agilium.webapp.manager.mvc.Extensions
+@{
+    ViewData["Title"] = "Preço do produto Diferenciado por Turno";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Produto"><i class="fa fa-dashboard"></i> Produto </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Preço Diferenciado por Turno </a>
+            <a href="#"> Apagar </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="callout callout-danger">
+    <h3>Você deseja realmente apagar o preço diferenciado do Produto por Turno?</h3>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form id="frmDelete" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IDPRODUTO" />
+            <input type="hidden" asp-for="NumeroTurno" />
+            <input type="hidden" asp-for="DescricaoTipoDiferenca" />
+            <input type="hidden" asp-for="DescricaoTipoValor" />
+            <input type="hidden" asp-for="Valor" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">Apagar Registro</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+
+                                <label asp-for="NumeroTurno" id="labelTurno"></label>
+                                <input asp-for="NumeroTurno" class="form-control" disabled/>
+                                <span asp-validation-for="NumeroTurno" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DescricaoTipoDiferenca" id="labelTipoDiferença"></label>
+                                <select asp-for="DescricaoTipoDiferenca"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETpDiferencaPreco>()"
+                                        class="form-control " disabled></select>
+                                <span asp-validation-for="DescricaoTipoDiferenca" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DescricaoTipoValor" id="labelTipoValor"></label>
+                                <select asp-for="DescricaoTipoValor"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoValorPreco>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="DescricaoTipoValor" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Valor" id="labelValor"></label>
+                                <input asp-for="Valor" class="form-control money" disabled />
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/produtoTurnoPreco.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+ }

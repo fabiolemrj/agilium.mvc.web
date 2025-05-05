@@ -1,0 +1,73 @@
+﻿@model IEnumerable<agilium.webapp.manager.mvc.ViewModels.Config.ConfigImagemViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Configurações - Imagens";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        @*<a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>*@
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Configurações Imagens</a>
+        </div>
+    </article>
+</section>
+<br />
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Chave
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                
+                <tr>
+                    @if (!string.IsNullOrEmpty(item.ImagemConvertida))
+                    {
+                        <td>
+                            <img class=" card-img-user-top img-rounded elevation-2" src="@item.ImagemConvertida" id="imgConvert" name="imgConvert" />
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <img class=" card-img-user-top img-rounded elevation-2" src="~/Images/imagem_nao_encontrada.png" id="imgConvert" name="imgConvert" />
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CHAVE)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    
+                    <td class="text-right">
+                        <a class="btn btn-warning" asp-action="EditConfigImage" asp-route-chave="@item.CHAVE" asp-route-idEmpresa="@item.IDEMPRESA" ><spam class="fa fa-pencil-alt"></spam></a>
+                        @*<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CHAVE" asp-route-idEmpresa="@item.IDEMPRESA" title="Apagar"><spam class="fa fa-trash"></spam></a>*@
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+ 
+    </table>
+</div>

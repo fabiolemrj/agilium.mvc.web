@@ -1,0 +1,133 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.DevolucaoViewModel.DevolucaoViewModel
+
+@{
+    var desabilitar = Model.IDVENDA.HasValue ? "disabled":"";
+}
+
+    @Html.HiddenFor(modelItem => Model.IDVENDA)
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label asp-for="DataConsulta" id="labelData"></label>
+            @if (!Model.IDVENDA.HasValue)
+            {
+                <input asp-for="DataConsulta" class="form-control" type="date"/>
+            }else{
+                @Html.HiddenFor(modelItem => Model.DataConsulta)
+              
+                <input asp-for="DataConsulta" class="form-control" disabled/>
+            }
+            <span asp-validation-for="DataConsulta" class="text-danger"></span>
+        </div>       
+    </div>
+    <div class="col-md-1">
+        <div class="form-group">
+            <label id="lbbotao">&nbsp</label>
+            <span @(desabilitar)>
+                <button type="button" onclick="Selecionarvenda();" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-venda-btn" title="Filtrar" @desabilitar><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label id="labelIdVenda">Selecione a venda a ser devolvida</label>
+            <select id="Selecaovenda" name="Selecaovenda" class="form-control" @desabilitar>
+                <option value="">--</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+<div class="mx-auto" style="width: 300px;">
+    <dl>
+        <dt>Itens da Venda para Devolução</dt>
+    </dl>
+</div>
+@*@for(int i = 0; i < Model.DevolucaoItens.Count; i++)
+{
+    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].ValorDevolucao)
+    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].QuantidadeDevolucao)
+    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idItemVenda)
+    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idDevolucaoItem)
+}*@
+<div id="listaVendas">
+    <table class='table table-hover' id='divGridResultadox'>
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    
+                </th>
+                <th>
+                    Item
+                </th>
+                <th>
+                    Produto
+                </th>
+                <th>
+                    Qtd Vendida
+                </th>
+                <th>
+                    Vlr Vendido
+                </th>
+                <th>
+                    Qtd Devolução
+                </th>
+                <th>
+                    Vlr Devolução
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.DevolucaoItens.Count; i++)
+            {
+                <tr>
+                    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idItemVenda)
+                    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idProduto)
+                    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idDevolucaoItem)
+                    @Html.HiddenFor(modelItem => Model.DevolucaoItens[i].idDevolucao)
+                    <td>
+                        @Html.CheckBoxFor(modelItem =>Model.DevolucaoItens[i].selecionado)
+
+                 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].SeqVenda)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].ProdutoNome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].QuantidadeVendida)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].ValorTotal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].QuantidadeDevolucao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => Model.DevolucaoItens[i].ValorDevolucao)
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script>
+        $.validator.methods.date = function (value, element) {
+            Globalize.culture("pt-BR");
+            // you can alternatively pass the culture to parseDate instead of
+            // setting the culture above, like so:
+            // parseDate(value, null, "en-AU")
+            return this.optional(element) || Globalize.parseDate(value) !== null;
+        }
+    </script>
+   }

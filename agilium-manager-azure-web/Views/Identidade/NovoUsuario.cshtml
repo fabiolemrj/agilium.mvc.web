@@ -1,0 +1,150 @@
+﻿<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+
+@model agilium.webapp.manager.mvc.ViewModels.RegisterModel
+@{
+    ViewData["Title"] = "Registro novo usuário";
+  
+}
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturnCliente"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action" id="btnSalvarCliente"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="#"> Criar nova conta</a>
+        </div>
+    </article>
+</section>
+<br />
+
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Registro" id="frmNovoUsuario" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title">Dados Gerais</h3>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label asp-for="Nome" id="labelnome"></label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Email" id="labelEmail"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label asp-for="Usuario" id="labelUsuario"></label>
+                            <input asp-for="Usuario" class="form-control" />
+                            <span asp-validation-for="Usuario" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="CPF" id="labelCpf"></label>
+                            <input asp-for="CPF" class="form-control" />
+                            <span asp-validation-for="CPF" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @*<div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input type="password" asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword"></label>
+                            <input type="password" asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>*@
+
+                </div>
+                </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+  
+    $('#btnSalvar').click(function () {
+            $('#btnSendForm').click();
+        
+    });
+
+
+    $(function () {
+        $('#btnAjuda').click(function () {
+
+            Tour.run([
+                {
+                    element: $('#btnVoltar'),
+                    content: '<strong><div align="center" class="text-info">Botão de Voltar</div></strong><p><div align="center">Retorna a pagina anterior.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#btnSalvar'),
+                    content: '<strong><div align="center" class="text-info">Botão de Salvar</div></strong><p><div align="center">Salvar registros.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('.barra-de-posicao-atual'),
+                    content: '<strong><div align="center" class="text-info">Bread Crumb</div></strong><p><div align="center">Caminho de telas percorridos até a tela atual.</div></p>',
+                    position: 'top'
+                },
+
+                {
+                    element: $('#labelcardGerais'),
+                    content: '<strong><div align="center" class="text-info">Dados Gerais</div></strong><p><div align="center">Area com campos com dados gerais do cliente.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#labelnome'),
+                    content: '<strong><div align="center" class="text-info">Nome</div></strong><p><div align="center">Informa o Nome completo do usuario.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#labelEmail'),
+                    content: '<strong><div align="center" class="text-info">Email</div></strong><p><div align="center">Informa o Email do usuario.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#labelUsuario'),
+                    content: '<strong><div align="center" class="text-info">Nome Simplificado</div></strong><p><div align="center">Informa o Nome Simplificado do usuario.</div></p>',
+                    position: 'top'
+                },
+                {
+                    element: $('#labelCpf'),
+                    content: '<strong><div align="center" class="text-info">CPF</div></strong><p><div align="center">Numero do CPF do usuario.</div></p>',
+                    position: 'top'
+                },
+            ]);
+        });
+    });
+</script>

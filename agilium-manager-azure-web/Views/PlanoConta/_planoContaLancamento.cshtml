@@ -1,0 +1,134 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PlanoContaViewModel.PlanoContaLancamentoListaViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Plano de Contas - Lançamentos";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+@*<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>*@
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="@Url.Action("Index","PlanoConta")" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+            <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="@Url.Action("Index","PlanoConta")"><i class="fa fa-dashboard"></i> Plano de Conta </a> /
+            <a href="#"> Lançamentos </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="card card card-outline card-primary">
+    <div class="card-header">
+        <h5 class="card-title">
+            <i class="fas fa-file-invoice-dollar"></i>
+            
+        </h5>    
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12" id="areaFiltro">
+                <form asp-action="LancamentoPorPlano" asp-route-id="@Model.IdPlano" class="sidebar-form" method="post">
+                    <input type="hidden" asp-for="IdPlano"/>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label id="DataInicial">Data Inicial</label>
+                                <input class="form-control" asp-for="DataInicial" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label id="DataFinal">Data Final</label>
+                                <input class="form-control" asp-for="DataFinal"  />
+                            </div>
+                        </div>
+                        <div class="align-items-center">
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <label id="DataFinal">&nbsp</label>
+                                    <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+        <br/>
+        <table class="table table-hover">
+            <thead class="table thead-dark">
+                <tr>
+                    <th>
+                        Data
+                    </th>
+                    <th>
+                        Descrição
+                    </th>
+                    <th>
+                        Valor
+                    </th>
+                    <th>
+                        Conta
+                    </th>
+                    <th>
+                        Tipo
+                    </th>                    
+                </tr>
+            </thead>
+            <tbody>
+            
+                @foreach (var item in Model.Lancamentos)
+                {
+                    var saldo = item.Valor;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataHora)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DescricaoLancamento)
+                        </td>
+                        <td>
+                            @Html.Raw(saldo.ToString("C"))
+                        </td>
+                        <td>
+                            Boleto
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tipo)
+                        </td>
+
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*<div class="modal-footer justify-content-end">
+
+    <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+        <i class="fas fa-window-close"></i>
+    </a>
+
+    <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvarModal" title="Confirmar operação">
+        <i class="fas fa-save"></i>
+    </button>
+</div>*@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Financeiro/planoConta.js"></script>
+      
+
+
+ }

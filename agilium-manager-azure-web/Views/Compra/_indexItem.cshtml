@@ -1,0 +1,132 @@
+﻿@model IEnumerable<agilium.webapp.manager.mvc.ViewModels.CompraViewModel.CompraItemViewModel>
+<link rel="stylesheet" href="~/css/scroll_Horizontal.css">
+
+<div class="container-fluid">
+   
+    <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">  
+            <a asp-action="CreateItem" onclick="on()"></span></a>
+    
+            <div class="col-12">
+         
+                <div class="align-items-center">                   
+                        <div class="form-group">
+                            <button type="button" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Adicionar Novo Item"><i class="fa fa-plus-square sns-tool-action"></i></button>
+                        </div>                   
+                </div>
+            
+            <div class="row">
+                <div class="tableFixHead">
+                    <table class="table table-hover">
+                        <thead class="table thead-dark">
+                            <tr>
+                                <th>Cod Produto 1</th>
+                                <th>Produto 2</th>
+                                <th>Estoque 3</th>
+
+                                <th>Quant. 4</th>
+                                <th>Unid. 5</th>
+                                <th>Rel Compra/venda 6</th>
+                                <th>Valor Unitário 7</th>
+                                <th>Valor Total 8</th>
+                                <th>Preço Venda 9</th>
+                                <th>CFOP 10</th>
+                                <th>Estoque 11</th>
+                                <th>Descr. NF 12</th>
+                                <th>CEST 13</th>
+                                <th>NCM 14</th>
+                                <th>EAN 15</th>
+                                <th>CST ICMS 16</th>
+                                <th>CST Cofins 17</th>
+                                <th>CST PIS 18</th>
+                                <th>CST IPI 19</th>
+                                <th>% ICMS Ret 20</th>
+                                <th>Aliq. ICMS 21</th>
+                                <th>Aliq. Cofins 22</th>
+                                <th>Aliq. PIS 23</th>
+                                <th>Aliq. IPI 24</th>
+                                <th>Base Calc. ICMS 25</th>
+                                <th>Base Calc. Cofins 26</th>
+                                <th>Base Calc. PIS 27</th>
+                                <th>Base Calc. IPI 28</th>
+                                <th>Base Retido 29</th>
+                                <th>Valor ICMS 30</th>
+                                <th>Valor IPI 31</th>
+                                <th>Valor PIS 32</th>
+                                <th>Valor Cofins 33</th>
+                                <th>Valor Outros 34</th>
+                                <th>35</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderByDescending(x => x.DataValidade))
+                            {
+                                var valorAliquotaIcms = item.ValorAliquotaIcms.HasValue ? item.ValorAliquotaIcms : 0;
+                                var valorAliquotaCofins = item.ValorAliquotaCofins.HasValue ? item.ValorAliquotaCofins : 0;
+                                var valorAliquotaIpi = item.ValorAliquotaIpi.HasValue ? item.ValorAliquotaIpi : 0;
+                                var valorAliquotaPis = item.ValorAliquotaPis.HasValue ? item.ValorAliquotaPis : 0;
+                                var valorBaseCalculoCofins = item.ValorBaseCalculoCofins.HasValue ? item.ValorBaseCalculoCofins : 0;
+                                var valorBaseCalculoIcms = item.ValorBaseCalculoIcms.HasValue ? item.ValorBaseCalculoIcms : 0;
+                                var valorBaseCalculoIpi = item.ValorBaseCalculoIpi.HasValue ? item.ValorBaseCalculoIpi : 0;
+                                var valorBaseCalculoPis = item.ValorBaseCalculoPis.HasValue ? item.ValorBaseCalculoPis : 0;
+                                var valorBaseRetido = item.ValorBaseRetido.HasValue ? item.ValorBaseRetido : 0;
+                                var valorCofins = item.ValorCofins.HasValue ? item.ValorCofins : 0;
+                                var valorIcms = item.ValorIcms.HasValue ? item.ValorIcms : 0;
+                                var valorIpi = item.ValorIpi.HasValue ? item.ValorIpi : 0;
+                                var valorNovoPrecoVenda = item.ValorNovoPrecoVenda.HasValue ? item.ValorNovoPrecoVenda : 0;
+                                var valorUnitario = item.ValorUnitario.HasValue ? item.ValorUnitario : 0;
+                                var valorTotal = item.ValorTotal.HasValue ? item.ValorTotal : 0;
+                                var valorPis = item.ValorPis.HasValue ? item.ValorPis : 0;
+                                var valorOUTROS = item.ValorOUTROS.HasValue ? item.ValorOUTROS : 0;
+
+                                <tr>
+                                    <td>1 @Html.DisplayFor(modelItem => item.CodigoProdutoFornecedor)</td>
+                                    <td>2 @Html.DisplayFor(modelItem => item.NomeProduto)</td>
+                                    <td>3 @Html.DisplayFor(modelItem => item.NomeEstoque)</td>
+                                    <td>4 @Html.DisplayFor(modelItem => item.Quantidade)</td>
+                                    <td>5 @Html.DisplayFor(modelItem => item.SGUN)</td>
+                                    <td>6 @Html.DisplayFor(modelItem => item.Relacao)</td>
+                                    <td>7 @Html.Raw(valorUnitario?.ToString("N"))</td>
+                                    <td>8 @Html.Raw(valorTotal?.ToString("N"))</td>
+                                    <td>9 @Html.Raw(valorNovoPrecoVenda?.ToString("N"))</td>
+                                    <td>10 @Html.DisplayFor(modelItem => item.NumeroCFOP)</td>
+                                    <td>11 @Html.DisplayFor(modelItem => item.NomeEstoque)</td>
+                                    <td>12 @Html.DisplayFor(modelItem => item.DescricaoProdutoCompra)</td>
+                                    <td>13 @Html.DisplayFor(modelItem => item.CodigoCEST)</td>
+                                    <td>14 @Html.DisplayFor(modelItem => item.CodigoNCM)</td>
+                                    <td>15 @Html.DisplayFor(modelItem => item.CodigoEan)</td>
+                                    <td>16 @Html.DisplayFor(modelItem => item.CodigoCstIcms)</td>
+                                    <td>17 @Html.DisplayFor(modelItem => item.CodigoCstCofins)</td>
+                                    <td>18 @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
+                                    <td>19 @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
+                                    <td>20 @Html.Raw(valorBaseRetido?.ToString("N"))</td>
+                                    <td>21 @Html.Raw(valorAliquotaIcms?.ToString("N"))</td>
+                                    <td>22 @Html.Raw(valorAliquotaCofins?.ToString("N"))</td>
+                                    <td>23 @Html.Raw(valorAliquotaPis?.ToString("N"))</td>
+                                    <td>24 @Html.Raw(valorAliquotaIpi?.ToString("N"))</td>
+                                    <td>25 @Html.Raw(valorBaseRetido?.ToString("N"))</td>
+                                    <td>26 @Html.Raw(valorBaseCalculoIcms?.ToString("N"))</td>
+                                    <td>27 @Html.Raw(valorBaseCalculoCofins?.ToString("N"))</td>
+                                    <td>28 @Html.Raw(valorBaseCalculoPis?.ToString("N"))</td>
+                                    <td>29 @Html.Raw(valorBaseCalculoIpi?.ToString("N"))</td>
+                                    <td>30 @Html.Raw(valorIcms?.ToString("N"))</td>
+                                    <td>31 @Html.Raw(valorIpi?.ToString("N"))</td>
+                                    <td>32 @Html.Raw(valorPis?.ToString("N"))</td>
+                                    <td>33 @Html.Raw(valorCofins?.ToString("N"))</td>
+                                    <td>34 @Html.Raw(valorOUTROS?.ToString("N"))</td>
+                                    <td>35</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+             
+            </div>
+               
+      
+        </div>
+      
+    </div>
+</div>
+
+

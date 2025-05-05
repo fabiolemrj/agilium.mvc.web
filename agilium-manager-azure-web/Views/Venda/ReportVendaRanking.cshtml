@@ -1,0 +1,137 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.VendaReportViewModel.VendaFiltroRankingViewModel
+
+@{
+    ViewData["Title"] = "Relatório de Venda Simplificado";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmRelatVendaRanking" class="sidebar-form" method="post" novalidate>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="dataInicial" id="labelDtInicial"></label>
+                        <input asp-for="dataInicial" class="form-control" class="form-control datetime" type="text" data-mask="00/00/0000" />
+                        <span asp-validation-for="dataInicial" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="dataFinal" id="labelDtInicial"></label>
+                        <input asp-for="dataFinal" class="form-control" class="form-control datetime" type="text" data-mask="00/00/0000" />
+                        <span asp-validation-for="dataFinal" class="text-danger"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="TipoResultado" id="labelativo"></label>
+                        <select asp-for="TipoResultado"
+                                asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EResultadoFiltroRanking>()"
+                                class="form-control"></select>
+                        <span asp-validation-for="TipoResultado" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Ordenacao" id="labelativo"></label>
+                        <select asp-for="Ordenacao"
+                                asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EOrdenacaoFiltroRanking>()"
+                                class="form-control"></select>
+                        <span asp-validation-for="Ordenacao" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<table class="table table-hover">
+    <thead class="table thead-dark">
+        <tr>
+            <th>
+                Resultado
+            </th>
+            <th>
+                Quant. Vendida
+            </th>
+            <th>
+                Total Vendido
+            </th>
+            <th>
+                Custo Total
+            </th>
+            <th>
+                Lucro Total
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            double quantidadeTotal = 0;
+            double totalVendida = 0;
+            double custoTotal = 0;
+            double lucroTotal = 0;
+        }
+        <tr class="bg-secondary disabled color-palette">
+            <td><h5 class="description-header">Totalização</h5></td>
+            <td>
+                <h5 class="description-header">@Html.Raw(Model.ListaVendas.Sum(x=>x.QuantidadeVendida).ToString("N"))</h5>
+            </td>
+            <td>
+                <h5 class="description-header">@Html.Raw(Model.ListaVendas.Sum(x=>x.TotalVendida).ToString("N"))</h5>
+            </td>
+            <td>
+                <h5 class="description-header">@Html.Raw(Model.ListaVendas.Sum(x=>x.CustoTotal).ToString("N"))</h5>
+            </td>
+            <td>
+                <h5 class="description-header">@Html.Raw(Model.ListaVendas.Sum(x=>x.LucroTotal).ToString("N"))</h5>
+
+            </td>
+        </tr>
+        @foreach (var item in Model.ListaVendas)
+        {
+            quantidadeTotal += item.QuantidadeVendida;
+            totalVendida += item.TotalVendida;
+            custoTotal += item.CustoTotal;
+            lucroTotal += item.LucroTotal;
+
+            <tr>
+                <td>
+                    @Html.Raw(item.Resultado)
+                </td>
+                <td>
+                    @Html.Raw(item.QuantidadeVendida.ToString("N"))
+                </td>
+                <td>
+                    @Html.Raw(item.TotalVendida.ToString("N"))
+                </td>
+                <td>
+                    @Html.Raw(item.CustoTotal.ToString("N"))
+                </td>
+                <td>
+                    @Html.Raw(item.LucroTotal.ToString("N"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

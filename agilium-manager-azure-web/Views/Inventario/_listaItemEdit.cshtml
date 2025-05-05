@@ -1,0 +1,60 @@
+﻿@model List<agilium.webapp.manager.mvc.ViewModels.InventarioViewModel.InventarioItemViewModel>
+
+<tbody>
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        var nomeProduto = $"{@Model[i].CodigoProduto} - {@Model[i].NomeProduto}";
+
+        var classeAtivo = "text-success";
+        double valorCustoMedio = @Model[i].ValorCustoMedio.HasValue ? @Model[i].ValorCustoMedio.Value : 0;
+        double quantidadeApurada = @Model[i].QuantidadeAnalise.HasValue ? @Model[i].QuantidadeAnalise.Value : 0;
+        double quantidadeEstoque = @Model[i].QuantidadeEstoque.HasValue ? @Model[i].QuantidadeEstoque.Value : 0;
+        double perdaSobra = quantidadeEstoque - quantidadeApurada;
+
+        if (!(perdaSobra >= 0))
+        {
+            perdaSobra = perdaSobra * -1;
+            classeAtivo = "text-danger";
+        }
+
+        <tr>
+            <td>
+                <input type="hidden" asp-for="@Model[i].CodigoProduto" class="form-control" />
+                <input type="hidden" asp-for="@Model[i].NomeProduto" class="form-control" />
+                @nomeProduto
+            </td>
+
+            <td>
+                <input type="date" asp-for="@Model[i].DataHora" class="form-control" />
+            </td>
+            <td>
+                <input type="hidden" asp-for="@Model[i].NomeUsuarioAnalise" class="form-control" />
+                <input type="hidden" asp-for="@Model[i].IDUSUARIOANALISE" class="form-control" />
+                @Model[i].NomeUsuarioAnalise
+            </td>
+            <td>
+                <input type="hidden" asp-for="@Model[i].ValorCustoMedio" class="form-control" />
+                @Model[i].ValorCustoMedio
+            </td>
+            <td>
+                <input asp-for="@Model[i].QuantidadeAnalise" class="form-control" />
+            </td>
+            <td>
+                <input asp-for="@Model[i].QuantidadeEstoque" class="form-control" />
+            </td>
+            <td>
+                <span class="@classeAtivo">
+                    @Html.Raw(perdaSobra)
+                </span>
+            </td>
+            <td class="text-right">
+
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model[i].Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+               <a class="btn btn-danger" asp-action="DeleteItem" asp-route-id="@Model[i].Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
+                
+
+            </td>
+
+        </tr>
+    }
+</tbody>

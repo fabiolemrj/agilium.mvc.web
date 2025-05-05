@@ -1,0 +1,86 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.VendaViewModel.VendaDetalhesViewModel
+
+<div id="divGridResultado table-responsive">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Nº Item
+                </th>
+                <th>
+                    Código
+                </th>
+                <th>
+                    Produto
+                </th>
+                <th>
+                    Valor Unitario
+                </th>
+                <th>
+                    Quantidade
+                </th>
+                <th>
+                    Valor Item
+                </th>
+                <th>
+                    Acrescimos
+                </th>
+                <th>
+                    Descontos
+                </th>
+                <th>
+                    Total
+                </th>
+                <th>
+                    Situação
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.VendaItens.OrderBy(x => x.Sequencial))
+            {
+                var valorUnitario = item.ValorUnitario.HasValue ? item.ValorUnitario.Value.ToString("N") : "";
+                var valorItem = item.Valor.HasValue ? item.Valor.Value.ToString("N") : "";
+                var desconto = item.ValorDesconto.HasValue ? item.ValorDesconto.Value.ToString("N") : "";
+                var acrescimo = item.ValorAcrescimo.HasValue ? item.ValorAcrescimo.Value.ToString("N") : "";
+                var total = item.ValorTotal.HasValue ? item.ValorTotal.Value.ToString("N") : "";
+                var quantidade = item.Quantidade.HasValue ? item.Quantidade.Value.ToString("N") : "";
+
+                var situacao = item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoItemVenda.Cancelado ? "text-danger" : "";
+                <tr class="@situacao">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sequencial)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodigoProduto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoNome)
+                    </td>                    
+                    <td>
+                        @Html.Raw(valorUnitario)
+                    </td>
+                    <td>
+                        @Html.Raw(quantidade)
+                    </td>
+                    <td>
+                        @Html.Raw(valorItem)
+                    </td>
+                    <td>
+                        @Html.Raw(acrescimo)
+                    </td>
+                    <td>
+                        @Html.Raw(desconto)
+                    </td>
+                    <td>
+                        @Html.Raw(total)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Situacao)
+                    </td>
+                </tr>
+            }
+        </tbody>
+       
+    </table>
+</div>

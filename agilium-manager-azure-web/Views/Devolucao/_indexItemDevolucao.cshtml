@@ -1,0 +1,80 @@
+﻿@model IEnumerable<agilium.webapp.manager.mvc.ViewModels.DevolucaoViewModel.DevolucaoItemViewModel>
+@{
+    var i = 0;
+    ViewData["Title"] = "Itens da Devolução";
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@ViewData["Title"]</h5>
+    <button type="button" class="close" data-dismiss="modal">
+        <span aria-hidden="true">×</span><span class="sr-only">Fechar</span>
+    </button>
+</div>
+<div class="info-box">
+    <span class="info-box-icon bg-info"><i class="fas fa-th-list"></i></span>
+    <div class="info-box-content">
+        <span class="info-box-text">Devolução</span>
+        <span class="info-box-number">@ViewBag.devolucao</span>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Produto
+                </th>
+                <th>
+                    Seq. Item Venda
+                </th>
+                <th>
+                    Valor Item
+                </th>
+                <th>
+                    Valor Devolvido
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.OrderBy(x => x.CodigoProduto))
+            {
+                var valorItem = item.ValorItem.HasValue ? item.ValorItemVenda.Value.ToString("N") : "";
+                var valorDevolvido = item.ValorItemVenda.HasValue ? item.ValorItemVenda.Value.ToString("N") : "";
+                i++;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CodigoProduto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoNome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SequencialVenda)
+                    </td>
+                    <td>
+                        @Html.Raw(valorItem)
+                    </td>
+                    <td>
+                        @Html.Raw(valorDevolvido)
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+<div class="modal-footer justify-content-end">
+
+    <a class="nav-link btn btn-outline-danger" data-dismiss="modal" aria-label="Close" id="fechar" title="Cancelar operação">
+        <i class="fas fa-window-close"></i>
+    </a>
+
+    @* <button type="submit" class="nav-link btn btn-outline-success" id="btnSalvarModal" title="Confirmar operação">
+        <i class="fas fa-save"></i>
+    </button>*@
+</div>

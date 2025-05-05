@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "agilium.api.business": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61591;http://localhost:61593"
+    }
+  }
+}

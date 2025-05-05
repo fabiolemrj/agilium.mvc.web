@@ -1,0 +1,296 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using agilum.mvc.web.Data
+@inject SignInManager<AppUserAgiliumIdentity> SignInManager
+@inject UserManager<AppUserAgiliumIdentity> UserManager
+<!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agilium Painel</title>
+
+    <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="~/font/NightMachine-rwMB.ttf" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <!-- Theme style -->
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/chart.js/Chart.css" />
+    <link rel="stylesheet" href="~/css/toastr.css" />
+
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini text-md accent-navy">
+    @*<div id="overlay" onclick="off()">
+            <img id="imgLoader" src="~/Images/ajax-loader.gif" alt="Aguarde o carregamento..." />
+
+        </div>*@
+
+    <div id="overlay">
+        <div class="loader">
+            <img id="imgLoader" src="~/Images/loading-gif-png-5.gif" alt="Aguarde o carregamento..." />
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-light navbar-warning">
+            <!-- Left navbar links -->
+            <a class="brand-link text-lg-left">
+                @*<img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">*@
+                @*<span class="fonteLogoAgilium" >AGILIUM PAINEL</span>*@
+            </a>
+
+            <!-- Right navbar links -->
+            <partial name="_LoginPartial" />
+          
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+
+        <aside class="main-sidebar sidebar-light-navy elevation-4">
+            <!-- Brand Logo -->
+            <a class="brand-link navbar-warning" asp-controller="Home" asp-action="Index">
+                <img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="fonteLogoAgilium">AGILIUM</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+               
+                    <div class="">
+
+                        <a href="#" class="nav-link active">   @UserManager.GetUserAsync(User).Result.UserName</a>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>
+                                    Cadastro
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="Unidade" asp-action="Index">
+                                        <i class="nav-icon fas fa-id-card"></i>
+                                        <p>Unidades</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>
+                                    Financeiro
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="ContaCorrenteCliente" asp-action="Index">
+                                        @*<a class="nav-link" asp-controller="ClientesAgilium" asp-action="Index">*@
+
+                                        <i class="nav-icon fas fa-hand-holding-usd nav-icon"></i>
+                                        <p>Conta-Corrente</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="Cobranca" asp-action="Index">
+                                        <i class="nav-icon fas fa-cash-register nav-icon"></i>
+
+                                        <p>Cobrança</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-lock"></i>
+                                <p>
+                                    <i class="nav-icon right fas fa-angle-left"></i>Controle de acesso
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="ApplicationUser" asp-action="Index">
+                                        <i class="fas fa-lock-open nav-icon"></i>
+                                        Usuarios
+
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bullhorn"></i>
+                                <p>
+                                    <i class="nav-icon right fas fa-angle-left"></i>Marketing
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="Marketing" asp-action="Index">
+                                        <i class="fas fa-mail-bulk nav-icon"></i>
+                                        Campanhas E-mail
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <div class="conteudo content">
+                <div class="container-fluid">
+                    @RenderBody()
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <!-- To the right -->
+            <div class="pull-right hidden-xs">
+                Ambiente: Homologação
+            </div>
+            <!-- Default to the left -->
+            <div>Data do Sistema: @DateTime.Now.ToString("dd/MM/yyyy")</div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <!-- AdminLTE App -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/dist/plugins/chart.js/Chart.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/dist/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/dist/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/dist/plugins/jszip/jszip.min.js"></script>
+    <script src="~/dist/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/dist/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script src="~/js/toastr.min.js"></script>
+
+    <!--forms-->
+    <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
+    @*<script src="~/dist/js/demo.js"></script>
+        <script src="~/dist/js/pages/dashboard.js"></script>*@
+
+    @RenderSection("Scripts", required: false)
+
+<script>
+
+         $(document).ready(function () {
+
+                //Renderiza a mensagem que retorna da controller
+             if ("@ViewBag.TipoMensagem" != '') {
+                 ModalMensagem("@ViewBag.TipoMensagem", "@Html.Raw(ViewBag.Mensagem)");
+             }
+             else if ("@TempData["TipoMensagem"]" != '')
+             {
+                  ModalMensagem("@TempData["TipoMensagem"]","@TempData["Mensagem"]");
+             }
+                //ModalConfirmacao("teste", "tesxto", function () { alert('confirmou');});
+
+        });
+
+
+        function on() {
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function ModalMensagem(tipoModal, mensagemModal) {
+            var _tipoModal;
+            switch (tipoModal) {
+
+                case "warning":
+                    toastr.warning(mensagemModal)
+                    break;
+                case "danger":
+                    toastr.error(mensagemModal)
+                    break;
+                case "info":
+                    toastr.info(mensagemModal)
+                    break;
+                case "success":
+                    toastr.success(mensagemModal)
+                    break;
+
+                default:
+                    toastr.success(mensagemModal)
+                    break;
+            }
+        }
+</script>
+
+</body>
+</html>

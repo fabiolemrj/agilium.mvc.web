@@ -1,0 +1,134 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.ValeViewModel.ValeViewModel
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Vale";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Vale")"><i class="fa fa-dashboard"></i> Vale</a> /
+            <a href="#"> Apagar </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="callout callout-danger">
+    <h3>Você deseja realmente apagar o Vale?</h3>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form id="CreateEdit" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Codigo" />
+            <input type="hidden" asp-for="CodigoBarra" />
+            <input type="hidden" asp-for="IDEMPRESA" />
+            <input type="hidden" asp-for="IDCLIENTE" />
+            <input type="hidden" asp-for="Tipo" />
+            <input type="hidden" asp-for="Valor" />
+            <input type="hidden" asp-for="DataHora" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">Apagar Registro</h3>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" id="labelCodigo"></label>
+                                <input asp-for="Codigo" class="form-control" size="20" disabled/>
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                     
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label asp-for="Situacao" id="labelSituacao"></label>
+                                    <select asp-for="Situacao"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESituacaoVale>()"
+                                            class="form-control " disabled></select>
+                                    <span asp-validation-for="Situacao" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
+                                <select asp-for="IDEMPRESA"
+                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="IDCLIENTE" id="labelCliente"></label>
+                                <select asp-for="IDCLIENTE"
+                                        asp-items="@Model.Clientes.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
+                                        class="form-control js-example-basic-single" disabled>
+                                    <option value="">-*****-</option>
+                                </select>
+                                <span asp-validation-for="IDCLIENTE" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Tipo" id="labelTipo"></label>
+                                <select asp-for="Tipo"
+                                        asp-items="@Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoVale>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="Tipo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Valor" id="labelValor"></label>
+                                <input asp-for="Valor" class="form-control" disabled/>
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                       
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/vale.js"></script>
+    <script>
+
+
+    </script>
+ }

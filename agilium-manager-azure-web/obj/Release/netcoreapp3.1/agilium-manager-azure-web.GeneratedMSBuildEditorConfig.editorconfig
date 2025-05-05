@@ -1,0 +1,9 @@
+is_global = true
+build_property.RefitInternalNamespace = agilium_manager_azure_web
+build_property.RootNamespace = agilium_manager_azure_web
+build_property.ProjectDir = C:\ProjetoAgilium\agilium_base\agilium-manager-azure-web\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.CsWinRTUseWindowsUIXamlProjections = false
+build_property.EffectiveAnalysisLevelStyle = 
+build_property.EnableCodeStyleSeverity = 

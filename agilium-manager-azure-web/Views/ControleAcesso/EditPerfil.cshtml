@@ -1,0 +1,128 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.ControleAcesso.CreateEditPerfilViewModel
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","PerfilIndex")"><i class="fa fa-dashboard"></i> Perfis </a> /
+            <a href="#"> Editar Perfil </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="frmEdit">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Situacao" />
+            <input type="hidden" asp-for="idEmpresa" />
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title text-info">Editar</h3>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Descricao" class="control-label" id="labelDescricao"></label>
+                            <input asp-for="Descricao" class="form-control" />
+                            <span asp-validation-for="Descricao" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+
+@section Scripts {
+    <script>
+        $('#btnSalvar').click(function () {
+
+            on();
+            $('#btnSendForm').click();
+            off();
+        });
+
+        $(function () {
+            $('#btnAjuda').click(function () {
+
+                Tour.run([
+                    {
+                        element: $('#btnReturn'),
+                        content: '<strong><div align="center" class="text-info">Botão Voltar</div></strong><p><div align="center">Voltar para pagina anterior.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#btnSalvar'),
+                        content: '<strong><div align="center" class="text-info">Botão Salvar</div></strong><p><div align="center">Confirmar gravação dos dados.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#breadcrumb'),
+                        content: '<strong><div align="center" class="text-info">Breadcrumb</div></strong><p><div align="center">Area de Breadcrumb para navegação.</div></p>',
+                        position: 'top'
+                    },
+
+                    {
+                        element: $('#labelDescricao'),
+                        content: '<strong><div align="center" class="text-info">Perfil</div></strong><p><div align="center">Descrição do Perfil em edição.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#divGridResultado'),
+                        content: '<strong><div align="center" class="text-info">Lista de Itens de Permissões</div></strong><p><div align="center">Lista de itens de permissões que poderá ser dado autorização de acesso ao perfil.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#descrItem'),
+                        content: '<strong><div align="center" class="text-info">Descrição da permissão</div></strong><p><div align="center">Descrição da permissão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#inc'),
+                        content: '<strong><div align="center" class="text-info">Campo Incluir</div></strong><p><div align="center">Permissão de inclusão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#alt'),
+                        content: '<strong><div align="center" class="text-info">Campo Alterar</div></strong><p><div align="center">Permissão de alteração.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#exc'),
+                        content: '<strong><div align="center" class="text-info">Campo Excluir</div></strong><p><div align="center">Permissão de exclusão.</div></p>',
+                        position: 'top'
+                    },
+                    {
+                        element: $('#rel'),
+                        content: '<strong><div align="center" class="text-info">Campo Relatório</div></strong><p><div align="center">Permissão de visualização/impressão de Relatório.</div></p>',
+                        position: 'top'
+                    },
+                ]);
+            });
+        });
+    </script>
+}

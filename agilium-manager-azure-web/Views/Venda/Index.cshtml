@@ -1,0 +1,223 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.PagedViewModel<agilium.webapp.manager.mvc.ViewModels.VendaViewModel.VendaViewModel>
+@using agilium.webapp.manager.mvc.Extensions
+
+@{
+    ViewData["Title"] = "Venda";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Venda </a>
+        </div>
+    </article>
+</section>
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 table-responsive">
+        <div id="divGridResultado">
+            <table class="table table-hover">
+                <thead class="table thead-dark">
+                    <tr>
+                        <th>
+                            Nº Venda
+                        </th>
+                        <th>
+                            Caixa Nº
+                        </th>
+                        <th>
+                            Situação Caixa
+                        </th>
+                        <th>
+                            Data
+                        </th>
+                        <th>
+                            Valor
+                        </th>
+                        <th>
+                            Acréscimos
+                        </th>
+                        <th>
+                            Descontos
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th>
+                            Situação
+                        </th>
+                        <th>
+                            Nº Doc. Fiscal
+                        </th>
+                        <th>
+                            Série
+                        </th>
+                        <th>
+                            Emissão
+                        </th>
+                        <th>
+                            Operador Caixa
+                        </th>
+                        <th>
+                            Ponto de Venda
+                        </th>
+                        <th>
+                            Cliente
+                        </th>
+                        <th>
+                            CPF Cliente
+                        </th>
+
+                        <th class="colunaacao-mudarsituacao"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.List.OrderByDescending(x => x.Sequencial))
+                    {
+
+                        var situacao = item.Situacao.Value == agilium.webapp.manager.mvc.Enums.ESituacaoVenda.Inativo ? "text-danger" : "";
+                        var emissao = "";
+                        if (item.Emissao.Value == agilium.webapp.manager.mvc.Enums.ETipoEmissaoVenda.NaoEmitido)
+                            emissao = "text-danger";
+                        else if (item.Emissao.Value == agilium.webapp.manager.mvc.Enums.ETipoEmissaoVenda.Contigencia)
+                            emissao = "text-warning";
+                        else if (item.Emissao.Value == agilium.webapp.manager.mvc.Enums.ETipoEmissaoVenda.Cancelada)
+                            emissao = "text-danger";
+
+                        var data = item.Data.HasValue ? item.Data.Value.ToString("dd/MM/yyyy") : "";
+                        var valor = item.Valor.HasValue ? item.Valor.Value.ToString("N") : "0,00";
+                        var valorDesc = item.ValorDesconto.HasValue ? item.ValorDesconto.Value.ToString("N") : "0,00";
+                        var valorAcresc = item.ValorAcrescimo.HasValue ? item.ValorAcrescimo.Value.ToString("N") : "0,00";
+                        var valorTotal = item.ValorTotal.HasValue ? item.ValorTotal.Value.ToString("N") : "0,00";
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sequencial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CaixaNome)
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                @Html.Raw(data)
+                            </td>
+                            <td>
+                                @Html.Raw(valor)
+                            </td>
+                            <td>
+                                @Html.Raw(valorAcresc)
+                            </td>
+                            <td>
+                                @Html.Raw(valorDesc)
+                            </td>
+                            <td>
+                                @Html.Raw(valorTotal)
+                            </td>
+                            <td>
+                                <span class="@situacao">@Html.DisplayFor(modelItem => item.Situacao)</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumeroNF)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SerieNF)
+                            </td>
+                            <td>
+                                <span class="@emissao">@Html.DisplayFor(modelItem => item.Emissao)</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FuncionarioNome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PDVNome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClienteNome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CpfCnpj)
+                            </td>
+                            <td>
+                                <a class="btn btn-default" asp-action="VendaDashboard" asp-route-idVenda="@item.Id" title="Dashboard da Venda" data-modal=""><spam class="fas fa-chart-line"></spam></a>
+                                <a class="btn btn-default" asp-action="VendaEspelho" asp-route-idVenda="@item.Id" title="Espelho da Venda" data-modal=""><spam class="far fa-object-group"></spam></a>
+                                <a class="btn btn-default" asp-action="VendaDetalhe" asp-route-idVenda="@item.Id" title="Detalhes da Venda" data-modal=""><spam class="fas fa-shopping-cart"></spam></a>
+                                @* <a class="btn btn-default" asp-action="IndexMovimentacao" asp-route-idCaixa="@item.Id" title="Movimentações"><spam class="fas fa-tasks"></spam></a>
+                        <a class="btn btn-default" asp-action="IndexMoeda" asp-route-idCaixa="@item.Id" title="Moedas"><spam class="fas fa-coins"></spam></a>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="17">
+                            <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/venda.js"></script>
+
+ }

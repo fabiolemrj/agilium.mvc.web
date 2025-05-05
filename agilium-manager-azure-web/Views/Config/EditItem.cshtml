@@ -1,0 +1,150 @@
+﻿@model agilium.webapp.manager.mvc.ViewModels.Config.EditarChaveValorViewModel
+
+@{
+    ViewData["Title"] = "Configuração";
+}
+<link rel="stylesheet" href="~/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Config",new { idEmpresa =Model.IdEmpresa })"><i class="fa fa-dashboard"></i> Configurações</a> /
+            <a href="#"> Editar Configuração </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="EditItem" id="frmConfig" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="IdEmpresa" />
+            <input type="hidden" asp-for="Chave" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (Model.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.SimNao)
+                    {
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel" class="">@Model.Label</label>
+                                <select asp-for="Valor"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.Numero)
+                    {
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel" class="">@Model.Label</label>
+                                <input type="number" asp-for="Valor" class="form-control" />
+
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.Cores)
+                    {
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel" class="" >@Model.Label</label>
+                                <div class="input-group my-colorpicker1 colorpicker-element" data-colorpicker-id="2">
+                                    <input type="text" asp-for="Valor" class="form-control" data-original-title="" title="">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fas fa-palette"></i></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.TipoAmbiente)
+                    {
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel" class="">@Model.Label</label>
+                                <select asp-for="Valor"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoAmbiente>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    }
+                    else if (Model.Tipo == agilium.webapp.manager.mvc.Enums.ETipoCompnenteConfig.TipoAberturaCaixa)
+                    {
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel" class="">@Model.Label</label>
+                                <select asp-for="Valor"
+                                        asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoAberturaCaixa>()"
+                                        class="form-control"></select>
+                                <span asp-validation-for="Valor" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <span class="badge badge-info">@Model.Classificacao</span>
+                                <label id="idLabel">@Model.Label</label>
+                                <input type="text" asp-for="Valor" class="form-control" size="100" />
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+        </div>
+</div>
+@section Scripts {
+    <script src="~/dist/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Ferramentas/config.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.my-colorpicker1').colorpicker();
+
+            $('.my-colorpicker1 .fa-palette').css('color', event.color.toString());
+        });
+
+        $('#caminho_certificado').change(function (e) {
+
+            const fileName = e.target.files[0].name;
+
+            $("#CERTIFICADO_CAMINHO_Valor").val(fileName);
+
+        });
+
+        const carregarArquivo = () => {
+
+            $("#caminho_certificado").click();
+        }
+
+    </script>
+}
