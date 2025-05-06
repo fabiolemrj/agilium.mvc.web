@@ -449,7 +449,14 @@ namespace agilium.api.business.Services
             return true;
         }
 
-   
+
+        #endregion
+
+        #region CaAreas
+        public async Task<bool> UsuarioTemPermissao(string idUsuarioAspNet, int idTag)
+        {
+            return await _caRepositoryDapper.UsuarioTemPermissaoAcesso(idUsuarioAspNet, idTag);
+        }
         #endregion
     }
 }

@@ -2797,10 +2797,7 @@
           "FluentValidation.AspNetCore": "11.3.0"
         },
         "runtime": {
-          "agilium-manager-azure-business.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "agilium-manager-azure-business.dll": {}
         },
         "compile": {
           "agilium-manager-azure-business.dll": {}
@@ -2820,10 +2817,7 @@
           "agilium-manager-azure-business": "1.0.0"
         },
         "runtime": {
-          "agilium-manager-git-azure-infra.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "agilium-manager-git-azure-infra.dll": {}
         },
         "compile": {
           "agilium-manager-git-azure-infra.dll": {}

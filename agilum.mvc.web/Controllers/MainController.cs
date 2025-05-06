@@ -105,5 +105,10 @@ namespace agilum.mvc.web.Controllers
             _logService.Erro(usuario, msg, tela, controle, "Web", sql, tipo);
         }
         protected string Deserializar(object objeto) => JsonSerializer.Serialize(objeto);
+
+        protected string RetirarPontos(string valor)
+        {
+            return valor.Replace(".", "").Replace("-", "").Replace("/", "").Replace(",", "");
+        }
     }
 }

@@ -298,6 +298,21 @@ namespace agilium.api.infra.Repository.Dapper
             return _dbSession.Connection.Execute(query, parametros, _dbSession.Transaction) > 0;
         }
 
+        public async Task<bool> UsuarioTemPermissaoAcesso(string idUsuarioAspNet, int idTag)
+        {
+            var query = $@"Select a.*,a.id_area as Id from ca_areas a 
+                                inner join ca_permissoes perm on a.id_area = perm.id_area 
+                                inner join ca_usuarios u on u.id_perfil = perm.id_perfil
+                                where idUserAspNet = @idUserAspNet
+                                and idtag = @idTag";
+            var parametros = new DynamicParameters();
+            parametros.Add("@idUserAspNet", idUsuarioAspNet, DbType.String, ParameterDirection.Input);
+            parametros.Add("@idTag", idTag, DbType.Int32, ParameterDirection.Input);
+
+            return _dbSession.Connection.Query<CaAreaManager>(query, parametros, _dbSession.Transaction).Any();
+            
+        }
+
 
         #endregion
     }

@@ -19,3 +19,14 @@ C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-azure-business\o
 C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.csproj.CoreCompileInputs.cache
 C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.dll
 C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.pdb
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Debug\netcoreapp3.1\agilium-manager-azure-business.deps.json
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Debug\netcoreapp3.1\agilium-manager-azure-business.dll
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Debug\netcoreapp3.1\agilium-manager-azure-business.pdb
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.csproj.AssemblyReference.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.AssemblyInfoInputs.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.AssemblyInfo.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.csproj.CoreCompileInputs.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.sourcelink.json
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.dll
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Debug\netcoreapp3.1\agilium-manager-azure-business.pdb

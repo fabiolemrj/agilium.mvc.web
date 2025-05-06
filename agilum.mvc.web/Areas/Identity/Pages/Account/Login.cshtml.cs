@@ -14,22 +14,24 @@ using Microsoft.Extensions.Logging;
 
 using agilium.api.infra.Context;
 using agilum.mvc.web.Data;
+using KissLog.RestClient.Requests.CreateRequestLog;
+using System.Security.Claims;
 
 namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-       // private readonly UserManager<AppUserAgilium> _userManager;
+        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
         private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<AppUserAgiliumIdentity> signInManager,
             ILogger<LoginModel> logger
-          //  ,UserManager<AppUserAgilium> userManager
+            ,UserManager<AppUserAgiliumIdentity> userManager
             )
         {
-         //   _userManager = userManager;
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -75,6 +77,21 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        private async Task AdicionarClaim(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+
+            if(user!=null)
+            {
+                var customClaims = new[] { new Claim("id", user.Id) };
+                var res = await _userManager.AddClaimsAsync(user, customClaims);
+                if (!res.Succeeded)
+                {
+                    ModelState.AddModelError(string.Empty, "Erro ao tentar ccriar claim");
+                }
+            }
+        }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -86,6 +103,8 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                   
+                    await AdicionarClaim(Input.Email);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

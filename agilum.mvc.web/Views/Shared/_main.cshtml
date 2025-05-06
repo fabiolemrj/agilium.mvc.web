@@ -93,79 +93,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     Cadastro
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
-                            </a>
+                            </a>                        
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-circle"></i>
+                                        <p>
+                                            Auxiliares
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-controller="Unidade" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Unidade
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexGrupo">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Grupo de Produto
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Estoque" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Estoque
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Devolucao" asp-action="IndexMotivos">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Motivo de Devolução
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexDepartamentos">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Departamentos
+                                                </p>
+                                            </a>
+                                            <a class="nav-link" asp-controller="Produto" asp-action="IndexMarcas">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Marcas de produtos
+                                                </p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="Unidade" asp-action="Index">
+                                    <a class="nav-link active" asp-controller="Empresa" asp-action="Index">
                                         <i class="nav-icon fas fa-id-card"></i>
-                                        <p>Unidades</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
-                                <p>
-                                    Financeiro
-                                    <i class="nav-icon fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="ContaCorrenteCliente" asp-action="Index">
-                                        @*<a class="nav-link" asp-controller="ClientesAgilium" asp-action="Index">*@
-
-                                        <i class="nav-icon fas fa-hand-holding-usd nav-icon"></i>
-                                        <p>Conta-Corrente</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="Cobranca" asp-action="Index">
-                                        <i class="nav-icon fas fa-cash-register nav-icon"></i>
-
-                                        <p>Cobrança</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-lock"></i>
-                                <p>
-                                    <i class="nav-icon right fas fa-angle-left"></i>Controle de acesso
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="ApplicationUser" asp-action="Index">
-                                        <i class="fas fa-lock-open nav-icon"></i>
-                                        Usuarios
-
+                                        <p>Empresa</p>
                                     </a>
                                 </li>
 
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-bullhorn"></i>
-                                <p>
-                                    <i class="nav-icon right fas fa-angle-left"></i>Marketing
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="Marketing" asp-action="Index">
-                                        <i class="fas fa-mail-bulk nav-icon"></i>
-                                        Campanhas E-mail
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -237,7 +228,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!--forms-->
     <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-
+    <script src="~/local/global.js"></script>
     @*<script src="~/dist/js/demo.js"></script>
         <script src="~/dist/js/pages/dashboard.js"></script>*@
 

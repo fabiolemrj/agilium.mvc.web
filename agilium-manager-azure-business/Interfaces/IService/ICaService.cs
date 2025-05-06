@@ -58,6 +58,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<bool> AtualizarPerfil(CaPerfiManager perfil);
         Task<bool> AdicionarPermissoes(List<CaPermissaoManager> permissoes);
         Task<IEnumerable<CaPerfiManager>> ObterTodosCaPerfilManager();
+        Task<bool> UsuarioTemPermissao(string idUsuarioAspNet, int idTag);
         #endregion
     }
 }

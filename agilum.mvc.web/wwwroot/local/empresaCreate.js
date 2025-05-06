@@ -33,21 +33,21 @@ function BuscarCep() {
 }
 
 function AdicionarContato(tpcontato, descr1, descr2) {
-    alert('adicionar contato');
-    //$.ajax({
-    //    type: 'get',
-    //    url: `/Empresa/AdicionarContato?tpcontato=${tpcontato}&descr1=${descr1}&descr2=${descr2}`,
-    //    success: function (resultado) {
-    //        if (resultado.erro) {
-    //            toastr.error("erro")
-    //            return;
-    //        }
-    //        const objeto = JSON.parse(JSON.stringify(resultado));
-    //    },
-    //    error: function (result) {
-    //        toastr.error(result)
-    //    }
-    //});
+    //alert('adicionar contato');
+    $.ajax({
+        type: 'get',
+        url: `/Empresa/AdicionarContato?tpcontato=${tpcontato}&descr1=${descr1}&descr2=${descr2}`,
+        success: function (resultado) {
+            if (resultado.erro) {
+                toastr.error("erro")
+                return;
+            }
+            const objeto = JSON.parse(JSON.stringify(resultado));
+        },
+        error: function (result) {
+            toastr.error(result)
+        }
+    });
 
 }
 

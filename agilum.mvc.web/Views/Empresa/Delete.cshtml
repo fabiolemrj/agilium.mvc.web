@@ -1,0 +1,120 @@
+﻿@using agilium.api.business.Enums
+@model agilum.mvc.web.ViewModels.Empresa.EmpresaCreateViewModel
+@using agilum.mvc.web.Extensions
+
+@{
+    ViewData["Title"] = "Apagar Empresa";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="#"> Apagar Empresa</a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="callout callout-danger">
+    <h3>Você deseja realmente apagar esta Empresa?</h3>
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Delete" id="frmDeleteEmpresa" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">Apagar Registro</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CDEMPRESA" id="labelCodigo"></label>
+                                <input asp-for="CDEMPRESA" class="form-control" size="6" readonly />
+                                <span asp-validation-for="CDEMPRESA" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="TPEMPRESA" id="labeltpempresa"></label>
+                                <select asp-for="TPEMPRESA"
+                                        asp-items="Html.GetEnumSelectList<ETipoEmpresa>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="TPEMPRESA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="NMRZSOCIAL" id="labelRazSoc"></label>
+                                <input asp-for="NMRZSOCIAL" class="form-control" size="70" readonly />
+                                <span asp-validation-for="NMRZSOCIAL" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="divNomeFantasia">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="NMFANTASIA" id="labelNomFant"></label>
+                                <input asp-for="NMFANTASIA" class="form-control" size="70" readonly />
+                                <span asp-validation-for="NMFANTASIA" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="NUCNPJ" id="labelCnpj"></label>
+                                <input asp-for="NUCNPJ" class="form-control cnpj" size="20" readonly />
+                                <span asp-validation-for="NUCNPJ" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCREST" id="labelInscrEstad"></label>
+                                <input asp-for="DSINSCREST" class="form-control" size="20" readonly />
+                                <span asp-validation-for="DSINSCREST" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCRESTVINC" id="labelInscrEstadVinc"></label>
+                                <input asp-for="DSINSCRESTVINC" class="form-control" size="20" readonly />
+                                <span asp-validation-for="DSINSCRESTVINC" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSINSCRMUN" id="labelInscrMunicip"></label>
+                                <input asp-for="DSINSCRMUN" class="form-control" size="20" readonly />
+                                <span asp-validation-for="DSINSCRMUN" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script src="~/local/empresaCreate.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -10074,23 +10074,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fabio\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Notebook\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
+      "projectUniqueName": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
       "projectName": "agilium-manager-azure-api",
-      "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
-      "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-      "outputPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\obj\\",
+      "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
+      "packagesPath": "C:\\Users\\Notebook\\.nuget\\packages\\",
+      "outputPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Notebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -10106,11 +10108,11 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
-              "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
+            "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
+              "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
             },
-            "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
-              "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
+            "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
+              "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
             }
           }
         }
@@ -10123,9 +10125,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "netcoreapp3.1": {
@@ -10229,50 +10230,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "O pacote 'Microsoft.IdentityModel.JsonWebTokens' 5.5.0 tem uma moderado vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
-      "libraryId": "Microsoft.IdentityModel.JsonWebTokens",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "O pacote 'Swashbuckle.AspNetCore.SwaggerUI' 5.4.1 tem uma moderado vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-qrmm-w75w-3wpx",
-      "libraryId": "Swashbuckle.AspNetCore.SwaggerUI",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "O pacote 'System.IdentityModel.Tokens.Jwt' 5.5.0 tem uma moderado vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-59j7-ghrg-fj52",
-      "libraryId": "System.IdentityModel.Tokens.Jwt",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "O pacote 'System.Text.RegularExpressions' 4.3.0 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-cmhx-cq75-c4mj",
-      "libraryId": "System.Text.RegularExpressions",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v3.1"
-      ]
-    }
-  ]
+  }
 }

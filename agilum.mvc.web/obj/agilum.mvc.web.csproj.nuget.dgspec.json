@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj": {}
+    "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj": {}
   },
   "projects": {
-    "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj": {
+    "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
+        "projectUniqueName": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
         "projectName": "agilium-manager-azure-api",
-        "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
-        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\obj\\",
+        "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj",
+        "packagesPath": "C:\\Users\\Notebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Notebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -33,11 +34,11 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
               },
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
               }
             }
           }
@@ -50,9 +51,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -156,24 +156,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
+    "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj",
+        "projectUniqueName": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj",
         "projectName": "agilium-manager-azure-business",
-        "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj",
-        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\obj\\",
+        "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj",
+        "packagesPath": "C:\\Users\\Notebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Notebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -199,9 +200,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -228,24 +228,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
+    "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj",
+        "projectUniqueName": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj",
         "projectName": "agilium-manager-git-azure-infra",
-        "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj",
-        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\obj\\",
+        "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj",
+        "packagesPath": "C:\\Users\\Notebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Notebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -261,8 +262,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
               }
             }
           }
@@ -275,9 +276,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -342,24 +342,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj": {
+    "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj",
+        "projectUniqueName": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj",
         "projectName": "agilum.mvc.web",
-        "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj",
-        "packagesPath": "C:\\Users\\fabio\\.nuget\\packages\\",
-        "outputPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilum.mvc.web\\obj\\",
+        "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\agilum.mvc.web.csproj",
+        "packagesPath": "C:\\Users\\Notebook\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\fabio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Notebook\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -375,14 +376,14 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-api\\agilium-manager-azure-api.csproj"
               },
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\agilium-manager-azure-business.csproj"
               },
-              "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
-                "projectPath": "C:\\ProjetoAgilium\\AgiliumBaseMvc\\agilum.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
+              "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj": {
+                "projectPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj"
               }
             }
           }
@@ -395,9 +396,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "direct"
+        }
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -445,6 +445,10 @@
               "target": "Package",
               "version": "[3.1.32, )"
             },
+            "Microsoft.Extensions.Http.Polly": {
+              "target": "Package",
+              "version": "[6.0.36, )"
+            },
             "Microsoft.Extensions.Identity.Core": {
               "target": "Package",
               "version": "[3.1.32, )"
@@ -460,6 +464,10 @@
             "Pomelo.EntityFrameworkCore.MySql.Design": {
               "target": "Package",
               "version": "[1.1.2, )"
+            },
+            "Refit": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "System.DirectoryServices.AccountManagement": {
               "target": "Package",
@@ -485,7 +493,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -11,26 +11,39 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using agilum.mvc.web.Extensions;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace agilum.mvc.web.Controllers
 {
 
+    [Authorize]
+    [Route("unidade")]
     public class UnidadeController : MainController
     {
         private readonly IUnidadeService _unidadeService;
         private readonly string _nomeEntidade = "Unidade";
         private readonly IMapper _mapper;
+        private readonly ICaService _caService;
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
-            IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService) : base(notificador, configuration, appUser, utilDapperRepository, logService)
+            IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
+            ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService)
         {
             _unidadeService = unidadeService;
             _mapper = mapper;
+            _caService = caService;
         }
 
-        [Route("unidades")]
+        [Route("lista")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
+        [ClaimsAuthorizeAttribute(2006)]
+         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            }
 
             //ps = ObterQuantidadeLinhasPorPaginas();
 
@@ -42,6 +55,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("nova")]
+        [ClaimsAuthorizeAttribute(2007)]
         public async Task<IActionResult> Create()
         {
             ViewBag.operacao = "I";
@@ -82,6 +96,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("editar")]
+        [ClaimsAuthorizeAttribute(2010)]
         public async Task<IActionResult> Edit(long id)
         {
             ViewBag.operacao = "E";
@@ -129,6 +144,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("apagar")]
+        [ClaimsAuthorizeAttribute(2008)]
         public async Task<IActionResult> Delete(long id)
         {
             var objeto = await _unidadeService.ObterPorId(id);

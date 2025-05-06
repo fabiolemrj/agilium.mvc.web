@@ -1,5 +1,6 @@
 using agilium.api.infra.Context;
 using agilum.mvc.web.Configuration;
+using agilum.mvc.web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -81,6 +82,8 @@ namespace agilum.mvc.web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

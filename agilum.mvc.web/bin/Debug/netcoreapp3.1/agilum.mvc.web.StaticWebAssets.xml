@@ -1,4 +1,4 @@
 ﻿<StaticWebAssets Version="1.0">
-  <ContentRoot BasePath="/Identity" Path="C:\Users\fabio\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.32\staticwebassets\V4\" />
-  <ContentRoot BasePath="_content/agilium-manager-azure-api" Path="C:\ProjetoAgilium\AgiliumBaseMvc\agilum.mvc.web\agilium-manager-azure-api\wwwroot\" />
+  <ContentRoot BasePath="/Identity" Path="C:\Users\Notebook\.nuget\packages\microsoft.aspnetcore.identity.ui\3.1.32\staticwebassets\V4\" />
+  <ContentRoot BasePath="_content/agilium-manager-azure-api" Path="C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-api\wwwroot\" />
 </StaticWebAssets>
