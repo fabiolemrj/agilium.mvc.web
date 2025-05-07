@@ -195,8 +195,8 @@ namespace agilum.mvc.web.Controllers
 
 
         #region Contato
-        [Route("contato/novo")]
         [HttpGet]
+        [Route("contato/novo")]
         public async Task<IActionResult> AdicionarContato(long idEmpresa)
         {
             ViewBag.acao = "AdicionarContato";
@@ -208,7 +208,8 @@ namespace agilum.mvc.web.Controllers
             return PartialView("_createContato", model);
         }
 
-        //[Route("contato/editar")]
+        [HttpGet]
+        [Route("contato/editar")]
         public async Task<IActionResult> EditarContato(long idEmpresa, long idContato)
         {
             ViewBag.acao = "EditarContato";
@@ -223,8 +224,9 @@ namespace agilum.mvc.web.Controllers
 
             return PartialView("_createContato", model);
         }
-
-        public async Task<IActionResult> DeleteContato(long idEmpresa, long idContato)
+        [HttpGet]
+        [Route("contato/apagar")]
+        public async Task<IActionResult> DeleteContato(long idContato, long idEmpresa)
         {
             var contatoEmpresa = await _contatoService.ObterPorId(idContato, idEmpresa);
             if (contatoEmpresa == null)
@@ -235,6 +237,7 @@ namespace agilum.mvc.web.Controllers
 
             var url = Url.Action("ObterEndereco", "Empresa", new { id = idEmpresa });
             await _contatoService.Apagar(idContato, idEmpresa);
+            await _contatoService.Salvar();
             if (!OperacaoValida())
             {
                 AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
@@ -250,7 +253,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Route("contato/editar")]
+        [Route("contato/editar")]
         public async Task<IActionResult> EditarContato(ContatoEmpresaViewModel model)
         {
             ViewBag.acao = "EditarContato";
@@ -261,10 +264,10 @@ namespace agilum.mvc.web.Controllers
                 model.Contato.Id = model.IDCONTATO;
 
             await _contatoService.Atualizar(_mapper.Map<ContatoEmpresa>(model));
-
+            await _contatoService.Salvar();
             if (!OperacaoValida()) return PartialView("_createContato", model);
 
-            var url = Url.Action("EditarContato", "Empresa", new { id = model.IDEMPRESA });
+            var url = Url.Action("ObterEndereco", "Empresa", new { id = model.IDEMPRESA });
 
 
             return Json(new { success = true, url });
@@ -273,7 +276,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Route("contato/novo")]
+        [Route("contato/novo")]
         public async Task<IActionResult> AdicionarContato(ContatoEmpresaViewModel model)
         {
             ViewBag.acao = "AdicionarContato";
@@ -290,20 +293,21 @@ namespace agilum.mvc.web.Controllers
                 contatoEmpresa.Contato.Id = contatoEmpresa.IDCONTATO;
 
             await _contatoService.Adicionar(contatoEmpresa);
+            await _contatoService.Salvar();
 
             if (!OperacaoValida()) return PartialView("_createContato", model);
 
-            var url = Url.Action("AdicionarContato", "Empresa", new { id = model.IDEMPRESA });
+            var url = Url.Action("ObterEndereco", "Empresa", new { id = model.IDEMPRESA });
 
 
             return Json(new { success = true, url });
         }
-
+        [HttpGet]
         [AllowAnonymous]
-        //[Route("obter-contato/{id}")]
+        [Route("contato")]
         public async Task<IActionResult> ObterEndereco(long id)
         {
-            var empresa = await _empresaService.ObterPorId(id);
+            var empresa = _mapper.Map<EmpresaCreateViewModel>(await _empresaService.ObterCompletoPorId(id));
 
             if (empresa == null)
             {

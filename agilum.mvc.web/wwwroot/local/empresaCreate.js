@@ -10,11 +10,11 @@ $('#btnSalvar').click(function () {
 });
 
 function BuscarCep() {
-    const _cep = $('.cep').val();
+    const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
     //ModalMensagem("success",_cep);
     $.ajax({
         type: 'get',
-        url: '/Endereco/BuscarCep?cep=' + _cep,
+        url: _cep,
         success: function (resultado) {
             if (resultado.erro || resultado.id_logradouro == 0 || resultado.endereco == null) {
                 toastr.error("Cep não localizado")
@@ -33,21 +33,21 @@ function BuscarCep() {
 }
 
 function AdicionarContato(tpcontato, descr1, descr2) {
-    //alert('adicionar contato');
-    $.ajax({
-        type: 'get',
-        url: `/Empresa/AdicionarContato?tpcontato=${tpcontato}&descr1=${descr1}&descr2=${descr2}`,
-        success: function (resultado) {
-            if (resultado.erro) {
-                toastr.error("erro")
-                return;
-            }
-            const objeto = JSON.parse(JSON.stringify(resultado));
-        },
-        error: function (result) {
-            toastr.error(result)
-        }
-    });
+    alert('adicionar contato');
+    //$.ajax({
+    //    type: 'get',
+    //    url: `/Empresa/AdicionarContato?tpcontato=${tpcontato}&descr1=${descr1}&descr2=${descr2}`,
+    //    success: function (resultado) {
+    //        if (resultado.erro) {
+    //            toastr.error("erro")
+    //            return;
+    //        }
+    //        const objeto = JSON.parse(JSON.stringify(resultado));
+    //    },
+    //    error: function (result) {
+    //        toastr.error(result)
+    //    }
+    //});
 
 }
 
@@ -58,7 +58,7 @@ $('.delete').click(function (event) {
 
     const idContato = $(this).attr("data-idContato");
     const idEmpresa = $(this).attr("data-idEmpresa");
-    const contato = $(this).attr("data-tpcontato") +" - " +  $(this).attr("data-descr1");
+    const contato = $(this).attr("data-tpcontato") + " - " + $(this).attr("data-descr1");
 
     Swal.fire({
         title: 'Deseja realmente apagar o contato selecionado?',
@@ -74,7 +74,7 @@ $('.delete').click(function (event) {
 
             $.ajax({
                 type: 'get',
-                url: `/Empresa/DeleteContato?idContato=${idContato}&idEmpresa=${idEmpresa}`,
+                url: `/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`,
                 success: function (resultado) {
                     if (resultado.erro) {
                         toastr.error(resultado.erro)
@@ -112,7 +112,7 @@ $('.delete').click(function (event) {
                     }
                 })
             });
-           
+
 
 
         }
@@ -158,7 +158,7 @@ $(function () {
                 element: $('#labelNomFant'),
                 content: '<strong><div align="center" class="text-info">Nome Fantasia</div></strong><p><div align="center">campo Nome fantasia.</div></p>',
                 position: 'top'
-            },           
+            },
             {
                 element: $('#labelCnpj'),
                 content: '<strong><div align="center" class="text-info">CNPJ</div></strong><p><div align="center">campo CNPJ da empresa.</div></p>',
@@ -259,7 +259,7 @@ $(function () {
                 content: '<strong><div align="center" class="text-info">Complemento</div></strong><p><div align="center">campo de complemento do endereço.</div></p>',
                 position: 'top'
             },
-         
+
             {
                 element: $('#labelBairro'),
                 content: '<strong><div align="center" class="text-info">Bairro</div></strong><p><div align="center">campo de Bairro do endereço.</div></p>',

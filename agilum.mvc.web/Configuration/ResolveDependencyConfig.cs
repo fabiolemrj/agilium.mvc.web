@@ -101,6 +101,13 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IContatoDapperRepository, ContatoDapperRepository>();
             #endregion
 
+            #region Endereco
+            services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+            services.AddScoped<IEnderecoService, EnderecoService>();
+            services.AddScoped<ICepRepository, CepRepository>();
+            services.AddScoped<IEnderecoDapperRepository, EnderecoDapperRepository>();
+            #endregion
+
             return services;
         }
     }

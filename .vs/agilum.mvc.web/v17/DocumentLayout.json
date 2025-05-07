@@ -3,60 +3,8 @@
   "WorkspaceRootPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\empresa\\_createcontato.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\empresa\\_createcontato.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\viewmodels\\empresa\\empresaviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\viewmodels\\empresa\\empresaviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\empresa\\_contato.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\empresa\\_contato.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresacreate.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\wwwroot\\local\\empresacreate.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\processo\\compra.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\wwwroot\\local\\processo\\compra.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\empresa\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\empresa\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\global.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\wwwroot\\local\\global.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresa.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\wwwroot\\local\\empresa.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\controllers\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\empresa\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\empresa\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\empresa\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\empresa\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\viewmodels\\endereco\\enderecoindexviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\viewmodels\\endereco\\enderecoindexviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -66,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -97,183 +45,18 @@
               "Name": "ST:15:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "compra.js",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\Processo\\compra.js",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\wwwroot\\local\\Processo\\compra.js",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\Processo\\compra.js",
-              "RelativeToolTip": "agilum.mvc.web\\wwwroot\\local\\Processo\\compra.js",
-              "ViewState": "AQIAAGYAAAAAAAAAAAD4v3cAAAAYAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-05-06T19:24:09.979Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "global.js",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\global.js",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\wwwroot\\local\\global.js",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\global.js",
-              "RelativeToolTip": "agilum.mvc.web\\wwwroot\\local\\global.js",
-              "ViewState": "AQIAAAIAAAAAAAAAAAAxwBMAAAAYAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-05-06T18:36:24.546Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "_main.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
-              "ViewState": "AQIAANgAAAAAAAAAAAAAAOYAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T18:33:43.589Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "empresaCreate.js",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresaCreate.js",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\wwwroot\\local\\empresaCreate.js",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresaCreate.js",
-              "RelativeToolTip": "agilum.mvc.web\\wwwroot\\local\\empresaCreate.js",
-              "ViewState": "AQIAABIAAAAAAAAAAAAowCMAAAAGAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-05-06T18:32:29.382Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "empresa.js",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresa.js",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\wwwroot\\local\\empresa.js",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\wwwroot\\local\\empresa.js",
-              "RelativeToolTip": "agilum.mvc.web\\wwwroot\\local\\empresa.js",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2025-05-06T18:32:25.589Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{99b8fa2f-ab90-4f57-9c32-949f146f1914}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "_createContato.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\_createContato.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Empresa\\_createContato.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\_createContato.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Empresa\\_createContato.cshtml",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAD8AAAB0AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T18:29:28.848Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "_contato.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\_contato.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Empresa\\_contato.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\_contato.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Empresa\\_contato.cshtml",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAADYAAAAgAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T18:01:44.391Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Delete.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Delete.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Empresa\\Delete.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Delete.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Empresa\\Delete.cshtml",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAAADMAAABaAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T17:47:54.695Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "EnderecoIndexViewModel.cs",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Endereco\\EnderecoIndexViewModel.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\ViewModels\\Endereco\\EnderecoIndexViewModel.cs",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Endereco\\EnderecoIndexViewModel.cs",
-              "RelativeToolTip": "agilum.mvc.web\\ViewModels\\Endereco\\EnderecoIndexViewModel.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAIA5wA8AAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T14:53:11.426Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Create.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Empresa\\Create.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Create.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Empresa\\Create.cshtml",
-              "ViewState": "AQIAAOAAAAAAAAAAAAASwPIAAAAoAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T14:35:19.604Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Index.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Empresa\\Index.cshtml",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Empresa\\Index.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Empresa\\Index.cshtml",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAAAAwAAAAXAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-06T12:46:22.308Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EmpresaViewModel.cs",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Empresa\\EmpresaViewModel.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\ViewModels\\Empresa\\EmpresaViewModel.cs",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Empresa\\EmpresaViewModel.cs",
-              "RelativeToolTip": "agilum.mvc.web\\ViewModels\\Empresa\\EmpresaViewModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFQAAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T12:35:13.444Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "MainController.cs",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\MainController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\MainController.cs",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\MainController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\MainController.cs",
-              "ViewState": "AQIAAFEAAAAAAAAAAAAkwG8AAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T12:26:03.516Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "EmpresaController.cs",
               "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\EmpresaController.cs",
               "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\EmpresaController.cs",
               "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\EmpresaController.cs",
               "RelativeToolTip": "agilum.mvc.web\\Controllers\\EmpresaController.cs",
-              "ViewState": "AQIAALoAAAAAAAAAAAAUwMkAAAAMAAAA",
+              "ViewState": "AQIAAM0AAAAAAAAAAAAYwOYAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-06T11:37:03.475Z",
               "EditorCaption": ""
