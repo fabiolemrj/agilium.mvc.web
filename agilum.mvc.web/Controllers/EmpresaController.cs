@@ -1,16 +1,21 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium.api.business.Services;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels.Contato;
 using agilum.mvc.web.ViewModels.Empresa;
+using agilum.mvc.web.ViewModels.EmpresaUsuario;
+using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,20 +31,24 @@ namespace agilum.mvc.web.Controllers
         private readonly IEmpresaService _empresaService;
         private readonly IContatoService _contatoService;
         private readonly ILogger<EmpresaController> _logger;
-        private readonly IMapper _mapper;
+        private readonly IUsuarioService _usuarioService;
+        private readonly ICaService _caService;
         private readonly string _nomeEntidade = "Empresa";
 
-        public EmpresaController(IEmpresaService empresaService, ILogger<EmpresaController> logger,
+        public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
             IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, 
-            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService)
+            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
         {
             _empresaService = empresaService;
             _logger = logger;
             _contatoService = contatoService;
-            _mapper = mapper;
+            _usuarioService = usuarioService;
+            _caService = caService;
         }
 
         #region endpoint
+
+        #region empresa
         [Route("lista")]
         [HttpGet]
         [ClaimsAuthorizeAttribute(2001)]
@@ -192,7 +201,7 @@ namespace agilum.mvc.web.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        #endregion
 
         #region Contato
         [HttpGet]
@@ -316,6 +325,140 @@ namespace agilum.mvc.web.Controllers
 
             return PartialView("_contato", empresa);
         }
+        #endregion
+
+        #region selecionar empresa modal
+        [HttpPost]       
+        public async Task<ActionResult> SelecionarEmpresa(string idEmpresaSelecionada)
+        {
+            var _id = "";
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_idSelecEmp")))
+            {
+                if (idEmpresaSelecionada != "-1")
+                    HttpContext.Session.SetString("_idSelecEmp", idEmpresaSelecionada);
+
+                _id = idEmpresaSelecionada;
+            }
+            else
+            {
+                _id = HttpContext.Session.GetString("_idSelecEmp");
+                if (_id != idEmpresaSelecionada)
+                {
+                    HttpContext.Session.SetString("_idSelecEmp", idEmpresaSelecionada);
+                    _id = idEmpresaSelecionada;
+                }
+
+            }
+            return RedirectToAction("Index","Home");
+        }
+        [HttpGet]
+        [Route("obter-empresas-por-usuario")]
+        public async Task<ActionResult> ObterEmpresasUsuarioJson()
+        {
+            var idUserAspNet = AppUser.GetUserId().ToString();
+            var listaUsuarioEmpresa = new List<EmpresaUsuarioViewModel>();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("listaEmpresaUsuario")))
+            {
+
+                //var listaEmpresaUsuario =
+
+                var usuario = (await _usuarioService.ObterPorUsuarioAspNetPorId(idUserAspNet));
+                if (usuario == null)
+                {
+                    var msgErro = "Erro ao tentar obter empresas qu eo usuario tem autorização";
+                    AdicionarErroValidacao(msgErro);
+                    msgErro = string.Join("\n\r", ModelState.Values
+                                         .SelectMany(x => x.Errors)
+                                         .Select(x => x.ErrorMessage));
+
+                    var retornoErro = new { mensagem = msgErro };
+
+                    return new JsonResult(new { error = true, msg = msgErro });
+
+                }
+
+                listaUsuarioEmpresa = _mapper.Map<List<EmpresaUsuarioViewModel>>(_usuarioService.ObterEmpresasPorUsuario(usuario.Id).Result);
+                var listaConvertida = JsonConvert.SerializeObject(listaUsuarioEmpresa);
+                HttpContext.Session.SetString("listaEmpresaUsuario", listaConvertida);
+            }
+            else
+            {
+                var lista = HttpContext.Session.GetString("listaEmpresaUsuario");
+                listaUsuarioEmpresa = JsonConvert.DeserializeObject<List<EmpresaUsuarioViewModel>>(lista);
+            }
+
+            var idEmpresaSelecionado = "";
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("idEmpresaSelecionado")))
+            {
+                idEmpresaSelecionado = HttpContext.Session.GetString("idEmpresaSelecionado");
+            }
+            return PartialView("_SelecionarEmpresa");
+            //return new JsonResult(new { lista = (List<EmpresaUsuarioViewModel>)listaUsuarioEmpresa, idEmpresaSelecionada = idEmpresaSelecionado });
+        }
+        [HttpPost]
+        [Route("SelecionarEmpresa")]
+        public async Task<ActionResult> SelecionarEmpresa(ListaEmpresasSelecao model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            if (string.IsNullOrEmpty(model.IDEMPRESA))
+            {
+                var retornoErro = new { mensagem = "Erro ao tentar salvar empresae selecionada" };
+                _logger.LogError(retornoErro.ToString());
+                AdicionarErroValidacao(retornoErro.mensagem);
+                return RedirectToAction("Index", "Home");
+            }
+
+            var empresa = await _empresaService.ObterPorId(Convert.ToInt64(model.IDEMPRESA));
+            var empresaSelecionada = new EmpresaUsuarioViewModel()
+            {
+                IDEMPRESA = empresa.Id.ToString(),
+                IDUSUARIO = AppUser.GetUserId().ToString(),
+                NomeEmpresa = empresa.NMRZSOCIAL
+            };
+            HttpContext.Session.SetString("_empSelec", System.Text.Json.JsonSerializer.Serialize(empresaSelecionada)) ;
+
+            return RedirectToAction("Index", "Home");
+
+        }
+
+        [Route("ObterListasEmpresasPorUsuario")]
+        [HttpGet]
+        public async Task<ActionResult> ObterListasEmpresasPorUsuario()
+        {
+            var idUserAspNet = AppUser.GetUserId().ToString();
+            var usuario = (await _usuarioService.ObterPorUsuarioAspNetPorId(idUserAspNet));
+            if(usuario == null)
+            {
+               var retornoErro = new { mensagem = "Erro ao tentar obter empresas do usuario" };
+                _logger.LogError(retornoErro.ToString());
+                AdicionarErroValidacao(retornoErro.mensagem);
+                return RedirectToAction("index","Home");
+            }
+            var listaUsuarioEmpresa = new ListaEmpresasSelecao();
+            _caService.ObterEmpresasAssociadasPorUsuario(idUserAspNet).Result.ToList().ForEach(item =>
+            {
+                listaUsuarioEmpresa.EmpresasDisponiveisAssociacao.Add(_mapper.Map<EmpresaViewModel>(item));
+            });
+
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("_empSelec")))
+            {
+                var empresaSelecionada = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(HttpContext.Session.GetString("_empSelec"));
+                listaUsuarioEmpresa.IDEMPRESA = empresaSelecionada.IDEMPRESA;
+            }
+            return View("_SelecionarEmpresa",listaUsuarioEmpresa);
+
+
+        }
+
+        [Route("ObterEmpresaSelecionada")]
+        public async Task<ActionResult> ObterEmpresaSelecionada()
+        {
+            //var empresaSelecionada = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>( ObterStringEmpresaSelecionada());
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+            return Json(empresaSelecionada.NomeEmpresa);
+        }
+
         #endregion
 
         #endregion

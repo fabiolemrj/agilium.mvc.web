@@ -1,6 +1,7 @@
 ﻿using agilium.api.business.Models;
 using agilum.mvc.web.ViewModels.Contato;
 using agilum.mvc.web.ViewModels.Empresa;
+using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using agilum.mvc.web.ViewModels.Endereco;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
@@ -29,6 +30,15 @@ namespace agilum.mvc.web.Configuration
                 .ForMember(dest => dest.NomeUsuario, opt => opt.MapFrom(src => src.nome))
                 .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.CpfUsuario, opt => opt.MapFrom(x => x.cpf));
+
+
+            CreateMap<EmpresaAuth, EmpresaUsuarioViewModel>()
+                  // .ForMember(dest => dest.NomeEmpresa, opt => opt.MapFrom(src => src.Empresa.NMRZSOCIAL))
+                  .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA.ToString()))
+                  .ForMember(dest => dest.IDUSUARIO, opt => opt.MapFrom(src => src.IDUSUARIO.ToString()))
+                .ReverseMap();
+                     
+            
             #endregion
 
             #region Unidade

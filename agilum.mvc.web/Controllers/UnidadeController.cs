@@ -24,14 +24,13 @@ namespace agilum.mvc.web.Controllers
     {
         private readonly IUnidadeService _unidadeService;
         private readonly string _nomeEntidade = "Unidade";
-        private readonly IMapper _mapper;
+
         private readonly ICaService _caService;
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
             IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
-            ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService)
+            ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
         {
             _unidadeService = unidadeService;
-            _mapper = mapper;
             _caService = caService;
         }
 

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("agilium-manager-azure-business")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecb89dd07932055bfaf0cfe0cf27485de254beb0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2727338992c68c2c252b6752f9dee33d50a46d4c")]
 [assembly: System.Reflection.AssemblyProductAttribute("agilium-manager-azure-business")]
 [assembly: System.Reflection.AssemblyTitleAttribute("agilium-manager-azure-business")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,4 +1,9 @@
-﻿
+﻿$('#btnSalvar').click(function () {
+    on();
+    $('#btnSendForm').click();
+    off();
+});
+
 
 function SelecionarEmpresa() {
     $('#cbEmpresaUsuario').change(function () {

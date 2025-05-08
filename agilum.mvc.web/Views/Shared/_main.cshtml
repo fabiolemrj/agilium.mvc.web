@@ -70,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <aside class="main-sidebar sidebar-light-navy elevation-4">
             <!-- Brand Logo -->
-            <a class="brand-link navbar-warning" asp-controller="Home" asp-action="Index">
+            <a class="brand-link navbar-warning" data-widget="pushmenu" href="#" role="button">
                 <img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="fonteLogoAgilium">AGILIUM</span>
             </a>
@@ -78,21 +78,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-               
-                    <div class="">
-
-                        <a href="#" class="nav-link active">   @UserManager.GetUserAsync(User).Result.UserName</a>
-                    </div>
-                </div>
-
+                            
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
+                    
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                                <a class="nav-link" asp-action="ObterListasEmpresasPorUsuario" asp-controller="empresa" data-modal="" id="idselec">
+                                    <label id="idselec-txt"></label>
+                                </a>
+                            </div>
+                          
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home"></i>
+                                <p>Home</p>
+                            </a>
+                        </li>
             
                         <li class="nav-item ">
                             <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-building"></i>
+                
+                                <i class="nav-icon fas fa-th-list"></i>
                                 <p>
                                     Cadastro
                                     <i class="right fas fa-angle-left"></i>
@@ -101,7 +110,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ul class="nav-treeview">
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="nav-icon fas fa-circle"></i>
+                                        <i class="nav-icon fas fa-list-ul"></i>
                                         <p>
                                             Auxiliares
                                             <i class="nav-icon fas fa-angle-left right"></i>
@@ -150,10 +159,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </ul>
                                 </li>
                             </ul>
-                            <ul class="nav nav-treeview">
+                            <ul class="nav-treeview">
                                 <li class="nav-item">
                                     <a class="nav-link active" asp-controller="Empresa" asp-action="Index">
-                                        <i class="nav-icon fas fa-id-card"></i>
+                                        <i class="nav-icon fas fa-circle"></i>
                                         <p>Empresa</p>
                                     </a>
                                 </li>
@@ -197,6 +206,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div>Data do Sistema: @DateTime.Now.ToString("dd/MM/yyyy")</div>
         </footer>
     </div>
+    
     <!-- ./wrapper -->
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
@@ -312,9 +322,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
             else if ("@TempData["TipoMensagem"]" != '') {
                 ModalMensagem("@TempData["TipoMensagem"]", "@TempData["Mensagem"]");
-            }           
-        });
+            }
 
+        });
 
         function on() {
             document.getElementById("overlay").style.display = "block";
@@ -365,12 +375,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             }
         }
 
-        //$('#modal-dialog').on('show', function () {
-        //    var link = $(this).data('link'),
-        //        confirmBtn = $(this).find('.confirm');
-        //})
-
-
         $('#btnYes').click(function () {
 
             // handle form processing here
@@ -383,7 +387,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $(".indisponivel").click(function () {
             ModalMensagem("danger", "Recurso Indisponível para versão Web");
         });
-    </script>
+        $(document).ready(function () {
+            ObterEmpresaSelecionado();
+        });
 
+        function ObterEmpresaSelecionado(){
+            $.ajax({
+                type: 'get',
+                url: '/empresa/ObterEmpresaSelecionada',
+                success: function (resultado) {
+                    if (resultado == null ) {
+                        toastr.error("Erro")
+                        return;
+                    }
+                    const idEmpresa = JSON.parse(JSON.stringify(resultado));
+                    if(idEmpresa)
+                        $('#idselec-txt').text(idEmpresa);
+                    else
+                        $('#idselec-txt').text("Selecionar empresa");
+                },
+                error: function (result) {
+                    $('#idselec-txt').text('Selecionar empresa');
+                }
+            });
+        }
+
+    </script>
 </body>
 </html>

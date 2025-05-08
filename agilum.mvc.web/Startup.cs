@@ -57,6 +57,14 @@ namespace agilum.mvc.web
                 loggingBuilder.AddDebug();
             });
             services.AddAutoMapper(typeof(Startup));
+            //services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(3);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
         }
 
@@ -79,6 +87,7 @@ namespace agilum.mvc.web
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

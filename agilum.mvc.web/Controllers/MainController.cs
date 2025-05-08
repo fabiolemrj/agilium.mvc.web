@@ -1,6 +1,9 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Notificacoes;
+using agilum.mvc.web.ViewModels.EmpresaUsuario;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -14,6 +17,7 @@ namespace agilum.mvc.web.Controllers
     {
         private readonly INotificador _notificador;
         protected readonly IConfiguration _configuration;
+        protected readonly IMapper _mapper;
 
         public readonly IUser AppUser;
         protected Guid UsuarioId { get; set; }
@@ -21,14 +25,15 @@ namespace agilum.mvc.web.Controllers
         protected readonly IUtilDapperRepository _utilDapperRepository;
         protected readonly ILogService _logService;
 
-        protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService)
+        protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
+            ILogService logService, IMapper mapper)
         {
             _notificador = notificador;
             _configuration = configuration;
             AppUser = appUser;
             _utilDapperRepository = utilDapperRepository;
             _logService = logService;
-
+            _mapper = mapper;
             if (appUser.IsAuthenticated())
             {
                 UsuarioId = appUser.GetUserId();
@@ -109,6 +114,17 @@ namespace agilum.mvc.web.Controllers
         protected string RetirarPontos(string valor)
         {
             return valor.Replace(".", "").Replace("-", "").Replace("/", "").Replace(",", "");
+        }
+
+        protected string ObterStringEmpresaSelecionada()
+        {
+            return HttpContext.Session.GetString("_empSelec");
+        }
+
+        protected EmpresaUsuarioViewModel ObterObjetoEmpresaSelecionada()
+        {
+            var objeto = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(ObterStringEmpresaSelecionada());
+            return objeto;
         }
     }
 }

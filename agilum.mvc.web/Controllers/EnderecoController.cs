@@ -15,12 +15,13 @@ namespace agilum.mvc.web.Controllers
     public class EnderecoController : MainController
     {
         private readonly IEnderecoService _enderecoService;
-        private readonly IMapper _mapper;
+ 
 
-        public EnderecoController(IEnderecoService enderecoService, IMapper mapper, INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService) : base(notificador, configuration, appUser, utilDapperRepository, logService)
+        public EnderecoController(IEnderecoService enderecoService, IMapper mapper, INotificador notificador, 
+            IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
         {
             _enderecoService = enderecoService;
-            _mapper = mapper;
+ 
         }
 
         [Route("buscar-cep")]

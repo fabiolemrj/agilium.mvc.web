@@ -457,6 +457,11 @@ namespace agilium.api.business.Services
         {
             return await _caRepositoryDapper.UsuarioTemPermissaoAcesso(idUsuarioAspNet, idTag);
         }
+
+        public async Task<IEnumerable<Empresa>> ObterEmpresasAssociadasPorUsuario(string idUsuarioAspNet)
+        {
+            return await _caRepositoryDapper.ObterEmpresasAssociadasPorUsuario(idUsuarioAspNet);
+        }
         #endregion
     }
 }

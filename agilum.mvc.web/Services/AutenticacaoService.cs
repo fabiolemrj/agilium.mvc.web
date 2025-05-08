@@ -1,14 +1,14 @@
 ﻿using agilum.mvc.web.Interfaces;
+using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
 namespace agilum.mvc.web.Services
 {
     public class AutenticacaoService : IAutenticacaoService
     {
-
-
         public AutenticacaoService()
         {            
         }

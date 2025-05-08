@@ -59,6 +59,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<bool> AdicionarPermissoes(List<CaPermissaoManager> permissoes);
         Task<IEnumerable<CaPerfiManager>> ObterTodosCaPerfilManager();
         Task<bool> UsuarioTemPermissao(string idUsuarioAspNet, int idTag);
+        Task<IEnumerable<Empresa>> ObterEmpresasAssociadasPorUsuario(string idUsuarioAspNet);
         #endregion
     }
 }

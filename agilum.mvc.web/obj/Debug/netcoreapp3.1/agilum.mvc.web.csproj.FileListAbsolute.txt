@@ -585,3 +585,4 @@ C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\staticwebassets\agilum.mvc.web.StaticWebAssets.xml
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\agilum.m.87355D82.Up2Date
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\agilum.mvc.web.genruntimeconfig.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Empresa\_SelecionarEmpresa.cshtml.g.cs

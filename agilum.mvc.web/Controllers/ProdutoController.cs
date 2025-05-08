@@ -4,6 +4,7 @@ using agilium.api.business.Models;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Produtos;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ namespace agilum.mvc.web.Controllers
     public class ProdutoController : MainController
     {
         private readonly IProdutoService _produtoService;
- 
+        private readonly IEmpresaService _empresaService;
 
         private readonly string _nomeEntidadeDepart = "Departamento";
         private readonly string _nomeEntidadeMarca = "Marca";
@@ -28,11 +29,14 @@ namespace agilum.mvc.web.Controllers
         private List<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
 
         #endregion
-        public ProdutoController( INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService) : base(notificador, configuration, appUser, utilDapperRepository, logService)
+        public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, INotificador notificador, 
+            IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
         {
+            _produtoService = produtoService;
+            _empresaService = empresaService;
 
-       
-
+            if(!listaEmpresaViewModels.Any())
+                listaEmpresaViewModels = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result.ToList());
         }
 
         #region GrupoProduto

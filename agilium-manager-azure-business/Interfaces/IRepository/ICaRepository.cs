@@ -45,5 +45,6 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<bool> RemoverPermissoesPorPerfil(int idPerfil);
         Task<bool> AdicionarPermissaoPorPerfil(CaPermissaoManager permissao);
         Task<bool> UsuarioTemPermissaoAcesso(string idUsuarioAspNet, int idTag);
+        Task<IEnumerable<Empresa>> ObterEmpresasAssociadasPorUsuario(string idUsuarioAspNet);
     }
 }

@@ -251,6 +251,8 @@ namespace agilium.api.infra.Repository.Dapper
             };
         }
 
+      
+
         public async Task AtualizarUsuarioPorPerfil(long idPerfil, string idUserAspNet)
         {
             using (var scope = new TransactionScope())
@@ -311,6 +313,18 @@ namespace agilium.api.infra.Repository.Dapper
 
             return _dbSession.Connection.Query<CaAreaManager>(query, parametros, _dbSession.Transaction).Any();
             
+        }
+        public async Task<IEnumerable<Empresa>> ObterEmpresasAssociadasPorUsuario(string idUsuarioAspNet)
+        {
+            var query = $@"select e.IDEMPRESA as ID,e.* 
+                            from agilium_base.emp_auth au
+                            inner join empresa e on e.IDEMPRESA = au.IDEMPRESA
+                            inner join ca_usuarios u on u.id_usuario = au.IDUSUARIO
+                            where u.idUserAspNet = @idUserAspNet";
+            var parametros = new DynamicParameters();
+            parametros.Add("@idUserAspNet", idUsuarioAspNet, DbType.String, ParameterDirection.Input);
+
+            return _dbSession.Connection.Query<Empresa>(query, parametros, _dbSession.Transaction);
         }
 
 
