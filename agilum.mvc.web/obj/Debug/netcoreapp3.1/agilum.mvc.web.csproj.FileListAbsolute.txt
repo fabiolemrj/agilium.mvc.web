@@ -586,3 +586,9 @@ C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\agilum.m.87355D82.Up2Date
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\agilum.mvc.web.genruntimeconfig.cache
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Empresa\_SelecionarEmpresa.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\IndexGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\CreateEditGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\DeleteGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\DeleteSubGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\IndexSubGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\CreateEditSubGrupo.cshtml.g.cs

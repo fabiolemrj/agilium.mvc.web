@@ -456,7 +456,7 @@ namespace agilum.mvc.web.Controllers
         {
             //var empresaSelecionada = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>( ObterStringEmpresaSelecionada());
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
-            return Json(empresaSelecionada.NomeEmpresa);
+            return Json(empresaSelecionada?.NomeEmpresa);
         }
 
         #endregion

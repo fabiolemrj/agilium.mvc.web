@@ -108,6 +108,60 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IEnderecoDapperRepository, EnderecoDapperRepository>();
             #endregion
 
+            #region Produto
+            services.AddScoped<IProdutoService, ProdutoService>();
+            services.AddScoped<IProdutoDepartamentoRepository, ProdutoDepartamentoRepository>();
+            services.AddScoped<IProdutoMarcaRepository, ProdutoMarcaRepository>();
+            services.AddScoped<IGrupoProdutoRepository, GrupoProdutoRepository>();
+            services.AddScoped<ISubGrupoProdutoRepository, SubGrupoProdutoRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoReposiotry>();
+            services.AddScoped<IProdutoComposicaoRepository, ProdutoComposicaoRepository>();
+            services.AddScoped<IProdutoCodigoBarraRepository, ProdutoCodigoBarraRepository>();
+            services.AddScoped<IProdutoPrecoRepository, ProdutoPrecoRepository>();
+            services.AddScoped<IProdutoFotoRepository, ProdutoFotoRepository>();
+            services.AddScoped<IProdutoDapper, ProdutoDapper>();
+
+            #endregion
+
+            #region Tabela Auxiliar Fiscal
+            services.AddScoped<ICestNcmRepository, CestNcmRepository>();
+            services.AddScoped<ICsosnRepository, CsosnRepository>();
+            services.AddScoped<ICstRepository, CstRepository>();
+            services.AddScoped<ICfopRepository, CfopRepository>();
+            services.AddScoped<IIbptRepository, IbptRepository>();
+            services.AddScoped<INcmRepository, NcmRepository>();
+            services.AddScoped<ITabelaAuxiliarFiscalService, TabelaAuxiliarFiscalService>();
+            #endregion
+
+
+            #region Estoque
+            services.AddScoped<IEstoqueRepository, EstoqueRepository>();
+            services.AddScoped<IEstoqueService, EstoqueService>();
+            services.AddScoped<IEstoqueProdutoRepository, EstoqueProdutoRepository>();
+            services.AddScoped<IEstoqueHistoricoRepository, EstoqueHistoricoRepository>();
+            services.AddScoped<IEstoqueDapperRepository, EstoqueDapperRepository>();
+            #endregion
+
+            #region Cliente
+            services.AddScoped<IClienteContatoRepository, ClienteContatoRepository>();
+            services.AddScoped<IClientePFRepository, ClientePFRepository>();
+            services.AddScoped<IClientePJRepository, ClientePJRepository>();
+            services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IClientePrecoRepository, ClientePrecoRepository>();
+            services.AddScoped<IClienteDapperRepository, ClienteDapperRepository>();
+
+            #endregion
+
+
+            #region Turno
+            services.AddScoped<ITurnoRepository, TurnoRepository>();
+            services.AddScoped<ITurnoPrecoRepository, TurnoPrecoRepository>();
+            services.AddScoped<IPTurnoDapperRepository, TurnoDapperRepository>();
+            services.AddScoped<ITurnoService, TurnoService>();
+
+            #endregion
+
             return services;
         }
     }

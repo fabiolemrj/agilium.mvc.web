@@ -1,5 +1,5 @@
 ﻿using agilium.api.business.Enums;
-using agilium.api.manager.ViewModels.EmpresaViewModel;
+using agilum.mvc.web.ViewModels.Empresa;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

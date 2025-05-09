@@ -123,7 +123,10 @@ namespace agilum.mvc.web.Controllers
 
         protected EmpresaUsuarioViewModel ObterObjetoEmpresaSelecionada()
         {
-            var objeto = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(ObterStringEmpresaSelecionada());
+            var empresa = ObterStringEmpresaSelecionada();
+            if (empresa == null)
+                return new EmpresaUsuarioViewModel() { NomeEmpresa = "Selecionar Empresa"};
+            var objeto = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(empresa);
             return objeto;
         }
     }
