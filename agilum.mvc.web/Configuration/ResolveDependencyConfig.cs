@@ -39,7 +39,6 @@ namespace agilum.mvc.web.Configuration
 
             var connectionString = configuration.GetConnectionString("ConnectionDb");
 
-
             services.AddScoped<INotificador, Notificador>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
@@ -133,6 +132,13 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<ITabelaAuxiliarFiscalService, TabelaAuxiliarFiscalService>();
             #endregion
 
+            #region Devolucao
+            services.AddScoped<IDevolucaoDapperRepository, DevolucaoDapperRepository>();
+            services.AddScoped<IDevolucaoItemRepository, DevolucaoItemRepository>();
+            services.AddScoped<IDevolucaoRepository, DevolucaoRepository>();
+            services.AddScoped<IMotivoDevolucaoRepository, MotivoDevolucaoRepository>();
+            services.AddScoped<IDevolucaoService, DevolucaoService>();
+            #endregion
 
             #region Estoque
             services.AddScoped<IEstoqueRepository, EstoqueRepository>();

@@ -3,6 +3,7 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Impostos;
@@ -23,6 +24,7 @@ namespace agilum.mvc.web.Controllers
     [Authorize]
     public class ProdutoController : MainController
     {
+        #region constantes
         private readonly IProdutoService _produtoService;
         private readonly IEmpresaService _empresaService;
         private readonly IUnidadeService _unidadeService;
@@ -35,6 +37,8 @@ namespace agilum.mvc.web.Controllers
         private readonly string _nomeEntidadeMarca = "Marca";
         private readonly string _nomeEntidadeGrupo = "Grupo de Produtos";
         private readonly string _nomeEntidadeSubGrupo = "SubGrupo de Produtos";
+
+        #endregion
 
         #region Listas Auxiliares
         private List<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
@@ -49,6 +53,8 @@ namespace agilum.mvc.web.Controllers
         private List<CsosnViewModel> Csosn { get; set; } = new List<CsosnViewModel>();
 
         #endregion
+
+        #region construtor
         public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService,IUnidadeService unidadeService, IEstoqueService estoqueService, 
@@ -67,10 +73,12 @@ namespace agilum.mvc.web.Controllers
             var listasAuxiliaresProdutos = ObterListasAuxiliares().Result;
             Grupos = listasAuxiliaresProdutos.Grupos;
         }
+        #endregion
 
         #region GrupoProduto
 
         [Route("grupo/lista")]
+        [ClaimsAuthorizeAttribute(2011)]
         public async Task<IActionResult> IndexGrupo([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -97,6 +105,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("grupo/novo")]
+        [ClaimsAuthorizeAttribute(2012)]
         public async Task<IActionResult> CreateGrupo()
         {
             ViewBag.operacao = "I";
@@ -139,6 +148,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("grupo/editar")]
+        [ClaimsAuthorizeAttribute(2015)]
         public async Task<IActionResult> EditGrupo(long id)
         {
             ViewBag.operacao = "E";
@@ -189,6 +199,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("grupo/apagar")]
+        [ClaimsAuthorizeAttribute(2013)]
         public async Task<IActionResult> DeleteGrupo(long id)
         {
 
@@ -417,6 +428,356 @@ namespace agilum.mvc.web.Controllers
 
         #endregion
 
+        #region Departamento
+        [Route("departamento/lista")]
+        [ClaimsAuthorizeAttribute(2175)]
+        public async Task<IActionResult> IndexDepartamentos([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        {
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+            if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+            {
+                var msgErro = $"Selecione uma empresa para acessar {_nomeEntidadeDepart}";
+
+                TempData["TipoMensagem"] = "danger";
+                TempData["Titulo"] = _nomeEntidadeDepart;
+                TempData["Mensagem"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeDepart;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("Index", "Home");
+            }
+
+            var lista = (await ObterPerfil(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
+
+            ViewBag.Pesquisa = q;
+
+            return View(lista);
+        }
+
+        [Route("departamento/novo")]
+        [ClaimsAuthorizeAttribute(2176)]
+        public async Task<IActionResult> CreateDepartamento()
+        {
+            ViewBag.operacao = "I";
+            ViewBag.acao = "CreateDepartamento";
+
+            var model = new ProdutoDepartamentoViewModel();
+            model.situacao = EAtivo.Ativo;
+            model.Empresas = listaEmpresaViewModels.ToList();
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+            if(empresaSelecionada != null && !string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+                model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            
+            return View("CreateEditDepartamento", model);
+        }
+
+        [Route("departamento/novo")]
+        [HttpPost]
+        public async Task<IActionResult> CreateDepartamento(ProdutoDepartamentoViewModel model)
+        {
+            ViewBag.operacao = "I";
+            ViewBag.acao = "CreateDepartamento";
+            if (!ModelState.IsValid) return View("CreateEditDepartamento", model);
+
+            var objeto = _mapper.Map<ProdutoDepartamento>(model);
+
+            if (objeto.Id == 0) objeto.Id = objeto.GerarId();
+            await _produtoService.Adicionar(objeto);
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "AdicionarDepartamento", "Web", Deserializar(objeto)));
+                return View("CreateEditDepartamento", model);
+            }
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "AdicionarDepartamento", null);
+
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexDepartamentos");
+        }
+
+        [Route("departamento/editar")]
+        [ClaimsAuthorizeAttribute(2179)]
+        public async Task<IActionResult> EditDepartamento(long id)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "EditDepartamento";
+            var model = await ObterDepartamentoCompletoPorId(id);
+            if (model == null)
+            {
+                var msgErro = $"{_nomeEntidadeDepart} não localizado";
+                AdicionarErroValidacao(msgErro);
+                TempData["Erros"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeDepart;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("IndexDepartamentos");
+            }
+
+            return View("CreateEditDepartamento", model);
+        }
+
+        [Route("departamento/editar")]
+        [HttpPost]
+        public async Task<IActionResult> EditDepartamento(ProdutoDepartamentoViewModel model)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "EditDepartamento";
+
+            if (!ModelState.IsValid) return View("CreateEditDepartamento", model);
+
+            var objeto = _mapper.Map<ProdutoDepartamento>(model);
+
+            await _produtoService.Atualizar(objeto);
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "AtualizarDepartamento", "Web", Deserializar(objeto)));
+                return View("CreateEditDepartamento", model);
+            }
+
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "AdicionarDepartamento", null);
+         
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexDepartamentos");
+        }
+
+        [Route("departamento/apagar")]
+        [ClaimsAuthorizeAttribute(2177)]
+        public async Task<IActionResult> DeleteDepartamento(long id)
+        {
+            var model = await ObterDepartamentoCompletoPorId(id);
+            if (model == null)
+            {
+                var msgErro = $"{_nomeEntidadeDepart} não localizado";
+                AdicionarErroValidacao(msgErro);
+                TempData["Mensagem"] = msgErro;
+                TempData["TipoMensagem"] = "danger";
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeDepart;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("IndexDepartamentos");
+            }
+
+            return View(model);
+        }
+
+        [Route("departamento/apagar")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteDepartamento(ProdutoDepartamentoViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            if (!_produtoService.ApagarDepartamento(model.Id).Result)
+            {
+                var msgErro = string.Join("\n\r", ModelState.Values
+                                       .SelectMany(x => x.Errors)
+                                       .Select(x => x.ErrorMessage));
+                return View(model);
+            }
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "ApagarDepartamento", "Web", $"id:{model.Id}"));
+                return View(model);
+            }
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso: id:{model.Id}", "Produto", "ApagarDepartamento", null);
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexDepartamentos");
+        }
+        #endregion
+
+        #region Marca
+
+        [Route("marca/lista")]
+        [ClaimsAuthorizeAttribute(2181)]
+        public async Task<IActionResult> IndexMarcas([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        {
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+            if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+            {
+                var msgErro = $"Selecione uma empresa para acessar {_nomeEntidadeMarca}";
+
+                TempData["TipoMensagem"] = "danger";
+                TempData["Titulo"] = _nomeEntidadeMarca;
+                TempData["Mensagem"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeMarca;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("Index", "Home");
+            }
+
+            var lista = (await ObterMarcas(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
+
+            ViewBag.Pesquisa = q;
+
+            return View(lista);
+        }
+
+
+        [Route("marca/novo")]
+        [ClaimsAuthorizeAttribute(2182)]
+        public async Task<IActionResult> CreateMarca()
+        {
+            ViewBag.operacao = "I";
+            ViewBag.acao = "CreateMarca";
+
+            var model = new ProdutoMarcaViewModel();
+            model.situacao = EAtivo.Ativo;
+            model.Empresas = listaEmpresaViewModels.ToList();
+
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+            
+            if (empresaSelecionada != null && !string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+                model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            return View("CreateEditMarca", model);
+        }
+
+        [Route("marca/novo")]
+        [HttpPost]
+        public async Task<IActionResult> CreateMarca(ProdutoMarcaViewModel model)
+        {
+            ViewBag.operacao = "I";
+            ViewBag.acao = "CreateMarca";
+            if (!ModelState.IsValid) return View("CreateEditMarca", model);
+
+            var objeto = _mapper.Map<ProdutoMarca>(model);
+
+            if (objeto.Id == 0) objeto.Id = objeto.GerarId();
+            await _produtoService.Adicionar(objeto);
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "AdicionarMarca", "Web", Deserializar(objeto)));
+                return View("CreateEditMarca", model);
+            }
+
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "ApagarDepartamento", null);
+           
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexMarcas");
+        }
+
+        [Route("marca/editar")]
+        [ClaimsAuthorizeAttribute(2185)]
+        public async Task<IActionResult> EditMarca(long id)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "EditMarca";
+            var objeto = await ObterMarcaCompletoPorId(id);
+            if (objeto == null)
+            {
+                var msgErro = $"{_nomeEntidadeDepart} não localizado";
+                AdicionarErroValidacao(msgErro);
+                TempData["Erros"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeDepart;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("IndexMarcas");
+            }
+
+            return View("CreateEditMarca", objeto);
+        }
+
+        [Route("marca/editar")]
+        [HttpPost]
+        public async Task<IActionResult> EditMarca(ProdutoMarcaViewModel model)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "EditMarca";
+
+            if (!ModelState.IsValid) return View("CreateEditMarca", model);
+
+            var objeto = _mapper.Map<ProdutoMarca>(model);
+
+            await _produtoService.Atualizar(objeto);
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "AtualizarMarca", "Web", Deserializar(objeto)));
+                return View("CreateEditDepartamento", model);
+            }
+
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AtualizarMarca", null);
+
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexMarcas");
+        }
+
+        [Route("marca/apagar")]
+        [ClaimsAuthorizeAttribute(2183)]
+        public async Task<IActionResult> DeleteMarca(long id)
+        {
+            var objeto = await ObterMarcaCompletoPorId(id);
+            if (objeto == null)
+            {
+                var msgErro = $"{_nomeEntidadeDepart} não localizado";
+                AdicionarErroValidacao(msgErro);
+                TempData["Mensagem"] = msgErro;
+                TempData["TipoMensagem"] = "danger";
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeDepart;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("IndexMarcas");
+            }
+
+            return View(objeto);
+        }
+
+        [Route("marca/apagar")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteMarca(ProdutoMarcaViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            if (!_produtoService.ApagarProdutoMarca(model.Id).Result)
+            {
+                var msgErro = string.Join("\n\r", ModelState.Values
+                                       .SelectMany(x => x.Errors)
+                                       .Select(x => x.ErrorMessage));
+
+                NotificarErro(msgErro);
+                return View(model);
+            }
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "ApagarMarca", "Web", $"id:{model.Id}"));
+                return View(model);
+            }
+            await _produtoService.Salvar();
+            LogInformacao($"sucesso: id:{model.Id}", "Produto", "ApagarMarca", null);
+           
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexMarcas");
+        }
+
+        #endregion
+
         #region metodos privados
         public async Task<ListasAuxiliaresProdutoViewModel> ObterListasAuxiliares()
         {
@@ -460,6 +821,60 @@ namespace agilum.mvc.web.Controllers
                 ReferenceAction = "IndexGrupo",
                 TotalResults = retorno.TotalResults
             };
+        }
+
+        private async Task<PagedViewModel<ProdutoDepartamentoViewModel>> ObterPerfil(long idempresa, string filtro, int page, int pageSize)
+        {
+            var retorno = await _produtoService.ObterPaginacaoPorDescricao(idempresa, filtro, page, pageSize);
+            var listaTeste = retorno.List;
+            var lista = _mapper.Map<IEnumerable<ProdutoDepartamentoViewModel>>(listaTeste);
+
+            return new PagedViewModel<ProdutoDepartamentoViewModel>()
+            {
+                List = lista,
+                PageIndex = retorno.PageIndex,
+                PageSize = retorno.PageSize,
+                Query = retorno.Query,
+                ReferenceAction = "Index",
+                TotalResults = retorno.TotalResults
+            };
+        }
+
+        private async Task<ProdutoDepartamentoViewModel> ObterDepartamentoCompletoPorId(long id)
+        {
+            var departamentos = _produtoService.ObterPorIdDepartamento(id).Result;
+
+            var model = _mapper.Map<ProdutoDepartamentoViewModel>(departamentos);
+            model.Empresas = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result);
+
+            return model;
+        }
+
+        private async Task<PagedViewModel<ProdutoMarcaViewModel>> ObterMarcas(long idempresa, string filtro, int page, int pageSize)
+        {
+            var retorno = await _produtoService.ObterMarcaPaginacaoPorDescricao(idempresa, filtro, page, pageSize);
+            var listaTeste = retorno.List;
+            var lista = _mapper.Map<IEnumerable<ProdutoMarcaViewModel>>(listaTeste);
+
+            return new PagedViewModel<ProdutoMarcaViewModel>()
+            {
+                List = lista,
+                PageIndex = retorno.PageIndex,
+                PageSize = retorno.PageSize,
+                Query = retorno.Query,
+                //ReferenceAction = "IndexPagination",
+                TotalResults = retorno.TotalResults
+            };
+        }
+
+        private async Task<ProdutoMarcaViewModel> ObterMarcaCompletoPorId(long id)
+        {
+            var objeto = _produtoService.ObterPorIdMarca(id).Result;
+
+            var model = _mapper.Map<ProdutoMarcaViewModel>(objeto);
+            model.Empresas = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result);
+
+            return model;
         }
         #endregion
 

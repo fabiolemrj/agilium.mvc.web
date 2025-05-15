@@ -63,6 +63,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("nova")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2002)]
         public async Task<IActionResult> Create()
         {
             ObterEstados();
@@ -112,6 +113,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpGet]
         [Route("editar")]
+        [ClaimsAuthorizeAttribute(2005)]
         public async Task<IActionResult> Edit(long id)
         {
             ObterEstados();
@@ -165,6 +167,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpGet]
         [Route("apagar")]
+        [ClaimsAuthorizeAttribute(2003)]
         public async Task<IActionResult> Delete(long id)
         {
             var objeto = _mapper.Map<EmpresaCreateViewModel>(await _empresaService.ObterPorId(id));

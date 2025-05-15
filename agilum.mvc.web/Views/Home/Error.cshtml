@@ -2,17 +2,33 @@
 @{
     ViewData["Title"] = @Model.Titulo;
 }
-<div class="container">
-    <div style="padding-top: 200px; text-align: center">
-        @{
-            if (Model == null)
-            {
-                <h2>Ooops! Ocorreu um erro, mas não se preocupe. Nosso time será avisado e iremos corrigir em breve!</h2>
-            }
-            else
-            {
-                <h2>@Html.Raw(Model.Mensagem)</h2>
-            }
-        }
+<div class="">
+    <div style="">
+  
+        <div class="error-page">
+            <h2 class="headline text-danger"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">@Model.ErroCode</font></font></h2>
+
+            <div class="error-content">
+                <h3><i class="fas fa-exclamation-triangle text-danger"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">@Model.Titulo.</font></font></h3>
+
+                <p>
+                    <font style="vertical-align: inherit;">
+                        <font style="vertical-align: inherit;">
+                            @{
+                                if (Model == null)
+                                {
+                                    <h2>Ooops! Ocorreu um erro, mas não se preocupe. Nosso time será avisado e iremos corrigir em breve!</h2>
+                                }
+                                else
+                                {
+                                    <h2>@Html.Raw(Model.Mensagem)</h2>
+                                }
+                            }
+                        </font>
+                    </font>                  
+                </p>
+            </div>
+            <!-- /.error-content -->
+        </div>
     </div>
 </div>

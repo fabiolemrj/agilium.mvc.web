@@ -1,9 +1,11 @@
 ﻿using agilium.api.business.Interfaces.IService;
+using agilum.mvc.web.ViewModels;
 using KissLog.RestClient.Requests.CreateRequestLog;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using Polly;
 using System.Linq;
 using System.Security.Claims;
 
@@ -62,8 +64,14 @@ namespace agilum.mvc.web.Extensions
 
             if (!CustomAuthorization.ValidarUsuario(_caService,id,_idTag))
             {
-                context.Result = new ForbidResult();
+                context.Result = Error(context, 403);
             }
+        }
+
+        public IActionResult Error(AuthorizationFilterContext context, int statusCode)
+        {          
+
+            return new RedirectToRouteResult(new RouteValueDictionary(new {controller ="Home", action = $"Error",id=statusCode}));
         }
     }
 }

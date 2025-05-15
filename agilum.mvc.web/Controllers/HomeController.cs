@@ -28,7 +28,7 @@ namespace agilum.mvc.web.Controllers
         {
             var modelErro = new ErrorViewModel
             {
-                Mensagem = "O sistema está temporariamente indisponível, isto pode ocorrer em momentos de sobrecarga de usuários.",
+                Mensagem = "O sistema está temporariamente indisponível, porque ocorreu um erro interno do sistema.",
                 Titulo = "Sistema indisponível.",
                 ErroCode = 500
             };
@@ -42,16 +42,10 @@ namespace agilum.mvc.web.Controllers
         {
             var modelErro = new ErrorViewModel();
 
-            if (id == 500)
+           
+            if (id == 404)
             {
-                modelErro.Mensagem = "Ocorreu um erro! Tente novamente mais tarde ou contate nosso suporte.";
-                modelErro.Titulo = "Ocorreu um erro!";
-                modelErro.ErroCode = id;
-            }
-            else if (id == 404)
-            {
-                modelErro.Mensagem =
-                    "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
+                modelErro.Mensagem = "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
                 modelErro.Titulo = "Ops! Página não encontrada.";
                 modelErro.ErroCode = id;
             }
@@ -61,9 +55,17 @@ namespace agilum.mvc.web.Controllers
                 modelErro.Titulo = "Acesso Negado";
                 modelErro.ErroCode = id;
             }
+            else if (id == 500)
+            {
+                modelErro.Mensagem = "Ocorreu um erro interno! Tente novamente mais tarde ou contate nosso suporte.";
+                modelErro.Titulo = "Ocorreu um erro!";
+                modelErro.ErroCode = id;
+            }
             else
             {
-                return StatusCode(404);
+                modelErro.Mensagem = "Ocorreu um erro! Tente novamente mais tarde ou contate nosso suporte.";
+                modelErro.Titulo = "Ocorreu um erro!";
+                modelErro.ErroCode = id;
             }
 
             return View("Error", modelErro);

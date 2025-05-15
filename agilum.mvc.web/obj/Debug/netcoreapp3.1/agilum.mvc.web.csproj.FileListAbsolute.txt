@@ -592,3 +592,15 @@ C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\DeleteSubGrupo.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\IndexSubGrupo.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\CreateEditSubGrupo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\IndexDepartamentos.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\CreateEditDepartamento.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\DeleteDepartamento.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\CreateEditMarca.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\DeleteMarca.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Produto\IndexMarcas.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Devolucao\IndexMotivos.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Devolucao\CreateEditMotivo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Devolucao\DeleteMotivo.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\Index.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\CreateEditEstoque.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\DeleteEstoque.cshtml.g.cs

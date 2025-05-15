@@ -54,7 +54,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("nova")]
-        [ClaimsAuthorizeAttribute(2007)]
+        [ClaimsAuthorizeAttribute(20071)]
         public async Task<IActionResult> Create()
         {
             ViewBag.operacao = "I";

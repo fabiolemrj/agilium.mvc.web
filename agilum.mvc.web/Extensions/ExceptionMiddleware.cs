@@ -4,10 +4,14 @@ using agilum.mvc.web.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore.Internal;
 using Polly.CircuitBreaker;
 using Refit;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace agilum.mvc.web.Extensions
@@ -25,7 +29,16 @@ namespace agilum.mvc.web.Extensions
 
             try
             {
+                var listaErros = new List<int>{StatusCodes.Status400BadRequest, StatusCodes.Status401Unauthorized, StatusCodes.Status402PaymentRequired,
+                    StatusCodes.Status403Forbidden, StatusCodes.Status404NotFound,StatusCodes.Status405MethodNotAllowed,StatusCodes.Status408RequestTimeout,
+                StatusCodes.Status406NotAcceptable,StatusCodes.Status409Conflict,StatusCodes.Status500InternalServerError,StatusCodes.Status501NotImplemented,
+                StatusCodes.Status503ServiceUnavailable};
+
                 await _next(httpContext);
+                if(listaErros.Any(x => x == httpContext.Response.StatusCode))
+                {
+                    throw new Exception("Erro");
+                }
             }
             catch (CustomHttpRequestException ex)
             {
@@ -40,6 +53,9 @@ namespace agilum.mvc.web.Extensions
                 HandleRequestExceptionAsync(httpContext, ex.StatusCode);
             }
             catch (BrokenCircuitException ex)
+            {
+                HandleCircuitBreakerExceptionAsync(httpContext);
+            }catch(Exception ex)
             {
                 HandleCircuitBreakerExceptionAsync(httpContext);
             }
@@ -62,7 +78,8 @@ namespace agilum.mvc.web.Extensions
 
         private static void HandleCircuitBreakerExceptionAsync(HttpContext context)
         {
-            context.Response.Redirect("/sistema-indisponivel");
+            context.Response.Redirect($"/error/{context.Response.StatusCode}"); 
+            //context.Response.Redirect("/sistema-indisponivel");
         }
     }
 }

@@ -214,7 +214,10 @@ namespace agilium.api.business.Services
         #region metodos privado
         private async Task<bool> PodeApagarEstoque(long idEstoque)
         {
-            return false;
+            var estoqueHistorico = await _estoqueHistoricoRepository.Obter(x=>x.IDESTOQUE == idEstoque);
+            var produtosEstoque = await _estoqueProdutoRepository.Obter(x => x.IDESTOQUE == idEstoque);
+
+            return !estoqueHistorico.Any() && !produtosEstoque.Any();
         }
 
 

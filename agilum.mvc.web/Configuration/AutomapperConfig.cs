@@ -1,9 +1,13 @@
 ﻿using agilium.api.business.Enums;
 using agilium.api.business.Models;
+using agilium.api.business.Models.CustomReturn;
+using agilum.mvc.web.ViewModels.Cliente;
 using agilum.mvc.web.ViewModels.Contato;
+using agilum.mvc.web.ViewModels.Devolucao;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using agilum.mvc.web.ViewModels.Endereco;
+using agilum.mvc.web.ViewModels.Estoque;
 using agilum.mvc.web.ViewModels.Produtos;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
@@ -199,6 +203,116 @@ namespace agilum.mvc.web.Configuration
                 .ReverseMap();
 
 
+            #endregion
+
+            #region Devolucao
+            CreateMap<MotivoDevolucao, MotivoDevolucaoViewModel>()
+               .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.DSMOTDEV))
+               .ForMember(dest => dest.situacao, opt => opt.MapFrom(src => src.STMOTDEV))
+               .ForMember(dest => dest.Empresas, act => act.Ignore())
+               .ReverseMap();
+
+            CreateMap<Devolucao, DevolucaoViewModel>()
+             .ForMember(dest => dest.IDVENDA, opt => opt.MapFrom(src => src.IDVENDA))
+             .ForMember(dest => dest.IDVALE, opt => opt.MapFrom(src => src.IDVALE))
+             .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDDEV))
+             .ForMember(dest => dest.IDMOTDEV, opt => opt.MapFrom(src => src.IDMOTDEV))
+             .ForMember(dest => dest.Observacao, opt => opt.MapFrom(src => src.DSOBSDEV))
+             .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.DTHRDEV))
+             .ForMember(dest => dest.IDCLIENTE, opt => opt.MapFrom(src => src.IDCLIENTE))
+                    .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA))
+             .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STDEV))
+             .ForMember(dest => dest.ValorTotal, opt => opt.MapFrom(src => src.VLTOTALDEV))
+             .ForMember(dest => dest.EmpresaNome, act => act.Ignore())
+             .ForMember(dest => dest.ValeNome, act => act.Ignore())
+             .ForMember(dest => dest.MotivoDevolucaoNome, act => act.Ignore())
+             .ForMember(dest => dest.ClienteNome, act => act.Ignore())
+             .ForMember(dest => dest.Itens, act => act.Ignore())
+             .ForMember(dest => dest.VendaNome, act => act.Ignore())
+             .ForMember(dest => dest.DevolucaoItens, act => act.Ignore())
+               .ReverseMap();
+
+            CreateMap<DevolucaoItem, DevolucaoItemViewModel>()
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.NUQTD))
+            .ForMember(dest => dest.IDDEV, opt => opt.MapFrom(src => src.IDDEV))
+            .ForMember(dest => dest.IDVENDA_ITEM, opt => opt.MapFrom(src => src.IDVENDA_ITEM))
+            .ForMember(dest => dest.ValorItem, opt => opt.MapFrom(src => src.VLITEM))
+            .ForMember(dest => dest.DevolucaoNome, act => act.Ignore())
+            .ForMember(dest => dest.VendaItemNome, act => act.Ignore())
+             .ForMember(dest => dest.ProdutoNome, act => act.Ignore())
+              .ForMember(dest => dest.ValorItemVenda, act => act.Ignore())
+               .ForMember(dest => dest.SequencialVenda, act => act.Ignore())
+            .ReverseMap();
+
+            CreateMap<DevolucaoItemVendaCustom, DevolucaoItemVendaViewModel>()
+                .ReverseMap();
+            #endregion
+
+            #region Cliente
+            CreateMap<Cliente, ClienteViewModel>()
+              .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDCLIENTE))
+              .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STCLIENTE))
+              .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.NMCLIENTE))
+              .ForMember(dest => dest.TipoPessoa, opt => opt.MapFrom(src => src.TPCLIENTE))
+              .ForMember(dest => dest.DataCadastro, opt => opt.MapFrom(src => src.DTCAD))
+              .ForMember(dest => dest.PublicaEmail, opt => opt.MapFrom(src => src.STPUBEMAIL))
+              .ForMember(dest => dest.PublicaSMS, opt => opt.MapFrom(src => src.STPUBSMS))
+              .ForMember(dest => dest.IDENDERECO, opt => opt.MapFrom(src => src.IDENDERECO))
+              .ForMember(dest => dest.IDENDERECOCOB, opt => opt.MapFrom(src => src.IDENDERECOCOB))
+              .ForMember(dest => dest.IDENDERECOFAT, opt => opt.MapFrom(src => src.IDENDERECOFAT))
+              .ForMember(dest => dest.IDENDERECONTREGA, opt => opt.MapFrom(src => src.IDENDERECONTREGA))
+              .ForMember(dest => dest.Endereco, act => act.Ignore())
+              .ForMember(dest => dest.EnderecoCobranca, act => act.Ignore())
+              .ForMember(dest => dest.EnderecoEntrega, act => act.Ignore())
+              .ForMember(dest => dest.EnderecoFaturamento, act => act.Ignore())
+              .ForMember(dest => dest.ClientePessoaFisica, act => act.Ignore())
+              .ForMember(dest => dest.ClientePessoaJuridica, act => act.Ignore())
+              .ReverseMap();
+
+            CreateMap<ClientePF, ClientePFViewModel>()
+              .ForMember(dest => dest.CPF, opt => opt.MapFrom(src => src.NUCPF))
+              .ForMember(dest => dest.NumeroDocumento, opt => opt.MapFrom(src => src.NURG))
+              .ForMember(dest => dest.DataNascimento, opt => opt.MapFrom(src => src.DTNASC))
+              .ReverseMap();
+
+            CreateMap<ClientePJ, ClientePJViewModel>()
+              .ForMember(dest => dest.Cnpj, opt => opt.MapFrom(src => src.NUCNPJ))
+              .ForMember(dest => dest.InscricaoEstadual, opt => opt.MapFrom(src => src.DSINSCREST))
+              .ForMember(dest => dest.RazaoSocial, opt => opt.MapFrom(src => src.NMRZSOCIAL))
+              .ReverseMap();
+
+            CreateMap<ClientePreco, ClientePrecoViewModel>()
+                 .ForMember(dest => dest.IDCLIENTE, opt => opt.MapFrom(src => src.IDCLIENTE))
+                 .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
+                 .ForMember(dest => dest.Diferenca, opt => opt.MapFrom(src => src.TPDIFERENCA))
+                 .ForMember(dest => dest.TipoValor, opt => opt.MapFrom(src => src.TPVALOR))
+                 .ForMember(dest => dest.Valor, opt => opt.MapFrom(src => src.NUVALOR))
+                 .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NmUsuario))
+                 .ForMember(dest => dest.Datahora, opt => opt.MapFrom(src => src.DTHRCAD))
+                .ReverseMap();
+            #endregion
+
+            #region Estoque
+            CreateMap<Estoque, EstoqueViewModel>()
+              .ForMember(dest => dest.situacao, opt => opt.MapFrom(src => src.STESTOQUE))
+              .ForMember(dest => dest.Empresas, act => act.Ignore())
+              .ReverseMap();
+
+            CreateMap<EstoqueProduto, EstoqueProdutoViewModel>()
+                .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.NUQTD))
+                .ReverseMap();
+
+            CreateMap<EstoqueHistorico, EstoqueHistoricoViewModel>()
+                  .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.DTHRHST))
+                  .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
+                  .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.QTDHST))
+                  .ForMember(dest => dest.IDITEM, opt => opt.MapFrom(src => src.IDITEM))
+                  .ForMember(dest => dest.IDESTOQUE, opt => opt.MapFrom(src => src.IDESTOQUE))
+                  .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.DSHST))
+                  .ForMember(dest => dest.IDLANC, opt => opt.MapFrom(src => src.IDLANC))
+                  .ForMember(dest => dest.NomeUsuario, opt => opt.MapFrom(src => src.NMUSUARIO))
+                  .ForMember(dest => dest.TipoHistorico, opt => opt.MapFrom(src => src.TPHST))
+                .ReverseMap();
             #endregion
         }
     }
