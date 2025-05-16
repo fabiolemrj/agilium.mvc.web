@@ -8,6 +8,7 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using agilum.mvc.web.ViewModels.Endereco;
 using agilum.mvc.web.ViewModels.Estoque;
+using agilum.mvc.web.ViewModels.Fornecedor;
 using agilum.mvc.web.ViewModels.Produtos;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
@@ -88,7 +89,15 @@ namespace agilum.mvc.web.Configuration
                .ForMember(origem => origem.Contato, opt => opt.MapFrom(src => src.Contato))
                //.ForMember(origem => origem.Empresa, opt => opt.MapFrom(src => src.Empresa))
                .ReverseMap();
+            CreateMap<FornecedorContato, ContatoFornecedorViewModel>()
+       .ForMember(origem => origem.Contato, opt => opt.MapFrom(src => src.Contato))
+       .ForMember(origem => origem.IDFORN, opt => opt.MapFrom(src => src.IDFORN))
+       .ReverseMap();
 
+            CreateMap<ClienteContato, ClienteContatoViewModel>()
+            .ForMember(origem => origem.Contato, opt => opt.MapFrom(src => src.Contato))
+            .ForMember(origem => origem.IDCLIENTE, opt => opt.MapFrom(src => src.IDCLIENTE))
+            .ReverseMap();
             #endregion
 
             #region Endereco
@@ -313,6 +322,22 @@ namespace agilum.mvc.web.Configuration
                   .ForMember(dest => dest.NomeUsuario, opt => opt.MapFrom(src => src.NMUSUARIO))
                   .ForMember(dest => dest.TipoHistorico, opt => opt.MapFrom(src => src.TPHST))
                 .ReverseMap();
+            #endregion
+
+            #region Fornecedor
+            CreateMap<Fornecedor, FornecedorViewModel>()
+               .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STFORNEC))
+               .ForMember(dest => dest.NomeFantasia, opt => opt.MapFrom(src => src.NMFANTASIA))
+               .ForMember(dest => dest.RazaoSocial, opt => opt.MapFrom(src => src.NMRZSOCIAL))
+               .ForMember(dest => dest.TipoPessoa, opt => opt.MapFrom(src => src.TPPESSOA))
+                     .ForMember(dest => dest.TipoPessoa, opt => opt.MapFrom(src => src.TPPESSOA == "J" ? ETipoPessoa.J : ETipoPessoa.F))
+               // .ForMember(dest => dest.TipoFiscal, opt => opt.MapFrom(src => src.TPFISCAL))
+               .ForMember(dest => dest.CpfCnpj, opt => opt.MapFrom(src => src.NUCPFCNPJ))
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDFORN))
+               .ForMember(dest => dest.InscricaoEstdualMunicipal, opt => opt.MapFrom(src => src.DSINSCR))
+                 .ForMember(dest => dest.TipoFiscal, opt => opt.MapFrom(src => src.TPFISCAL))
+                 .ForMember(dest => dest.Endereco, act => act.Ignore())
+               .ReverseMap();
             #endregion
         }
     }

@@ -106,7 +106,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     Cadastro
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
-                            </a>                        
+                            </a>
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-ul"></i>
+                                        <p>
+                                            Principal
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="Empresa" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Empresa</p>
+                                            </a>
+                                            <a class="nav-link active" asp-controller="Fornecedor" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Fornecedor</p>
+                                            </a>
+                                        </li>
+                                    
+                                    </ul>
+                                </li>
+                            </ul>
                             <ul class="nav-treeview">
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -158,18 +182,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     </ul>
                                 </li>
-                            </ul>
-                            <ul class="nav-treeview">
-                                <li class="nav-item">
-                                    <a class="nav-link active" asp-controller="Empresa" asp-action="Index">
-                                        <i class="nav-icon fas fa-circle"></i>
-                                        <p>Empresa</p>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
-                        
+                            </ul>                        
+                        </li>                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -209,8 +223,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     
     <!-- ./wrapper -->
     <!-- REQUIRED SCRIPTS -->
-    <!-- jQuery -->
-    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <!-- AdminLTE App -->
     <script src="~/js/site.js" asp-append-version="true"></script>

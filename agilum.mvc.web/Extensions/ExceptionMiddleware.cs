@@ -35,10 +35,10 @@ namespace agilum.mvc.web.Extensions
                 StatusCodes.Status503ServiceUnavailable};
 
                 await _next(httpContext);
-                if(listaErros.Any(x => x == httpContext.Response.StatusCode))
-                {
-                    throw new Exception("Erro");
-                }
+                //if(listaErros.Any(x => x == httpContext.Response.StatusCode))
+                //{
+                //    throw new Exception("Erro");
+                //}
             }
             catch (CustomHttpRequestException ex)
             {

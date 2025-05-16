@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace agilum.mvc.web.Controllers
@@ -109,7 +110,7 @@ namespace agilum.mvc.web.Controllers
         {
             _logService.Erro(usuario, msg, tela, controle, "Web", sql, tipo);
         }
-        protected string Deserializar(object objeto) => JsonSerializer.Serialize(objeto);
+        protected string Deserializar(object objeto) => JsonSerializer.Serialize(objeto, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
 
         protected string RetirarPontos(string valor)
         {

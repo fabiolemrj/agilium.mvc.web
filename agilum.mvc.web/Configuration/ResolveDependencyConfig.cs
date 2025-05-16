@@ -159,13 +159,19 @@ namespace agilum.mvc.web.Configuration
 
             #endregion
 
-
             #region Turno
             services.AddScoped<ITurnoRepository, TurnoRepository>();
             services.AddScoped<ITurnoPrecoRepository, TurnoPrecoRepository>();
             services.AddScoped<IPTurnoDapperRepository, TurnoDapperRepository>();
             services.AddScoped<ITurnoService, TurnoService>();
 
+            #endregion
+
+            #region Fornecedor
+            services.AddScoped<IFornecedorContatoRepsoitory, FornecedorContatoRepository>();
+            services.AddScoped<IFornecedorRepsoitory, FornecedorRepository>();
+            services.AddScoped<IFornecedorService, FornecedorService>();
+            services.AddScoped<IFornecedorDapperRepository, FornecedorDapperRepository>();
             #endregion
 
             return services;

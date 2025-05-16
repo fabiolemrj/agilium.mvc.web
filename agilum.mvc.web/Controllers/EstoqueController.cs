@@ -47,7 +47,7 @@ namespace agilum.mvc.web.Controllers
 
         #region estoque
         [Route("lista")]
-        [ClaimsAuthorizeAttribute(2181)]
+        [ClaimsAuthorizeAttribute(2050)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -74,7 +74,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("estoque/novo")]
-        [ClaimsAuthorizeAttribute(2181)]
+        [ClaimsAuthorizeAttribute(2051)]
         public async Task<IActionResult> CreateEstoque()
         {
             ViewBag.operacao = "I";
@@ -118,7 +118,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("estoque/editar")]
-        [ClaimsAuthorizeAttribute(2181)]
+        [ClaimsAuthorizeAttribute(2054)]
         public async Task<IActionResult> EditEstoque(long id)
         {
             ViewBag.operacao = "E";
@@ -165,6 +165,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("estoque/apagar")]
+        [ClaimsAuthorizeAttribute(2052)]
         public async Task<IActionResult> DeleteEstoque(long id)
         {
             var objeto = await Obter(id.ToString());
@@ -205,6 +206,48 @@ namespace agilum.mvc.web.Controllers
 
             return RedirectToAction("Index");
         }
+        #endregion
+
+        #region Estoque Produto
+        [Route("produtos")]
+        [ClaimsAuthorizeAttribute(2050)]
+        public async Task<ActionResult> ProdutoEstoque(long idEstoque)
+        {
+
+            var lista = await _estoqueService.ObterProdutoEstoquePorEstoque(idEstoque);
+
+            var model = new List<ProdutoPorEstoqueViewModel>();
+            var produto = new Produto();
+
+            lista.ForEach(prod => {
+
+                if (prod.IDPRODUTO != produto.Id)
+                    produto = _produtoService.ObterPorId(prod.IDPRODUTO.Value).Result;
+
+                var estoqueProduto = new ProdutoPorEstoqueViewModel()
+                {
+                    Id = prod.Id,
+                    idProduto = prod.IDPRODUTO.Value,
+                    QuantidadeAtual = prod.NUQTD.HasValue ? prod.NUQTD.Value : 0,
+                    Produto = produto.NMPRODUTO,
+                    ValorCustoMedio = produto.VLCUSTOMEDIO.HasValue ? produto.VLCUSTOMEDIO.Value : 0,
+                    ValorUltimaCompra = produto.VLULTIMACOMPRA.HasValue ? produto.VLULTIMACOMPRA.Value : 0,
+                    Codigo = produto.CDPRODUTO
+                };
+
+                model.Add(estoqueProduto);
+            });
+
+            var estoque = _estoqueService.ObterPorId(idEstoque).Result;
+            if(estoque != null)
+            {
+                ViewBag.Estoque = estoque.Descricao;
+                ViewBag.idEstoque = idEstoque;
+            }
+
+            return View(model);
+        }
+
         #endregion
 
         #region metodos privados

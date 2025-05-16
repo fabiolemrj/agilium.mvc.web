@@ -604,3 +604,10 @@ C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\Index.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\CreateEditEstoque.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\DeleteEstoque.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Estoque\ProdutoEstoque.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\CreateEditFornecedor.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\DeleteFornecedor.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\Index.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\_contatos.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\_createContato.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Fornecedor\_endereco.cshtml.g.cs

@@ -1,0 +1,86 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Estoque
+@model List<ProdutoPorEstoqueViewModel>
+@using agilum.mvc.web.Extensions
+@{
+    ViewData["Title"] = "Produtos";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a href="history.back()" type="button" title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Estoque"><i class="fa fa-dashboard"></i> Estoque </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Produtos </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form class="sidebar-form" method="get">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <h2 class="card-title text-default">@ViewBag.Estoque</h2>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Quantidade Atual
+                </th>
+                <th>
+                    Ultima Compra
+                </th>
+                <th>
+                    Custo Medio
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QuantidadeAtual)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorUltimaCompra)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorCustoMedio)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
