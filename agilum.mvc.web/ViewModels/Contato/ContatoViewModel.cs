@@ -9,8 +9,10 @@ namespace agilum.mvc.web.ViewModels.Contato
     {
         public long Id { get; set; }
         [Display(Name = "Tipo Contato")]
+       // [Required(ErrorMessage ="Campo obrigatorio")]
         public ETipoContato TPCONTATO { get; set; }
         [Display(Name = "Descrição 1")]
+      //  [Required(ErrorMessage = "Campo obrigatorio")]
         public string DESCR1 { get; set; }
         [Display(Name = "Descrição 2")]
         public string DESCR2 { get; set; }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("agilium-manager-git-azure-infra")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+580735c6059e971f45e4127b92d56cfa446a08e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a146ff6714fa45773537639fce799770fa0e6e5e")]
 [assembly: System.Reflection.AssemblyProductAttribute("agilium-manager-git-azure-infra")]
 [assembly: System.Reflection.AssemblyTitleAttribute("agilium-manager-git-azure-infra")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

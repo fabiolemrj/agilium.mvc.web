@@ -38,7 +38,7 @@ function OcultarCPfCnpj() {
 
 $('.delete').click(function (event) {
 
-    alert('delete');
+   // alert('delete');
     event.preventDefault();
 
     const idContato = $(this).attr("data-idContato");
@@ -48,7 +48,7 @@ $('.delete').click(function (event) {
     Swal.fire({
         title: 'Deseja realmente apagar o contato selecionado?',
         text: `${contato}?`,
-        icon: 'danger',
+        icon: 'error',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -60,53 +60,46 @@ $('.delete').click(function (event) {
             $.ajax({
                 type: 'get',
                 url: `/Fornecedor/DeleteContato?idContato=${idContato}&idFornecedor=${idFornecedor}`,
-                success: function (resultado) {
-                    if (resultado.erro) {
-                        toastr.error(resultado.erro)
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: resultado.erro
-                        });
-                        if (res.url) {
-                            $('#ContatoTarget').load(res.url);
-                        }
-                        return;
-                    }
-                },
-                error: function (result) {
-                    toastr.error(result)
-                }
-            }).then((result) => {
-                let icone = "success";
-                let titulo = "Sucesso"
-                let msg = `Contato ${contato} Removido!`;
-                if (result.erro) {
-                    icone = "error"
-                    msg = erro;
-                    titulo = 'Oops...'
-                }
+    
+            }).then(() => {
+               CarregarContatos(idFornecedor, contato);
 
-                Swal.fire({
-                    icon: icone,
-                    title: titulo,
-                    text: msg
-                }).then((res) => {
-                    if (result.url) {
-                        $('#ContatoTarget').load(result.url);
-                    }
-                })
             });
         }
     })
 });
 
-function BuscarCep() {
-    const _cep = $('.cep').val();
-    //ModalMensagem("success",_cep);
+function CarregarContatos(idfornecedor, contato) {
     $.ajax({
         type: 'get',
-        url: '/Endereco/BuscarCep?cep=' + _cep,
+        url: `/Fornecedor/editar?id=` + idfornecedor,
+        success: function (result) {
+          
+        }
+
+    }).then((result) => {
+        let icone = "success";
+        let titulo = "Sucesso"
+        let msg = `Contato ${contato} Removido!`;
+        if (result.erro) {
+            icone = "error"
+            msg = erro;
+            titulo = 'Oops...'
+        }
+
+        Swal.fire({
+            icon: icone,
+            title: titulo,
+            text: msg
+        });
+    });
+}
+
+function BuscarCep() {
+    const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
+    $.ajax({
+        type: 'get',
+        url:  _cep,
         success: function (resultado) {
             if (resultado.erro || resultado.id_logradouro == 0 || resultado.endereco == null) {
                 toastr.error("Cep não localizado")

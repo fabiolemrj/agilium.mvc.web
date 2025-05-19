@@ -139,8 +139,7 @@
                     {
                         <div class="row">
                             <div class="col-md-12" id="ContatoTarget">
-                                @await Html.PartialAsync("_contatos.cshtml")
-
+                                <partial name="_contatos.cshtml" for="@Model"/>
                             </div>
                         </div>
                     }
@@ -153,13 +152,13 @@
         </form>
     </div>
 </div>
-<div id="myModal" class="modal-exemplo modal fade">
+@* <div id="myModal" class="modal-exemplo modal fade">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div id="myModalContent"></div>
         </div>
     </div>
-</div>
+</div> *@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -168,7 +167,7 @@
 
     <script>
         $(document).ready(function () {
-            SetModal();
+          //  SetModal();
         });
     </script>
 }

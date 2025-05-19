@@ -222,10 +222,20 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "AdicionarContato";
             ViewBag.operacao = "I";
 
+            await PreencherViewBagNomeFornecedor(idFornecedor);
             var model = new ContatoFornecedorViewModel();
             model.IDFORN = idFornecedor;
 
-            return PartialView("_createContato", model);
+            return View("CreateEditContatoFornec", model);
+        }
+
+        private async Task PreencherViewBagNomeFornecedor(long idFornecedor)
+        {
+            var fornecedor = await Obter(idFornecedor.ToString());
+            if (fornecedor != null)
+            {
+                ViewBag.nome = fornecedor.RazaoSocial;
+            }
         }
 
         [HttpPost]
@@ -235,8 +245,9 @@ namespace agilum.mvc.web.Controllers
         {
             ViewBag.acao = "AdicionarContato";
             ViewBag.operacao = "I";
+            await PreencherViewBagNomeFornecedor(model.IDFORN);
 
-            if (!ModelState.IsValid) return PartialView("_createContato", model);
+            if (!ModelState.IsValid) return View("CreateEditContatoFornec", model);
 
             var fornecedorContato = _mapper.Map<FornecedorContato>(model);
 
@@ -248,29 +259,58 @@ namespace agilum.mvc.web.Controllers
             if (!OperacaoValida())
             {
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Fornecedor", "AdicionarContato", "Web", Deserializar(model)));
-                PartialView("_createContato", model);
+                View("CreateEditContatoFornec", model);
             }
             await _fornecedorService.Salvar();
             LogInformacao($"sucesso: {Deserializar(fornecedorContato)}", "Fornecedor", "AdicionarContato", null);
 
-            var url = Url.Action("ObterEndereco", "Fornecedor", new { id = model.IDFORN });
-
-            return Json(new { success = true, url });
+            return RedirectToAction("EditFornecedor", new { id = model.IDFORN });
+          
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Route("AdicionarContato")]
+        //public async Task<IActionResult> AdicionarContato(ContatoFornecedorViewModel model)
+        //{
+        //    ViewBag.acao = "AdicionarContato";
+        //    ViewBag.operacao = "I";
+
+        //    if (!ModelState.IsValid) return PartialView("_createContato", model);
+
+        //    var fornecedorContato = _mapper.Map<FornecedorContato>(model);
+
+        //    if (fornecedorContato.Contato.Id == 0)
+        //        fornecedorContato.Contato.Id = await GerarId();
+
+        //    await _fornecedorService.AdicionarContato(fornecedorContato);
+
+        //    if (!OperacaoValida())
+        //    {
+        //        var msgErro = string.Join("\n\r", ObterNotificacoes("Fornecedor", "AdicionarContato", "Web", Deserializar(model)));
+        //        PartialView("_createContato", model);
+        //    }
+        //    await _fornecedorService.Salvar();
+        //    LogInformacao($"sucesso: {Deserializar(fornecedorContato)}", "Fornecedor", "AdicionarContato", null);
+
+        //    var url = Url.Action("ObterEndereco", "Fornecedor", new { id = model.IDFORN });
+
+        //    return Json(new { success = true, url });
+        //}
 
         [Route("EditarContato")]
         public async Task<IActionResult> EditarContato(long idFornecedor, long idContato)
         {
             ViewBag.acao = "EditarContato";
             ViewBag.operacao = "E";
-
+            await PreencherViewBagNomeFornecedor(idFornecedor);
             var contatoEmpresa = await ObterContatoPorId(idContato, idFornecedor);
             if (contatoEmpresa == null)
             {
                 return NotFound();
             }
 
-            return PartialView("_createContato", contatoEmpresa);
+            return View("CreateEditContatoFornec", contatoEmpresa);
+            // return PartialView("_createContato", contatoEmpresa);
         }
 
         [HttpPost]
@@ -280,8 +320,8 @@ namespace agilum.mvc.web.Controllers
         {
             ViewBag.acao = "EditarContato";
             ViewBag.operacao = "E";
-
-            if (!ModelState.IsValid) return PartialView("_createContato", model);
+            await PreencherViewBagNomeFornecedor(model.IDFORN);
+            if (!ModelState.IsValid) return View("CreateEditContatoFornec", model);
             if (model.Contato.Id == 0)
                 model.Contato.Id = model.IDCONTATO;
             var fornecedorContato = _mapper.Map<FornecedorContato>(model);
@@ -291,38 +331,119 @@ namespace agilum.mvc.web.Controllers
             if (!OperacaoValida())
             {
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Fornecedor", "AtualizarContatoEmpresa", "Web"));
-                PartialView("_createContato", model);
+                View("CreateEditContatoFornec", model);
             }
             await _fornecedorService.Salvar();
             LogInformacao($"sucesso: idcontato {Deserializar(fornecedorContato)}", "Fornecedor", "AtualizarContatoEmpresa", null);
-            var url = Url.Action("ObterEndereco", "Fornecedor", new { id = model.IDFORN });
-
-            return Json(new { success = true, url });
+            return RedirectToAction("EditFornecedor", new { id = model.IDFORN });
         }
 
         [Route("DeleteContato")]
         public async Task<IActionResult> DeleteContato(long idFornecedor, long idContato)
-        {
+        {            
             var contatoEmpresa = await ObterContatoPorId(idContato, idFornecedor);
             if (contatoEmpresa == null)
             {
-                var msg = "Erro ao tentar remover endereço contato!";
-                return Json(new { erro = msg });
+                AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
+                return RedirectToAction("EditFornecedor", new { id = idFornecedor });
             }
+            await PreencherViewBagNomeFornecedor(idFornecedor);
 
-            var url = Url.Action("ObterEndereco", "Fornecedor", new { id = idFornecedor });
-            await _fornecedorService.RemoverContato(idContato, idFornecedor);
+            return View("DeleteContato", contatoEmpresa);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("DeleteContato")]
+        public async Task<IActionResult> DeleteContato(ContatoFornecedorViewModel model)
+        {
+            await PreencherViewBagNomeFornecedor(model.IDFORN);
+
+            if (!ModelState.IsValid) return View(model);
+            if (model.Contato.Id == 0)
+                model.Contato.Id = model.IDCONTATO;
+            var fornecedorContato = _mapper.Map<FornecedorContato>(model);
+
+            await _fornecedorService.RemoverContato(model.IDFORN, model.IDCONTATO);
+
             if (!OperacaoValida())
             {
-                AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
-                var msgErro = string.Join("\n\r", ModelState.Values
-                              .SelectMany(x => x.Errors)
-                              .Select(x => x.ErrorMessage));
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Fornecedor", "apagarContato", "Web"));
+                return View("DeleteContato", model);
+            }
+            await _fornecedorService.Salvar();
+            LogInformacao($"sucesso: idcontato {Deserializar(fornecedorContato)}", "Fornecedor", "ApagarContato", null);
+            return RedirectToAction("EditFornecedor", new { id = model.IDFORN });
+        }
 
-                return Json(new { erro = msgErro });
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Route("EditarContato")]
+        //public async Task<IActionResult> EditarContato(ContatoFornecedorViewModel model)
+        //{
+        //    ViewBag.acao = "EditarContato";
+        //    ViewBag.operacao = "E";
+
+        //    if (!ModelState.IsValid) return PartialView("_createContato", model);
+        //    if (model.Contato.Id == 0)
+        //        model.Contato.Id = model.IDCONTATO;
+        //    var fornecedorContato = _mapper.Map<FornecedorContato>(model);
+
+        //    await _fornecedorService.Atualizar(fornecedorContato);
+
+        //    if (!OperacaoValida())
+        //    {
+        //        var msgErro = string.Join("\n\r", ObterNotificacoes("Fornecedor", "AtualizarContatoEmpresa", "Web"));
+        //        PartialView("_createContato", model);
+        //    }
+        //    await _fornecedorService.Salvar();
+        //    LogInformacao($"sucesso: idcontato {Deserializar(fornecedorContato)}", "Fornecedor", "AtualizarContatoEmpresa", null);
+        //    var url = Url.Action("ObterEndereco", "Fornecedor", new { id = model.IDFORN });
+
+        //    return Json(new { success = true, url });
+        //}
+
+        //[Route("DeleteContato")]
+        //public async Task<IActionResult> DeleteContato(long idFornecedor, long idContato)
+        //{
+        //    var contatoEmpresa = await ObterContatoPorId(idContato, idFornecedor);
+        //    if (contatoEmpresa == null)
+        //    {
+        //        var msg = "Erro ao tentar remover endereço contato!";
+
+        //      //  return RedirectToAction("EditFornecedor", new { id = idFornecedor });
+        //        return Json(new { erro = msg });
+        //    }
+
+        //    var url = Url.Action("ObterEndereco", "Fornecedor", new { id = idFornecedor });
+        //    await _fornecedorService.RemoverContato(idFornecedor, idContato);
+        //    await _fornecedorService.Salvar();
+        //    if (!OperacaoValida())
+        //    {
+        //        AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
+        //        var msgErro = string.Join("\n\r", ModelState.Values
+
+
+        //                      .SelectMany(x => x.Errors)
+        //                      .Select(x => x.ErrorMessage));
+
+        //        return Json(new { erro = msgErro });
+        //    }
+        //return RedirectToAction("EditFornecedor", new { id = idFornecedor });
+        //      return Json(new { success = true, url });
+        //}
+
+        [Route("ObterEndereco")]
+        public async Task<IActionResult> ObterEndereco(long id)
+        {
+            var fornecedor = await Obter(id.ToString());
+
+            if (fornecedor == null)
+            {
+                return NotFound();
             }
 
-            return Json(new { success = true, url });
+            return PartialView("_contatos", fornecedor);
         }
         #endregion
 
