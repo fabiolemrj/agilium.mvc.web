@@ -165,6 +165,18 @@ namespace agilium.api.business.Services
             return await _usuarioRepository.ObterTodos();
         }
 
+        public async Task<List<Usuario>> ObterTodosUsuariosValidos()
+        {
+            var retorno = new List<Usuario>();
+            var usuarios = await _usuarioRepository.ObterTodos();
+            usuarios.ForEach(usu =>
+            {
+                if (!string.IsNullOrEmpty(usu.nome))
+                    retorno.Add(usu);
+            });
+            return retorno;
+        }
+
         public async Task<PagedResult<Usuario>> ObterTodosUsuarios( int page = 1, int pageSize = 15)
         {
             int pagina = page > 0 ? page : 1;

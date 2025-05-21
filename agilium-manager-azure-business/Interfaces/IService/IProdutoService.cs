@@ -90,6 +90,9 @@ namespace agilium.api.business.Interfaces.IService
         Task<IEnumerable<ProdutoFoto>> ObterFotoPorProduto(long idProduto);
         #endregion
 
+        #region dapper
+        Task AtualizarIBPTTodosProdutos();
+        #endregion
 
         Task Salvar();
     }

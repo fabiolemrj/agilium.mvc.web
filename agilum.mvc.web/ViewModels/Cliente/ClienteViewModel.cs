@@ -119,4 +119,6 @@ namespace agilum.mvc.web.ViewModels.Cliente
         public ETipoValorPreco DescricaoTipoValor { get; set; }
         public List<ClienteViewModel> Clientes { get; set; } = new List<ClienteViewModel>();
     }
+
+
 }

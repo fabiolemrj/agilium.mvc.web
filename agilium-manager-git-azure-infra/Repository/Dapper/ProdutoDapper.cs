@@ -3,6 +3,7 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using MySqlConnector;
@@ -67,6 +68,64 @@ namespace agilium.api.infra.Repository.Dapper
 
                 };
 
+            }
+        }
+
+        public async Task<List<Produto>> ObterProdutosParaAtualizarIbpt()
+        {
+            var query = $@"SELECT IDPRODUTO as Id,CDNCM,CDPRODUTO,NMPRODUTO  FROM produto WHERE STPRODUTO = 1";
+            return _dbSession.Connection.QueryAsync<Produto>(query, null, _dbSession.Transaction).Result.ToList();
+        }
+
+        private async Task<Ibpt> ObterIbptPorCodCnm(string cdncm)
+        {
+            var query = $@"SELECT * FROM ibpt WHERE NCM = '{{ncm}}' ORDER BY FIMVIG DESC";
+            return _dbSession.Connection.QueryAsync<Ibpt>(query, null, _dbSession.Transaction).Result.FirstOrDefault();
+        }
+
+        public async Task AtualizarIBPTPorProduto(Produto produto)
+        {
+            var resultado = false;
+
+            if (!string.IsNullOrEmpty(produto.CDNCM))
+            {
+                //Se por acaso não encontrar o NCM com o código completo
+                //deve-se ir reduzindo o código até 1 caracter para poder localizar
+                var ncm = produto.CDNCM.Trim();
+
+                while ((ncm.Length > 1) && (!resultado))
+                {
+                    var ibpt = await ObterIbptPorCodCnm(ncm);
+                    
+                    if (ibpt != null)
+                    {
+                        resultado = true;
+                        var municipal = ibpt.MUNICIPAL.HasValue ? ibpt.MUNICIPAL.Value : 0;
+                        var importadoFederal = ibpt.IMPORTADOSFEDERAL.HasValue ? ibpt.IMPORTADOSFEDERAL.Value : 0;
+                        var nacionalFederal = ibpt.NACIONALFEDERAL.HasValue ? ibpt.NACIONALFEDERAL.Value : 0;
+                        var estadual = ibpt.ESTADUAL.HasValue ? ibpt.ESTADUAL.Value : 0;
+
+                        var parametros = new DynamicParameters();
+                        parametros.Add("@PCIBPTFED", nacionalFederal, DbType.Double, ParameterDirection.Input);
+                        parametros.Add("@PCIBPTEST", estadual, DbType.Double, ParameterDirection.Input);
+                        parametros.Add("@PCIBPTMUN", municipal, DbType.Double, ParameterDirection.Input);
+                        parametros.Add("@PCIBPTIMP", importadoFederal, DbType.Double, ParameterDirection.Input);
+                        parametros.Add("@IDPRODUTO", produto.Id, DbType.Int64, ParameterDirection.Input);
+                        //Só atualizo se estiver em vigência
+                        if (ibpt.FIMVIG.HasValue && ibpt.FIMVIG.Value >= DateTime.Now)
+                        {
+                            var queryAtualizarProduto = @$"UPDATE produto SET PCIBPTFED = @PCIBPTFED, PCIBPTEST = @PCIBPTEST,
+                                                            PCIBPTMUN = @PCIBPTMUN, PCIBPTIMP = @PCIBPTIMP
+                                                            WHERE IDPRODUTO = @IDPRODUTO";
+                            _dbSession.Connection.Execute(queryAtualizarProduto, parametros);
+                        }
+                    }
+                    else
+                    {
+                        //Reduz 1 caracter no final do NCM
+                        ncm = ncm.Substring(0, ncm.Length - 1);
+                    }
+                }
             }
         }
 

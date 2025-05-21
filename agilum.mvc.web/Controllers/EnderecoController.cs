@@ -27,6 +27,8 @@ namespace agilum.mvc.web.Controllers
         [Route("buscar-cep")]
         public async Task<IActionResult> BuscarCep(string cep)
         {
+            if(string.IsNullOrEmpty(cep))
+                return NotFound();
             var objetoCep = await _enderecoService.ObterCepPorNumeroCep(cep);
             if (objetoCep == null)
             {

@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Contato;
@@ -44,6 +45,7 @@ namespace agilum.mvc.web.Controllers
         #region fornecedor
         [Route("lista")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2025)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
 
@@ -55,6 +57,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2026)]
         public async Task<IActionResult> CreateFornecedor()
         {
             ObterEstados();
@@ -114,6 +117,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2029)]
         public async Task<IActionResult> EditFornecedor(long id)
         {
             ObterEstados();
@@ -171,6 +175,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2027)]
         public async Task<IActionResult> DeleteFornecedor(long id)
         {
             ObterEstados();

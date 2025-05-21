@@ -84,19 +84,19 @@ namespace agilum.mvc.web.ViewModels.Produtos
         public int? CFOPVenda { get; set; }
         [Display(Name = "Origem do Produto")]
         public EOrigemProduto? OrigemProduto { get; set; }
-        [Display(Name = "Codigo de Situação da Operação no Simples Nacional (CSOSN) ICMS ")]
+        [Display(Name = "Codigo Situação Oper. Simples Nacional (CSOSN) ICMS ")]
         [StringLength(5, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string DSICMS_CST { get; set; }
         [Display(Name = "ALiquota ICMS (%)")]
         [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
         public double? AliquotaICMS { get; set; }
-        [Display(Name = "Redução da Base de calculo (%)")]
+        [Display(Name = "Redução Base Calculo (%)")]
         [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
         public double? ReducaoBaseCalculoICMS { get; set; }
         [Display(Name = "ALiquota ICMS ST (%)")]
         [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
         public double? AliquotaICMS_ST { get; set; }
-        [Display(Name = "Margem de valor Agregado (MVA) ICMS ST (%)")]
+        [Display(Name = "Margem valor Agregado (MVA) ICMS ST (%)")]
         [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
         public double? AliquotaMargemValorAgregadoICMS_ST { get; set; }
         [Display(Name = "Redução da Base de calculo (%)")]

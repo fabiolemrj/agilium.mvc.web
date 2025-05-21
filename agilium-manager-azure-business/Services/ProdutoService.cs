@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace agilium.api.business.Services
 {
@@ -22,6 +23,8 @@ namespace agilium.api.business.Services
         private readonly IProdutoCodigoBarraRepository _produtoCodigoBarraRepository;
         private readonly IProdutoPrecoRepository _produtoPrecoRepository;
         private readonly IProdutoFotoRepository _produtoFotoRepository;
+        private readonly IDapperRepository _dapperRepository;
+        private readonly IProdutoDapper _produtoDapperRepository;
 
         public ProdutoService(INotificador notificador,
             IProdutoDepartamentoRepository produtoDepartamentoRepository,
@@ -31,7 +34,9 @@ namespace agilium.api.business.Services
             IProdutoRepository produtoRepository,
             IProdutoCodigoBarraRepository produtoCodigoBarraRepository,
             IProdutoPrecoRepository produtoPrecoRepository,
-            IProdutoFotoRepository produtoFotoRepository) : base(notificador)
+            IProdutoFotoRepository produtoFotoRepository,
+            IDapperRepository dapperRepository,
+            IProdutoDapper produtoDapper) : base(notificador)
         {
             _produtoDepartamentoRepository = produtoDepartamentoRepository;
             _produtoMarcaRepository = produtoMarcaRepository;
@@ -41,6 +46,8 @@ namespace agilium.api.business.Services
             _produtoCodigoBarraRepository = produtoCodigoBarraRepository;
             _produtoPrecoRepository = produtoPrecoRepository;
             _produtoFotoRepository = produtoFotoRepository;
+            _dapperRepository = dapperRepository;
+            _produtoDapperRepository = produtoDapper;
         }
 
         public async Task Salvar()
@@ -57,7 +64,7 @@ namespace agilium.api.business.Services
             _produtoCodigoBarraRepository?.Dispose();           
             _produtoPrecoRepository?.Dispose();
             _produtoFotoRepository?.Dispose();
-            _produtoRepository?.Dispose();
+            _produtoRepository?.Dispose();;
         }
 
         #region Produto
@@ -74,8 +81,6 @@ namespace agilium.api.business.Services
         {
             if (!ExecutarValidacao(new ProdutoValidation(), produto))
                 return;
-
-
 
             await _produtoRepository.AtualizarSemSalvar(produto);
         }
@@ -132,6 +137,36 @@ namespace agilium.api.business.Services
         {
             var produto = _produtoRepository.ObterPorId(idProduto).Result;
             return (produto != null && produto.NUPRECO.HasValue)? produto.NUPRECO.Value : 0.0;
+        }
+
+        public async Task AtualizarIBPTTodosProdutos()
+        {
+
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+                var produtos = await _produtoDapperRepository.ObterProdutosParaAtualizarIbpt();
+                
+                produtos.ForEach(async prod =>
+                {
+                    await _produtoDapperRepository. AtualizarIBPTPorProduto(prod);
+                });
+
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                    await _dapperRepository.Rollback();
+            }
+            catch (Exception ex)
+            {
+                do
+                {
+                    Notificar(ex.Message);
+                }
+                while (ex != null);
+
+                await _dapperRepository.Rollback();
+            }
         }
         #endregion
 

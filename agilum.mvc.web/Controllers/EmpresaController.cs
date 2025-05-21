@@ -28,13 +28,16 @@ namespace agilum.mvc.web.Controllers
     [Route("empresa")]
     public class EmpresaController : MainController
     {
+        #region constantes
         private readonly IEmpresaService _empresaService;
         private readonly IContatoService _contatoService;
         private readonly ILogger<EmpresaController> _logger;
         private readonly IUsuarioService _usuarioService;
         private readonly ICaService _caService;
         private readonly string _nomeEntidade = "Empresa";
+        #endregion
 
+        #region construtores
         public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
             IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, 
             IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
@@ -45,6 +48,7 @@ namespace agilum.mvc.web.Controllers
             _usuarioService = usuarioService;
             _caService = caService;
         }
+        #endregion
 
         #region endpoint
 

@@ -55,10 +55,11 @@ namespace agilum.mvc.web.Extensions
             catch (BrokenCircuitException ex)
             {
                 HandleCircuitBreakerExceptionAsync(httpContext);
-            }catch(Exception ex)
-            {
-                HandleCircuitBreakerExceptionAsync(httpContext);
             }
+            //catch(Exception ex)
+            //{
+            //   // HandleCircuitBreakerExceptionAsync(httpContext);
+            //}
 
         }
 

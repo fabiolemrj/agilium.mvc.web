@@ -1,0 +1,69 @@
+﻿@model List<agilum.mvc.web.ViewModels.Produtos.ProdutoCodigoBarraViewModel>
+
+@{
+    ViewData["Title"] = "Codigo de Barra do Produto";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a asp-action="AdicionarCodigoBarra" asp-route-idProduto="@ViewBag.idProduto" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Index" asp-controller="Produto" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Produto"><i class="fa fa-dashboard"></i> Produto </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Codigo de Barra </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form asp-action="ListaCodigoBarra" class="sidebar-form" method="get">
+            <div class="row">
+                <div class="callout callout-info col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">@ViewBag.NomeProduto</font></font></h5>
+
+                </div>
+            </div>
+            
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo de Barra
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CDBARRA)
+                    </td>
+                    <td class="text-right">
+                        @*<a class="btn btn-warning" asp-action="EditDepartamento" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>*@
+                        <a asp-action="DeleteCodigoBarra" class="btn btn-danger" title="Apagar" asp-route-id="@item.Id" data-codigobarra="@item.CDBARRA"><spam class="fa fa-trash"></spam></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/produto.js"></script>
+}

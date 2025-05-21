@@ -1,0 +1,71 @@
+﻿@model agilum.mvc.web.ViewModels.Cliente.ClienteViewModel
+<div class="card card card-outline card-primary">
+    <div class="card-header">
+        <input type="hidden" asp-for="Endereco.Id" />
+        <h5 class="card-title">
+            <i class="fas fa-address-book"></i>
+            Contato
+        </h5>
+    </div>
+    <div class="card-body">
+        <nav class="navbar navbar-expand navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item d-none d-sm-inline-block">
+                    <h3 class="card-title">
+                        <i class="fas fa-id-card"></i>
+                        Contato
+                    </h3>
+
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link btn btn-default" asp-action="AdicionarContato" asp-route-idCliente="@Model.Id" title="Cadastrar Novo Contato" id="btnaddContato">
+                        <span class="fa fa-plus-square sns-tool-action"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div id="divGridResultadoContato">
+            <input type="hidden" asp-for="Id" />
+            <table class="table table-hover">
+                <thead class="table thead-dark">
+                    <tr>
+                        <th>
+                            Tipo
+                        </th>
+                        <th>
+                            Descrição
+                        </th>
+                        <th>
+                            Descrição Auxiliar
+                        </th>
+                        <th class="colunaacao"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Contatos)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contato.TPCONTATO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contato.DESCR1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Contato.DESCR2)
+                            </td>
+                            <td class="text-right">
+                                <a class="btn btn-warning" asp-action="EditarContato" asp-route-idCliente="@item.IDCLIENTE" asp-route-idContato="@item.IDCONTATO" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                                <a class="btn btn-danger" id="btnDeleteContato" title="Apagar" asp-action="DeleteContato" asp-route-idCliente="@item.IDCLIENTE" asp-route-idContato="@item.IDCONTATO"
+                                   data-idContato="@item.IDCONTATO" data-idCliente="@item.IDCLIENTE" data-tpcontato="@item.Contato.TPCONTATO" data-descr1="@item.Contato.DESCR1" id="btndeleteContato"><spam class="fa fa-trash"></spam></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

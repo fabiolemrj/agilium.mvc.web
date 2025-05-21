@@ -7,11 +7,11 @@
 
 
 function BuscarCep() {
-    const _cep = $('.cep').val();
+    const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
     //ModalMensagem("success",_cep);
     $.ajax({
         type: 'get',
-        url: '/Endereco/BuscarCep?cep=' + _cep,
+        url: _cep,
         success: function (resultado) {
             if (resultado.erro || resultado.id_logradouro == 0 || resultado.endereco == null) {
                 toastr.error("Cep não localizado")

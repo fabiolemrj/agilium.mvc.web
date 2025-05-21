@@ -90,5 +90,64 @@ namespace agilum.mvc.web.ViewModels.Usuarios
         public string idperfilManager { get; set; }
         public string PerfilDescricao { get; set; }
     }
+    public class UserFull
+    {
+        public string id { get; set; }
+        [Display(Name = "Nome")]
+        public string nome { get; set; }
+        [Display(Name = "CPF")]
+        [MaxLength(14, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string cpf { get; set; }
+        [Display(Name = "Logradouro")]
+        [MaxLength(100, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string ender { get; set; }
+        [Display(Name = "Numero")]
+        public string num { get; set; }
+        [MaxLength(25, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        [Display(Name = "Complemento")]
+        public string compl { get; set; }
+        [Display(Name = "Bairro")]
+        [MaxLength(40, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string bairro { get; set; }
+        [Display(Name = "Cep")]
+        public string cep { get; set; }
+        [Display(Name = "Cidade")]
+        [MaxLength(40, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string cidade { get; set; }
+        [Display(Name = "Estado")]
+        [MaxLength(2, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string uf { get; set; }
+        [Display(Name = "Telefone 1")]
+        [MaxLength(20, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string tel1 { get; set; }
+        [MaxLength(20, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        [Display(Name = "Celular")]
+        public string cel { get; set; }
+        [Display(Name = "Data de Nascimento")]
+        public string dtnasc { get; set; }
+
+        [Display(Name = "E-mail")]
+        public string email { get; set; }
+        [Display(Name = "Telefone 2")]
+        [MaxLength(20, ErrorMessage = "O campo {0} pode ter até {1} caracteres")]
+        public string tel2 { get; set; }
+
+        public string ativo { get; set; }
+        [Display(Name = "Ativo?")]
+        public bool AtivoBool
+        {
+            get { return ativo == "1"; }
+            set { ativo = value ? "1" : "2"; }
+        }
+        public string idUserAspNet { get; set; }
+        [Display(Name = "Nome simplificado")]
+        public string Usuario { get; set; }
+
+        public string Foto { get; set; }
+        [Display(Name = "Perfil")]
+        public string PerfilDescricao { get; set; }
+        [Display(Name = "Perfil")]
+        public string idperfilManager { get; set; }
+    }
 
 }

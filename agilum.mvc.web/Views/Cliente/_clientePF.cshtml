@@ -1,0 +1,33 @@
+﻿@model agilum.mvc.web.ViewModels.Cliente.ClienteViewModel
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        Pessoa Física
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ClientePessoaFisica.CPF" id="labelCpf"></label>
+                    <input asp-for="ClientePessoaFisica.CPF" class="form-control cpf" size="15" />
+                    <span asp-validation-for="ClientePessoaFisica.CPF" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ClientePessoaFisica.NumeroDocumento" id="labelNumDoc"></label>
+                    <input asp-for="ClientePessoaFisica.NumeroDocumento" class="form-control" />
+                    <span asp-validation-for="ClientePessoaFisica.NumeroDocumento" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ClientePessoaFisica.DataNascimento" id="labeldtNasc"></label>
+                    <input asp-for="ClientePessoaFisica.DataNascimento" class="form-control" size="70" type="date"/>
+                    <span asp-validation-for="ClientePessoaFisica.DataNascimento" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 ﻿using agilium.api.business.Enums;
 using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn;
+using agilium.api.manager.ViewModels.TurnoViewModel;
 using agilum.mvc.web.ViewModels.Cliente;
 using agilum.mvc.web.ViewModels.Contato;
 using agilum.mvc.web.ViewModels.Devolucao;
@@ -9,6 +10,8 @@ using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using agilum.mvc.web.ViewModels.Endereco;
 using agilum.mvc.web.ViewModels.Estoque;
 using agilum.mvc.web.ViewModels.Fornecedor;
+using agilum.mvc.web.ViewModels.Funcionarios;
+using agilum.mvc.web.ViewModels.Impostos;
 using agilum.mvc.web.ViewModels.Produtos;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
@@ -44,8 +47,12 @@ namespace agilum.mvc.web.Configuration
                   .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA.ToString()))
                   .ForMember(dest => dest.IDUSUARIO, opt => opt.MapFrom(src => src.IDUSUARIO.ToString()))
                 .ReverseMap();
-                     
-            
+
+            CreateMap<Usuario, UserFull>()
+               .ForMember(dest => dest.dtnasc, opt => opt.MapFrom(src => src.DataCadastro.ToString()))
+               .ForMember(dest => dest.idperfilManager, opt => opt.MapFrom(src => src.id_perfil))
+                .ForMember(dest => dest.ativo, opt => opt.MapFrom(src => src.ativo)).ReverseMap();
+          
             #endregion
 
             #region Unidade
@@ -118,6 +125,9 @@ namespace agilum.mvc.web.Configuration
 
             #region Produto
 
+            CreateMap<ProdutoFoto, ProdutoFotoViewModel>()
+               .ForMember(dest => dest.Foto, act => act.Ignore())
+          .ReverseMap();
 
             CreateMap<Produto, ProdutoViewModel>()
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDPRODUTO))
@@ -339,6 +349,89 @@ namespace agilum.mvc.web.Configuration
                  .ForMember(dest => dest.Endereco, act => act.Ignore())
                .ReverseMap();
             #endregion
+
+            #region Funcionario
+            CreateMap<Funcionario, FuncionarioViewModel>()
+                .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDFUNC))
+                .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.NMFUNC))
+                .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STFUNC))
+                .ForMember(dest => dest.Noturno, opt => opt.MapFrom(src => src.NUTURNO))
+                .ForMember(dest => dest.CPF, opt => opt.MapFrom(src => src.NUCPF))
+                .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.NURG))
+                .ForMember(dest => dest.DataAdmissao, opt => opt.MapFrom(src => src.DTADM))
+                .ForMember(dest => dest.DataDemissao, opt => opt.MapFrom(src => src.DTDEM))
+                .ForMember(dest => dest.DSRFID, opt => opt.MapFrom(src => src.DSRFID))
+                .ForMember(dest => dest.Turno, opt => opt.MapFrom(src => src.STNOTURNO))
+                 //.ForMember(dest => dest.IDENDERECO, act => act.Ignore())
+                 .ForMember(dest => dest.Empresas, act => act.Ignore())
+                  //  .ForMember(dest => dest.Usuario, act => act.Ignore())
+                  .ReverseMap();
+            #endregion
+
+            #region Impostos
+            CreateMap<Cst, CstViewModel>().ReverseMap();
+            CreateMap<Csosn, CsosnViewModel>().ReverseMap();
+            CreateMap<CestNcm, CestViewModel>().ReverseMap();
+            CreateMap<Ncm, NcmViewModel>().ReverseMap();
+            CreateMap<Ibpt, IbptViewModel>().ReverseMap();
+            CreateMap<Cfop, CfopViewModel>().ReverseMap();
+            #endregion
+
+            #region Turno
+            CreateMap<TurnoPreco, TurnoPrecoViewModel>()
+                .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
+                .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
+                .ForMember(dest => dest.Diferenca, opt => opt.MapFrom(src => src.TPDIFERENCA))
+                .ForMember(dest => dest.TipoValor, opt => opt.MapFrom(src => src.TPVALOR))
+                .ForMember(dest => dest.Valor, opt => opt.MapFrom(src => src.NUVALOR))
+                .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NMUSUARIO))
+                .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.DTHRCAD))
+                
+               .ReverseMap();
+
+            CreateMap<Turno, TurnoViewModel>()
+            .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
+            .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA))
+            .ForMember(dest => dest.IDUSUARIOFIM, opt => opt.MapFrom(src => src.IDUSUARIOFIM))
+            .ForMember(dest => dest.IDUSUARIOINI, opt => opt.MapFrom(src => src.IDUSUARIOINI))
+            .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.DTTURNO))
+            .ForMember(dest => dest.DataFinal, opt => opt.MapFrom(src => src.DTHRFIM))
+            .ForMember(dest => dest.DataInicial, opt => opt.MapFrom(src => src.DTHRINI))
+               .ForMember(dest => dest.Obs, opt => opt.MapFrom(src => src.DSOBS))
+           .ReverseMap();
+
+            CreateMap<Turno, TurnoIndexViewModel>()
+             .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
+             .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA))
+             .ForMember(dest => dest.IDUSUARIOFIM, opt => opt.MapFrom(src => src.IDUSUARIOFIM))
+             .ForMember(dest => dest.IDUSUARIOINI, opt => opt.MapFrom(src => src.IDUSUARIOINI))
+             .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.DTTURNO))
+             .ForMember(dest => dest.DataFinal, opt => opt.MapFrom(src => src.DTHRFIM))
+             .ForMember(dest => dest.DataInicial, opt => opt.MapFrom(src => src.DTHRINI))
+             .ForMember(dest => dest.Obs, opt => opt.MapFrom(src => src.DSOBS))
+             .ForMember(dest => dest.Empresa, act => act.Ignore())
+             .ForMember(dest => dest.UsuarioFinal, act => act.Ignore())
+             .ForMember(dest => dest.UsuarioInicial, act => act.Ignore())
+            .ReverseMap();
+
+            CreateMap<TurnoPreco, agilum.mvc.web.ViewModels.Turno.TurnoPrecoViewModel>()
+          .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
+          .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
+          .ForMember(dest => dest.Diferenca, opt => opt.MapFrom(src => src.TPDIFERENCA))
+          .ForMember(dest => dest.TipoValor, opt => opt.MapFrom(src => src.TPVALOR))
+          .ForMember(dest => dest.Valor, opt => opt.MapFrom(src => src.NUVALOR))
+          .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NMUSUARIO))
+          .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.DTHRCAD))
+           .ForMember(dest => dest.DescricaoTipoValor, act => act.Ignore())
+            .ForMember(dest => dest.DescricaoTipoDiferenca, act => act.Ignore())
+             .ForMember(dest => dest.NomeCliente, act => act.Ignore())
+         .ForMember(dest => dest.ValorFinal, act => act.Ignore())
+          .ForMember(dest => dest.Clientes, act => act.Ignore())
+         .ReverseMap();
+            #endregion
+
+
+
         }
     }
 }

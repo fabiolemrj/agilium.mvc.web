@@ -1,0 +1,175 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Funcionarios
+@model FuncionarioViewModel
+@using agilum.mvc.web.Extensions
+
+@{
+    ViewData["Title"] = "Funcionario";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Funcionario")"><i class="fa fa-dashboard"></i> Funcionario</a> /
+            <a href="#"> Apagar </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="callout callout-danger">
+    <h3>Você deseja realmente apagar este Funcionario?</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="Delete" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Situacao" />
+            <input type="hidden" asp-for="Nome" />
+            <input type="hidden" asp-for="IDEMPRESA" />
+            <input type="hidden" asp-for="CPF" />
+            <input type="hidden" asp-for="Turno" />
+            <input type="hidden" asp-for="Codigo" />
+            <input type="hidden" asp-for="IDENDERECO" />
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    <h3 class="card-title text-danger">Apagar Registro</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
+                                <select asp-for="IDEMPRESA"
+                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Codigo" id="labelCodigo"></label>
+                                <input asp-for="Codigo" class="form-control" size="6" disabled />
+                                <span asp-validation-for="Codigo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="TipoFuncionario" id="labelCapacidade"></label>
+                                <select asp-for="TipoFuncionario"
+                                        asp-items="@Html.GetEnumSelectList<ETipoFuncionario>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="TipoFuncionario" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Situacao" id="labelativo"></label>
+                                <select asp-for="Situacao"
+                                        asp-items="Html.GetEnumSelectList<EAtivo>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="Situacao" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label asp-for="Nome" id="labelCodigo"></label>
+                                <input asp-for="Nome" class="form-control" size="70" disabled />
+                                <span asp-validation-for="Nome" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="CPF" id="labelCpf"></label>
+                                <input asp-for="CPF" class="form-control cpf" size="15" disabled />
+                                <span asp-validation-for="CPF" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Documento" id="labelCpf"></label>
+                                <input asp-for="Documento" class="form-control cpf" size="20" disabled />
+                                <span asp-validation-for="Documento" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="DSRFID" id="labelCpf"></label>
+                                <input asp-for="DSRFID" class="form-control cpf" size="50" disabled />
+                                <span asp-validation-for="DSRFID" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Turno" id="labelCapacidade"></label>
+                                <input asp-for="Turno" class="form-control" size="20" disabled />
+                                <span asp-validation-for="Turno" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label asp-for="Noturno" id="labelCapacidade"></label>
+                                <select asp-for="Noturno"
+                                        asp-items="@Html.GetEnumSelectList<ESimNao>()"
+                                        class="form-control" disabled></select>
+                                <span asp-validation-for="Noturno" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="card  col-9">
+                            <div class="card-header">Usuario (Controle Acesso)</div>
+                            <div class="card-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <select asp-for="IDUSUARIO"
+                                                asp-items="@Model.Usuarios.Select(x => new SelectListItem(){Text = x.nome, Value = x.id})"
+                                                class="form-control" disabled></select>
+                                        <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/funcionario.js"></script>
+}

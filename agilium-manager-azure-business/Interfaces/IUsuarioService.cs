@@ -23,6 +23,7 @@ namespace agilium.api.business.Interfaces
         Task<PagedResult<Usuario>> ObterTodosUsuarios(int page = 1, int pageSize = 15);
         Task<List<Usuario>> ObterUsuariosPorNome(string nome);
         Task<PagedResult<Usuario>> ObterUsuariosPorNome(string nome, int page = 1, int pageSize = 15);
+        Task<List<Usuario>> ObterTodosUsuariosValidos();
 
 
         Task<List<EmpresaAuth>> ObterEmpresasPorUsuario(long id);

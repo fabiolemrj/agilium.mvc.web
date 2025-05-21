@@ -82,6 +82,10 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<ICaPermissaoManagerRepository, CaPermissaoManagerRepository>();
             #endregion
 
+            #region Dapper
+            services.AddScoped<ICaRepositoryDapper, CaRepositoryDapper>();
+            #endregion
+
             #region Empresa
             services.AddScoped<IEmpresaRepository, EmpresaRepository>();
             services.AddScoped<IEmpresaService, EmpresaService>();
@@ -172,6 +176,21 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IFornecedorRepsoitory, FornecedorRepository>();
             services.AddScoped<IFornecedorService, FornecedorService>();
             services.AddScoped<IFornecedorDapperRepository, FornecedorDapperRepository>();
+            #endregion
+
+            #region Funcionario
+            services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
+            services.AddScoped<IFuncionarioService, FuncionarioService>();
+            #endregion
+
+            #region Tabela Auxiliar Fiscal
+            services.AddScoped<ICestNcmRepository, CestNcmRepository>();
+            services.AddScoped<ICsosnRepository, CsosnRepository>();
+            services.AddScoped<ICstRepository, CstRepository>();
+            services.AddScoped<ICfopRepository, CfopRepository>();
+            services.AddScoped<IIbptRepository, IbptRepository>();
+            services.AddScoped<INcmRepository, NcmRepository>();
+            services.AddScoped<ITabelaAuxiliarFiscalService, TabelaAuxiliarFiscalService>();
             #endregion
 
             return services;

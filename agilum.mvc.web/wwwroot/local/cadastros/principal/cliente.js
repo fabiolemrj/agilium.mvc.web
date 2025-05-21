@@ -2,6 +2,10 @@
     const _tipoPessoa = $('#tpPessoaInput').val();
     ExibirDivTipoPessoa(_tipoPessoa);
 });
+$("#tpPessoaInput").on("change", function () {
+    const _tipoPessoa = $('#tpPessoaInput').val();
+    ExibirDivTipoPessoa(_tipoPessoa);
+});
 
 $('.money').mask('##0,00', { reverse: true });
 $(".cnpj").mask("99.999.999/9999-99");
@@ -163,11 +167,14 @@ $('#btnAjuda').click(function () {
 
 
 function BuscarCep() {
-    const _cep = $('.cep').val();
+    const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
     //ModalMensagem("success",_cep);
+
+    if (!_cep) return;
+
     $.ajax({
         type: 'get',
-        url: '/Endereco/BuscarCep?cep=' + _cep,
+        url: _cep,
         success: function (resultado) {
             if (resultado.erro || resultado.id_logradouro == 0 || resultado.endereco == null) {
                 toastr.error("Cep não localizado")
@@ -207,10 +214,14 @@ $(".cep.padrao").on("blur", function () {
 });
 
 function BuscarCep(_cep, logradouro, bairro, cidade, uf) {
-        
+
+    if (!_cep) return;
+
+    const cep = '/endereco/buscar-cep?cep=' + _cep;
+
     $.ajax({
         type: 'get',
-        url: '/Endereco/BuscarCep?cep=' + _cep,
+        url: cep,
         success: function (resultado) {
             if (resultado.erro || resultado.id_logradouro == 0 || resultado.endereco == null) {
                 toastr.error("Cep não localizado")
@@ -247,10 +258,7 @@ function ExibirDivTipoPessoa(_tipoPessoa) {
         $('#ClientePessoaFisica.DataNascimento').val('');
     }
 }
-$("#tpPessoaInput").on("change", function () {
-    const _tipoPessoa = $('#tpPessoaInput').val();
-    ExibirDivTipoPessoa(_tipoPessoa);
-});
+
 
 
 $('.delete').click(function (event) {
@@ -277,42 +285,22 @@ $('.delete').click(function (event) {
                 type: 'get',
                 url: `/Cliente/DeleteContato?idContato=${idContato}&idCliente=${idCliente}`,
                 success: function (resultado) {
-                    if (resultado.erro) {
-                        toastr.error(resultado.erro)
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: resultado.erro
-                        });
-                        if (res.url) {
-                            $('#ContatoTarget').load(res.url);
-                        }
-                        return;
-                    }
-                },
-                error: function (result) {
+                    EditarCliente(idCliente)
+                }, error: function (resultado) {
                     toastr.error(result)
                 }
-            }).then((result) => {
-                let icone = "success";
-                let titulo = "Sucesso"
-                let msg = `Contato ${contato} Removido!`;
-                if (result.erro) {
-                    icone = "error"
-                    msg = erro;
-                    titulo = 'Oops...'
-                }
-
-                Swal.fire({
-                    icon: icone,
-                    title: titulo,
-                    text: msg
-                }).then((res) => {
-                    if (result.url) {
-                        $('#ContatoTarget').load(result.url);
-                    }
-                })
+           
             });
         }
     })
 });
+
+function EditarCliente(idcliente) {
+    $.ajax({
+        type: 'get',
+        url: '/Cliente/editar?id=' + idcliente,
+        success: function (result) {
+            toastr.success('contato criado');
+        }
+    });
+}

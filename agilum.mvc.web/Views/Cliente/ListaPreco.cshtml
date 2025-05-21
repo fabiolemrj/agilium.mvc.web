@@ -1,0 +1,24 @@
+﻿@model List<agilum.mvc.web.ViewModels.Cliente.ClienteViewModel>
+@{
+    ViewData["Title"] = "Preços do Produto Diferenciados por cliente ";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Index" asp-controller="Produto" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Produto"><i class="fa fa-dashboard"></i> Produto </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Historico de Preços </a>
+        </div>
+    </article>
+</section>
+<br />

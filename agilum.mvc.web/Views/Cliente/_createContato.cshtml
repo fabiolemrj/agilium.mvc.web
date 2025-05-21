@@ -1,0 +1,104 @@
+﻿@using agilium.api.business.Enums
+@model agilum.mvc.web.ViewModels.Cliente.ClienteContatoViewModel
+
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = "Contato Cliente";
+    ViewData["Title"] = operacao;
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("EditCliente","Cliente", new { id = Model.IDCLIENTE })"><i class="fa fa-dashboard"></i> Cliente</a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12">
+        <div class="">
+            <div class="callout callout-info">
+                <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">@ViewData["nome"]</font></font></h5>
+            </div>
+        </div>
+        <div class="">
+            <form asp-action="@ViewBag.acao" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="frmCreateContatoCliente">
+                <vc:Summary></vc:Summary>
+                <input type="hidden" asp-for="IDCONTATO" />
+                <input type="hidden" asp-for="IDCLIENTE" />
+                <div class="card">
+                    <div class="card-header">
+                        @if (inclusao)
+                        {
+                            <h3 class="card-title text-success">Novo Registro</h3>
+                        }
+                        else
+                        {
+                            <h3 class="card-title text-warning">Editar Registro</h3>
+                        }
+                    </div>
+                    <div class="card-body">
+                        
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label asp-for="Contato.TPCONTATO" class="control-label" id="idtpcontato"></label>
+                                <select asp-for="Contato.TPCONTATO" class="form-control" asp-items="Html.GetEnumSelectList<ETipoContato>()">
+                                </select>
+                                <span asp-validation-for="Contato.TPCONTATO" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Contato.DESCR1" class="control-label" id="labelDescricao"></label>
+                                    <input asp-for="Contato.DESCR1" class="form-control" />
+                                    <span asp-validation-for="Contato.DESCR1" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Contato.DESCR2" class="control-label" id="labelDescrAux"></label>
+                                    <input asp-for="Contato.DESCR2" class="form-control" />
+                                    <span asp-validation-for="Contato.DESCR2" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/principal/cliente.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            SetModal();
+        });
+    </script>
+}

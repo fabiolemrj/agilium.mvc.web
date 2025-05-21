@@ -22,10 +22,15 @@ namespace agilum.mvc.web.Controllers
     [Route("unidade")]
     public class UnidadeController : MainController
     {
+        #region constantes
         private readonly IUnidadeService _unidadeService;
         private readonly string _nomeEntidade = "Unidade";
 
         private readonly ICaService _caService;
+        #endregion
+
+        #region construtores
+
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
             IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
             ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
@@ -33,7 +38,9 @@ namespace agilum.mvc.web.Controllers
             _unidadeService = unidadeService;
             _caService = caService;
         }
+        #endregion
 
+        #region unidades
         [Route("lista")]
         [HttpGet]
         [ClaimsAuthorizeAttribute(2006)]
@@ -184,6 +191,7 @@ namespace agilum.mvc.web.Controllers
             
             return RedirectToAction("Index");
         }
+        #endregion
 
         #region metodos privados
         private async Task<agilum.mvc.web.ViewModels.PagedViewModel<UnidadeIndexViewModel>> ObterListaPaginado(string filtro, int page, int pageSize)
