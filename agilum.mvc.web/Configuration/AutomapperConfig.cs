@@ -9,13 +9,17 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using agilum.mvc.web.ViewModels.Endereco;
 using agilum.mvc.web.ViewModels.Estoque;
+using agilum.mvc.web.ViewModels.FormaPagamento;
 using agilum.mvc.web.ViewModels.Fornecedor;
 using agilum.mvc.web.ViewModels.Funcionarios;
 using agilum.mvc.web.ViewModels.Impostos;
+using agilum.mvc.web.ViewModels.Moedas;
+using agilum.mvc.web.ViewModels.PontoVenda;
 using agilum.mvc.web.ViewModels.Produtos;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace agilum.mvc.web.Configuration
 {
@@ -430,8 +434,53 @@ namespace agilum.mvc.web.Configuration
          .ReverseMap();
             #endregion
 
+            #region PDV
+            CreateMap<PontoVenda, PontoVendaViewModel>()
+               .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDPDV))
+               .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.DSPDV))
+               .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STPDV))
+               .ForMember(dest => dest.NomeMaquina, opt => opt.MapFrom(src => src.NMMAQUINA))
+               .ForMember(dest => dest.CaminhoCertificadoDigital, opt => opt.MapFrom(src => src.DSCAMINHO_CERT))
+               .ForMember(dest => dest.SenhaCertificadoDigital, opt => opt.MapFrom(src => src.DSSENHA_CERT))
+               .ForMember(dest => dest.PortaImpressora, opt => opt.MapFrom(src => src.DSPORTAIMPRESSORA))
+               .ForMember(dest => dest.NUBAUDRATEBAL, opt => opt.MapFrom(src => src.NUBAUDRATEBAL))
+               .ForMember(dest => dest.CDHANDSHAKEBAL, opt => opt.MapFrom(src => src.CDHANDSHAKEBAL))
+               .ForMember(dest => dest.CDPARITYBAL, opt => opt.MapFrom(src => src.CDPARITYBAL))
+               .ForMember(dest => dest.CDMODELOBAL, opt => opt.MapFrom(src => src.CDMODELOBAL))
+               .ForMember(dest => dest.CDSERIALSTOPBITBAL, opt => opt.MapFrom(src => src.CDSERIALSTOPBITBAL))
+               .ForMember(dest => dest.DSPORTABAL, opt => opt.MapFrom(src => src.DSPORTABAL))
+               // .ForMember(dest => dest.Estoques, opt => opt.MapFrom(src => src.Estoque))
+               .ForMember(dest => dest.Estoques, act => act.Ignore())
+               .ForMember(dest => dest.Empresas, act => act.Ignore())
+             .ReverseMap();
+            #endregion
 
+            #region Moeda
+            CreateMap<Moeda, MoedaViewModel>()
+             .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDMOEDA))
+             .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.DSMOEDA))
+             .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STMOEDA))
+             .ForMember(dest => dest.SitucacaoTroco, opt => opt.MapFrom(src => src.STTROCO))
+             .ForMember(dest => dest.Tipo, opt => opt.MapFrom(src => src.TPMOEDA))
+             .ForMember(dest => dest.TipoDocFiscal, opt => opt.MapFrom(src => src.TPDOCFISCAL))
+             .ForMember(dest => dest.PorcentTaxa, opt => opt.MapFrom(src => src.PCTAXA))
+             .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA))
+             .ForMember(dest => dest.COR_BOTAO, opt => opt.MapFrom(src => src.COR_BOTAO))
+             .ForMember(dest => dest.COR_FONTE, opt => opt.MapFrom(src => src.COR_FONTE))
+             .ForMember(dest => dest.TECLA_ATALHO, opt => opt.MapFrom(src => src.TECLA_ATALHO))
+              //.ForMember(dest => dest.IDENDERECO, act => act.Ignore())
+              .ForMember(dest => dest.Empresas, act => act.Ignore())
+               //  .ForMember(dest => dest.Usuario, act => act.Ignore())
+               .ReverseMap();
+            #endregion
 
+            #region forma pagamento
+            CreateMap<FormaPagamento, FormaPagamentoViewModel>()
+               .ForMember(dest => dest.IDEmpresa, opt => opt.MapFrom(src => src.IDEmpresa))
+               .ForMember(dest => dest.Situacao, opt => opt.MapFrom(src => src.STFormaPagamento))
+                .ForMember(dest => dest.Descricao, opt => opt.MapFrom(src => src.DSFormaPagamento))
+               .ReverseMap();
+            #endregion
         }
     }
 }

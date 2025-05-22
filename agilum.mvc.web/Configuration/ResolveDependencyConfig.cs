@@ -39,6 +39,7 @@ namespace agilum.mvc.web.Configuration
 
             var connectionString = configuration.GetConnectionString("ConnectionDb");
 
+            #region geral
             services.AddScoped<INotificador, Notificador>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
@@ -58,7 +59,8 @@ namespace agilum.mvc.web.Configuration
             //  .AddPolicyHandler(PollyExtensions.EsperarTentar())
             //  .AddTransientHttpErrorPolicy(
             //      p => p.CircuitBreakerAsync(quantidadeAcionamentoCircuito, TimeSpan.FromSeconds(tempoEsperaCircuitoEmSegundos)));
-            
+            #endregion
+
             #region Dapper
             services.AddScoped<ICaRepositoryDapper, CaRepositoryDapper>();
 
@@ -192,6 +194,22 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<INcmRepository, NcmRepository>();
             services.AddScoped<ITabelaAuxiliarFiscalService, TabelaAuxiliarFiscalService>();
             #endregion
+
+            #region PDV
+            services.AddScoped<IPontoVendaRepository, PontoVendaRepository>();
+            services.AddScoped<IPontoVendaService, PontoVendaService>();
+            #endregion
+
+            #region Moeda
+            services.AddScoped<IMoedaRepository, MoedaRepository>();
+            services.AddScoped<IMoedaService, MoedaService>();
+            #endregion
+
+            #region Forma Pagamento
+            services.AddScoped<IFormaPagamentoRepository, FormaPagamentoRepository>();
+            services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
+            #endregion
+
 
             return services;
         }

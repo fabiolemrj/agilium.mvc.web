@@ -12,6 +12,8 @@ namespace agilum.mvc.web.ViewModels
         public string Query { get; set; }
         public int TotalResults { get; set; }
         public double TotalPages => Math.Ceiling((double)TotalResults / PageSize);
+        public string ReferenceController { get; set ; }
+        public string Level { get; set; }
     }
     public interface IPagedList
     {
@@ -21,5 +23,7 @@ namespace agilum.mvc.web.ViewModels
         public string Query { get; set; }
         public int TotalResults { get; set; }
         public double TotalPages { get; }
+        public string ReferenceController { get; set; }
+        public string Level { get; set; }
     }
 }

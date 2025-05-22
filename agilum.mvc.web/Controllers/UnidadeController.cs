@@ -55,13 +55,11 @@ namespace agilum.mvc.web.Controllers
 
             var lista = (await ObterListaPaginado(q, page, ps));
             ViewBag.Pesquisa = q;
-            ViewBag.Pesquisa = q;
-           lista.ReferenceAction = "Index";
             return View(lista);
         }
 
         [Route("nova")]
-        [ClaimsAuthorizeAttribute(20071)]
+        [ClaimsAuthorizeAttribute(2007)]
         public async Task<IActionResult> Create()
         {
             ViewBag.operacao = "I";
@@ -206,7 +204,8 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                //ReferenceAction = "IndexPagination",
+                ReferenceAction = "lista",
+                ReferenceController = "unidade",
                 TotalResults = retorno.TotalResults
             };
         }

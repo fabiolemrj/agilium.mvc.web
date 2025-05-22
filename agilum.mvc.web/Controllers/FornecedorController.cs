@@ -51,7 +51,6 @@ namespace agilum.mvc.web.Controllers
 
             var lista = await ObterListaPaginado(q, page, ps);
             ViewBag.Pesquisa = q;
-            lista.ReferenceAction = "Index";
             return View(lista);
         }
 
@@ -465,7 +464,8 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "Index",
+                ReferenceAction = "lista",
+                ReferenceController = "fornecedor",
                 TotalResults = retorno.TotalResults
             };
         }

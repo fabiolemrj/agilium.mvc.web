@@ -1,11 +1,10 @@
 ﻿@using agilium.api.business.Enums
-@using agilum.mvc.web.ViewModels.UnidadeViewModel
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.PontoVenda
+@model agilum.mvc.web.ViewModels.PagedViewModel<PontoVendaViewModel>
 @using agilum.mvc.web.Extensions
-@model agilum.mvc.web.ViewModels.PagedViewModel<UnidadeIndexViewModel>
-
-
 @{
-    ViewData["Title"] = "Unidades";
+    ViewData["Title"] = "Ponto de Venda";
 }
 <h5>@ViewData["Title"]</h5>
 <hr />
@@ -18,7 +17,7 @@
     <article>
         <div class="barra-de-posicao-atual" id="breadcrumb">
             <a asp-action="Index" asp-controller="Home"> Início</a> /
-            <a href="#"><i class="fa fa-dashboard"></i> Unidades </a>
+            <a href="#"><i class="fa fa-dashboard"></i> Ponto de Venda </a>
         </div>
     </article>
 </section>
@@ -30,7 +29,7 @@
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
-                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar Empresa por Razão Social" placeholder="Pesquisar Empresa por Razão Social..." id="q" name="q" />
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
                 </div>
                 <div>
                     <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
@@ -41,8 +40,8 @@
                 </div>
             </div>
             <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
-        </form>
 
+        </form>
     </div>
 </div>
 <div id="divGridResultado">
@@ -56,6 +55,9 @@
                     Descrição
                 </th>
                 <th>
+                    Maquina ocupante PDV
+                </th>
+                <th>
                     Situação
                 </th>
                 <th class="colunaacao-mudarsituacao"></th>
@@ -66,7 +68,7 @@
             {
                 var ativo = "";
                 var classeAtivo = "";
-                if (item.Ativo == EAtivo.Ativo)
+                if (item.Situacao == EAtivo.Ativo)
                 {
                     ativo = "Ativo";
                     classeAtivo = "btn btn-danger";
@@ -84,9 +86,11 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Descricao)
                     </td>
-
                     <td>
-                        @if (item.Ativo == EAtivo.Ativo)
+                        @Html.DisplayFor(modelItem => item.NomeMaquina)
+                    </td>
+                    <td>
+                        @if (item.Situacao == EAtivo.Ativo)
                         {
                             <span class="text-success">Ativo</span>
                         }
@@ -96,26 +100,16 @@
                         }
                     </td>
                     <td class="text-right">
-                        @if (item.Ativo != EAtivo.Ativo)
-                        {
-                           @*  <a class="btn btn-default" asp-action="MudarSituacao" asp-route-id="@item.Id" title="Mudar Situacao"><spam class="fas fa-toggle-off"></spam></a> *@
-                        }
-                        else
-                        {
-                           @*  <a class="btn btn-default" asp-action="MudarSituacao" asp-route-id="@item.Id" title="Mudar Situacao"><spam class="fas fa-toggle-on"></spam></a> *@
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
-                        }
-
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
                         <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>
                     </td>
                 </tr>
-
             }
         </tbody>
         <tfoot>
             <tr>
 
-                <td colspan="4">
+                <td colspan="5">
                     <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
                 </td>
             </tr>
@@ -123,3 +117,7 @@
         </tfoot>
     </table>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/pontoVenda/pontoVenda.js"></script>
+}

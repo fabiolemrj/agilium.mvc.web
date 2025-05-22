@@ -240,6 +240,7 @@ namespace agilum.mvc.web.Controllers
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
                 ReferenceAction = "IndexMotivos",
+                ReferenceController = "devolucao",
                 TotalResults = retorno.TotalResults
             };
         }

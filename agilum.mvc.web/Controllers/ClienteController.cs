@@ -430,6 +430,7 @@ namespace agilum.mvc.web.Controllers
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
                 ReferenceAction = "Index",
+                ReferenceController = "cliente",
                 TotalResults = retorno.TotalResults
             };
         }

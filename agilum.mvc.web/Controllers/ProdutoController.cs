@@ -256,7 +256,7 @@ namespace agilum.mvc.web.Controllers
 
         #region GrupoProduto
 
-        [Route("grupo/lista")]
+        [Route("grupos")]
         [ClaimsAuthorizeAttribute(2011)]
         public async Task<IActionResult> IndexGrupo([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
@@ -277,7 +277,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             var lista = (await ObterGrupo(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
-
+            
             ViewBag.Pesquisa = q;
 
             return View(lista);
@@ -430,7 +430,7 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region SubGrupo
-        [Route("subgrupo/lista")]
+        [Route("subgrupos")]
         public async Task<IActionResult> IndexSubGrupo([FromQuery] long idGrupo, [FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
             var lista = (await ObterSubGrupo(idGrupo, q, page, ps)); ;
@@ -608,7 +608,7 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region Departamento
-        [Route("departamento/lista")]
+        [Route("departamentos")]
         [ClaimsAuthorizeAttribute(2175)]
         public async Task<IActionResult> IndexDepartamentos([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
@@ -1674,14 +1674,16 @@ namespace agilum.mvc.web.Controllers
             var retorno = await _produtoService.ObterGrupoPaginacaoPorDescricao(idempresa, filtro, page, pageSize);
             var listaTeste = retorno.List;
             var lista = _mapper.Map<IEnumerable<GrupoProdutoViewModel>>(listaTeste);
-
+          
             return new PagedViewModel<GrupoProdutoViewModel>()
             {
+             
                 List = lista,
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "Index",
+                ReferenceAction = "grupos",
+                ReferenceController = "produto",
                 TotalResults = retorno.TotalResults
             };
         }
@@ -1692,13 +1694,15 @@ namespace agilum.mvc.web.Controllers
             var listaTeste = retorno.List;
             var lista = _mapper.Map<IEnumerable<SubGrupoViewModel>>(listaTeste);
 
+       
             return new PagedViewModel<SubGrupoViewModel>()
             {
                 List = lista,
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "IndexGrupo",
+                ReferenceAction = "subgrupos",
+                ReferenceController = "produto",
                 TotalResults = retorno.TotalResults
             };
         }
@@ -1715,7 +1719,8 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "Index",
+                ReferenceController = "produto",
+                ReferenceAction = "departamentos",
                 TotalResults = retorno.TotalResults
             };
         }
@@ -1775,8 +1780,8 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "lista" +
-                "",
+                ReferenceAction = "lista",
+                ReferenceController = "produto",
                 TotalResults = retorno.TotalResults
             };
         }

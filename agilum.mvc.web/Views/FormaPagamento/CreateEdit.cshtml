@@ -1,0 +1,103 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.FormaPagamento
+@model FormaPagamentoViewModel
+@using agilum.mvc.web.Extensions
+
+@{
+    var inclusao = ViewBag.operacao == "I";
+    var operacao = inclusao ? "Novo" : "Editar";
+
+    ViewData["Title"] = "Forma de Pagamento";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","FormaPagamento")"><i class="fa fa-dashboard"></i> Forma Pagamento</a> /
+            <a href="#"> @operacao </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="@ViewBag.acao" id="frmCreateEdit" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <vc:Summary></vc:Summary>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="card" id="labelcardGerais">
+                <div class="card-header">
+                    @if (ViewBag.operacao == "I")
+                    {
+                        <h3 class="card-title text-success">Novo Registro</h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-title text-warning">Editar Registro</h3>
+                    }
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="IDEmpresa" id="labelEmpresa"></label>
+                                <select asp-for="IDEmpresa"
+                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
+                                        class="form-control"></select>
+                                <span asp-validation-for="IDEmpresa" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        @if (ViewBag.operacao == "E")
+                        {
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="Situacao" id="labelativo"></label>
+                                    <select asp-for="Situacao"
+                                            asp-items="Html.GetEnumSelectList<EAtivo>()"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="Situacao" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="Situacao" />
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="Descricao" id="labelCodigo"></label>
+                                <input asp-for="Descricao" class="form-control" size="20" />
+                                <span asp-validation-for="Descricao" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" style="visibility:hidden" id="btnSendForm" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/cadastros/pontoVenda/formaPagamento.js"></script>
+
+}

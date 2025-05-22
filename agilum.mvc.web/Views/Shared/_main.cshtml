@@ -194,8 +194,96 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     </ul>
                                 </li>
-                            </ul>                        
-                        </li>                        
+                            </ul>
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-ul"></i>
+                                        <p>
+                                            Ponto de Venda
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="PontoVenda" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>PDV</p>
+                                            </a>
+                                            <a class="nav-link active" asp-controller="Moeda" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Moeda</p>
+                                            </a>
+                                            <a class="nav-link active" asp-controller="FormaPagamento" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Forma de Pagamento</p>
+                                            </a>
+                                           
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link active">
+
+                                <i class="nav-icon fas fa-th-list"></i>
+                                <p>
+                                    Processos
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-ul"></i>
+                                        <p>
+                                            Turnos
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="Turno" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Historico</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-list-ul"></i>
+                                        <p>
+                                            Estoque
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="Compra" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Compras</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="Perda" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Perdas/Sobras</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" asp-controller="Inventario" asp-action="Index">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>Inventário</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

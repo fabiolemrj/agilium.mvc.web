@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,14 +47,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProdutoController.cs",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "ViewState": "AQIAAOwAAAAAAAAAAAAcwE0GAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-21T18:01:48.461Z",
+              "Title": "_main.cshtml",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
+              "RelativeToolTip": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAIwOUAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-22T19:51:14.909Z",
               "EditorCaption": ""
             }
           ]
