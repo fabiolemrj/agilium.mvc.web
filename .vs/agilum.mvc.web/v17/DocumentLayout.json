@@ -3,8 +3,32 @@
   "WorkspaceRootPath": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\controllers\\turnocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\turnocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\turno\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\turno\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\repository\\dapper\\turnodapperrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\repository\\dapper\\turnodapperrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\turno\\fecharturno.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\turno\\fecharturno.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\interfaces\\iservice\\iturnoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|solutionrelative:agilium-manager-azure-business\\interfaces\\iservice\\iturnoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\shared\\_main.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\viewmodels\\turno\\turnoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\viewmodels\\turno\\turnoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,13 +70,91 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TurnoDapperRepository.cs",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\Repository\\Dapper\\TurnoDapperRepository.cs",
+              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Repository\\Dapper\\TurnoDapperRepository.cs",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\Repository\\Dapper\\TurnoDapperRepository.cs",
+              "RelativeToolTip": "agilium-manager-git-azure-infra\\Repository\\Dapper\\TurnoDapperRepository.cs",
+              "ViewState": "AQIAALsAAAAAAAAAAAAQwM8AAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T18:58:31.804Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FecharTurno.cshtml",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Turno\\FecharTurno.cshtml",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Turno\\FecharTurno.cshtml",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Turno\\FecharTurno.cshtml",
+              "RelativeToolTip": "agilum.mvc.web\\Views\\Turno\\FecharTurno.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAGAAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-23T18:46:35.244Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TurnoController.cs",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\TurnoController.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\TurnoController.cs",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Controllers\\TurnoController.cs",
+              "RelativeToolTip": "agilum.mvc.web\\Controllers\\TurnoController.cs",
+              "ViewState": "AQIAALkAAAAAAAAAAAAnwNAAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T18:19:11.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Turno\\Index.cshtml",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Turno\\Index.cshtml",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Turno\\Index.cshtml",
+              "RelativeToolTip": "agilum.mvc.web\\Views\\Turno\\Index.cshtml",
+              "ViewState": "AQIAAE0AAAAAAAAAAAAYwIgAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-23T18:44:04.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ITurnoService.cs",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\Interfaces\\IService\\ITurnoService.cs",
+              "RelativeDocumentMoniker": "agilium-manager-azure-business\\Interfaces\\IService\\ITurnoService.cs",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-azure-business\\Interfaces\\IService\\ITurnoService.cs",
+              "RelativeToolTip": "agilium-manager-azure-business\\Interfaces\\IService\\ITurnoService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwB4AAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T19:22:43.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TurnoViewModel.cs",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Turno\\TurnoViewModel.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\ViewModels\\Turno\\TurnoViewModel.cs",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\ViewModels\\Turno\\TurnoViewModel.cs",
+              "RelativeToolTip": "agilum.mvc.web\\ViewModels\\Turno\\TurnoViewModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwCUAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-23T18:11:12.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "_main.cshtml",
               "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
               "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
               "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Views\\Shared\\_main.cshtml",
               "RelativeToolTip": "agilum.mvc.web\\Views\\Shared\\_main.cshtml",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAIwOUAAAA3AAAA",
+              "ViewState": "AQIAAOQAAAAAAAAAAAAAAOsAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-05-22T19:51:14.909Z",
               "EditorCaption": ""

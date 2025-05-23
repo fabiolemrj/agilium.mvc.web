@@ -18,10 +18,12 @@ namespace agilium.api.infra.Repository.Dapper
     public class TurnoDapperRepository : IPTurnoDapperRepository
     {
         protected readonly IConfiguration _configuration;
+        private readonly DbSession _dbSession;
 
-        public TurnoDapperRepository(IConfiguration configuration)
+        public TurnoDapperRepository(IConfiguration configuration, DbSession dbSession)
         {
             _configuration = configuration;
+            _dbSession = dbSession;
         }
 
         public string GetConnection()
@@ -160,6 +162,72 @@ namespace agilium.api.infra.Repository.Dapper
             }
         }
 
+
+        public async Task<Turno> ObterTurnoAbertoPorIdEmpresa(long idEmpresa)
+        {
+            var query = $@"SELECT IDPRODUTO as Id,CDNCM,CDPRODUTO,NMPRODUTO  FROM produto WHERE STPRODUTO = 1";
+            return _dbSession.Connection.QueryAsync<Turno>(query, null, _dbSession.Transaction).Result.FirstOrDefault();
+        }
+
+        public async Task<bool> TurnoAbertoPorId(long id)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", id, DbType.Int64, ParameterDirection.Input);
+            var query = $@"SELECT IDTURNO as Id FROM turno WHERE IDEMPRESA = @IDEMPRESA AND DTHRFIM IS NULL";
+
+            return _dbSession.Connection.QueryAsync<Turno>(query, parametros,_dbSession.Transaction).Result.Any();
+
+            
+        }
+
+        public async Task<int> GerarNumeroTurnoPorIdEmpresa(long idEmpresa)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", idEmpresa, DbType.Int64, ParameterDirection.Input);
+
+            var query = $@"SELECT(COALESCE(MAX(t.NUTURNO), 0) + 1) AS NOVOTURNO FROM turno t WHERE t.IDEMPRESA = @IDEMPRESA AND t.DTTURNO = curdate()";
+
+
+            return _dbSession.Connection.QueryAsync<int>(query, parametros, _dbSession.Transaction).Result.FirstOrDefault();
+        }
+
+        public async Task IncluirTurno(long novoId, Turno turno)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDTURNO", novoId, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDEMPRESA", turno.IDEMPRESA, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDUSUARIOINI", turno.IDUSUARIOINI, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@DTTURNO", turno.DTTURNO, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@NUTURNO", turno.NUTURNO, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@DTHRINI", turno.DTHRINI, DbType.DateTime, ParameterDirection.Input);
+
+            var query = $@"INSERT INTO turno(IDTURNO, IDEMPRESA, IDUSUARIOINI, DTTURNO, NUTURNO, DTHRINI)
+                            values (@IDTURNO, @IDEMPRESA, @IDUSUARIOINI, @DTTURNO, @NUTURNO, @DTHRINI)";
+
+            _dbSession.Connection.Execute(query, parametros, _dbSession.Transaction);
+        }
+
+        public async Task<Turno> ObterObjetoTurnoAbertoPorIdEmpresa(long idEmpresa)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", idEmpresa, DbType.Int64, ParameterDirection.Input);
+            var query = $@"SELECT t.IDTURNO as Id, t.* FROM turno t WHERE t.IDEMPRESA = @IDEMPRESA AND t.DTHRFIM IS NULL";
+
+            return _dbSession.Connection.QueryAsync<Turno>(query,parametros, _dbSession.Transaction).Result.FirstOrDefault();
+            
+        }
+
+        public async Task FecharTurno(Turno turno, long idUsuarioFim)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDTURNO", turno.Id, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDUSUARIOFIM", idUsuarioFim, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@DSOBS", turno.DSOBS, DbType.String, ParameterDirection.Input);
+
+            var query = $@"UPDATE turno SET IDUSUARIOFIM = @IDUSUARIOFIM, DTHRFIM = now(), DSOBS = @DSOBS WHERE IDTURNO = @IDTURNO ";
+            await _dbSession.Connection.ExecuteAsync(query, parametros, _dbSession.Transaction);
+        }
+
         #endregion
 
         #region privates 
@@ -185,6 +253,7 @@ namespace agilium.api.infra.Repository.Dapper
 
             return con.Query<Turno>(query).FirstOrDefault();
         }
+
 
         private void IncluirTurno(long novoId,Turno turno, MySqlConnection con)
         {
@@ -212,6 +281,10 @@ namespace agilium.api.infra.Repository.Dapper
             var query = $@"UPDATE turno SET IDUSUARIOFIM = @IDUSUARIOFIM, DTHRFIM = now(), DSOBS = @DSOBS WHERE IDTURNO = @IDTURNO ";
             con.Execute(query, parametros);
         }
+
+  
+
+
 
 
         #endregion

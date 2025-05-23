@@ -17,7 +17,7 @@ namespace agilium.api.infra.Repository.Dapper
 
         public async Task BeginTransaction()
         {
-            _session.Transaction = _session.Connection.BeginTransaction();
+              _session.Transaction = _session.Connection.BeginTransaction();
         }
 
         public async Task Commit()

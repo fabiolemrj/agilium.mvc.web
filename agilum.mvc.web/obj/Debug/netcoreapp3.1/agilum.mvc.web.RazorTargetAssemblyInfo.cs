@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyProductAttribute("agilum.mvc.web")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a9332252c8bf9009e228f1e94540e88cf3f43466")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d1cb6b44ce4f6164d245b7922658f281b0f2c23")]
 [assembly: System.Reflection.AssemblyTitleAttribute("agilum.mvc.web.Views")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 

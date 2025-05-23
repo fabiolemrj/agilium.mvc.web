@@ -655,3 +655,5 @@ C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\FormaPagamento\Index.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\FormaPagamento\CreateEdit.cshtml.g.cs
 C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\FormaPagamento\Delete.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Turno\FecharTurno.cshtml.g.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\obj\Debug\netcoreapp3.1\Razor\Views\Turno\Index.cshtml.g.cs

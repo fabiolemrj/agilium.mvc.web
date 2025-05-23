@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace agilium.api.business.Services
 {
@@ -15,11 +16,18 @@ namespace agilium.api.business.Services
     {
         private readonly ITurnoPrecoRepository _turnoPrecoRepository;
         private readonly ITurnoRepository _turnoRepository;
-     
-        public TurnoService(INotificador notificador, ITurnoPrecoRepository turnoPrecoRepository, ITurnoRepository turnoRepository) : base(notificador)
+        private readonly IPTurnoDapperRepository _turnoDapperRepository;
+        private readonly IDapperRepository _dapperRepository;
+        private readonly IUtilDapperRepository _utilDapperRepository;
+
+        public TurnoService(INotificador notificador, ITurnoPrecoRepository turnoPrecoRepository, ITurnoRepository turnoRepository, IPTurnoDapperRepository turnoDapperRepository,
+            IDapperRepository dapperRepository,IUtilDapperRepository utilDapperRepository) : base(notificador)
         {
             _turnoPrecoRepository = turnoPrecoRepository;
             _turnoRepository = turnoRepository;
+            _turnoDapperRepository = turnoDapperRepository;
+            _dapperRepository = dapperRepository;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         public void Dispose()
@@ -100,8 +108,78 @@ namespace agilium.api.business.Services
         }
         #endregion
 
+        #region Dapper
+        public async Task<bool> AbrirTurno(long idEmpresa, long idUsuario)
+        {
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var idTuno = _utilDapperRepository.GerarUUID().Result;
+
+                if (!_turnoDapperRepository.TurnoAbertoPorId(idEmpresa).Result)
+                {
+
+                    var turno = new Turno(idEmpresa, idUsuario, null, DateTime.Now, _turnoDapperRepository.GerarNumeroTurnoPorIdEmpresa(idEmpresa).Result, DateTime.Now, null, null);
+                    await _turnoDapperRepository. IncluirTurno(idTuno, turno);
+                }
+
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                    await _dapperRepository.Rollback();
+            }
+            catch (Exception)
+            {
+                await _dapperRepository.Rollback();
+                throw;
+            }
+
+            return !TemNotificacao();
+            
+        }
+
+        public async Task<bool> TurnoAbertoPorId(long id)
+        {
+            return await _turnoDapperRepository.TurnoAbertoPorId(id);
+        }
+
+        public async Task<bool> FecharTurno(long idEmpresa, long idUsuario, string obs)
+        {
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var turno = _turnoDapperRepository.ObterObjetoTurnoAbertoPorIdEmpresa(idEmpresa).Result;
+                if (turno != null)
+                {
+                    turno.AdicionarObservacao(obs);
+                    await _turnoDapperRepository.FecharTurno(turno, idUsuario);
+                }
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                    await _dapperRepository.Rollback();
+            }
+            catch (Exception ex)
+            {
+                await _dapperRepository.Rollback();
+                throw;
+            }
+
+            return !TemNotificacao();
+        }
+
+        #endregion
+
         #region Metodos Privados
         private async Task<bool> PodeApagarTurnoPreco(long idTurnoPreco) => true;
+
+        public Task<Turno> ObterObjetoTurnoAbertoPorIdEmpresa(long idEmpresa)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
 

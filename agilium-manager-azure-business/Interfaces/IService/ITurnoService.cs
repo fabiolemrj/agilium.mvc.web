@@ -24,6 +24,14 @@ namespace agilium.api.business.Interfaces.IService
         Task<IEnumerable<TurnoPreco>> ObterTurnoPrecoPorProduto(long idProduto);
         #endregion
 
+        #region Dapper
+        Task<bool> AbrirTurno(long idEmpresa, long idUsuario);
+        Task<bool> TurnoAbertoPorId(long id);
+        Task<bool> FecharTurno(long idEmpresa, long idUsuario, string obs);
+        Task<Turno> ObterObjetoTurnoAbertoPorIdEmpresa(long idEmpresa);
+
+        #endregion
+
     }
 }
 

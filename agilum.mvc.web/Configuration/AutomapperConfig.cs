@@ -1,7 +1,7 @@
 ﻿using agilium.api.business.Enums;
 using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn;
-using agilium.api.manager.ViewModels.TurnoViewModel;
+
 using agilum.mvc.web.ViewModels.Cliente;
 using agilum.mvc.web.ViewModels.Contato;
 using agilum.mvc.web.ViewModels.Devolucao;
@@ -16,6 +16,7 @@ using agilum.mvc.web.ViewModels.Impostos;
 using agilum.mvc.web.ViewModels.Moedas;
 using agilum.mvc.web.ViewModels.PontoVenda;
 using agilum.mvc.web.ViewModels.Produtos;
+using agilum.mvc.web.ViewModels.Turno;
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
@@ -382,27 +383,6 @@ namespace agilum.mvc.web.Configuration
             #endregion
 
             #region Turno
-            CreateMap<TurnoPreco, TurnoPrecoViewModel>()
-                .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
-                .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
-                .ForMember(dest => dest.Diferenca, opt => opt.MapFrom(src => src.TPDIFERENCA))
-                .ForMember(dest => dest.TipoValor, opt => opt.MapFrom(src => src.TPVALOR))
-                .ForMember(dest => dest.Valor, opt => opt.MapFrom(src => src.NUVALOR))
-                .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NMUSUARIO))
-                .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.DTHRCAD))
-                
-               .ReverseMap();
-
-            CreateMap<Turno, TurnoViewModel>()
-            .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
-            .ForMember(dest => dest.IDEMPRESA, opt => opt.MapFrom(src => src.IDEMPRESA))
-            .ForMember(dest => dest.IDUSUARIOFIM, opt => opt.MapFrom(src => src.IDUSUARIOFIM))
-            .ForMember(dest => dest.IDUSUARIOINI, opt => opt.MapFrom(src => src.IDUSUARIOINI))
-            .ForMember(dest => dest.Data, opt => opt.MapFrom(src => src.DTTURNO))
-            .ForMember(dest => dest.DataFinal, opt => opt.MapFrom(src => src.DTHRFIM))
-            .ForMember(dest => dest.DataInicial, opt => opt.MapFrom(src => src.DTHRINI))
-               .ForMember(dest => dest.Obs, opt => opt.MapFrom(src => src.DSOBS))
-           .ReverseMap();
 
             CreateMap<Turno, TurnoIndexViewModel>()
              .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
@@ -418,7 +398,7 @@ namespace agilum.mvc.web.Configuration
              .ForMember(dest => dest.UsuarioInicial, act => act.Ignore())
             .ReverseMap();
 
-            CreateMap<TurnoPreco, agilum.mvc.web.ViewModels.Turno.TurnoPrecoViewModel>()
+            CreateMap<TurnoPreco, TurnoPrecoViewModel>()
           .ForMember(dest => dest.NumeroTurno, opt => opt.MapFrom(src => src.NUTURNO))
           .ForMember(dest => dest.IDPRODUTO, opt => opt.MapFrom(src => src.IDPRODUTO))
           .ForMember(dest => dest.Diferenca, opt => opt.MapFrom(src => src.TPDIFERENCA))
