@@ -1,0 +1,137 @@
+﻿@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Log
+@model agilum.mvc.web.ViewModels.PagedViewModel<LogSistemaViewModel>
+@using agilum.mvc.web.Extensions
+
+
+
+@{
+    ViewData["Title"] = "Log do Sistema";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Log </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Hora
+                </th>
+                <th>
+                    Usuario
+                </th>
+                <th>
+                    Descrição
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List.OrderByDescending(x => x.Data))
+            {
+                var data = item.Data.ToString("dd/MM/yyyy");
+                <tr>
+                    <td>
+                        @Html.Raw(data)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hora)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NomeUsuario)
+                    </td>
+                    <td style="word-wrap: break-word;max-width: 160px;">
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            @{
+                                for (var i = 1; i < Model.TotalPages + 1; i++)
+                                {
+                                    if (i == Model.PageIndex)
+                                    {
+                                        <li class="page-item active">
+                                            <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-ps="@Model.PageSize" asp-route-page="@i" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i</a></li>
+                                    }
+                                }
+                            }
+                        </ul>
+                    </nav>
+                </td>
+
+            </tr>
+
+        </tfoot>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/Ferramentas/log.js"></script>
+
+}
