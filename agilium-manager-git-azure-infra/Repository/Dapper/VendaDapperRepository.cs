@@ -142,17 +142,11 @@ namespace agilium.api.infra.Repository.Dapper
 
         public async Task<dynamic> ObterVendasRankingPorProduto(DateTime dataInicial, DateTime dataFinal)
         {
+            var parametros = new DynamicParameters();
+            parametros.Add("@dataInicial", dataInicial, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@dataFinal", dataFinal, DbType.Date, ParameterDirection.Input);
 
-            using (var con = new MySqlConnection(GetConnection()))
-                {
-                    try
-                    {
-                        con.Open();
-                        var parametros = new DynamicParameters();
-                        parametros.Add("@dataInicial", dataInicial, DbType.Date, ParameterDirection.Input);
-                        parametros.Add("@dataFinal", dataFinal, DbType.Date, ParameterDirection.Input);
-
-                        var query = $@"select sum(vi.VLTOTAL) as valor, p.NMPRODUTO as produto 
+            var query = $@"select sum(vi.VLTOTAL) as valor, p.NMPRODUTO as produto 
                                         from venda v
                                         inner join venda_item vi on vi.IDVENDA = v.IDVENDA
                                         inner JOIN produto p ON p.IDPRODUTO = vi.IDPRODUTO
@@ -160,17 +154,24 @@ namespace agilium.api.infra.Repository.Dapper
                                         inner join caixa c on c.idcaixa = v.idcaixa
                                             where date(v.dthrvenda) between @dataInicial and @dataFinal
                                         group by p.NMPRODUTO";
-                        var resultado = con.Query<dynamic>(query, parametros).ToList();
+            var resultado = _dbSession.Connection.Query<dynamic>(query, parametros, _dbSession.Transaction);
+            return resultado;
+            //using (var con = new MySqlConnection(GetConnection()))
+            //    {
+            //        try
+            //        {
+            //            con.Open();
 
-                        return resultado;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw;
-                    }
-                    finally { con.Close(); }            
 
-            }
+            //            return resultado;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            throw;
+            //        }
+            //        finally { con.Close(); }            
+
+            //}
         }
 
         public async Task<List<VendaReportViewModel>> ObterVendasReportViewModel(DateTime dataInicial, DateTime dataFinal)

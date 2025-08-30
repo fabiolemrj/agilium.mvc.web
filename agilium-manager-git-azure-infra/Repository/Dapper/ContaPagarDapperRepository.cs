@@ -1,4 +1,6 @@
-﻿using agilium.api.business.Interfaces.IRepository;
+﻿using agilium.api.business.Enums;
+using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -18,11 +20,15 @@ namespace agilium.api.infra.Repository.Dapper
     {
         protected readonly IConfiguration _configuration;
         private readonly IPlanoContaDapperRepository _planoContaDapperRepository;
+        private readonly DbSession _dbSession;
+        private readonly IUtilDapperRepository _utilDapperRepository;
 
-        public ContaPagarDapperRepository(IConfiguration configuration, IPlanoContaDapperRepository planoContaDapperRepository)
+        public ContaPagarDapperRepository(IConfiguration configuration, IPlanoContaDapperRepository planoContaDapperRepository, DbSession dbSession,IUtilDapperRepository utilDapperRepository)
         {
             _configuration = configuration;
             _planoContaDapperRepository = planoContaDapperRepository;
+            _dbSession = dbSession;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         public string GetConnection()
@@ -32,6 +38,59 @@ namespace agilium.api.infra.Repository.Dapper
         }
 
         #region metodos publicos
+
+
+  
+        public async Task<PlanoContaLancamento> CriarContaLancamentoDeContaPagar(long id)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDCONTAPAG", id, DbType.Int64, ParameterDirection.Input);
+
+            var queryCdConta = $@"select IDCONTAPAG as Id, IDCONTA,IDLANC, DESCR, IDCONTAPAG,VLCONTA,VLDESC,VLACRESC  from contas_pagar where IDCONTAPAG =@IDCONTAPAG";
+            var contaPagar = _dbSession.Connection.Query<ContaPagar>(queryCdConta,parametros,_dbSession.Transaction).FirstOrDefault();
+            if (contaPagar != null)
+            {              
+                var lancamento = new PlanoContaLancamento(contaPagar.IDCONTA, DateTime.Now, DateTime.Now, Int32.Parse(DateTime.Now.ToString("yyyyMM")),
+                              contaPagar.DESCR, (contaPagar.VLCONTA.Value - contaPagar.VLDESC + contaPagar.VLACRESC),
+                              business.Enums.ETipoContaLancacmento.Debito, business.Enums.EAtivo.Ativo);
+
+                return lancamento;
+            }
+            else
+                return null;
+        }
+
+        public async Task<bool> RealizarLancamento(long idLanc, PlanoContaLancamento planoContaLancamento)
+        {
+            var query = $@"INSERT INTO planoconta_lanc (IDLANC, IDCONTA, DTCAD, DTREF, NUANOMESREF, DSLANC, VLLANC, TPLANC, STLANC)  
+                            values(@IDLANC, @IDCONTA, now(), @DTREF, @NUANOMESREF, @DSLANC, @VLLANC, @TPLANC, @STLANC) ";
+
+            var anoMesReferencia = DateTime.Now.ToString("yyyyMM");
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDLANC", idLanc, DbType.Int64, ParameterDirection.Input);
+
+            parametros.Add("@VLLANC", planoContaLancamento.VLLANC, DbType.Double, ParameterDirection.Input);
+            parametros.Add("@IDCONTA", planoContaLancamento.IDCONTA, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@NUANOMESREF", planoContaLancamento.NUANOMESREF, DbType.String, ParameterDirection.Input);
+            parametros.Add("@DTREF", planoContaLancamento.DTREF, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@DSLANC", planoContaLancamento.DSLANC, DbType.String, ParameterDirection.Input);
+            parametros.Add("@TPLANC", planoContaLancamento.TPLANC, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@STLANC", planoContaLancamento.STLANC, DbType.Int32, ParameterDirection.Input);
+
+           return _dbSession.Connection.ExecuteAsync(query, parametros,_dbSession.Transaction).Result > 0;
+        }
+
+        public async Task<bool> AtualizarConsolidacaoContaPagar(long idLanc, long idConta)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDLANC", idLanc, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDCONTAPAG", idConta, DbType.Int64, ParameterDirection.Input);
+
+            var query = $@"update contas_pagar set dtpag = now(), stconta = 2, IDLANC = @IDLANC  where IDCONTAPAG =@IDCONTAPAG";
+
+            return _dbSession.Connection.ExecuteAsync(query, parametros, _dbSession.Transaction).Result > 0;
+        }
+
         public async Task<bool> ConsolidarConta(long id)
         {
             var resultado = false;
@@ -43,21 +102,21 @@ namespace agilium.api.infra.Repository.Dapper
                     {
                         con.Open();
                         var queryCdConta = $@"select IDCONTAPAG as Id, IDCONTA,IDLANC, DESCR, IDCONTAPAG,VLCONTA,VLDESC,VLACRESC  from contas_pagar where IDCONTAPAG ={id}";
-                        var contaPagar = con.Query<ContaPagar>(queryCdConta).FirstOrDefault();
-                        if(contaPagar != null)
+                        var contaPagar = _dbSession.Connection.Query<ContaPagar>(queryCdConta).FirstOrDefault();
+                        if (contaPagar != null)
                         {
                             var ID = GerarUUID(con).Result;
-                            var lancamento = new PlanoContaLancamento(contaPagar.IDCONTA,DateTime.Now, DateTime.Now, Int32.Parse(DateTime.Now.ToString("yyyyMM")),
-                                contaPagar.DESCR,(contaPagar.VLCONTA.Value - contaPagar.VLDESC + contaPagar.VLACRESC),
-                                business.Enums.ETipoContaLancacmento.Debito,business.Enums.EAtivo.Ativo);
-                            
-                            RealizarLancamento(ID,lancamento, con);
-                            
+                            var lancamento = new PlanoContaLancamento(contaPagar.IDCONTA, DateTime.Now, DateTime.Now, Int32.Parse(DateTime.Now.ToString("yyyyMM")),
+                                contaPagar.DESCR, (contaPagar.VLCONTA.Value - contaPagar.VLDESC + contaPagar.VLACRESC),
+                                business.Enums.ETipoContaLancacmento.Debito, business.Enums.EAtivo.Ativo);
+
+                            RealizarLancamento(ID, lancamento, con);
+
                             AtualizarConsolidacaoContaPagar(ID, id, con);
 
-                            if (contaPagar.IDCONTA > 0) 
+                            if (contaPagar.IDCONTA > 0)
                                 await _planoContaDapperRepository.AtualizarSaldoContaESubConta(contaPagar.IDCONTA.Value);
-                            
+
                         }
 
                         scope.Complete();
@@ -72,6 +131,8 @@ namespace agilium.api.infra.Repository.Dapper
             }
 
             return resultado;
+
+           
         }
 
     
@@ -126,6 +187,39 @@ namespace agilium.api.infra.Repository.Dapper
             }
 
             return resultado;
+        }
+
+        public async Task<PlanoContaLancamento> ObterPlanoContaLancamentoPorId(long idLanc)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDLANC", idLanc, DbType.Int64, ParameterDirection.Input);
+
+            var query = $@"SELECT IDLANC as Id ,IDCONTA,DTCAD,DTREF,NUANOMESREF,DSLANC,VLLANC,TPLANC,STLANC FROM planoconta_lanc WHERE IDLANC =@IDLANC"; ;
+
+            return _dbSession.Connection.Query<PlanoContaLancamento>(query,parametros,_dbSession.Transaction).FirstOrDefault();
+        }
+
+
+        public async Task<bool> AtualizarDesconsolidacaoContaPagarPorId(long idLanc)
+        {
+
+            var query = $@"update contas_pagar set dtpag = null, stconta = 1, IDLANC = null where IDCONTAPAG ={idLanc}";
+
+            return _dbSession.Connection.Execute(query, null, _dbSession.Transaction) > 0;
+        }
+
+        public async Task<bool> ApagarLancamentoPorId(long idLanc)
+        {
+            var query = $@"delete FROM planoconta_lanc WHERE IDLANC ={idLanc}";
+
+            return _dbSession.Connection.Execute(query, null, _dbSession.Transaction) > 0;
+        }
+
+        public async Task<bool> AtualizarLancamentoPorId(long idLanc)
+        {
+            var query = $@"update planoconta_lanc set stlanc = 0 WHERE IDLANC={idLanc}";
+
+            return _dbSession.Connection.Execute(query, null, _dbSession.Transaction) > 0;
         }
 
         #endregion

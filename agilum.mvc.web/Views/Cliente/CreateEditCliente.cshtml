@@ -1,4 +1,5 @@
-﻿@using agilium.api.business.Enums
+﻿
+@using agilium.api.business.Enums
 @using agilum.mvc.web.Enums
 @using agilum.mvc.web.ViewModels.Cliente
 @model ClienteViewModel
@@ -61,7 +62,7 @@
                                 <div class="form-group">
                                     <label asp-for="TipoPessoa" id="labeltpPessoa"></label>
                                     <select asp-for="TipoPessoa"
-                                            asp-items="Html.GetEnumSelectList<ETipoPessoa>()"
+                                            asp-items="Html.GetEnumSelectList<agilium.api.business.Enums.ETipoPessoa>()"
                                             class="form-control" disabled id="tpPessoaInput"></select>
                                     <span asp-validation-for="TipoPessoa" class="text-danger"></span>
                                 </div>
@@ -74,7 +75,7 @@
                                 <div class="form-group">
                                     <label asp-for="TipoPessoa" id="labeltpPessoa"></label>
                                     <select asp-for="TipoPessoa"
-                                            asp-items="Html.GetEnumValueSelectList<ETipoPessoa>()"
+                                            asp-items="Html.GetEnumValueSelectList<agilium.api.business.Enums.ETipoPessoa>()"
                                             class="form-control" id="tpPessoaInput"></select>
                                     <span asp-validation-for="TipoPessoa" class="text-danger"></span>
                                 </div>
@@ -119,7 +120,7 @@
                                 <div class="form-group">
                                     <label asp-for="Situacao" id="labelativo"></label>
                                     <select asp-for="Situacao"
-                                            asp-items="Html.GetEnumSelectList<EAtivo>()"
+                                            asp-items="Html.GetEnumSelectList<agilium.api.business.Enums.EAtivo>()"
                                             class="form-control"></select>
                                     <span asp-validation-for="Situacao" class="text-danger"></span>
                                 </div>

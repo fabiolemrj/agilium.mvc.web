@@ -13,7 +13,7 @@ namespace agilum.mvc.web.Configuration
         {
             try
             {
-                var moeda = Convert.ToDecimal(value, new CultureInfo("pt-BR"));
+                var moeda = Convert.ToDouble(value, new CultureInfo("pt-BR"));
             }
             catch (Exception)
             {
@@ -26,20 +26,22 @@ namespace agilum.mvc.web.Configuration
 
     public class MoedaAttributeAdapter : AttributeAdapterBase<MoedaAttribute>
     {
+
         public MoedaAttributeAdapter(MoedaAttribute attribute, IStringLocalizer stringLocalizer) : base(attribute, stringLocalizer)
         {
 
         }
-
         public override void AddValidation(ClientModelValidationContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             MergeAttribute(context.Attributes, "data-val", "true");
             MergeAttribute(context.Attributes, "data-val-moeda", GetErrorMessage(context));
             MergeAttribute(context.Attributes, "data-val-number", GetErrorMessage(context));
         }
-
         public override string GetErrorMessage(ModelValidationContextBase validationContext)
         {
             return "Moeda em formato inválido";
@@ -49,7 +51,6 @@ namespace agilum.mvc.web.Configuration
     public class MoedaValidationAttributeAdapterProvider : IValidationAttributeAdapterProvider
     {
         private readonly IValidationAttributeAdapterProvider _baseProvider = new ValidationAttributeAdapterProvider();
-
         public IAttributeAdapter GetAttributeAdapter(ValidationAttribute attribute, IStringLocalizer stringLocalizer)
         {
             if (attribute is MoedaAttribute moedaAttribute)

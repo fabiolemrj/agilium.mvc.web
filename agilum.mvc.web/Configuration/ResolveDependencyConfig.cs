@@ -13,12 +13,11 @@ using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using agilium.api.manager.Extension;
-using agilium.api.manager.Services;
+
 using agilum.mvc.web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using agilium.api.manager.Data;
+
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using agilum.mvc.web.Extensions;
@@ -28,6 +27,7 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
 using System.Net.Http;
+
 namespace agilum.mvc.web.Configuration
 {
     public static class ResolveDependencyConfig
@@ -54,6 +54,8 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILogDapper, LogDapperRepository>();
             services.AddScoped<ILogService, LogService>();
+            services.AddSingleton<IValidationAttributeAdapterProvider, MoedaValidationAttributeAdapterProvider>();
+
 
             //services.AddHttpClient<IAutenticacaoService, AutenticacaoService>()
             //  .AddPolicyHandler(PollyExtensions.EsperarTentar())
@@ -73,7 +75,7 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<ICaService, CaService>();
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-            services.AddScoped<agilium.api.manager.Services.IEmailSender, ServiceEmail>();
+            services.AddScoped<agilum.mvc.web.Services.IEmailSender, ServiceEmail>();
 
             services.AddScoped<ICaPerfilRepository, CaPerfilRepository>();
             services.AddScoped<ICaService, CaService>();
@@ -210,6 +212,113 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
             #endregion
 
+            #region Compra
+            services.AddScoped<ICompraRepository, CompraRepository>();
+            services.AddScoped<ICompraFiscalRepository, CompraFiscalRepository>();
+            services.AddScoped<ICompraItemRepository, CompraItemRepository>();
+            services.AddScoped<ICompraService, CompraService>();
+            services.AddScoped<ICompraDapperRepository, CompraDapperRepository>();
+            #endregion
+
+            #region Plano Conta
+            services.AddScoped<IPlanoContaSaldoRepository, PlanoContaSaldoRepository>();
+            services.AddScoped<IPlanoContaRepository, PlanoContaRepository>();
+            services.AddScoped<IPlanoContaDapperRepository, PlanoContaDapperRepository>();
+            services.AddScoped<IPlanoContaLancamentoRepository, PlanoContaLancamentoRepository>();
+            services.AddScoped<IPlanoContaService, PlanoContaService>();
+            #endregion
+
+            #region Perda
+            services.AddScoped<IPerdaRepository, PerdaRepository>();
+            services.AddScoped<IPerdaService, PerdaService>();
+            services.AddScoped<IPerdaDapperRepository, PerdaDapperReposiotry>();
+            #endregion
+
+            #region Inventario
+            services.AddScoped<IInventarioRepository, InventarioRepository>();
+            services.AddScoped<IInventarioItemRepository, InventarioItemRepository>();
+            services.AddScoped<IInventarioDapperRepository, InventarioDapperRepository>();
+            services.AddScoped<IInventarioService, InventarioService>();
+            #endregion
+
+            #region Caixa
+            services.AddScoped<ICaixaRepository, CaixaRepository>();
+            services.AddScoped<ICaixaMoedaRepository, CaixaMoedaRepository>();
+            services.AddScoped<ICaixaMovimentoRepository, CaixaMovimentaoRepository>();
+            services.AddScoped<ICaixaService, CaixaService>();
+            services.AddScoped<ICaixaDapperRepository, CaixaDapperRepository>();
+            #endregion
+
+            #region Venda
+            services.AddScoped<IVendaDapperRepository, VendaDapperRepository>();
+            services.AddScoped<IVendaRepository, VendaRepository>();
+            services.AddScoped<IVendaMoedaRepository, VendaMoedaRepository>();
+            services.AddScoped<IVendaItemRepository, VendaItemRepository>();
+            services.AddScoped<IVendaFiscalRepository, VendaFiscalRepository>();
+            services.AddScoped<IVendaEspelhoRepository, VendaEspelhoRepository>();
+            services.AddScoped<IVendaCanceladaRepository, VendaCanceladaRepository>();
+            services.AddScoped<IVendaService, VendaService>();
+            #endregion
+
+            #region Config
+            services.AddScoped<IConfigRepository, ConfigRepository>();
+            services.AddScoped<IConfigImagemRepository, ConfigImagemRepository>();
+            services.AddScoped<IConfigDapperRepository, ConfigDapperRepository>();
+            services.AddScoped<IConfigService, ConfigService>();
+            #endregion
+
+            #region Pedido
+            services.AddScoped<IPedidoRepository, PedidoRepository>();
+            services.AddScoped<IPedidoItemRepository, PedidoItemRepository>();
+            services.AddScoped<IPedidoSiteMercadoRepository, PedidoSiteMercadoRepository>();
+            services.AddScoped<IPedidoSiteMercadoItemRepository, PedidoItemSiteMercadoRepository>();
+            services.AddScoped<IPedidoPagamentoRepository, PedidoPagamentoRepository>();
+            services.AddScoped<IPedidoPagamentoSiteMercadoRepository, PedidoPagamentoSiteMercadoRepository>();
+            services.AddScoped<IPedidoVendaRepository, PedidoVendaRepository>();
+            services.AddScoped<IPedidoVendaItemRepository, PedidoVendaItemRepository>();
+            //  services.AddScoped<IPedidoService, PedidoService>();
+            services.AddScoped<IPedidoDapperRepository, PedidoDapperRepository>();
+            #endregion
+
+            #region Vale
+            services.AddScoped<IValeRepository, ValeRepository>();
+            services.AddScoped<IValeDapperRepository, ValeDapperRepository>();
+            services.AddScoped<IValeService, ValeService>();
+            #endregion
+
+            #region Plano Conta
+            services.AddScoped<IPlanoContaSaldoRepository, PlanoContaSaldoRepository>();
+            services.AddScoped<IPlanoContaRepository, PlanoContaRepository>();
+            services.AddScoped<IPlanoContaDapperRepository, PlanoContaDapperRepository>();
+            services.AddScoped<IPlanoContaLancamentoRepository, PlanoContaLancamentoRepository>();
+            services.AddScoped<IPlanoContaService, PlanoContaService>();
+            #endregion
+
+            #region Categoria financeira
+            services.AddScoped<ICategoriaFinanceiroRepository, CategoriaFinanceiraRepository>();
+            services.AddScoped<ICategoriaFinanceiraService, CategoriaFinanceiraService>();
+            #endregion
+
+            #region Contas
+            services.AddScoped<IPContaPagarDapperRepository, ContaPagarDapperRepository>();
+            services.AddScoped<IContaPagarRepository, ContaPagarRepository>();
+            services.AddScoped<IContaReceberRepository, ContaReceberRepository>();
+            services.AddScoped<IPContaReceberDapperRepository, ContaReceberRepositoryDapper>();
+            services.AddScoped<IContaService, ContaService>();
+            #endregion
+
+            #region Config
+            services.AddScoped<IConfigRepository, ConfigRepository>();
+            services.AddScoped<IConfigImagemRepository, ConfigImagemRepository>();
+            services.AddScoped<IConfigDapperRepository, ConfigDapperRepository>();
+            services.AddScoped<IConfigService, ConfigService>();
+            #endregion
+
+            #region log
+            services.AddScoped<ILogRepository, LogRepository>();
+            services.AddScoped<ILogDapper, LogDapperRepository>();
+            services.AddScoped<ILogService, LogService>();
+            #endregion
 
             return services;
         }

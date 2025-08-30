@@ -1851,10 +1851,7 @@
           "FluentValidation.AspNetCore": "11.3.0"
         },
         "runtime": {
-          "agilium-manager-azure-business.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "agilium-manager-azure-business.dll": {}
         }
       }
     }

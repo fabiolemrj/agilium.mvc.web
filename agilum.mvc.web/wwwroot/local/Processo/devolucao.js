@@ -54,56 +54,77 @@ async function SelecionarItensVendaPorVenda(id,iddev) {
 }
 
 function MontarResultado(data) {
-    var resultado = "";
+    // Usando template literals para construir o HTML da tabela de forma mais limpa
+    let resultado = `
+        <table class='table table-hover' id='divGridResultado'>
+            <thead class='table thead-dark'>
+                <tr>
+                    <th></th>
+                    <th>Item</th>
+                    <th>Produto</th>
+                    <th>Qtd Vendida</th>
+                    <th>Vlr Vendido</th>
+                    <th>Qtd Devolução</th>
+                    <th>Vlr Devolução</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${$.map(data, (item, idx) => {
+        const options = { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 3 };
+        const formatNumber = new Intl.NumberFormat('pt-BR', options);
 
-    resultado += "<table class='table table-hover' id='divGridResultado'>";
-    resultado += "<thead class='table thead-dark'>";
-    resultado += "<tr>";
-    resultado += "<th></th>";
-    resultado += "<th>Item</th>";
-    resultado += "<th>Produto</th>";
-    resultado += "<th>Qtd Vendida</th>";
-    resultado += "<th>Vlr Vendido</th>";
-    resultado += "<th>Qtd Devolução</th>";
-    resultado += "<th>Vlr Devolução</th>";
-    resultado += "</tr>";
-    resultado += "</thead>";
-    resultado += "<tbody>";
-    //<input data-val="true" data-val-required="The selecionado field is required." id="DevolucaoItens_0__selecionado" name="DevolucaoItens[0].selecionado" type="checkbox" value="true">
-    $.map(data, function (item, idx) {
-        const options = { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 3 }
-        const formatNumber = new Intl.NumberFormat('pt-BR', options)
+        const valorTotal = formatNumber.format(item.ValorTotal);
+        const valorDevolucao = formatNumber.format(item.ValorDevolucao);
 
-        const valorTotal = formatNumber.format(item.valorTotal);
-        const valorDevolucao = formatNumber.format(item.valorDevolucao);
+        // A construção de cada linha também usa template literals
+        return `
+                        <tr>
+                            <td>
+                                <div class='form-check'>
+                                    <input 
+                                          type='checkbox'
+                                        id='DevolucaoItens_${idx}__selecionado' 
+                                        name='DevolucaoItens[${idx}].selecionado' 
+                                      
+                                        ${item.selecionado ? 'checked' : ''} 
+                                    />
+                                    <input type='hidden' value='${item.idItemVenda}' id='DevolucaoItens_${idx}__idItemVenda' name='DevolucaoItens[${idx}].idItemVenda' />
+                                    <input type='hidden' value='${item.idProduto}' id='DevolucaoItens_${idx}__idProduto' name='DevolucaoItens[${idx}].idProduto' />
+                                    <input type='hidden' value='${item.idDevolucaoItem}' id='DevolucaoItens_${idx}__idDevolucaoItem' name='DevolucaoItens[${idx}].idDevolucaoItem' />
+                                    <input type='hidden' value='${item.ValorTotal}' id='DevolucaoItens_${idx}__ValorTotal' name='DevolucaoItens[${idx}].ValorTotal' />
+                                    <input type='hidden' value='${item.QuantidadeDevolucao}' id='DevolucaoItens_${idx}__QuantidadeDevolucao' name='DevolucaoItens[${idx}].QuantidadeDevolucao' />
+                                    <input type='hidden' value='${item.QuantidadeVendida}' id='DevolucaoItens_${idx}__QuantidadeVendida' name='DevolucaoItens[${idx}].QuantidadeVendida' />
+                                    <input type='hidden' value='${item.idDevolucao}' id='DevolucaoItens_${idx}__idDevolucao' name='DevolucaoItens[${idx}].idDevolucao' />
+                                </div>
+                            </td>
+                            <td>${item.SeqVenda}</td>
+                            <td>${item.ProdutoNome}</td>
+                            <td>${item.QuantidadeVendida}</td>
+                            <td>${valorTotal}</td>
+                            <td>${item.QuantidadeDevolucao}</td>
+                            <td>${valorDevolucao}</td>
+                        </tr>
+                    `;
+    }).join('')}
+            </tbody>
+        </table>
+    `;
 
-        resultado += "  <tr>";
-        resultado += "  <td> <div class='form-check'>";
-        if (item.selecionado)
-            resultado += " <input checked='checked' data-val='true' id='DevolucaoItens_" + idx + "__selecionado' name='DevolucaoItens[" + idx + "].selecionado' type='checkbox' value='true'>";
-        else
-            resultado += " <input data-val='true' id='DevolucaoItens_" + idx + "__selecionado' name='DevolucaoItens[" + idx + "].selecionado' type='checkbox' value='false'>";
-        resultado += "<input type='hidden' value=" + item.idItemVenda + " id='DevolucaoItens_" + idx + "__idItemVenda ' name='DevolucaoItens[" + idx +"].idItemVenda'/>";
-        resultado += "<input type='hidden' value=" + item.idProduto + " id='DevolucaoItens_" + idx + "__idProduto' name='DevolucaoItens[" + idx + "].idProduto'/>";
-        resultado += "<input type='hidden' value=" + item.idDevolucaoItem + " id='DevolucaoItens_" + idx + "__idDevolucaoItem' name='DevolucaoItens[" + idx + "].idDevolucaoItem'/>";
-        resultado += "<input type='hidden' value=" + item.valorTotal + " id='DevolucaoItens_" + idx + "__ValorTotal' name='DevolucaoItens[" + idx + "].ValorTotal'/>";
-        resultado += "<input type='hidden' value=" + item.quantidadeDevolucao + " id='DevolucaoItens_" + idx + "__QuantidadeDevolucao' name='DevolucaoItens[" + idx + "].QuantidadeDevolucao'/>";
-        resultado += "<input type='hidden' value=" + item.quantidadeVendida + " id='DevolucaoItens_" + idx + "__QuantidadeVendida' name='DevolucaoItens[" + idx + "].QuantidadeVendida'/>";
-        resultado += "<input type='hidden' value=" + item.idDevolucao + " id='DevolucaoItens_" + idx + "__idDevolucao' name='DevolucaoItens[" + idx + "].idDevolucao'/>";
-        resultado += "</div>";
-        resultado += "</td>";
-        resultado += " <td>" + item.seqVenda + "</td>";
-        resultado += " <td>" + item.produtoNome + "</td>";
-        resultado += " <td>" + item.quantidadeVendida + "</td>";
-        resultado += " <td>" + valorTotal + "</td>";
-        resultado += " <td>" + item.quantidadeDevolucao + "</td>";
-        resultado += " <td>" + valorDevolucao + "</td>";
-        resultado += "  </tr>";
-    });
-    resultado += "</tbody>";
-    resultado += "</table>";
-    resultado += "";
+    // Atualiza o HTML e anexa o evento
     $("#listaVendas").html(resultado);
+
+    // Anexa o evento de 'change' aos checkboxes da tabela
+    $('#divGridResultado input[type="checkbox"]').on('change', function () {
+        // A propriedade checked já reflete o estado atual, então não é necessário
+        // definir novamente
+        const isChecked = $(this).prop('checked');
+
+        if (isChecked) {
+            console.log('Checkbox ' + this.id + ' foi marcado!');
+        } else {
+            console.log('Checkbox ' + this.id + ' foi desmarcado!');
+        }
+    });
 }
 
 async function Selecionarvenda() {
@@ -111,15 +132,7 @@ async function Selecionarvenda() {
     var _date = $('#DataConsulta').val();
 
     const [year, month, day] = _date.split('-');
-
-    //const date = new Date(+year, +month - 1, +day);
-
-    //var getYear1 = date.toLocaleString("default", { year: "numeric" });
-    //var getMonth1 = date.toLocaleString("default", { month: "2-digit" });
-    //var getDay1 = date.toLocaleString("default", { day: "2-digit" });
-    //var data1 = getYear1 + "-" + getMonth1 + "-" + getDay1;
-
-   
+       
     let dataSplit = _date.split('-');
     let dateConverted;
 
@@ -152,8 +165,8 @@ async function Selecionarvenda() {
             $("#Selecaovenda").children().remove();
             $("#Selecaovenda").empty();
             $("#Selecaovenda").append(new Option("--", "", true));
-            $.map(objeto.viewDevolucao.vendasItens, function (item, idx) {
-                $("#Selecaovenda").append(new Option(item.vendaNome, item.idVenda));
+            $.map(objeto.viewDevolucao.VendasItens, function (item, idx) {
+                $("#Selecaovenda").append(new Option(item.VendaNome, item.idVenda));
                
             });
             //alert(s);
@@ -172,59 +185,6 @@ $(function () {
     $('.datetime').mask('99/99/9999', { placeholder: "dd/MM/yyyy", selectOnFocus: true });
 
 });
-
-//$('.cancel').click(function (event) {
-
-//    event.preventDefault();
-
-
-//    const id = $(this).attr("data-id");
-//    const devolucao = $(this).attr("data-dev");
-
-//    Swal.fire({
-//        title: 'Deseja realmente cancelar a devolução selecionada?',
-//        text: `${devolucao}`,
-//        icon: 'error',
-//        showCancelButton: true,
-//        confirmButtonColor: '#3085d6',
-//        cancelButtonColor: '#d33',
-//        cancelButtonText: 'Sair',
-//        confirmButtonText: 'OK'
-//    }).then((result) => {
-//        if (result.isConfirmed) {
-
-//            $.ajax({
-//                type: 'get',
-//                url: `/devolucao/cancelar?id=${id}`,
-//                success: function (resultado) {
-//                    if (resultado.erro) {
-//                        toastr.error(resultado.erro)
-//                        Swal.fire({
-//                            icon: 'error',
-//                            title: 'Oops...',
-//                            text: resultado.erro
-//                        });
-//                    }
-//                    if (resultado.url) {
-//                        $.ajax({
-//                            type: 'get',
-//                            url: resultado.url,
-//                            success: function () { },
-//                            error: function () {
-
-//                            }
-//                        });
-
-//                    }
-//                    return;
-//                },
-//                error: function (result) {
-//                    toastr.error(result)
-//                }
-//            });
-//        }
-//    })
-//});
 
 $(function () {
     $('#btnAjuda').click(function () {

@@ -21,5 +21,9 @@ namespace agilium.api.business.Models.CustomReturn.ComprasNFEViewModel
         public long idCompra { get; set; }
         [XmlElement("protNFe")]
         public protNFe ProtNFe { get; set; } =new protNFe();
+        [XmlIgnore]
+        public bool sucesso { get; set; }
+        [XmlIgnore]
+        public string ArquivoXml { get; set; }
     }
 }

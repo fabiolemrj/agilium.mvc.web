@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels.Contato;
@@ -11,11 +12,14 @@ using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +38,13 @@ namespace agilum.mvc.web.Controllers
         private readonly ILogger<EmpresaController> _logger;
         private readonly IUsuarioService _usuarioService;
         private readonly ICaService _caService;
+        private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
         private readonly string _nomeEntidade = "Empresa";
         #endregion
 
         #region construtores
         public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
-            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, 
+            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, SignInManager<AppUserAgiliumIdentity> signInManager,
             IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
         {
             _empresaService = empresaService;
@@ -47,6 +52,7 @@ namespace agilum.mvc.web.Controllers
             _contatoService = contatoService;
             _usuarioService = usuarioService;
             _caService = caService;
+            _signInManager = signInManager;
         }
         #endregion
 
@@ -463,6 +469,12 @@ namespace agilum.mvc.web.Controllers
         {
             //var empresaSelecionada = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>( ObterStringEmpresaSelecionada());
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+            if(empresaSelecionada.IDEMPRESA == null)
+            {
+                await _signInManager.SignOutAsync();           
+            }
+                
+
             return Json(empresaSelecionada?.NomeEmpresa);
         }
 

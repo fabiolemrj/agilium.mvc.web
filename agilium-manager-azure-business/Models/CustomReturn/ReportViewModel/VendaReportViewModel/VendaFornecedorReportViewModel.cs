@@ -20,4 +20,5 @@ namespace agilium.api.business.Models.CustomReturn.ReportViewModel.VendaReportVi
         public double TotalQuantidade { get; set; }
         public double TotalValor { get; set; }
     }
+
 }

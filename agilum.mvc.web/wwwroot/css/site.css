@@ -197,3 +197,12 @@ body {
 .modal-backdrop {
     z-index: 1010!important;
 }
+
+.imagem-limitada-max {
+    max-width: 100px; /* A largura nunca será maior que 300px */
+    max-height: 100px; /* A largura nunca será maior que 300px */
+}
+
+.card-login-agilium{
+    width:400px;
+}

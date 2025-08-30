@@ -4,11 +4,9 @@
     off();
 });
 
-
 $(document).ready(function () {
     SetModalLocal();
 });
-
 
 function Salvar()
 {
@@ -18,7 +16,8 @@ function Salvar()
 }
 
 $(function () {
-   // $('.money').mask('#.##9,99', { reverse: true });
+    // $('.money').mask('#.##9,99', { reverse: true });
+    $('.money').mask('000.000.000.000.000,00', { reverse: true, placeholder: "0,00" });
     $('.datetime').mask('99/99/9999', { placeholder: "dd/MM/yyyy", selectOnFocus: true });
 });
 
@@ -131,7 +130,6 @@ function SetModalLocal() {
     });
 }
 
-
 function bindFormLocal(dialog) {
     $('form', dialog).submit(function () {
         $.ajax({
@@ -160,4 +158,20 @@ function bindFormLocal(dialog) {
     });
 }
 
+function formatarMoeda(meuInput) {
+    const input = document.getElementById(meuInput);
+    let valor = input.value;
 
+    // Remove caracteres não numéricos
+    valor = valor.replace(/[^0-9]/g, '');
+
+    // Verifica se o valor é um número válido
+    if (isNaN(valor) || valor === "") {
+        input.value = ""; // Limpa o campo se não for um número válido
+        return;
+    }
+
+    // Converte para número e formata
+    const numero = Number(valor) / 100;
+    input.value = numero.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}

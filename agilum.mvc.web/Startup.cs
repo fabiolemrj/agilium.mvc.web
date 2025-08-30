@@ -4,12 +4,14 @@ using agilum.mvc.web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 
 
 namespace agilum.mvc.web
@@ -46,7 +48,7 @@ namespace agilum.mvc.web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.ResolveDependencies(Configuration);
             services.AddIdentityConfiguration(Configuration);
-            services.AddApiVersioning();
+            
 
             services.AddRazorPages();
             services.AddMvcConfiguration();
@@ -93,6 +95,24 @@ namespace agilum.mvc.web
             app.UseAuthorization();
 
             app.UseMiddleware<ExceptionMiddleware>();
+
+            //app.UseGlobalizationConfig();
+            var cultura = new CultureInfo("pt-BR");
+
+            var dateformat = new DateTimeFormatInfo
+            {
+                ShortDatePattern = "dd/MM/yyyy",
+                LongDatePattern = "dd/MM/yyyy hh:mm:ss tt"
+            };
+            cultura.DateTimeFormat = dateformat;
+
+            var supportedCultures = new[] { cultura };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseEndpoints(endpoints =>
             {

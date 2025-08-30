@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("agilium-manager-azure-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b3ff9bb7e7343bbce9cf425a1fe5ad932663a3e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7276c03fcdb60833d398ccd7c4d2d6f95ce21b4")]
 [assembly: System.Reflection.AssemblyProductAttribute("agilium-manager-azure-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("agilium-manager-azure-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

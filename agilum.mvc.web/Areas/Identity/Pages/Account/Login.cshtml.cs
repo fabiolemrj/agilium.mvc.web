@@ -16,6 +16,12 @@ using agilium.api.infra.Context;
 using agilum.mvc.web.Data;
 using KissLog.RestClient.Requests.CreateRequestLog;
 using System.Security.Claims;
+using agilium.api.business.Interfaces.IService;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using agilium.api.business.Enums;
+using AutoMapper;
+using agilium.api.business.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
@@ -25,16 +31,26 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         private readonly UserManager<AppUserAgiliumIdentity> _userManager;
         private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IEmpresaService _empresaService;
+        protected readonly IMapper _mapper;
 
         public LoginModel(SignInManager<AppUserAgiliumIdentity> signInManager,
-            ILogger<LoginModel> logger
-            ,UserManager<AppUserAgiliumIdentity> userManager
+            ILogger<LoginModel> logger,
+            UserManager<AppUserAgiliumIdentity> userManager,
+            IEmpresaService empresaService, IMapper mapper
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _empresaService = empresaService;
+            _mapper = mapper;
+
+            if (listaEmpresaViewModels.Count() == 0)
+                listaEmpresaViewModels = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result);
         }
+
+        private IEnumerable<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -48,16 +64,57 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
             [EmailAddress]
+            [Required(ErrorMessage = "Campo {0} obrigatório")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage ="Campo {0} obrigatório")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            public string Empresa { get; set; }
+            
+        }
+
+        public class EmpresaUsuarioViewModel
+        {
+            public string IDEMPRESA { get; set; }
+            public string NomeEmpresa { get; set; }
+            public string IDUSUARIO { get; set; }
+        }
+
+        public List<EmpresaViewModel> Empresas { get; set; } = new List<EmpresaViewModel>();
+
+        public class EmpresaViewModel
+        {
+            public long Id { get; set; }          
+            public string NUCNPJ { get; set; }         
+            public long IDENDERECO { get; set; }            
+            public string CDEMPRESA { get; set; }         
+            public string NMRZSOCIAL { get; set; }           
+            public string NMFANTASIA { get; set; }           
+            public string DSINSCREST { get; set; }            
+            public string DSINSCRESTVINC { get; set; }            
+            public string DSINSCRMUN { get; set; }           
+            public string NMDISTRIBUIDORA { get; set; }            
+            public string NUREGJUNTACOM { get; set; }           
+            public decimal? NUCAPARM { get; set; } = 0;            
+            public ESimNao? STMICROEMPRESA { get; set; }            
+            public ESimNao? STLUCROPRESUMIDO { get; set; }           
+            public ETipoEmpresa? TPEMPRESA { get; set; }           
+            public ECodigoRegimeTributario CRT { get; set; }           
+            public string IDCSC { get; set; }         
+            public string CSC { get; set; }            
+            public string NUCNAE { get; set; }            
+            public string IDCSC_HOMOL { get; set; }            
+            public string CSC_HOMOL { get; set; }          
+            public string IDLOJA_SITEMARCADO { get; set; }            
+            public string CLIENTID_SITEMERCADO { get; set; }           
+            public string CLIENTSECRET_SITEMERCADO { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -66,7 +123,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
-
+            ObterEmpresas();
             returnUrl = returnUrl ?? Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -92,18 +149,47 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                 }
             }
         }
+
+        private async Task<bool> ValidarEmpresa()
+        {
+            return (!string.IsNullOrEmpty(Input.Empresa) && Convert.ToInt64(Input.Empresa) > 0);
+        }
+
+        private async Task GravarEmpresa(string idempresa, string email)
+        {
+            var empresa = await _empresaService.ObterPorId(Convert.ToInt64(idempresa));
+            var user = await _userManager.FindByEmailAsync(email);
+            var empresaSelecionada = new EmpresaUsuarioViewModel()
+            {
+                IDEMPRESA = empresa.Id.ToString(),
+                IDUSUARIO = user.Nome,
+                NomeEmpresa = empresa.NMRZSOCIAL
+            };
+            HttpContext.Session.SetString("_empSelec", System.Text.Json.JsonSerializer.Serialize(empresaSelecionada));
+        }
+        private async void ObterEmpresas()
+        {
+            Empresas = listaEmpresaViewModels.ToList();
+        }
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
             if (ModelState.IsValid)
             {
+                if (!await ValidarEmpresa())
+                {
+                    ObterEmpresas();
+                    ModelState.AddModelError(string.Empty, "Selecione uma empresa");
+                    return Page();
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                   
+                    await GravarEmpresa(Input.Empresa, Input.Email);
                     await AdicionarClaim(Input.Email);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
@@ -127,5 +213,9 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+       
     }
+
+   
 }

@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\ProjetoAgilium\agilium_base\agilium-manager-azure-api\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
-    <History>True|2025-01-06T18:41:18.3430781Z||;</History>
+    <_PublishTargetUrl>C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-api\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
+    <History>True|2025-08-28T19:49:43.3062365Z;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>

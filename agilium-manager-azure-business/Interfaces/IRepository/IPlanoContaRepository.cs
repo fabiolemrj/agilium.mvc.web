@@ -21,5 +21,8 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<long> RealizarLancamento(long idConta, DateTime DataRef, string Descricao, double valorLancamento, ETipoContaLancacmento tipoContaLancacmento);
         Task<long> ObterContaPrimeiroNivel(long idConta);
         Task<bool> ExcluirLancamento(long idLanc);
+        Task<bool> ApagarPlanoSaldo(long idConta);
+        Task<bool> ApagarPlanoContaLancamento(long idConta);
+        Task<bool> ApagarPlanoConta(long idConta);
     }
 }

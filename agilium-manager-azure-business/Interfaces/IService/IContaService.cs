@@ -19,7 +19,8 @@ namespace agilium.api.business.Interfaces.IService
         Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15);
         Task<ContaPagar> ObterCompletoPorId(long id);
         Task<List<ContaPagar>> ObterTodas(long idEmpresa);
-
+        Task<bool> ConsolidarContaPorId(long id);
+        Task<bool> DesconsolidarContaPorId(long id);
         #endregion
 
         #region Conta Receber
@@ -31,6 +32,8 @@ namespace agilium.api.business.Interfaces.IService
         Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15);
         Task<ContaReceber> ObterContaReceberCompletoPorId(long id);
         Task<List<ContaReceber>> ObterTodasContaReceber(long idEmpresa);
+        Task<bool> ConsolidarContaReceberPorId(long id);
+        Task<bool> DesconsolidarContaReceberPorId(long id);
         #endregion
     }
 }

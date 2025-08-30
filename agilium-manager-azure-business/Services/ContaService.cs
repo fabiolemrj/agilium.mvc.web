@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using System.Xml;
 
 namespace agilium.api.business.Services
 {
@@ -15,10 +17,23 @@ namespace agilium.api.business.Services
     {
         private IContaPagarRepository _contaPagarRepository;
         private IContaReceberRepository _contaReceberRepository;
-        public ContaService(INotificador notificador, IContaPagarRepository contaPagarRepository, IContaReceberRepository contaReceberRepository) : base(notificador)
+        private readonly IDapperRepository _dapperRepository;
+        private readonly IUtilDapperRepository _utilDapperRepository;
+        private readonly IPContaPagarDapperRepository _contaPagarDapperRepository;
+        private readonly IPlanoContaDapperRepository _planoContaDapperRepository;
+        private readonly IPContaReceberDapperRepository _ContaReceberDapperRepository;
+
+        public ContaService(INotificador notificador, IContaPagarRepository contaPagarRepository, IContaReceberRepository contaReceberRepository,
+            IDapperRepository dapperRepository, IUtilDapperRepository utilDapperRepository, IPContaPagarDapperRepository contaPagarDapperRepository, 
+            IPlanoContaDapperRepository planoContaDapperRepository, IPContaReceberDapperRepository contaReceberDapperRepository) : base(notificador)
         {
             _contaPagarRepository = contaPagarRepository;
             _contaReceberRepository = contaReceberRepository;
+            _dapperRepository = dapperRepository;
+            _utilDapperRepository = utilDapperRepository;
+            _contaPagarDapperRepository = contaPagarDapperRepository;
+            _planoContaDapperRepository = planoContaDapperRepository;
+            _ContaReceberDapperRepository = contaReceberDapperRepository;
         }
 
         public async Task Salvar()
@@ -95,6 +110,90 @@ namespace agilium.api.business.Services
         {
             return _contaPagarRepository.Obter(x=>x.IDEMPRESA == idEmpresa).Result.ToList();
         }
+
+        #region dapper
+        public async Task<bool> ConsolidarContaPorId(long id)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var lancamento = await _contaPagarDapperRepository.CriarContaLancamentoDeContaPagar(id); ;
+                if (lancamento != null)
+                {
+                    var ID = _utilDapperRepository.GerarUUID().Result;
+
+                    await _contaPagarDapperRepository.RealizarLancamento(ID, lancamento);
+
+                    await _contaPagarDapperRepository.AtualizarConsolidacaoContaPagar(ID, id);
+
+                    if (lancamento.IDCONTA > 0)
+                        await _planoContaDapperRepository.AtualizarSaldoContaESubConta(lancamento.IDCONTA.Value);
+                                      
+                    resultado = true;
+                }
+                await _dapperRepository.Commit();
+            }
+            catch (Exception ex)
+            {
+                Notificar(ex.Message);
+                await _dapperRepository.Rollback();
+                resultado = false;
+            }
+
+            return resultado;
+        }
+
+        public async Task<bool> DesconsolidarContaPorId(long id)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var contaPagar = await _contaPagarRepository.ObterPorId(id);
+                if(contaPagar != null)
+                {
+                    var lancamento = await _contaPagarDapperRepository.ObterPlanoContaLancamentoPorId(contaPagar.IDLANC.Value);
+                    if (lancamento != null)
+                    {
+                        var anoMesLanc = Convert.ToInt32(lancamento.DTCAD.Value.ToString("yyyyMM"));
+                        var anoMesAtual = Convert.ToInt32(DateTime.Now.ToString("yyyyMM"));
+
+                        await _contaPagarDapperRepository.AtualizarDesconsolidacaoContaPagarPorId(contaPagar.Id);
+                        
+                        if (anoMesLanc <= anoMesAtual)
+                        {
+                            await _contaPagarDapperRepository.ApagarLancamentoPorId(contaPagar.IDLANC.Value);
+                        }
+                        else
+                        {
+                            await _contaPagarDapperRepository.AtualizarLancamentoPorId(contaPagar.IDLANC.Value);
+                        }
+
+                        if (contaPagar.IDCONTA > 0)
+                        {
+                            await _planoContaDapperRepository.AtualizarSaldoContaESubConta(contaPagar.IDCONTA.Value);
+                        }
+
+                    }
+                }
+
+                await _dapperRepository.Commit();
+                resultado = true;
+            }
+            catch (Exception ex)
+            {
+                Notificar(ex.Message);
+                await _dapperRepository.Rollback();
+                resultado = false;
+            }
+
+            return resultado;
+        }
+        #endregion
+
         #endregion
 
         #region Conta Receber
@@ -159,6 +258,87 @@ namespace agilium.api.business.Services
         {
             return await _contaReceberRepository.ObterTodos();
         }
+
+        #region dapper
+        public async Task<bool> ConsolidarContaReceberPorId(long id)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var lancamento = await _ContaReceberDapperRepository.CriarContaLancamentoDeContaReceber(id);
+                if (lancamento != null)
+                {
+                    var ID = _utilDapperRepository.GerarUUID().Result;
+
+                    await _ContaReceberDapperRepository.RealizarLancamento(ID, lancamento);
+                    await _ContaReceberDapperRepository.AtualizarConsolidacaoContaReceber(ID, id);
+
+                    if (lancamento.IDCONTA > 0)
+                        await _planoContaDapperRepository.AtualizarSaldoContaESubConta(lancamento.IDCONTA.Value);
+                }
+                
+                await _dapperRepository.Commit();
+                resultado = true;
+            }
+            catch (Exception ex)
+            {
+                Notificar(ex.Message);
+                await _dapperRepository.Rollback();
+                resultado = false;
+            }
+            return resultado;        
+        }
+
+        public async Task<bool> DesconsolidarContaReceberPorId(long id)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+                var contaReceber = await _contaReceberRepository.ObterPorId(id);
+                if (contaReceber != null)
+                {
+                    var lancamento = await _ContaReceberDapperRepository.ObterPlanoContaLancamentoPorId(contaReceber.IDLANC.Value);
+                    if (lancamento != null)
+                    {
+                        var anoMesLanc = Convert.ToInt32(lancamento.DTCAD.Value.ToString("yyyyMM"));
+                        var anoMesAtual = Convert.ToInt32(DateTime.Now.ToString("yyyyMM"));
+                        await _ContaReceberDapperRepository.AtualizarDesconsolidacaoContaReceberPorId(contaReceber.Id);
+
+                        if (anoMesLanc <= anoMesAtual)
+                        {
+                            await _ContaReceberDapperRepository.ApagarLancamentoPorId(contaReceber.IDLANC.Value);
+                        }
+                        else
+                        {
+                            await _ContaReceberDapperRepository.AtualizarLancamentoPorId(contaReceber.IDLANC.Value);
+                        }
+
+                        if (contaReceber.IDCONTA > 0)
+                        {
+                            await _planoContaDapperRepository.AtualizarSaldoContaESubConta(contaReceber.IDCONTA.Value);
+                        }
+                    }
+                }
+                
+                await _dapperRepository.Commit();
+                resultado = true;
+            }
+            catch (Exception ex)
+            {
+                Notificar(ex.Message);
+                await _dapperRepository.Rollback();
+                resultado = false;
+            }
+            return resultado;
+          
+        }
+
+
+        #endregion
+
         #endregion
 
         #region private

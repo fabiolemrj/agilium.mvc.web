@@ -15,7 +15,7 @@ namespace agilum.mvc.web.Extensions
             {
                 var moeda = Convert.ToDecimal(value, new CultureInfo("pt-BR"));
             }
-            catch (Exception)
+            catch (Exception)   
             {
                 return new ValidationResult("Moeda em formato inválido");
             }

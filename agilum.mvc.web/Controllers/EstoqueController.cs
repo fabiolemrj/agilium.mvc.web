@@ -250,6 +250,31 @@ namespace agilum.mvc.web.Controllers
 
         #endregion
 
+        #region Report
+        [Route("report/posicao")]
+        public async Task<IActionResult> ReportEstoquePosicao()
+        {
+            var viewModel = new FiltroEstoquePosicao();
+            viewModel.IdEstoque = 0;
+            viewModel.Estoques = _mapper.Map<List<EstoqueViewModel>>(_estoqueService.ObterTodas().Result.ToList());
+            return View("ReportPosicaoEstoque", viewModel);
+        }
+
+        [Route("report/posicao")]
+        [HttpPost]
+        public async Task<IActionResult> ReportEstoquePosicao(FiltroEstoquePosicao viewModel)
+        {
+            viewModel.Estoques = _mapper.Map <List<EstoqueViewModel>>( _estoqueService.ObterTodas().Result.ToList());
+
+            if (!ModelState.IsValid) return View("ReportPosicaoEstoque", viewModel);
+
+
+            viewModel.Lista = _mapper.Map<List<EstoquePosicaoReport>>(await _estoqueService.ObterRelatorioPosicaoEstoque(viewModel.IdEstoque));
+
+            return View("ReportPosicaoEstoque", viewModel);
+
+        }
+        #endregion
         #region metodos privados
         private async Task<PagedViewModel<EstoqueViewModel>> ObterListaPaginado(long idempresa, string filtro, int page, int pageSize)
         {

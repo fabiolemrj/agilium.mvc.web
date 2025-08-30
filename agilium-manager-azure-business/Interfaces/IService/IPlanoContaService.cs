@@ -27,6 +27,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<List<PlanoContaSaldo>> ObterSaldoPorPlano(long idPlano);
         Task<PlanoContaSaldo> ObterSaldoPorId(long id);
         Task<double> ObterSaldoPorIdPlano(long idPlano);
+        Task<PlanoContaSaldo> ObterSaldoPorIdConta(long idConta);
         #endregion
 
 

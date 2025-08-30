@@ -44,6 +44,8 @@ namespace agilium.api.business.Interfaces.IService
         Task<bool> CancelarCompra(long idCompra, string usuarioNome);
         Task<bool> RealizarCadastroProdutoAutomatico(long idCompra);
         Task<bool> AtualizarProdutoNoItemCompra(long idItem, long idCompra, long? idProduto, long? idEstoque, string SGUN, double? Quantidade, double? Relacao, double? ValorUnitario, double? ValorTotal, double? NovoPrecoVenda);
+        Task<NFeProc> ImportarArquivoXmlNFESemGravar(long idCompra, string ArquivoXml);
+        Task<bool> SalvarArquivoXmlNFE(long idCompra, NFeProc nFeProc, string ArquivoXml);
         #endregion
     }
 }

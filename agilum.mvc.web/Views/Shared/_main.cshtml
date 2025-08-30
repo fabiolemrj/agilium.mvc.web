@@ -85,9 +85,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
                             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                                <a class="nav-link" asp-action="ObterListasEmpresasPorUsuario" asp-controller="empresa" data-modal="" id="idselec">
+                                
+                                @* <a class="nav-link" asp-action="ObterListasEmpresasPorUsuario" asp-controller="empresa" data-modal="" id="idselec">
                                     <label id="idselec-txt"></label>
-                                </a>
+                                </a> *@
+                                <div class="col-12">
+                                        <div class="callout callout-info">
+                                                <label id="idselec-txt"></label>
+                                            </div>   
+                                 
+                                </div>
+                           
                             </div>
                           
                         </li>
@@ -138,6 +146,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <i class="nav-icon fas fa-circle"></i>
                                                 <p>Produto</p>
                                             </a>
+                                            <a class="nav-link" asp-controller="Estoque" asp-action="Index">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>
+                                                    Estoque
+                                                </p>
+                                            </a>
                                         </li>
                                     
                                     </ul>
@@ -165,13 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <p>
                                                     Grupo de Produto
                                                 </p>
-                                            </a>
-                                            <a class="nav-link" asp-controller="Estoque" asp-action="Index">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>
-                                                    Estoque
-                                                </p>
-                                            </a>
+                                            </a>                                         
                                             <a class="nav-link" asp-controller="Devolucao" asp-action="IndexMotivos">
                                                 <i class="far fa-circle nav-icon"></i>
                                                 <p>
@@ -281,6 +289,233 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </a>
                                         </li>
                                     </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link active">
+
+                                <i class="nav-icon fas fa-th-list"></i>
+                                <p>
+                                    Configurações Vendas
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="Caixa" asp-action="IndexCaixa" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Caixa
+                                        </p>
+                                    </a>
+                                    <a asp-controller="venda" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Vendas
+                                        </p>
+                                    </a>
+                                   @*  <a asp-controller="devolucao" asp-action="index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Devolução de Produtos
+                                        </p>
+                                    </a> *@
+                                    <a asp-controller="vale" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Controle de Vales
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link active">
+                                        <i class="nav-icon fas fa-print"></i>
+                                        <p>
+                                            Relatórios
+                                            <i class="nav-icon fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>
+                                                    Vendas
+                                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a asp-action="ReportVendaDetalhada" asp-controller="Venda" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Venda detalhada
+                                                        </p>
+                                                    </a>
+                                                    <a asp-action="ReportVendaSimples" asp-controller="Venda" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Venda Simplificada
+                                                        </p>
+                                                    </a>
+                                                    <a href="#" class="nav-link indisponivel">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Diferença de caixa
+                                                        </p>
+                                                    </a>
+                                                    <a asp-action="ReportVendaRanking" asp-controller="Venda" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Ranking de vendas
+                                                        </p>
+                                                    </a>
+                                                    <a asp-action="ReportVendaFornecedor" asp-controller="Venda" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Vendas por fornecedor
+                                                        </p>
+                                                    </a>
+                                                    <a class="nav-link indisponivel">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            BI Vendas
+                                                        </p>
+                                                    </a>
+                                                    <a asp-action="ReportVendaMoeda" asp-controller="Venda" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Venda por moeda
+                                                        </p>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>
+                                                    Estoque
+                                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a asp-action="ReportEstoquePosicao" asp-controller="Estoque" class="nav-link">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            Posição de estoque geral
+                                                        </p>
+                                                    </a>
+
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#" class="nav-link">
+                                                <i class="nav-icon fas fa-circle"></i>
+                                                <p>
+                                                    Diversos
+                                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                                </p>
+                                            </a>
+                                            <ul class="nav nav-treeview">
+                                                <li class="nav-item">
+                                                    <a href="#" class="nav-link indisponivel">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            DRE Sintético
+                                                        </p>
+                                                    </a>
+                                                    <a href="#" class="nav-link indisponivel">
+                                                        <i class="far fa-circle nav-icon"></i>
+                                                        <p>
+                                                            DRE Analítico
+                                                        </p>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a href="#" class="nav-link active">
+
+                                <i class="nav-icon fas fa-th-list"></i>
+                                <p>
+                                    Financeiro
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="PlanoConta" asp-action="Index" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Planos de Contas
+                                        </p>
+                                    </a>
+                                    <a asp-controller="Conta" asp-action="IndexContaPagar" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Contas a pagar
+                                        </p>
+                                    </a>
+                                    <a asp-controller="Conta" asp-action="IndexContaReceber" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Contas a receber
+                                        </p>
+                                    </a>
+                                    <a class="nav-link" asp-controller="CategoriaFinanceira" asp-action="Index">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>
+                                            Categoria Financeira
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                                                
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-tools"></i>
+                                <p>
+                                    Ferramentas
+                                    <i class="nav-icon fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                         
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Config" asp-action="Index">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Configurações de sistema
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Config" asp-action="IndexConfigImagem">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>
+                                            Configurações Imagens
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" asp-controller="Log" asp-action="Index">
+                                        <i class="nav-icon far fa-circle"></i>
+                                        <p>Log</p>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
@@ -516,10 +751,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     if(idEmpresa)
                         $('#idselec-txt').text(idEmpresa);
                     else
-                        $('#idselec-txt').text("Selecionar empresa");
+                        $('#idselec-txt').text("Selecione uma empresa");
                 },
                 error: function (result) {
-                    $('#idselec-txt').text('Selecionar empresa');
+                    $('#idselec-txt').text('Selecione uma empresa');
                 }
             });
         }

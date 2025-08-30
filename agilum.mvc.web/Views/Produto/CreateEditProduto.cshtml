@@ -1,6 +1,6 @@
 ﻿
+
 @using agilium.api.business.Enums
-@using agilium.api.business.Models
 @using agilum.mvc.web.Enums
 @using agilum.mvc.web.ViewModels.Produtos
 @model ProdutoViewModel
@@ -198,7 +198,7 @@
                             <div class="form-group">
                                 <label asp-for="UtilizaBalanca" id="labelBalanca"></label>
                                 <select asp-for="UtilizaBalanca"
-                                        asp-items="Html.GetEnumSelectList<ESimNao>()"
+                                        asp-items="Html.GetEnumSelectList<agilium.api.business.Enums.ESimNao>()"
                                         class="form-control"></select>
                                 <span asp-validation-for="UtilizaBalanca" class="text-danger"></span>
                             </div>

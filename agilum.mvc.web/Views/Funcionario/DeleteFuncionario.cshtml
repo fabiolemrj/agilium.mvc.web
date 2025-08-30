@@ -83,7 +83,7 @@
                             <div class="form-group">
                                 <label asp-for="Situacao" id="labelativo"></label>
                                 <select asp-for="Situacao"
-                                        asp-items="Html.GetEnumSelectList<EAtivo>()"
+                                        asp-items="Html.GetEnumSelectList<agilium.api.business.Enums.EAtivo>()"
                                         class="form-control" disabled></select>
                                 <span asp-validation-for="Situacao" class="text-danger"></span>
                             </div>

@@ -103,6 +103,8 @@ namespace agilium.api.business.Models
             STIMPORTADA = sTIMPORTADA;
         }
 
+        public void AdicionarIdCompra(long id) => Id = id;
+
         public void AdicionarItem(CompraItem item) => Itens.Add(item);
         public void AdicionarFiscal(CompraFiscal fiscal) => ComprasFiscais.Add(fiscal);
     }

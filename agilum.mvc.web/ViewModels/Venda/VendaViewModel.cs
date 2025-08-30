@@ -1,6 +1,11 @@
-﻿using agilium.api.business.Enums;
+﻿
 using System.Collections.Generic;
 using System;
+
+
+using agilium.api.business.Models.CustomReturn.ReportViewModel.VendaReportViewModel;
+using System.ComponentModel.DataAnnotations;
+using agilum.mvc.web.Enums;
 
 namespace agilum.mvc.web.ViewModels.Venda
 {
@@ -78,5 +83,88 @@ namespace agilum.mvc.web.ViewModels.Venda
         public long idVenda { get; set; }
         public List<VendaItemViewModel> VendaItens { get; set; } = new List<VendaItemViewModel>();
         public List<VendaMoedaViewModel> VendaMoedas { get; set; } = new List<VendaMoedaViewModel>();
+    }
+
+    public class VendaEspelhoViewModel
+    {
+        public long Id { get; set; }
+        public Int64? IDVENDA { get; set; }
+        public string EspelhoVenda { get; set; }
+        public string SequencialVenda { get; set; }
+    }
+
+    public class VendaReportViewModel
+    {
+        public long Id { get; set; }
+        public string Sequencial { get; set; }
+        public ESituacaoVenda Situacao { get; set; }
+        public double Valor { get; set; }
+        public double Acrescimo { get; set; }
+        public double Desconto { get; set; }
+        public double Devolucao { get; set; }
+        public double Total { get; set; }
+        public string SeqCaixa { get; set; }
+        public string Operador { get; set; }
+        public string Pdv { get; set; }
+        public DateTime DataVenda { get; set; }
+    }
+
+    public class VendaItemReportViewModel
+    {
+        public long Id { get; set; }
+        public long IdVenda { get; set; }
+        public string Produto { get; set; }
+        public double ValorUnitario { get; set; }
+        public double Quantidade { get; set; }
+        public double Total { get; set; }
+        public ESituacaoItemVenda Situacao { get; set; }
+    }
+
+    public class VendaMoedaItemReportViewModel
+    {
+        public string Moeda { get; set; }
+        public double Valor { get; set; }
+    }
+
+    public class VendaDetalheReportViewModel : VendaReportViewModel
+    {
+        public List<VendaItemReportViewModel> Itens { get; set; } = new List<VendaItemReportViewModel>();
+        public List<VendaMoedaItemReportViewModel> Moedas { get; set; } = new List<VendaMoedaItemReportViewModel>();
+        //public List<VendaMoedaItemReportViewModel> TotalMoedas { get; set; } = new List<VendaMoedaItemReportViewModel>();
+
+    }
+
+    public class VendasReportViewModel
+    {
+        public List<VendaDetalheReportViewModel> Vendas { get; set; } = new List<VendaDetalheReportViewModel>();
+        public List<VendaMoedaItemReportViewModel> TotalMoedas { get; set; } = new List<VendaMoedaItemReportViewModel>();
+        public double TotalQuantidade { get; set; }
+        public double SubTotal { get; set; }
+        public double TotalAcrescimo { get; set; }
+        public double TotalDevolucao { get; set; }
+        public double ValorTotal { get; set; }
+        public double TotalDesconto { get; set; }
+    }
+        public class VendaRankingProdutoViewModel
+    {
+        public double valor { get; set; }
+        public string produto { get; set; }
+    }
+
+    public class VendaRankingProdutoIndexViewModel
+    {
+        public DateTime dataInicial { get; set; }
+        public DateTime dataFinal { get; set; }
+        public double? Total { get; set; } = 0;
+        public List<VendaRankingProdutoViewModel> Ranking { get; set; } = new List<VendaRankingProdutoViewModel>();
+    }
+
+    public class VendaFiltroRankingViewModel
+    {
+        public DateTime dataInicial { get; set; }
+        public DateTime dataFinal { get; set; }
+        public agilium.api.business.Enums.EResultadoFiltroRanking TipoResultado { get; set; }
+        public agilium.api.business.Enums.EOrdenacaoFiltroRanking Ordenacao { get; set; }
+        public List<VendaRankingReport> ListaVendas { get; set; } = new List<VendaRankingReport>();
     }
 }

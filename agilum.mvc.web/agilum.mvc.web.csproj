@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\agilium-manager-azure-api\agilium-manager-azure-api.csproj" />
     <ProjectReference Include="..\agilium-manager-azure-business\agilium-manager-azure-business.csproj" />
     <ProjectReference Include="..\agilium-manager-git-azure-infra\agilium-manager-git-azure-infra.csproj" />
   </ItemGroup>

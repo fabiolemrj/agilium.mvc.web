@@ -41,106 +41,61 @@ namespace agilium.api.infra.Repository.Dapper
         {
 
             await AtualizarSaldoContaESubContaTransaction(IdConta);
-            //using (var scope = new TransactionScope())
-            //{
-            //    using (var con = new MySqlConnection(GetConnection()))
-            //    {
-            //        try
-            //        {
-            //            con.Open();
-            //            var queryCdConta = $@"SELECT CDCONTA FROM planoconta WHERE IDCONTA = {IdConta}";
-            //            var planoConta = con.Query<PlanoConta>(queryCdConta).FirstOrDefault();
-
-            //            if(planoConta != null && !string.IsNullOrEmpty(planoConta.CDCONTA.Trim()))
-            //            {
-            //                var idsConta = ObterIdsConta(planoConta.CDCONTA, con);
-
-            //                var query = $@"SELECT coalesce(SUM(CASE WHEN PC.TPCONTA = PCL.TPLANC THEN PCL.VLLANC 
-            //                                    ELSE (PCL.VLLANC * -1) END ), 0) AS SALDO 
-            //                            FROM planoconta_lanc PCL 
-            //                                INNER JOIN planoconta PC on PCL.IDCONTA = PC.IDCONTA 
-            //                            WHERE PCL.IDCONTA IN ('{idsConta}')";
-
-            //                var novoSaldo = con.Query<double>(query).FirstOrDefault();
-
-            //                if (ExisteSaldoConta(IdConta, con))
-            //                {
-            //                    AtualizarPlanoSaldo(novoSaldo, IdConta, con);
-            //                }
-            //                else
-            //                {
-            //                    IncluirPlanoSaldo(novoSaldo, IdConta, con);
-            //                }
-            //            }
-            //            scope.Complete();
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            throw;
-            //        }
-            //        finally { con.Close(); }
-
-            //    };
-
-            //}
+            
         }
 
         public async Task<List<PlanoContaLancamento>> ObterLancamentosPorPlanoEData(long idPlano, DateTime dtInicial, DateTime dtFinal)
         {
-            using (var scope = new TransactionScope())
-            {
-                using (var con = new MySqlConnection(GetConnection()))
-                {                 
-                   
-                    try
-                    {
-                        con.Open();
-                        var queryCdConta = $@"SELECT IDLANC as Id,IDCONTA,DTCAD,DTREF,NUANOMESREF,DSLANC,VLLANC,TPLANC,STLANC FROM planoconta_lanc 
+            var queryCdConta = $@"SELECT IDLANC as Id,IDCONTA,DTCAD,DTREF,NUANOMESREF,DSLANC,VLLANC,TPLANC,STLANC FROM planoconta_lanc 
                                             WHERE IDCONTA = @IDCONTA and DTCAD between @DTINI and @DTFIM 
                                             order by DTCAD";
-                        var parametros = new DynamicParameters();
-                        parametros.Add("@DTINI", dtInicial, DbType.Date, ParameterDirection.Input);
-                        parametros.Add("@DTFIM", dtFinal, DbType.Date, ParameterDirection.Input);
-                        parametros.Add("@IDCONTA", idPlano, DbType.Int64, ParameterDirection.Input);
+            var parametros = new DynamicParameters();
+            parametros.Add("@DTINI", dtInicial, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@DTFIM", dtFinal, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@IDCONTA", idPlano, DbType.Int64, ParameterDirection.Input);
 
-                        var lancamentos = con.Query<PlanoContaLancamento>(queryCdConta, parametros).ToList();
-                        
-                        return lancamentos;
-                    }
-                    catch (Exception ex)
-                    {
+            var lancamentos = _dbSession.Connection.Query<PlanoContaLancamento>(queryCdConta, parametros, _dbSession.Transaction).ToList();
 
-                        throw;
-                    }
-                    finally { con.Close(); }
-                }
-            }
+            return lancamentos;           
         }
 
         public async Task<string> ObterDescricaoPlano(long idPlano)
         {
-            using (var scope = new TransactionScope())
-            {
-                using (var con = new MySqlConnection(GetConnection()))
-                {
-                    try
-                    {
-                        con.Open();
-                        var queryCdConta = $@"SELECT IDCONTA as Id, DSCONTA FROM planoconta
+            var queryCdConta = $@"SELECT IDCONTA as Id, DSCONTA FROM planoconta
                                             where IDCONTA = {idPlano}";
-                        
-                        var lancamento = con.Query<PlanoConta>(queryCdConta).FirstOrDefault();
+            var lancamento = _dbSession.Connection.Query<PlanoConta>(queryCdConta,null,_dbSession.Transaction).FirstOrDefault();
+            return lancamento.DSCONTA;
 
-                        return lancamento.DSCONTA;
-                    }
-                    catch (Exception ex)
-                    {
+        }
 
-                        throw;
-                    }
-                    finally { con.Close(); }
-                }
-            }
+        public async Task<bool> ApagarPlanoSaldo(long idConta)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDCONTA", idConta, DbType.Int64, ParameterDirection.Input);
+
+            var queryPlanoSaldo = $@"delete FROM planoconta_saldo  WHERE IDCONTA = @IDCONTA";
+
+            return _dbSession.Connection.Execute(queryPlanoSaldo, parametros, _dbSession.Transaction)> 0;
+        }
+
+        public async Task<bool> ApagarPlanoContaLancamento(long idConta)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDCONTA", idConta, DbType.Int64, ParameterDirection.Input);
+
+            var queryPlanoLancamento = $@"delete FROM planoconta_lanc WHERE IDCONTA = @IDCONTA";
+
+            return _dbSession.Connection.Execute(queryPlanoLancamento, parametros, _dbSession.Transaction) > 0;            
+        }
+
+        public async Task<bool> ApagarPlanoConta(long idConta)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDCONTA", idConta, DbType.Int64, ParameterDirection.Input);
+
+            var queryPlanoConta = $@"delete FROM planoconta WHERE IDCONTA = @IDCONTA";
+
+            return _dbSession.Connection.Execute(queryPlanoConta, parametros, _dbSession.Transaction) > 0;
         }
 
         public async Task RealizarLancamento(PlanoContaLancamento planoContaLancamento)
@@ -279,20 +234,20 @@ namespace agilium.api.infra.Repository.Dapper
             parametros.Add("@NUANOMESREF", anoMesReferencia, DbType.String, ParameterDirection.Input);
             parametros.Add("@IDCONTA", idConta, DbType.Int64, ParameterDirection.Input);
 
-            _dbSession.Connection.Execute(query, parametros);
+            _dbSession.Connection.Execute(query, parametros,_dbSession.Transaction);
         }
 
         private bool ExisteSaldoConta(long IdConta)
         {
             var query = $@"SELECT COUNT(*) AS TOTAL FROM planoconta_saldo WHERE IDCONTA = {IdConta}";
-            var resultado = _dbSession.Connection.Query<int>(query).FirstOrDefault();
+            var resultado = _dbSession.Connection.Query<int>(query,null,_dbSession.Transaction).FirstOrDefault();
             return resultado > 0;
         }
 
         private string ObterIdsConta(string cdConta)
         {
             var queryIBPT = $@"SELECT IDCONTA as Id FROM planoconta WHERE CDCONTA LIKE '{cdConta}%'";
-            var planosContas = _dbSession.Connection.Query<PlanoConta>(queryIBPT);
+            var planosContas = _dbSession.Connection.Query<PlanoConta>(queryIBPT, null, _dbSession.Transaction);
             
             var resultado = string.Empty;
             planosContas.ToList().ForEach(x => {
@@ -306,7 +261,7 @@ namespace agilium.api.infra.Repository.Dapper
         private async Task AtualizarSaldoContaESubContaTransaction(long IdConta)
         {
             var queryCdConta = $@"SELECT CDCONTA FROM planoconta WHERE IDCONTA = {IdConta}";
-            var planoConta = _dbSession.Connection.Query<PlanoConta>(queryCdConta).FirstOrDefault();
+            var planoConta = _dbSession.Connection.Query<PlanoConta>(queryCdConta,null,_dbSession.Transaction).FirstOrDefault();
 
             if (planoConta != null && !string.IsNullOrEmpty(planoConta.CDCONTA.Trim()))
             {
@@ -318,7 +273,7 @@ namespace agilium.api.infra.Repository.Dapper
                                             INNER JOIN planoconta PC on PCL.IDCONTA = PC.IDCONTA 
                                         WHERE PCL.IDCONTA IN ('{idsConta}')";
 
-                var novoSaldo = _dbSession.Connection.Query<double>(query).FirstOrDefault();
+                var novoSaldo = _dbSession.Connection.Query<double>(query,null,_dbSession.Transaction).FirstOrDefault();
 
                 if (ExisteSaldoConta(IdConta))
                 {
@@ -335,7 +290,7 @@ namespace agilium.api.infra.Repository.Dapper
         {
             var query = $@"DELETE FROM planoconta_lanc WHERE IDLANC = {idLanc}";
 
-            return _dbSession.Connection.Execute(query) > 0;
+            return _dbSession.Connection.Execute(query, null, _dbSession.Transaction) > 0;
         }
 
         #endregion

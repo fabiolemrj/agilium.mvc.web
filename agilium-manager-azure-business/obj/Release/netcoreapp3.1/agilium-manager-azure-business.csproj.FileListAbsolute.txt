@@ -9,3 +9,14 @@ C:\ProjetoAgilium\agilium_base\agilium-manager-azure-business\obj\Release\netcor
 C:\ProjetoAgilium\agilium_base\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.sourcelink.json
 C:\ProjetoAgilium\agilium_base\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.dll
 C:\ProjetoAgilium\agilium_base\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.pdb
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Release\netcoreapp3.1\agilium-manager-azure-business.deps.json
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Release\netcoreapp3.1\agilium-manager-azure-business.dll
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\bin\Release\netcoreapp3.1\agilium-manager-azure-business.pdb
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.csproj.AssemblyReference.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.AssemblyInfoInputs.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.AssemblyInfo.cs
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.csproj.CoreCompileInputs.cache
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.sourcelink.json
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.dll
+C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilium-manager-azure-business\obj\Release\netcoreapp3.1\agilium-manager-azure-business.pdb

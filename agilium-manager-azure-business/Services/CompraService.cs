@@ -309,11 +309,7 @@ namespace agilium.api.business.Services
             }
             catch(Exception ex)
             {
-                do
-                {
                     Notificar(ex.Message);
-                }
-                while (ex != null);
             }
           return resultado;       
         }
@@ -410,6 +406,74 @@ namespace agilium.api.business.Services
             }
 
             return nFeProc;
+        }
+
+
+        public async Task<NFeProc> ImportarArquivoXmlNFESemGravar(long idCompra, string ArquivoXml)
+        {
+            var resultado = false;
+            NFeProc nFeProc = new NFeProc();
+            try
+            {
+
+                MemoryStream xmlStream = new MemoryStream();
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(ArquivoXml);
+                xmlDoc.Save(xmlStream);
+                xmlStream.Flush();//Adjust this if you want read your data 
+                xmlStream.Position = 0;
+
+                var serializer = new XmlSerializer(typeof(NFeProc));
+                nFeProc = (NFeProc)serializer.Deserialize(xmlStream);
+
+            }
+            catch (Exception ex)
+            {
+                do
+                {
+                    Notificar(ex.Message);
+                }
+                while (ex != null);
+
+            }
+
+            return nFeProc;
+        }
+
+        public async Task<bool> SalvarArquivoXmlNFE(long idCompra, NFeProc nFeProc, string ArquivoXml)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                resultado = await ImportarCompraDeXmlNfe(nFeProc, idCompra);
+
+                if (resultado)
+                {
+                    resultado = _compraDapperRepository.AdicionarFiscal(idCompra, ArquivoXml).Result != null;
+                    if (!resultado)
+                        Notificar("Erro ao tentar adicionar arquivo Xml em compra fiscal");
+                }
+
+                if (resultado)
+                    await _dapperRepository.Commit();
+                else
+                    await _dapperRepository.Rollback();
+            }
+            catch (Exception ex)
+            {
+                do
+                {
+                    Notificar(ex.Message);
+                }
+                while (ex != null);
+
+                await _dapperRepository.Rollback();
+            }
+
+            return resultado;
         }
 
         public async Task<bool> EfetivarCompra(long idCompra, string usuarioNome)
@@ -573,12 +637,15 @@ namespace agilium.api.business.Services
                 //Obter Itens da compra
                 var itensCompras = _compraDapperRepository.ObterItemCompraPorIdCompraParaCadastroAutomatico(idCompra).Result;
 
-                itensCompras.ForEach(async item => {
-                    var idProduto = await _produtoDapperRepository.InsereProdutoPendente(item.DSPRODUTO.Substring(0,49),item.SGUN,item.CDNCM,item.CDCEST,item.NURELACAO.Value,item.VLNOVOPRECOVENDA.Value,compra.IDEMPRESA.Value);
-                                      
+                foreach (var item in itensCompras)
+                {
+                    var descricao = item.DSPRODUTO.Length > 49 ? item.DSPRODUTO.Substring(0, 49): item.DSPRODUTO;
+                    var idProduto = await _produtoDapperRepository.InsereProdutoPendente(descricao, item.SGUN, item.CDNCM, item.CDCEST, item.NURELACAO.Value, item.VLNOVOPRECOVENDA.Value, compra.IDEMPRESA.Value);
+
                     if (idProduto > 0)
-                        await _compraDapperRepository.AtualizarCompraItemComIdProduto(idProduto, item.Id);                
-                });
+                        await _compraDapperRepository.AtualizarCompraItemComIdProduto(idProduto, item.Id);
+                }
+            
                
                 resultado = !TemNotificacao();
 
@@ -594,16 +661,13 @@ namespace agilium.api.business.Services
             catch (Exception ex)
             {
                 await _dapperRepository.Rollback();
-                do
-                {
-                    Notificar(ex.Message);
-                }
-                while (ex != null);
+                
             }
             return resultado;
         }
 
         #endregion
+
         #region private
         private async Task<bool> PodeApagarCompra(long id) => true;
         private async Task<bool> PodeApagarCompraItem(long id) => true;

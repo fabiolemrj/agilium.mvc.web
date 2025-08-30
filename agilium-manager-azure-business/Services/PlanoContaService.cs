@@ -17,12 +17,18 @@ namespace agilium.api.business.Services
         private readonly IPlanoContaRepository _planoContaRepository;
         private readonly IPlanoContaLancamentoRepository _planoContaLancamentoRepository;
         private readonly IPlanoContaSaldoRepository _planoContaSaldoRepository;
+        private readonly IPlanoContaDapperRepository _planoContaDapperRepository;
+        private readonly IDapperRepository _dapperRepository;
+
         public PlanoContaService(INotificador notificador, IPlanoContaRepository planoContaRepository, IPlanoContaSaldoRepository planoContaSaldoRepository, 
-                                IPlanoContaLancamentoRepository lancamentoRepository) : base(notificador)
+                                IPlanoContaLancamentoRepository lancamentoRepository, IPlanoContaDapperRepository planoContaDapperRepository,
+                                IDapperRepository dapperRepository) : base(notificador)
         {
             _planoContaRepository = planoContaRepository;
             _planoContaSaldoRepository = planoContaSaldoRepository;
             _planoContaLancamentoRepository = lancamentoRepository;
+            _planoContaDapperRepository = planoContaDapperRepository;
+            _dapperRepository = dapperRepository;
         }
 
         public void Dispose()
@@ -54,7 +60,23 @@ namespace agilium.api.business.Services
                 Notificar("Não é possivel apagar este plano de conta pois o mesmo está sendo utilizado");
                 return;
             }
-            await _planoContaRepository.RemoverSemSalvar(id);
+
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                await _planoContaDapperRepository.ApagarPlanoSaldo(id);
+                await _planoContaDapperRepository.ApagarPlanoContaLancamento(id);
+                await _planoContaDapperRepository.ApagarPlanoConta(id);
+
+                await _dapperRepository.Commit();
+            }
+            catch (Exception ex)
+            {
+                await _dapperRepository.Rollback();
+                Notificar(ex.Message);
+            }
+           
         }
 
         public async Task Atualizar(PlanoConta planoConta)
@@ -144,6 +166,14 @@ namespace agilium.api.business.Services
             return (saldo != null && saldo.VLSALDO.HasValue) ? saldo.VLSALDO.Value : 0;
         }
 
+        public async Task<PlanoContaSaldo> ObterSaldoPorIdConta(long idConta)
+        {
+            return _planoContaSaldoRepository.Obter(x => x.IDCONTA == idConta).Result.FirstOrDefault();
+        }
+
+
+
+
         #endregion
 
         #region Plano Conta Lancamento
@@ -192,6 +222,12 @@ namespace agilium.api.business.Services
         {
             return await _planoContaLancamentoRepository.ObterPorId(id);
         }
+
+        public async Task<PlanoContaLancamento> ObterLancamentoPorIdConta(long id)
+        {
+            return _planoContaLancamentoRepository.Obter(x=>x.IDCONTA == id).Result.FirstOrDefault();
+        }
+
 
 
         #endregion

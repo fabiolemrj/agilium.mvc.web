@@ -170,15 +170,16 @@ namespace agilium.api.business.Services
             return !TemNotificacao();
         }
 
+        public async Task<Turno> ObterObjetoTurnoAbertoPorIdEmpresa(long idEmpresa)
+        {
+            return await _turnoDapperRepository.ObterTurnoAbertoPorIdEmpresa(idEmpresa);
+        }
         #endregion
 
         #region Metodos Privados
         private async Task<bool> PodeApagarTurnoPreco(long idTurnoPreco) => true;
 
-        public Task<Turno> ObterObjetoTurnoAbertoPorIdEmpresa(long idEmpresa)
-        {
-            throw new NotImplementedException();
-        }
+    
 
 
 
