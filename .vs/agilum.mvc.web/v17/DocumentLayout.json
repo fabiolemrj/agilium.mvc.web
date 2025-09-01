@@ -26,21 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "dbIdentityContext.cs",
-              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Data\\dbIdentityContext.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Data\\dbIdentityContext.cs",
-              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Data\\dbIdentityContext.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Data\\dbIdentityContext.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAYwBwAAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-01T14:35:16.014Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -67,6 +54,19 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dbIdentityContext.cs",
+              "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Data\\dbIdentityContext.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Data\\dbIdentityContext.cs",
+              "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\Data\\dbIdentityContext.cs",
+              "RelativeToolTip": "agilum.mvc.web\\Data\\dbIdentityContext.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAYwBUAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-01T14:35:16.014Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "AgiliumContext.cs",
               "DocumentMoniker": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilium-manager-git-azure-infra\\Context\\AgiliumContext.cs",
@@ -86,7 +86,7 @@
               "RelativeDocumentMoniker": "agilum.mvc.web\\appsettings.Development.json",
               "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\appsettings.Development.json",
               "RelativeToolTip": "agilum.mvc.web\\appsettings.Development.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAABsAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-09-01T11:16:53.437Z",
               "EditorCaption": ""
@@ -99,7 +99,7 @@
               "RelativeDocumentMoniker": "agilum.mvc.web\\appsettings.json",
               "ToolTip": "C:\\Projetos\\agilium.mvc.mvc\\agilium.mvc.web\\agilum.mvc.web\\appsettings.json",
               "RelativeToolTip": "agilum.mvc.web\\appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-09-01T11:16:36.532Z",
               "EditorCaption": ""
