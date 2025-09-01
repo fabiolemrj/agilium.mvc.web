@@ -204,12 +204,11 @@ namespace agilium.api.infra.Mappings
         {
             builder.ToTable("pedido_pagamento_sitemercado");
 
-            builder.HasKey(pps => pps.Id);
-            builder.Property(pps => pps.IDPedidoSM).HasColumnName("IDPEDIDOPAGAMENTOSM").HasColumnType("bigint(20)").IsRequired();
+            builder.HasKey(pps => pps.IDPedidoSM).HasName("IDPEDIDOPAGAMENTOSM");
             builder.Property(pps => pps.IDPedidoSM).HasColumnName("IDPEDIDOSM").HasColumnType("bigint(20)");
             builder.Property(pps => pps.IDMoeda).HasColumnName("IDMOEDA").HasColumnType("bigint(20)");
             builder.Property(pps => pps.IDVendaMoeda).HasColumnName("IDVENDA_MOEDA").HasColumnType("bigint(20)");
-            builder.Property(pps => pps._ID).HasColumnName("ID").HasColumnType("int(11)");
+           // builder.Property(pps => pps._ID).HasColumnName("ID").HasColumnType("int(11)");
             builder.Property(pps => pps.Nome).HasColumnName("NOME").HasColumnType("varchar(50)");
             builder.Property(pps => pps.Valor).HasColumnName("VALOR").HasColumnType("double");
             builder.Property(pps => pps.VLCorrigido).HasColumnName("VLCORRIGIDO").HasColumnType("double");
@@ -222,6 +221,8 @@ namespace agilium.api.infra.Mappings
             builder.HasOne(pps => pps.PedidoSitemercado).WithMany(x=>x.PedidoPagamentoSitemercados).HasForeignKey(pps => pps.IDPedidoSM);
             builder.HasOne(pps => pps.VendaMoeda).WithMany(x => x.PedidoPagamentoSitemercados).HasForeignKey(pps => pps.IDVendaMoeda);
             builder.HasOne(pps => pps.Moeda).WithMany(x => x.PedidoPagamentoSitemercados).HasForeignKey(pps => pps.IDMoeda);
+
+            builder.Ignore(x => x._ID);
         }
     }
 

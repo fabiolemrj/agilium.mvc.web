@@ -1,4 +1,5 @@
 ﻿using agilium.api.business.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -116,8 +117,10 @@ namespace agilium.api.infra.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AgiliumContext).Assembly);
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
-
+            
             base.OnModelCreating(modelBuilder);
+
+         
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
