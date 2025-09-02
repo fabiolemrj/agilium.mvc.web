@@ -398,3 +398,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.vs/agilum.mvc.web/DesignTimeBuild/.dtbcache.v2
+/agilium-manager-azure-api/obj/Debug/netcoreapp3.1/agilium-manager-azure-api.AssemblyInfo.cs
+/agilium-manager-azure-api/obj/Debug/netcoreapp3.1/agilium-manager-azure-api.AssemblyInfoInputs.cache
+/agilium-manager-azure-api/obj/Debug/netcoreapp3.1/agilium-manager-azure-api.csproj.AssemblyReference.cache
+/agilium-manager-azure-api/obj/Release/netcoreapp3.1/agilium-manager-azure-api.AssemblyInfo.cs
+/agilium-manager-azure-api/obj/Release/netcoreapp3.1/agilium-manager-azure-api.AssemblyInfoInputs.cache
+/agilium-manager-azure-api/obj/Release/netcoreapp3.1/agilium-manager-azure-api.csproj.AssemblyReference.cache
