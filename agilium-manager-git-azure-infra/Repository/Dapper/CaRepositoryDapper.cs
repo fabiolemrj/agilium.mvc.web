@@ -3,6 +3,7 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using Dapper;
 using KissLog.RestClient.Requests.CreateRequestLog;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
@@ -325,6 +326,27 @@ namespace agilium.api.infra.Repository.Dapper
             parametros.Add("@idUserAspNet", idUsuarioAspNet, DbType.String, ParameterDirection.Input);
 
             return _dbSession.Connection.Query<Empresa>(query, parametros, _dbSession.Transaction);
+        }
+
+        public async Task<bool> UsuarioPossuiAcessoWeb(string id)
+        {
+            var query = $@"SELECT u.* FROM ca_usuarios u
+                        inner join aspnetusers a on a.Id = u.idUserAspNet
+                        where id_usuario = @id_usuario";
+            var parametros = new DynamicParameters();
+            parametros.Add("@id_usuario", id, DbType.String, ParameterDirection.Input);
+
+            return _dbSession.Connection.QueryAsync<Usuario>(query, parametros, _dbSession.Transaction).Result.Any();
+        }
+
+        public async Task<Usuario> ObterUsuarioPorId(string id)
+        {
+            var query = $@"SELECT u.id_usuario as Id, u.* FROM ca_usuarios u where id_usuario = @id_usuario";
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@id_usuario", id, DbType.String, ParameterDirection.Input);
+
+            return _dbSession.Connection.QueryAsync<Usuario>(query, parametros, _dbSession.Transaction).Result.FirstOrDefault();
         }
 
 

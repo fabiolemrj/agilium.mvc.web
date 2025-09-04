@@ -4,6 +4,7 @@ using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilum.mvc.web.Enums;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Estoque;
@@ -76,6 +77,7 @@ namespace agilum.mvc.web.Controllers
         #region perda
 
         [Route("lista")]
+        [ClaimsAuthorizeAttribute(2101)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -104,6 +106,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2102)]
         public async Task<IActionResult> Create()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -138,6 +141,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2102)]
         public async Task<IActionResult> Create(PerdaViewModel viewModel)
         {
 
@@ -187,6 +191,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2105)]
         public async Task<IActionResult> Edit(long id)
         {
 
@@ -213,6 +218,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2105)]
         public async Task<IActionResult> Edit(PerdaViewModel model)
         {
 
@@ -243,6 +249,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2103)]
         public async Task<IActionResult> Delete(long id)
         {
             var objeto = _mapper.Map<PerdaViewModel>(await _perdaService.ObterPorId(id));
@@ -265,6 +272,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2103)]
         public async Task<IActionResult> Delete(PerdaViewModel model)
         {
             var objeto = _mapper.Map<PerdaViewModel>(await _perdaService.ObterPorId(model.Id));

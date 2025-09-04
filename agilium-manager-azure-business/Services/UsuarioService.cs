@@ -28,6 +28,7 @@ namespace agilium.api.business.Services
             _empresaRepository = empresaRepository;
         }
 
+        #region Usuario
         public async Task<bool> Adicionar(Usuario usuario)
         {
             if (!ExecutarValidacao(new UsuarioValidation(), usuario)) return false;
@@ -80,6 +81,15 @@ namespace agilium.api.business.Services
         public async Task Atualizar(EmpresaAuth empresaAuth)
         {
             await _empresaAuthRepository.AtualizarSemSalvar(empresaAuth);
+        }
+
+        public async Task<bool> AtualizarSemSalvar(Usuario usuario)
+        {
+            if (!ExecutarValidacao(new UsuarioValidation(), usuario)) return false;
+
+            await _usuarioRepository.AtualizarSemSalvar(usuario);
+
+            return true;
         }
 
         public async Task<bool> AtualizarFoto(Usuario usuario)
@@ -213,6 +223,21 @@ namespace agilium.api.business.Services
                 PageSize = pageSize
             };
         }
+        public async Task<PagedResult<Usuario>> ObterUsuariosPorNomePuro(string nome, int page = 1, int pageSize = 15)
+        {
+            int pagina = page > 0 ? page : 1;
+            var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
+
+            var lista = await _usuarioRepository.Buscar(x => x.nome.ToUpper().Contains(_nomeParametro.ToUpper()));
+
+            return new PagedResult<Usuario>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            };
+        }
 
         public async Task<bool> Remover(long id)
         {
@@ -262,5 +287,11 @@ namespace agilium.api.business.Services
         {
             _usuarioRepository?.SaveChanges();
         }
+
+
+        #endregion
+
+        #region dapper
+        #endregion
     }
 }

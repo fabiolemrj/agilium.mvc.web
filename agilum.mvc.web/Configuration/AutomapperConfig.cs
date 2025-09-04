@@ -29,6 +29,7 @@ using agilum.mvc.web.ViewModels.Vale;
 using agilum.mvc.web.ViewModels.Venda;
 using agilum.mvc.web.ViewModels.Config;
 using agilum.mvc.web.ViewModels.Log;
+using agilum.mvc.web.ViewModels.Usuarios;
 
 using AutoMapper;
 using System.Collections.Generic;
@@ -77,8 +78,11 @@ namespace agilum.mvc.web.Configuration
             CreateMap<Usuario, UserFull>()
                .ForMember(dest => dest.dtnasc, opt => opt.MapFrom(src => src.DataCadastro.ToString()))
                .ForMember(dest => dest.idperfilManager, opt => opt.MapFrom(src => src.id_perfil))
+               .ForMember(dest => dest.UsuarioPossuiAcessoWeb, act => act.Ignore())
                 .ForMember(dest => dest.ativo, opt => opt.MapFrom(src => src.ativo)).ReverseMap();
-          
+
+            CreateMap<CaPerfiManager, CaPerfilManagerViewModel>().ReverseMap();
+
             #endregion
 
             #region Unidade
@@ -922,6 +926,7 @@ namespace agilum.mvc.web.Configuration
                       .ForMember(dest => dest.NomeUsuario, opt => opt.MapFrom(src => src.usuario))
                 .ReverseMap();
             #endregion
+
         }
     }
 }

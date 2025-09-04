@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Estoque;
@@ -70,6 +71,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("lista")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2107)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -97,6 +99,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2108)]
         public async Task<ActionResult> Create()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -130,6 +133,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2108)]
         public async Task<IActionResult> Create(InventarioViewModel model)
         {
 
@@ -164,6 +168,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2111)]
         public async Task<ActionResult> Edit(long id)
         {
 
@@ -191,6 +196,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2111)]
         public async Task<ActionResult> Edit(InventarioViewModel model)
         {
 
@@ -222,6 +228,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2109)]
         public async Task<ActionResult> Cancelar(long id)
         {
             ;
@@ -245,6 +252,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2109)]
         public async Task<IActionResult> Cancelar(InventarioViewModel model)
         {
 
@@ -322,6 +330,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("editar-itens")]
+        [ClaimsAuthorizeAttribute(2111)]
         public async Task<IActionResult> IndexItemEdit(long id)
         {
 
@@ -373,6 +382,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar-itens")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2111)]
         public async Task<ActionResult> IndexItemEdit(ListaInventarioItemViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -393,6 +403,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("apagar-itens")]
+        [ClaimsAuthorizeAttribute(2118)]
         public async Task<IActionResult> DeleteItemInventario(long id)
         {
             var objeto = _mapper.Map<InventarioViewModel>(await _inventarioService.ObterPorId(id));
@@ -440,6 +451,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar-itens")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2118)]
         public async Task<IActionResult> DeleteItemInventario(ListaInventarioItemViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -474,6 +486,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("CadastroAutomaticoProdutos")]
+        [ClaimsAuthorizeAttribute(2119)]
         public async Task<IActionResult> CadastroAutomaticoProdutos(long id)
         {
             var objeto = await _inventarioService.ObterPorId(id);
@@ -498,6 +511,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("concluir")]
+        [ClaimsAuthorizeAttribute(2114)]
         public async Task<IActionResult> concluir(long id)
         {
             var objeto =  await _inventarioService.ObterPorId(id);
@@ -546,6 +560,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("inventariar")]
+        [ClaimsAuthorizeAttribute(2113)]
         public async Task<IActionResult> inventariar(long id)
         {
             var objeto = await _inventarioService.ObterPorId(id);
@@ -572,6 +587,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("IncluirProdutosDisponiveisInventario")]
+        [ClaimsAuthorizeAttribute(2117)]
         public async Task<ActionResult> IncluirProdutosDisponiveisInventario(long id)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -630,6 +646,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("IncluirProdutosDisponiveisInventario")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2117)]
         public async Task<ActionResult> IncluirProdutosDisponiveisInventario(AdicionarListaProdutosDisponiveisViewModel model)
         {
             if (!ModelState.IsValid) return View("AddProdutoDisp", model);

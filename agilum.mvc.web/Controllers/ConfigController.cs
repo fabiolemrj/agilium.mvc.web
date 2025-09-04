@@ -17,6 +17,7 @@ using agilum.mvc.web.Enums;
 using System.Reflection;
 using agilium.api.business.Models;
 using agilum.mvc.web.Services;
+using agilum.mvc.web.Extensions;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -39,6 +40,7 @@ namespace agilum.mvc.web.Controllers
         #region config
         [HttpGet]
         [Route("lista")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
 
@@ -84,6 +86,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("lista-imagem")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<ActionResult> IndexConfigImagem()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -149,6 +152,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [Route("editar-imagem")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<ActionResult> EditConfigImage(ConfigImagemViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
@@ -188,6 +192,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("editar")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> Edit(long idEmpresa)
         {
             var objeto = _mapper.Map<List<ConfigIndexViewModel>>(await _configService.ObterTodosPorEmpresa(idEmpresa));
@@ -209,6 +214,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [Route("editar")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> Edit(ConfigCamposViewModel model)
         {
 
@@ -243,6 +249,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("editar-item")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> EditItem(string chave, long idEmpresa)
         {
             var objeto = _mapper.Map<ConfigIndexViewModel>(await _configService.ObterPorChave(chave, idEmpresa));
@@ -264,6 +271,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [Route("editar-item")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> EditItem(EditarChaveValorViewModel model)
         {
 
@@ -290,6 +298,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("editar-certificado")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> EditCertificado(long idEmpresa)
         {
             var chaveCertificado = "CERTIFICADO_CAMINHO";
@@ -319,6 +328,7 @@ namespace agilum.mvc.web.Controllers
 
         [HttpPost]
         [Route("editar-certificado")]
+        [ClaimsAuthorizeAttribute(1015)]
         public async Task<IActionResult> EditCertificado(ChaveValorViewModel model)
         {
             if (!ModelState.IsValid) return View(model);

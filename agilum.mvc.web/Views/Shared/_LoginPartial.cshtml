@@ -5,16 +5,24 @@
 @inject SignInManager<AppUserAgiliumIdentity> SignInManager
 @inject UserManager<AppUserAgiliumIdentity> UserManager
 
-
-<ul class="navbar-nav">
-@*     <li class="nav-item">
-        <a class="nav-link" asp-action="ObterListasEmpresasPorUsuario" asp-controller="empresa" data-modal=""  id="idselec">
-            <label id="idselec-txt"></label>
-        </a>
+@{
+    var nomeUsuario = (User != null) ? @UserManager?.GetUserAsync(User).Result?.Nome : "";
     
-    </li> *@
+}
 
-</ul>
+<div class="tituloEmpresaBarra">
+
+    <div>
+        <span class="fonteTituloAgilium">MANAGER</span>
+
+    </div>
+    <div>
+        <label class="__nomeEmpresa" id="idselec-txt"></label>
+    </div>
+    
+</div>
+
+
 
 <ul class="navbar-nav ml-auto">
     @if (User != null)
@@ -23,9 +31,7 @@
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-user mr-2"></i>
                 @* @UserManager.GetUserName(User) *@
-                @UserManager.GetUserAsync(User).Result.Nome
-
-
+                @nomeUsuario
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 

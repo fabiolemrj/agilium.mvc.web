@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.FormaPagamento;
@@ -38,6 +39,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("lista")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2214)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
             var _nomeEntidadeMotivo = "Forma de Pagamento";
@@ -66,6 +68,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2215)]
         public async Task<ActionResult> Create()
         {
             var _nomeEntidadeMotivo = "Forma de Pagamento";
@@ -99,6 +102,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2215)]
         public async Task<IActionResult> Create(FormaPagamentoViewModel model)
         {
 
@@ -130,6 +134,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2218)]
         public async Task<ActionResult> Edit(long id)
         {
 
@@ -156,6 +161,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2218)]
         public async Task<ActionResult> Edit(FormaPagamentoViewModel model)
         {
 
@@ -183,6 +189,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2216)]
         public async Task<ActionResult> Delete(long id)
         {
             var model = await Obter(id.ToString());
@@ -205,6 +212,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2216)]
         public async Task<IActionResult> Delete(FormaPagamentoViewModel model)
         {
             ObterListas(model);

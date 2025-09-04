@@ -55,7 +55,7 @@ namespace agilum.mvc.web.Services
 
                 MailMessage mail = new MailMessage()
                 {
-                    From = new MailAddress(_emailSettings.UsernameEmail, "Agilium Painel")
+                    From = new MailAddress(_emailSettings.UsernameEmail, "Suporte Agilium Manager")
                 };
 
                 mail.To.Add(new MailAddress(toEmail));

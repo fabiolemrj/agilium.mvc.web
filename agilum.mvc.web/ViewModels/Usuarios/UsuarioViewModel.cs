@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System;
+using System.ComponentModel;
 
 namespace agilum.mvc.web.ViewModels.Usuarios
 {
@@ -148,6 +149,108 @@ namespace agilum.mvc.web.ViewModels.Usuarios
         public string PerfilDescricao { get; set; }
         [Display(Name = "Perfil")]
         public string idperfilManager { get; set; }
+        public bool UsuarioPossuiAcessoWeb { get; set; } = false;
+    }
+
+    public class UsuarioLogin
+    {
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]
+        public string Password { get; set; }
+    }
+
+
+    public class UserChangePassword
+    {
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Senha Atual")]
+        public string OldPassword { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Nova Senha")]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar Nova Senha")]
+        [Compare("NewPassword", ErrorMessage = "A nova senha e a senha de confirmação não correspondem")]
+        public string ConfirmPassword { get; set; }
+
+        [DataType(DataType.EmailAddress)]
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class UserForgotPassword
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+    }
+
+    public class UserResetPassword
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Senha")]
+        [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar Senha")]
+        [Compare("Password", ErrorMessage = "A senha e a senha de confirmação não correspondem.")]
+        public string ConfirmPassword { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    public class NovoUsuarioModel
+    {
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Nome Completo")]
+        [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]
+        public string Nome { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("CPF")]
+        public string CPF { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")]
+        [DisplayName("E-mail")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 6)]
+        [DisplayName("Senha")]
+        public string Password { get; set; } = "Abc@123";
+
+        [DisplayName("Confirme sua senha")]
+        [Compare("Password", ErrorMessage = "As senhas não conferem.")]
+        public string ConfirmPassword { get; set; } = "Abc@123";
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayName("Nome Simplificado")]
+        [StringLength(20, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 3)]
+        public string Usuario { get; set; }
+    }
+
+    public class CaPerfilManagerViewModel
+    {
+        public int IdPerfil { get; set; }
+        public string Descricao { get; set; }
     }
 
 }

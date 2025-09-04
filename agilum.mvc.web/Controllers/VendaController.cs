@@ -20,6 +20,7 @@ using VendaEspelhoViewModel = agilum.mvc.web.ViewModels.Venda.VendaEspelhoViewMo
 using VendaViewModel = agilum.mvc.web.ViewModels.Venda.VendaViewModel;
 
 using agilium.api.business.Services;
+using agilum.mvc.web.Extensions;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -43,6 +44,7 @@ namespace agilum.mvc.web.Controllers
         #region venda
 
         [Route("lista")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
 
@@ -78,6 +80,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("detalhes")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<ActionResult> VendaDetalhe(long idVenda)
         {
             var venda = _vendaService.ObterPorId(idVenda).Result;
@@ -95,6 +98,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("espelho")]
+        [ClaimsAuthorizeAttribute(2163)]
         public async Task<ActionResult> VendaEspelho(long idVenda)
         {
             var venda = _vendaService.ObterPorId(idVenda).Result;
@@ -109,6 +113,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("dashboard")]
+        [ClaimsAuthorizeAttribute(2162)]
         public async Task<ActionResult> VendaDashboard(long idVenda)
         {
             var vendaRankingProduto = new VendaRankingProdutoIndexViewModel();
@@ -214,6 +219,7 @@ namespace agilum.mvc.web.Controllers
 
         #region Venda Moeda
         [Route("formas-pagamento")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ListaMoedas(long idCaixa)
         {
             var itensVendas = await ObterListaVendaMoedaPaginado(idCaixa);
@@ -224,6 +230,7 @@ namespace agilum.mvc.web.Controllers
 
         #region Report
         [Route("report/detalhada")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaDetalhada([FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
 
@@ -257,6 +264,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("report/simples")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaSimples([FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
 
@@ -290,6 +298,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("report/fornecedor")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaFornecedor([FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
             var dataAtual = DateTime.Now;
@@ -322,6 +331,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("report/moeda")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaMoeda([FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
             var dataAtual = DateTime.Now;
@@ -355,6 +365,7 @@ namespace agilum.mvc.web.Controllers
 
 
         [Route("report/diferenca")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaDiferenca([FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
             var dataAtual = DateTime.Now;
@@ -387,6 +398,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("report/ranking")]
+        [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> ReportVendaRanking()
         {
             var model = new VendaFiltroRankingViewModel();

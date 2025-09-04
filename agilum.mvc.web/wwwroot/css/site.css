@@ -206,3 +206,29 @@ body {
 .card-login-agilium{
     width:400px;
 }
+
+.__nomeEmpresa{
+    font-size:1.3em;
+    font-weight: 400;
+  /*  color:rgb(51,73,62);*/
+    margin-inline-start:auto;
+    margin-left:100px;
+}
+
+
+.tituloEmpresaBarra{
+    display:flex;
+
+    align-items:flex-start;
+    width: 500px;
+}
+
+.fonteTituloAgilium {
+    font-family: "night machine";
+    font-size: 1.3em;
+}
+
+._rodape {
+    display: flex;
+    align-content: space-between;
+}

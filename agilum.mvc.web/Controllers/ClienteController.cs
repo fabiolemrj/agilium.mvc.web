@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Cliente;
@@ -45,6 +46,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("lista")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2019)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
 
@@ -56,6 +58,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2020)]
         public async Task<IActionResult> CreateCliente()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -141,6 +144,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2020)]
         public async Task<IActionResult> EditCliente(long id)
         {
 
@@ -167,6 +171,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2023)]
         public async Task<IActionResult> EditCliente(ClienteViewModel model)
         {
             ObterEstados();
@@ -211,6 +216,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2023)]
         public async Task<IActionResult> DeleteCliente(long id)
         {
             ObterEstados();
@@ -234,6 +240,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2021)]
         public async Task<IActionResult> DeleteCliente(ClienteViewModel model)
         {
             ObterEstados();

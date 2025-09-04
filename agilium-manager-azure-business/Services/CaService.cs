@@ -3,6 +3,8 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Models.Validations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -462,6 +464,50 @@ namespace agilium.api.business.Services
         {
             return await _caRepositoryDapper.ObterEmpresasAssociadasPorUsuario(idUsuarioAspNet);
         }
+        #endregion
+
+        #region dapper Usuarios
+        public async Task<bool> UsuarioPossuiAcessoWeb(string id)
+        {
+            return await _caRepositoryDapper.UsuarioPossuiAcessoWeb(id);
+        }
+
+        public async Task<bool> AdicionarUsuarioWeb(string id)
+        {
+            var resultado = false;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                var usuario = await _caRepositoryDapper.ObterUsuarioPorId(id);
+
+                if(usuario != null)
+                {
+
+                }
+
+
+                if (!TemNotificacao())
+                {
+                    resultado = true;
+                    await _dapperRepository.Commit();
+                }
+                else
+                {
+                    resultado = false;
+                    Notificar("Erro ao tanra criar novo usuario web");
+                    await _dapperRepository.Rollback();
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado = false;
+                Notificar("Erro ao tanra criar novo usuario web");
+                await _dapperRepository.Rollback();
+            }
+            return resultado;
+        }
+
         #endregion
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Log;
+using agilum.mvc.web.Extensions;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -22,6 +23,7 @@ namespace agilum.mvc.web.Controllers
         }
 
         [Route("lista")]
+        [ClaimsAuthorizeAttribute(1016)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 25, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
 

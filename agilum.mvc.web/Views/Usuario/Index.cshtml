@@ -1,0 +1,140 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Usuarios
+@model agilum.mvc.web.ViewModels.PagedViewModel<UserFull>
+@using agilum.mvc.web.Extensions
+@{
+    ViewData["Title"] = "Usuários";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturnCliente"></span></a>
+        @* <a asp-action="Registro" asp-controller="Usuario" title="Cadastrar novo usuario"><span class="fa fa-plus-square sns-tool-action" id="btnNovo"></span></a> *@
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a> Usuarios </a>
+        </div>
+    </article>
+</section>
+<br />
+
+<div class="row">
+    <div class="col-12">
+
+        <form asp-action="Index" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelFiltro">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar usuário" placeholder="Pesquisar usuario por nome..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-hover" id="divGridResultado">
+    <thead class="table thead-dark">
+        <tr>
+            <th id="listaNome" style="min-width: 300px">
+                <label class="form-label">Nome</label>
+            </th>
+            <th id="listaEmail">
+                <label class="form-label">E-mail</label>
+            </th>
+            @*  <th id="listaEmail">
+            <label class="form-label">Perfil</label>
+            </th>
+            *@
+            <th id="listaAtivo" style="width: 100px">
+                Situação
+            </th>
+            <th id="listaAcoes" style="max-width: 300px; text-align:right"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.List)
+        {
+            var habilitarUsuarioAtivo = item.AtivoBool ? "" : "disabled";
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nome)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+            @*     <td>
+                    @Html.DisplayFor(modelItem => item.PerfilDescricao)
+                </td> *@
+                <td>
+                    @if (item.AtivoBool)
+                    {
+                        <span class="text-success">Ativo</span>
+
+                    }
+                    else
+                    {
+                        <span class="text-danger">Inativo</span>
+
+                    }
+                </td>
+                <td class="text-right">
+                    @if (item.UsuarioPossuiAcessoWeb)
+                    {
+                        <a class="btn btn-secondary" title="Criar/Associar usuario web" id="btnCriarWeb" onclick="NovoUsuarioWeb('@item.id')"><spam class="fa fa-globe"></spam></a>
+                    }
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.id" title="Editar Usuario" id="btnEditarClaim"><spam class="fa fa-pencil-alt"></spam></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+
+            <td colspan="4">
+                <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+            </td>
+        </tr>
+
+    </tfoot>
+</table>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="~/js/dknotus-tour.min.js"></script>
+<script src="~/local/usuario/usuario.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+ 
+
+    </script>
+}

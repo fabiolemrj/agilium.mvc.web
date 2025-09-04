@@ -24,12 +24,14 @@ namespace agilium.api.business.Interfaces
         Task<List<Usuario>> ObterUsuariosPorNome(string nome);
         Task<PagedResult<Usuario>> ObterUsuariosPorNome(string nome, int page = 1, int pageSize = 15);
         Task<List<Usuario>> ObterTodosUsuariosValidos();
+        Task<PagedResult<Usuario>> ObterUsuariosPorNomePuro(string nome, int page = 1, int pageSize = 15);
 
 
         Task<List<EmpresaAuth>> ObterEmpresasPorUsuario(long id);
         Task<EmpresaAuth> ObterEmpresaPorId(long idUsuario, long idEmpresa);
         Task Adicionar(EmpresaAuth empresaAuth);
         Task Atualizar(EmpresaAuth empresaAuth);
+        Task<bool> AtualizarSemSalvar(Usuario usuario);
         Task AdicionarLista(IEnumerable<EmpresaAuth> empresaAuth);
         Task AtualizarLista(IEnumerable<EmpresaAuth> empresaAuth);
         Task<List<Empresa>> ObterEmpresasDisponiveisAssociacao( long idUsuario);

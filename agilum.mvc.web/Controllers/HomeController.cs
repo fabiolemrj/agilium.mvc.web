@@ -1,7 +1,10 @@
 ﻿using agilum.mvc.web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Configuration;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -11,15 +14,26 @@ namespace agilum.mvc.web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IConfiguration _configuration;
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         public ActionResult Index()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        [Route("ObterVersaoSistema")]
+        public ActionResult ObterVersaoSistema()
+        {
+            var versaobd_major = Convert.ToInt32(_configuration.GetConnectionString("versaobd-major"));
+            var versao_major = _configuration.GetConnectionString("versao-major");
+            var _versao = $"Versão: {_configuration.GetConnectionString("versao-major")}.{_configuration.GetConnectionString("versao-minor")}.{_configuration.GetConnectionString("versao-build")}" ;
+            return Json(new{versao = _versao });
         }
 
         [AllowAnonymous]

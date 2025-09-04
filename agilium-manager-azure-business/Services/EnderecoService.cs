@@ -52,7 +52,9 @@ namespace agilium.api.business.Services
 
         public async Task<Cep> ObterCepPorNumeroCep(string cep)
         {
-            return _cepRepository.Buscar(x => x.Numero.ToLower() == cep.ToLower().Replace(".", "").Replace("-", "")).Result.FirstOrDefault();
+            var _cep = cep.ToLower().Replace(".", "").Replace("-", "");
+            var resultado = _cepRepository.Buscar(x => x.Numero.ToLower() == _cep).Result.FirstOrDefault();
+            return resultado;
         }
 
         public async Task<Endereco> ObterEnderecoPorId(long id)

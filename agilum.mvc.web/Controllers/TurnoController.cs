@@ -12,6 +12,7 @@ using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Turno;
 using System.Linq;
 using agilium.api.business.Models;
+using agilum.mvc.web.Extensions;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -42,6 +43,7 @@ namespace agilum.mvc.web.Controllers
         #region turno
 
         [Route("lista")]
+        [ClaimsAuthorizeAttribute(2134)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -92,6 +94,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("abrir")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2135)]
         public async Task<IActionResult> AbrirTurno()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -188,6 +191,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("fechar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2136)]
         public async Task<IActionResult> FecharTurno()
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -222,6 +226,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("fechar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2136)]
         public async Task<IActionResult> FecharTurno(TurnoIndexViewModel viewModel)
         {
             if (!ModelState.IsValid) return View(viewModel);

@@ -1,0 +1,65 @@
+﻿@page
+@model agilum.mvc.web.Areas.Identity.Pages.Account.ConfirmarEmailModel
+@{
+    Layout = null;
+
+}
+@{
+    ViewData["Title"] = "Confirmação de Email";
+}
+
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agilium Manager</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.js">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+
+</head>
+
+<body class="hold-transition login-page">
+    <h2>Confirmação de email</h2>
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="#">Agilium Manager</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Seu acesso foi confirmado e voce poderá acessar o sistema</p>
+                <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Acesso ao sistema</a>
+            </div>
+        </div>
+
+    </div>
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <!-- AdminLTE App -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- jQuery -->
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/dist/js/adminlte.min.js"></script>
+    <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
+</body>
+</html>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

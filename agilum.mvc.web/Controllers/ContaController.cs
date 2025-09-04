@@ -3,6 +3,7 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilum.mvc.web.Enums;
+using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.CategeoriaFinanceira;
 using agilum.mvc.web.ViewModels.Cliente;
@@ -120,6 +121,7 @@ namespace agilum.mvc.web.Controllers
         #region contas pagar
 
         [Route("pagar/lista")]
+        [ClaimsAuthorizeAttribute(2079)]
         public async Task<IActionResult> IndexContaPagar([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -148,6 +150,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2080)]
         public async Task<IActionResult> CreateContaPagar()
         {
             ViewBag.operacao = "I";
@@ -181,6 +184,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/novo")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2080)]
         public async Task<IActionResult> CreateContaPagar(ContaPagarViewModel model)
         {
 
@@ -225,6 +229,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2083)]
         public async Task<IActionResult> EditContaPagar(long id)
         {
 
@@ -249,6 +254,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2083)]
         public async Task<IActionResult> EditContaPagar(ContaPagarViewModel model)
         {
 
@@ -279,6 +285,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2081)]
         public async Task<IActionResult> DeleteContaPagar(long id)
         {
             var model = _mapper.Map<ContaPagarViewModel>(await _contaService.ObterCompletoPorId(id));
@@ -301,6 +308,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2081)]
         public async Task<IActionResult> DeleteContaPagar(ContaPagarViewModel model)
         {
             await _contaService.Apagar(model.Id);
@@ -322,6 +330,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/consolidar/{id}")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2085)]
         public async Task<IActionResult> ConsolidarContaPagarPorId(long id)
         {
             var msgResultado = "";
@@ -348,6 +357,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar/desconsolidar/{id}")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2085)]
         public async Task<IActionResult> DesConsolidarContaPagarPorId(long id)
         {
             var msgResultado = "";
@@ -375,6 +385,7 @@ namespace agilum.mvc.web.Controllers
         #region contas receber
 
         [Route("receber/lista")]
+        [ClaimsAuthorizeAttribute(2087)]
         public async Task<IActionResult> IndexContaReceber([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
 
@@ -403,6 +414,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/novo")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2088)]
         public async Task<IActionResult> CreateContaReceber()
         {
             ViewBag.operacao = "I";
@@ -422,6 +434,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/novo")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2088)]
         public async Task<IActionResult> CreateContaReceber(ContaReceberViewModel model)
         {
 
@@ -466,6 +479,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/editar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2091)]
         public async Task<IActionResult> EditContaReceber(long id)
         {
 
@@ -490,6 +504,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/editar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2091)]
         public async Task<IActionResult> EditContaReceber(ContaReceberViewModel model)
         {
 
@@ -520,6 +535,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/apagar")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2089)]
         public async Task<IActionResult> DeleteContaReceber(long id)
         {
             var model = _mapper.Map<ContaReceberViewModel>(await _contaService.ObterContaReceberCompletoPorId(id));
@@ -542,6 +558,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/apagar")]
         [HttpPost]
+        [ClaimsAuthorizeAttribute(2089)]
         public async Task<IActionResult> DeleteContaReceber(ContaReceberViewModel model)
         {
             await _contaService.ApagarContaReceber(model.Id);
@@ -564,6 +581,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/consolidar/{id}")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2093)]
         public async Task<IActionResult> ConsolidarContaReceberPorId(long id)
         {
             var msgResultado = "";
@@ -589,6 +607,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber/desconsolidar/{id}")]
         [HttpGet]
+        [ClaimsAuthorizeAttribute(2093)]
         public async Task<IActionResult> DesConsolidarContaReceberPorId(long id)
         {
             var msgResultado = "";
