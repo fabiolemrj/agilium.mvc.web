@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Xml.Serialization;
 using static agilum.mvc.web.ViewModels.Compra.EIcmsTipo;
 
@@ -102,160 +103,620 @@ namespace agilum.mvc.web.ViewModels.Compra
         public List<CfopViewModel> Cfops { get; set; } = new List<CfopViewModel>();
     }
 
+    public class CompraIndexViewModel
+    {
+        public long Id { get; set; }
+        public string Fornecedor { get; set; }
+        public DateTime DataCompra { get; set; }
+        public ESituacaoCompra? Situacao { get; set; }
+        public ETipoCompravanteCompra? TipoComprovante { get; set; }
+        public string NumeroNF { get; set; }
+        public string ValorDesconto { get; set; }
+        public string ValorTotal { get; set; }
+        public string ValorIsencao { get; set; }
+        public string Codigo { get; set; }
+    }
+    
     public class CompraItemViewModel
     {
         public long Id { get; set; }
+
         [Display(Name = "Compra")]
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
-        public Int64? IDCOMPRA { get; set; }
+        public long? IDCOMPRA { get; set; }
         public string NomeCompra { get; set; }
+
         [Display(Name = "Produto")]
-        public Int64? IDPRODUTO { get; set; }
+        public long? IDPRODUTO { get; set; }
         public string CodigoProduto { get; set; }
+
         [Display(Name = "Descrição Produto NF")]
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         public string DescricaoProdutoCompra { get; set; }
+
         [Display(Name = "Estoque")]
-        public Int64? IDESTOQUE { get; set; }
+        public long? IDESTOQUE { get; set; }
         public string NomeEstoque { get; set; }
         public string NomeProduto { get; set; }
+
         [Display(Name = "Codigo EAN")]
         [StringLength(50, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string CodigoEan { get; set; }
+
         [Display(Name = "Codigo NCM")]
         [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string CodigoNCM { get; set; }
+
         [Display(Name = "CEST")]
         [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string CodigoCEST { get; set; }
+
         [Display(Name = "Unidade")]
         [StringLength(5, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string SGUN { get; set; }
-        [Display(Name = "Quantidade")]
-        [Required(ErrorMessage = "O campo {0} é obrigatorio")]
+
+        public string CodigoProdutoFornecedor { get; set; }
+        #region Propriedades Double com Correspondente String
+
+        // Quantidade
         public double? Quantidade { get; set; }
-        [Display(Name = "Relação")]
+        private string quantidadeString;
+        [Display(Name = "Quantidade")]
+        public string Quantidade_String
+        {
+            get => quantidadeString ?? FormatDecimal(Quantidade);
+            set
+            {
+                quantidadeString = value;
+                Quantidade = ParseDecimal(value);
+            }
+        }
+
+        // Relação
         public double? Relacao { get; set; }
-        [Display(Name = "Valor Unitário")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        [Required(ErrorMessage = "O campo {0} é obrigatorio")]
+        private string relacaoString;
+        [Display(Name = "Relação")]
+        public string Relacao_String
+        {
+            get => relacaoString ?? FormatDecimal(Relacao);
+            set
+            {
+                relacaoString = value;
+                Relacao = ParseDecimal(value);
+            }
+        }
+
+        // Valor Unitário
         public double? ValorUnitario { get; set; }
-        [Display(Name = "Valor Total")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
+        private string valorUnitarioString;
+        [Display(Name = "Valor Unitário")]
+        public string ValorUnitario_String
+        {
+            get => valorUnitarioString ?? FormatDecimal(ValorUnitario);
+            set
+            {
+                valorUnitarioString = value;
+                ValorUnitario = ParseDecimal(value);
+            }
+        }
+
+        // Valor Total
         public double? ValorTotal { get; set; } = 0;
-        [Display(Name = "Data Validade")]
-        public DateTime? DataValidade { get; set; }
+        private string valorTotalString;
+        [Display(Name = "Valor Total")]
+        public string ValorTotal_String
+        {
+            get => valorTotalString ?? FormatDecimal(ValorTotal);
+            set
+            {
+                valorTotalString = value;
+                ValorTotal = ParseDecimal(value);
+            }
+        }
+
+        // Valor Outros
+        public double? ValorOUTROS { get; set; } = 0;
+        private string valorOUTROSString;
+        [Display(Name = "Valor Outros")]
+        public string ValorOUTROS_String
+        {
+            get => valorOUTROSString ?? FormatDecimal(ValorOUTROS);
+            set
+            {
+                valorOUTROSString = value;
+                ValorOUTROS = ParseDecimal(value);
+            }
+        }
+
+        // Valor Base Redução
+        public double? ValorBaseRetido { get; set; } = 0;
+        private string valorBaseRetidoString;
+        [Display(Name = "Valor Base Redução")]
+        public string ValorBaseRetido_String
+        {
+            get => valorBaseRetidoString ?? FormatDecimal(ValorBaseRetido);
+            set
+            {
+                valorBaseRetidoString = value;
+                ValorBaseRetido = ParseDecimal(value);
+            }
+        }
+
+        // % ICMS Retido
+        public double? PorcentagemIcmsRetido { get; set; } = 0;
+        private string porcentagemIcmsRetidoString;
+        [Display(Name = "% ICMS Retido")]
+        public string PorcentagemIcmsRetido_String
+        {
+            get => porcentagemIcmsRetidoString ?? FormatDecimal(PorcentagemIcmsRetido);
+            set
+            {
+                porcentagemIcmsRetidoString = value;
+                PorcentagemIcmsRetido = ParseDecimal(value);
+            }
+        }
+
+        // Porcentagem Redução
+        public double? PorcentagemReducao { get; set; } = 0;
+        private string porcentagemReducaoString;
+        [Display(Name = "Porcentagem Redução")]
+        public string PorcentagemReducao_String
+        {
+            get => porcentagemReducaoString ?? FormatDecimal(PorcentagemReducao);
+            set
+            {
+                porcentagemReducaoString = value;
+                PorcentagemReducao = ParseDecimal(value);
+            }
+        }
+
+        // Valor Aliquota Pis
+        public double? ValorAliquotaPis { get; set; } = 0;
+        private string valorAliquotaPisString;
+        [Display(Name = "Aliquota PIS")]
+        public string ValorAliquotaPis_String
+        {
+            get => valorAliquotaPisString ?? FormatDecimal(ValorAliquotaPis);
+            set
+            {
+                valorAliquotaPisString = value;
+                ValorAliquotaPis = ParseDecimal(value);
+            }
+        }
+
+        // Valor Aliquota Cofins
+        public double? ValorAliquotaCofins { get; set; } = 0;
+        private string valorAliquotaCofinsString;
+        [Display(Name = "Aliquota Cofins")]
+        public string ValorAliquotaCofins_String
+        {
+            get => valorAliquotaCofinsString ?? FormatDecimal(ValorAliquotaCofins);
+            set
+            {
+                valorAliquotaCofinsString = value;
+                ValorAliquotaCofins = ParseDecimal(value);
+            }
+        }
+
+        // Valor Aliquota ICMS
+        public double? ValorAliquotaIcms { get; set; } = 0;
+        private string valorAliquotaIcmsString;
+        [Display(Name = "Aliquota ICMS")]
+        public string ValorAliquotaIcms_String
+        {
+            get => valorAliquotaIcmsString ?? FormatDecimal(ValorAliquotaIcms);
+            set
+            {
+                valorAliquotaIcmsString = value;
+                ValorAliquotaIcms = ParseDecimal(value);
+            }
+        }
+
+        // Valor Aliquota IPI
+        public double? ValorAliquotaIpi { get; set; } = 0;
+        private string valorAliquotaIpiString;
+        [Display(Name = "Aliquota IPI")]
+        public string ValorAliquotaIpi_String
+        {
+            get => valorAliquotaIpiString ?? FormatDecimal(ValorAliquotaIpi);
+            set
+            {
+                valorAliquotaIpiString = value;
+                ValorAliquotaIpi = ParseDecimal(value);
+            }
+        }
+
+        // Valor Base Calculo PIS
+        public double? ValorBaseCalculoPis { get; set; } = 0;
+        private string valorBaseCalculoPisString;
+        [Display(Name = "Base Calc. PIS")]
+        public string ValorBaseCalculoPis_String
+        {
+            get => valorBaseCalculoPisString ?? FormatDecimal(ValorBaseCalculoPis);
+            set
+            {
+                valorBaseCalculoPisString = value;
+                ValorBaseCalculoPis = ParseDecimal(value);
+            }
+        }
+
+        // Valor Base Calculo Cofins
+        public double? ValorBaseCalculoCofins { get; set; } = 0;
+        private string valorBaseCalculoCofinsString;
+        [Display(Name = "Base Calc Cofins")]
+        public string ValorBaseCalculoCofins_String
+        {
+            get => valorBaseCalculoCofinsString ?? FormatDecimal(ValorBaseCalculoCofins);
+            set
+            {
+                valorBaseCalculoCofinsString = value;
+                ValorBaseCalculoCofins = ParseDecimal(value);
+            }
+        }
+
+        // Valor Base Calculo ICMS
+        public double? ValorBaseCalculoIcms { get; set; } = 0;
+        private string valorBaseCalculoIcmsString;
+        [Display(Name = "Base Calc ICMS")]
+        public string ValorBaseCalculoIcms_String
+        {
+            get => valorBaseCalculoIcmsString ?? FormatDecimal(ValorBaseCalculoIcms);
+            set
+            {
+                valorBaseCalculoIcmsString = value;
+                ValorBaseCalculoIcms = ParseDecimal(value);
+            }
+        }
+
+        // Valor Base Calculo IPI
+        public double? ValorBaseCalculoIpi { get; set; } = 0;
+        private string valorBaseCalculoIpiString;
+        [Display(Name = "Base Calc IPI")]
+        public string ValorBaseCalculoIpi_String
+        {
+            get => valorBaseCalculoIpiString ?? FormatDecimal(ValorBaseCalculoIpi);
+            set
+            {
+                valorBaseCalculoIpiString = value;
+                ValorBaseCalculoIpi = ParseDecimal(value);
+            }
+        }
+
+        // Valor ICMS
+        public double? ValorIcms { get; set; } = 0;
+        private string valorIcmsString;
+        [Display(Name = "Valor ICMS")]
+        public string ValorIcms_String
+        {
+            get => valorIcmsString ?? FormatDecimal(ValorIcms);
+            set
+            {
+                valorIcmsString = value;
+                ValorIcms = ParseDecimal(value);
+            }
+        }
+
+        // Valor PIS
+        public double? ValorPis { get; set; } = 0;
+        private string valorPisString;
+        [Display(Name = "Valor PIS")]
+        public string ValorPis_String
+        {
+            get => valorPisString ?? FormatDecimal(ValorPis);
+            set
+            {
+                valorPisString = value;
+                ValorPis = ParseDecimal(value);
+            }
+        }
+
+        // Valor Cofins
+        public double? ValorCofins { get; set; }
+        private string valorCofinsString;
+        [Display(Name = "Valor Cofins")]
+        public string ValorCofins_String
+        {
+            get => valorCofinsString ?? FormatDecimal(ValorCofins);
+            set
+            {
+                valorCofinsString = value;
+                ValorCofins = ParseDecimal(value);
+            }
+        }
+
+        // Valor IPI
+        public double? ValorIpi { get; set; } = 0;
+        private string valorIpiString;
+        [Display(Name = "Valor IPI")]
+        public string ValorIpi_String
+        {
+            get => valorIpiString ?? FormatDecimal(ValorIpi);
+            set
+            {
+                valorIpiString = value;
+                ValorIpi = ParseDecimal(value);
+            }
+        }
+
+        // Valor Novo Preço Venda
+        public double? ValorNovoPrecoVenda { get; set; } = 0;
+        private string valorNovoPrecoVendaString;
+        [Display(Name = "Preço Venda")]
+        public string ValorNovoPrecoVenda_String
+        {
+            get => valorNovoPrecoVendaString ?? FormatDecimal(ValorNovoPrecoVenda);
+            set
+            {
+                valorNovoPrecoVendaString = value;
+                ValorNovoPrecoVenda = ParseDecimal(value);
+            }
+        }
+
+        #endregion
+
+        #region Outras Propriedades
+
         [Display(Name = "CFOP")]
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         public int? NumeroCFOP { get; set; }
-        [Display(Name = "Valor Outros")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorOUTROS { get; set; } = 0;
-        [Display(Name = "Valor Base Redução")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorBaseRetido { get; set; } = 0;
-        [Display(Name = "% ICMS Retido")]
-        [Range(0.0, 100, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? PorcentagemIcmsRetido { get; set; } = 0;
-        [Display(Name = "Porcentagem Redução")]
-        [Range(0.0, 100, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? PorcentagemReducao { get; set; } = 0;
+
         [Display(Name = "Codigo CST ICMS")]
-        [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
+        [StringLength(20)]
         public string CodigoCstIcms { get; set; }
+
         [Display(Name = "Codigo CST PIS")]
-        [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
+        [StringLength(20)]
         public string CodigoCstPis { get; set; }
+
         [Display(Name = "Codigo CST Cofins")]
-        [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
+        [StringLength(20)]
         public string CodigoCstCofins { get; set; }
+
         [Display(Name = "Codigo CST IPI")]
-        [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
+        [StringLength(20)]
         public string CodigoCstIpi { get; set; }
-        [Display(Name = "Aliquota PIS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorAliquotaPis { get; set; } = 0;
-        [Display(Name = "Aliquota Cofins")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorAliquotaCofins { get; set; } = 0;
-        [Display(Name = "Aliquota ICMS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorAliquotaIcms { get; set; } = 0;
-        [Display(Name = "Aliquota IPI")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorAliquotaIpi { get; set; } = 0;
-        [Display(Name = "Base Calc. PIS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorBaseCalculoPis { get; set; } = 0;
-        [Display(Name = "Base Calc Cofins")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorBaseCalculoCofins { get; set; } = 0;
-        [Display(Name = "Base Calc ICMS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorBaseCalculoIcms { get; set; } = 0;
-        [Display(Name = "Base Calc IPI")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorBaseCalculoIpi { get; set; } = 0;
-        [Display(Name = "Valor ICMS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorIcms { get; set; } = 0;
-        [Display(Name = "Valor PIS")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorPis { get; set; } = 0;
-        [Display(Name = "Valor Cofins")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorCofins { get; set; }
-        [Display(Name = "Valor IPI")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorIpi { get; set; } = 0;
-        [Display(Name = "Cod Produto/Fornecedor")]
-        [StringLength(20, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
-        public string CodigoProdutoFornecedor { get; set; }
-        [Display(Name = "Preço Venda")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
-        public double? ValorNovoPrecoVenda { get; set; } = 0;
+
+        [Display(Name = "Data Validade")]
+        public DateTime? DataValidade { get; set; }
+
         public List<ProdutoViewModel> Produtos { get; set; } = new List<ProdutoViewModel>();
         public List<EstoqueViewModel> Estoques { get; set; } = new List<EstoqueViewModel>();
         public List<UnidadeIndexViewModel> Unidades { get; set; } = new List<UnidadeIndexViewModel>();
         public bool Importada { get; set; } = false;
+
+        #endregion
+
+        #region Métodos Auxiliares
+
+
+        // Converte string para double? aceitando "." ou ","
+        // Método auxiliar para converter string pt-BR para double?
+        private double? ParseDecimal(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+
+            try
+            {
+                return double.Parse(value, new CultureInfo("pt-BR"));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string FormatDecimal(double? value)
+        {
+            if (!value.HasValue)
+                return null; // Se for nulo, não retorna nada
+
+            // Converte o valor numérico para string no formato brasileiro (pt-BR)
+            return value.Value.ToString("N2", new CultureInfo("pt-BR"));
+        }
+
+        public void AtualizarStrings()
+        {
+            Quantidade_String = FormatDecimal(Quantidade);
+            Relacao_String = FormatDecimal(Relacao);
+            ValorUnitario_String = FormatDecimal(ValorUnitario);
+            ValorTotal_String = FormatDecimal(ValorTotal);
+            ValorOUTROS_String = FormatDecimal(ValorOUTROS);
+            ValorBaseRetido_String = FormatDecimal(ValorBaseRetido);
+            PorcentagemIcmsRetido_String = FormatDecimal(PorcentagemIcmsRetido);
+            PorcentagemReducao_String = FormatDecimal(PorcentagemReducao);
+            ValorAliquotaPis_String = FormatDecimal(ValorAliquotaPis);
+            ValorAliquotaCofins_String = FormatDecimal(ValorAliquotaCofins);
+            ValorAliquotaIcms_String = FormatDecimal(ValorAliquotaIcms);
+            ValorAliquotaIpi_String = FormatDecimal(ValorAliquotaIpi);
+            ValorBaseCalculoPis_String = FormatDecimal(ValorBaseCalculoPis);
+            ValorBaseCalculoCofins_String = FormatDecimal(ValorBaseCalculoCofins);
+            ValorBaseCalculoIcms_String = FormatDecimal(ValorBaseCalculoIcms);
+            ValorBaseCalculoIpi_String = FormatDecimal(ValorBaseCalculoIpi);
+            ValorIcms_String = FormatDecimal(ValorIcms);
+            ValorPis_String = FormatDecimal(ValorPis);
+            ValorCofins_String = FormatDecimal(ValorCofins);
+            ValorIpi_String = FormatDecimal(ValorIpi);
+            ValorNovoPrecoVenda_String = FormatDecimal(ValorNovoPrecoVenda);
+        }
+
+        public void AtualizarDoubles()
+        {
+            Quantidade = ParseDecimal(Quantidade_String);
+            Relacao = ParseDecimal(Relacao_String);
+            ValorUnitario = ParseDecimal(ValorUnitario_String);
+            ValorTotal = ParseDecimal(ValorTotal_String);
+            ValorOUTROS = ParseDecimal(ValorOUTROS_String);
+            ValorBaseRetido = ParseDecimal(ValorBaseRetido_String);
+            PorcentagemIcmsRetido = ParseDecimal(PorcentagemIcmsRetido_String);
+            PorcentagemReducao = ParseDecimal(PorcentagemReducao_String);
+            ValorAliquotaPis = ParseDecimal(ValorAliquotaPis_String);
+            ValorAliquotaCofins = ParseDecimal(ValorAliquotaCofins_String);
+            ValorAliquotaIcms = ParseDecimal(ValorAliquotaIcms_String);
+            ValorAliquotaIpi = ParseDecimal(ValorAliquotaIpi_String);
+            ValorBaseCalculoPis = ParseDecimal(ValorBaseCalculoPis_String);
+            ValorBaseCalculoCofins = ParseDecimal(ValorBaseCalculoCofins_String);
+            ValorBaseCalculoIcms = ParseDecimal(ValorBaseCalculoIcms_String);
+            ValorBaseCalculoIpi = ParseDecimal(ValorBaseCalculoIpi_String);
+            ValorIcms = ParseDecimal(ValorIcms_String);
+            ValorPis = ParseDecimal(ValorPis_String);
+            ValorCofins = ParseDecimal(ValorCofins_String);
+            ValorIpi = ParseDecimal(ValorIpi_String);
+            ValorNovoPrecoVenda = ParseDecimal(ValorNovoPrecoVenda_String);
+        }
+
+        #endregion
     }
+
 
     public class CompraItemEditViewModel
     {
         public long Id { get; set; }
+
         [Display(Name = "Compra")]
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
-        public Int64? IDCOMPRA { get; set; }
+        public long? IDCOMPRA { get; set; }
         public string NomeCompra { get; set; }
+
         [Display(Name = "Produto")]
-        public Int64? IDPRODUTO { get; set; }
+        public long? IDPRODUTO { get; set; }
         public string CodigoProduto { get; set; }
+
         [Display(Name = "Descrição Produto NF")]
         public string DescricaoProdutoCompra { get; set; }
+
         [Display(Name = "Estoque")]
-        public Int64? IDESTOQUE { get; set; }
+        public long? IDESTOQUE { get; set; }
+
         [Display(Name = "Unidade")]
         [StringLength(5, ErrorMessage = "Quantidade maxima de caracteres para o campo {0} deve ser de até {1}")]
         public string SGUN { get; set; }
-        [Display(Name = "Quantidade")]
+
+        // Quantidade
         public double? Quantidade { get; set; }
-        [Display(Name = "Relação")]
+        private string quantidadeView;
+        [Display(Name = "Quantidade")]
+        public string QuantidadeView
+        {
+            get => quantidadeView ?? FormatDecimal(Quantidade);
+            set
+            {
+                quantidadeView = value;
+                Quantidade = ParseDecimal(value);
+            }
+        }
+
+        // Relação
         public double? Relacao { get; set; }
-        [Display(Name = "Valor Unitário")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
+        private string relacaoView;
+        [Display(Name = "Relação")]
+        public string RelacaoView
+        {
+            get => relacaoView ?? FormatDecimal(Relacao);
+            set
+            {
+                relacaoView = value;
+                Relacao = ParseDecimal(value);
+            }
+        }
+
+        // Valor Unitário
         public double? ValorUnitario { get; set; }
+        private string valorUnitarioView;
+        [Display(Name = "Valor Unitário")]
+        public string ValorUnitarioView
+        {
+            get => valorUnitarioView ?? FormatDecimal(ValorUnitario);
+            set
+            {
+                valorUnitarioView = value;
+                ValorUnitario = ParseDecimal(value);
+            }
+        }
+
         [Display(Name = "Valor Total")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
+        // Valor Total
         public double? ValorTotal { get; set; } = 0;
-        [Display(Name = "Preço Venda")]
-        [Range(0.0, Double.MaxValue, ErrorMessage = "O campo {0} deve ser maior que {1}.")]
+        private string valorTotalView;
+        [Display(Name = "Valor Total")]
+        public string ValorTotalView
+        {
+            get => valorTotalView ?? FormatDecimal(ValorTotal);
+            set
+            {
+                valorTotalView = value;
+                ValorTotal = ParseDecimal(value);
+            }
+        }
+
+        // Preço Venda
+        [Display(Name = "Novo Preço Venda")]
         public double? ValorNovoPrecoVenda { get; set; } = 0;
+        [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = true)]
+        private string valorNovoPrecoVendaView;
+        [Display(Name = "Preço Venda")]
+        public string ValorNovoPrecoVendaView
+        {
+            get => valorNovoPrecoVendaView ?? FormatDecimal(ValorNovoPrecoVenda);
+            set
+            {
+                valorNovoPrecoVendaView = value;
+                ValorNovoPrecoVenda = ParseDecimal(value);
+            }
+        }
+
         public List<ProdutoViewModel> Produtos { get; set; } = new List<ProdutoViewModel>();
         public List<EstoqueViewModel> Estoques { get; set; } = new List<EstoqueViewModel>();
         public List<UnidadeIndexViewModel> Unidades { get; set; } = new List<UnidadeIndexViewModel>();
         public bool Importada { get; set; } = false;
+
         public string certo { get; set; }
+
+        #region Métodos auxiliares
+
+        // Converte string para double? aceitando "." ou ","
+        // Método auxiliar para converter string pt-BR para double?
+        private double? ParseDecimal(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+
+            try
+            {
+                return double.Parse(value, new CultureInfo("pt-BR"));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string FormatDecimal(double? value)
+        {
+            if (!value.HasValue)
+                return null; // Se for nulo, não retorna nada
+
+            // Converte o valor numérico para string no formato brasileiro (pt-BR)
+            return value.Value.ToString("N2", new CultureInfo("pt-BR"));
+        }
+
+        public void AtualizarStrings()
+        {
+            ValorNovoPrecoVendaView = FormatDecimal(ValorNovoPrecoVenda);
+            RelacaoView = FormatDecimal(Relacao);
+            ValorUnitarioView = FormatDecimal(ValorUnitario);
+            ValorTotalView = FormatDecimal(ValorTotal);
+            
+        }
+
+        public void AtualizarDoubles()
+        {
+            ValorNovoPrecoVenda = ParseDecimal(ValorNovoPrecoVendaView);
+            Relacao = ParseDecimal(RelacaoView);
+            ValorUnitario = ParseDecimal(ValorUnitarioView);
+            ValorTotal = ParseDecimal(ValorTotalView);
+        }
+        #endregion
     }
+
 
     public class CompraFiscalViewModel
     {

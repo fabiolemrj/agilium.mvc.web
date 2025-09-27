@@ -21,6 +21,7 @@ namespace agilium.api.infra.Repository.Dapper
         private readonly IUtilDapperRepository _utilDapperRepository;
         private readonly IContatoDapperRepository _contatoDapperRepository;
         private readonly IEnderecoDapperRepository _enderecoDapperRepository;
+
         private readonly DbSession _dbSession;
 
         public FornecedorDapperRepository(IConfiguration configuration, IUtilDapperRepository utilDapperRepository, 
@@ -31,6 +32,7 @@ namespace agilium.api.infra.Repository.Dapper
             _contatoDapperRepository = contatoDapperRepository;
             _enderecoDapperRepository = enderecoDapperRepository;
             _dbSession = dbSession;
+            
         }
 
         public string GetConnection()
@@ -159,10 +161,79 @@ namespace agilium.api.infra.Repository.Dapper
             var query = $@"SELECT fornecedor.IDFORN as Id, fornecedor.* FROM fornecedor WHERE NUCPFCNPJ = @NUCPFCNPJ";
 
             return _dbSession.Connection.Query<Fornecedor>(query, parametros, _dbSession.Transaction).FirstOrDefault();
-            
+        }
+
+        public async Task<Fornecedor> ObterFornecedorPorId(long id)
+        {
+            //var parametros = new DynamicParameters();
+            //var query = $@"SELECT *, IDFORN as Id FROM fornecedor where IDFORN = @IDFORN";
+            //parametros.Add("@IDFORN", id, DbType.Int64, ParameterDirection.Input);
+
+            //var fornecedor = _dbSession.Connection.Query<Fornecedor>(query, parametros, _dbSession.Transaction).FirstOrDefault();
+
+            //if(fornecedor != null)
+            //{
+            //    var parametrosEndereco = new DynamicParameters();
+            //    var queryEndereco = $@"select *,idendereco as Id from endereco where idendereco = @idendereco";
+            //    parametrosEndereco.Add("@idendereco", fornecedor.IDENDERECO, DbType.Int64, ParameterDirection.Input);
+
+            //    var endereco = _dbSession.Connection.Query<Endereco>(queryEndereco, parametrosEndereco, _dbSession.Transaction).FirstOrDefault();
+            //    if(endereco != null)
+            //    {
+            //        fornecedor.AdicionarEndereco(endereco);
+            //    }
+
+            //    var parametrosContato = new DynamicParameters();
+            //    var queryContato = $@"select c.* from contato c inner join forn_contato fc on fc.idcontato = c.idcontato where idforn = @IDFORN";
+            //    parametrosContato.Add("@IDFORN", id, DbType.Int64, ParameterDirection.Input);
+
+            //    var contatos = _dbSession.Connection.Query<Contato>(queryContato, parametrosContato, _dbSession.Transaction);
+            //    foreach ( var contato in contatos)
+            //    {
+            //        var fornecContato = new FornecedorContato(contato, fornecedor);
+            //        fornecedor.FornecedoresContatos.Add(fornecContato);
+            //    }
+            //}
+
+            //return fornecedor;
+            return new Fornecedor();
+        }
+
+        public async Task<bool> AtualizarFornecedorTransacao(Fornecedor fornecedor)
+        {
+            var parametrosEndereco = new DynamicParameters();
+            var queryEndereco = $@"select *,IDENDERECO as Id from endereco where idendereco = @idendereco";
+            parametrosEndereco.Add("@idendereco", fornecedor.IDENDERECO, DbType.Int64, ParameterDirection.Input);
+
+            var endereco = _dbSession.Connection.Query<Endereco>(queryEndereco, parametrosEndereco, _dbSession.Transaction).FirstOrDefault();
+            if (endereco != null)
+            {
+                await _enderecoDapperRepository.AtualizarEnderecoTransacao(fornecedor.Endereco);
+            }
+            else if(fornecedor.IDENDERECO > 0 && endereco == null)
+            {
+                await _enderecoDapperRepository.AdicionarEndereco(fornecedor.Endereco);
             }
 
-        
+
+            var query = $@"UPDATE fornecedor SET IDENDERECO = @IDENDERECO, CDFORN = @CDFORN, NMRZSOCIAL = @NMRZSOCIAL, NMFANTASIA = @NMFANTASIA,TPPESSOA = @TPPESSOA, NUCPFCNPJ = @NUCPFCNPJ,DSINSCR =@DSINSCR, 
+                        TPFISCAL = @TPFISCAL,STFORNEC = @STFORNEC WHERE IDFORN = @IDFORN";
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDFORN", fornecedor.Id, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDENDERECO", fornecedor.IDENDERECO, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@CDFORN", fornecedor.CDFORN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@NMRZSOCIAL", fornecedor.NMRZSOCIAL, DbType.String, ParameterDirection.Input);
+            parametros.Add("@NMFANTASIA", fornecedor.NMFANTASIA, DbType.String, ParameterDirection.Input);
+            parametros.Add("@TPPESSOA", fornecedor.TPPESSOA, DbType.String, ParameterDirection.Input);
+            parametros.Add("@NUCPFCNPJ", fornecedor.NUCPFCNPJ, DbType.String, ParameterDirection.Input);
+            parametros.Add("@TPFISCAL", fornecedor.TPFISCAL, DbType.String, ParameterDirection.Input);
+            parametros.Add("@STFORNEC", fornecedor.STFORNEC, DbType.String, ParameterDirection.Input);
+            parametros.Add("@DSINSCR", fornecedor.DSINSCR, DbType.String, ParameterDirection.Input);
+
+            return _dbSession.Connection.ExecuteAsync(query, parametros, _dbSession.Transaction).Result > 0;            
+        }
+
 
         #endregion
     }

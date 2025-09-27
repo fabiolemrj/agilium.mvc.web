@@ -32,6 +32,7 @@ namespace agilum.mvc.web.Services
         public static List<Estado> ObterEstados()
         {
             List<Estado> estados = new List<Estado>();
+            estados.Add(new Estado() { Sigla = "", Nome = "****" });
             estados.Add(new Estado() { Sigla = "RJ", Nome = "Rio de Janeiro" });
             estados.Add(new Estado() { Sigla = "MG", Nome = "Minas Gerais" });
             estados.Add(new Estado() { Sigla = "SP", Nome = "São Paulo" });

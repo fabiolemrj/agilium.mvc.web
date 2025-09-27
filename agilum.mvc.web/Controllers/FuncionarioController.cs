@@ -3,6 +3,8 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -12,6 +14,7 @@ using agilum.mvc.web.ViewModels.Funcionarios;
 using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +42,8 @@ namespace agilum.mvc.web.Controllers
 
         public FuncionarioController(IFuncionarioService funcionarioService, IEnderecoService enderecoService, ICaService caService,
             IEmpresaService empresaService, IUsuarioService usuarioService
-            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _funcionarioService = funcionarioService;
             _enderecoService = enderecoService;
@@ -55,6 +59,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2031)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
+
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
@@ -73,6 +78,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
+            lista.Query = q;
 
             return View(lista);
         }
@@ -116,6 +122,11 @@ namespace agilum.mvc.web.Controllers
             {
                 await _enderecoService.AtualizarAdicionar(_mapper.Map<Endereco>(model.Endereco));
                 model.Endereco = null;
+            }
+            else
+            {
+                model.Endereco = null;
+                model.IDENDERECO = null;
             }
 
             var funcionario = _mapper.Map<Funcionario>(model);
@@ -178,6 +189,11 @@ namespace agilum.mvc.web.Controllers
             {
                 await _enderecoService.AtualizarAdicionar(_mapper.Map<Endereco>(model.Endereco));
                 model.Endereco = null;
+            }
+            else
+            {
+                model.Endereco = null;
+                model.IDENDERECO = null;
             }
 
 

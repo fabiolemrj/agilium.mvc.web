@@ -18,6 +18,9 @@ using System.Reflection;
 using agilium.api.business.Models;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -30,8 +33,9 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public ConfigController(INotificador notificador, IConfiguration configuration, IUser appUser, 
-            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, IConfigService configService) : 
-            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, IConfigService configService,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : 
+            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _configService = configService;
         }
@@ -276,11 +280,10 @@ namespace agilum.mvc.web.Controllers
         {
 
             if (!ModelState.IsValid) return View(model);
-
-            //var resposta = await _configService.Atualizar(model.IdEmpresa, await ConverterChaveValor(model));
+           
             if (!string.IsNullOrEmpty(model.Chave))
             {
-                await _configService.Atualizar(_mapper.Map<Config>(model));
+                await _configService.AtualizarManualmente(_mapper.Map<Config>(model));
             };
 
             if (!OperacaoValida())
@@ -289,7 +292,7 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
-            await _configService.Salvar();
+           
           
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
@@ -774,8 +777,6 @@ namespace agilum.mvc.web.Controllers
                 return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Vazio", EClassificacaoConfiguracao.Gerais).Result;
             }
         }
-
-
 
         private string ObterDescricao(string chave)
         {

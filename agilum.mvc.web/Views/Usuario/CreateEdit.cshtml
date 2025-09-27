@@ -366,6 +366,7 @@
 
         function BuscarCep() {
             const _cep = '/endereco/buscar-cep?cep=' + $('#cep').val();
+            //const _cep = '/mvc/endereco/buscar-cep?cep=' + $('#cep').val();
             //ModalMensagem("success",_cep);
             $.ajax({
                 type: 'get',

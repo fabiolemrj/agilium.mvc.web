@@ -28,7 +28,8 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<long> InsereProdutoPendente(string NMPRODUTO, string UNCOMPRA, string CDNCM, string CDCEST, double NURELACAO, double NUPRECO, long idEmpresa);
         Task<List<Produto>> ObterProdutosParaAtualizarIbpt();
         Task AtualizarIBPTPorProduto(Produto produto);
-
+        Task<List<Produto>> ObterTodosProdutos_IdDescricao(long idEmpresa);
+        Task<List<Produto>> BuscarProdutosJson(long idEmpresa, string filtro);
     }
 
 }

@@ -18,14 +18,16 @@ namespace agilium.api.business.Models
         public string Numero { get; private set; }
 
         public virtual List<Empresa> Empresas { get; set; } = new List<Empresa>();
-        public virtual List<Fornecedor> Fornecedores { get; set; } = new List<Fornecedor>();
+       // public virtual List<Fornecedor> Fornecedores { get; set; } = new List<Fornecedor>();
 
         public virtual List<Cliente> ClienteEndereco { get; set; } = new List<Cliente>();
         public virtual List<Cliente> ClienteEnderecoCobranca { get; set; } = new List<Cliente>();
         public virtual List<Cliente> ClienteEnderecoFaturamento { get; set; } = new List<Cliente>();
         public virtual List<Cliente> ClienteEnderecoEntrega { get; set; } = new List<Cliente>();
-        public virtual List<Funcionario> Funcionarios { get; set; } = new List<Funcionario>();
+      //  public virtual List<Funcionario> Funcionarios { get; set; } = new List<Funcionario>();
         public virtual List<Pedido> Pedidos { get; set; } = new List<Pedido>();
+        public virtual Funcionario Funcionario { get; set; } = new Funcionario();
+        public virtual Fornecedor Fornecedor { get; set; }
 
         public Endereco()
         {

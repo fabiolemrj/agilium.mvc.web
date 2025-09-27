@@ -8,7 +8,7 @@
 
 function BuscarCep() {
     const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
-    //ModalMensagem("success",_cep);
+    //const _cep = '/mvc/endereco/buscar-cep?cep=' + $('.cep').val();
     $.ajax({
         type: 'get',
         url: _cep,

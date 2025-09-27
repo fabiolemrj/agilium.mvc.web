@@ -72,7 +72,8 @@ $(function () {
 
 function NovoUsuarioWeb(idUsuario) {
     on();
-    const _cep = '/usuario/criar-novo-usuario?idUsuario=' + idUsuario;
+  
+    let _cep = '/usuario/criar-novo-usuario?idUsuario=' + idUsuario;
 
     toastr.options = {
         "closeButton": true,
@@ -106,6 +107,50 @@ function NovoUsuarioWeb(idUsuario) {
         },
         error: function (result) {
             toastr.error(result,"ERRO");
+            off();
+        }
+    });
+}
+
+function ReenviarEmail(idUsuario) {
+    on();
+
+    let _cep = '/usuario/reenviar-email?idUsuario=' + idUsuario;
+
+   
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "50000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    $.ajax({
+        type: 'get',
+        url: _cep,
+        success: function (resultado) {
+            if (!resultado.sucesso) {
+                toastr.error(resultado.erro, "ERRO");
+                off();
+                return;
+            }
+
+            toastr.success(resultado.erro, "SUCESSO")
+            off();
+        },
+        error: function (result) {
+            toastr.error(result, "ERRO");
             off();
         }
     });

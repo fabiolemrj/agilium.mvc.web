@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/toastr.css" />
+
 
 </head>
 
@@ -49,12 +51,16 @@
                     </div>
 
                     <div class="input-group mb-3">
-                        <input asp-for="Input.Password" class="form-control" placeholder="Senha" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        <input asp-for="Input.Password" class="form-control" placeholder="Senha" id="passwordInput" type="password" />
                         <div class="input-group-text">
-                            <span asp-validation-for="Input.Password" class="fas fa-lock text-danger"></span>
+
+                            <!-- Ícone de mostrar/ocultar senha -->
+                            <i class="fas fa-eye mr-2" id="togglePassword" style="cursor: pointer;"></i>
+                            <!-- Ícone de cadeado -->
+                            <span class="fas fa-lock text-danger"></span>
                         </div>
                     </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
                     <div class="input-group mb-3">
                         <select class="form-control" asp-for="Input.Empresa"
                                 asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})">
@@ -86,8 +92,8 @@
                 <p class="mb-1">
                     <a id="forgot-password" asp-page="./ForgotPassword">Esqueceu a senha?</a>
                 </p>
-              @*   <p class="mb-0">
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registre uma nova assinatura</a>
+                @*   <p class="mb-0">
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registre uma nova assinatura</a>
                 </p> *@
             </div>
             <!-- /.login-card-body -->
@@ -108,6 +114,7 @@
     <!-- AdminLTE App -->
     <script src="~/dist/js/adminlte.min.js"></script>
     <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/js/toastr.min.js"></script>
 
 
 </body>
@@ -117,3 +124,111 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<script>
+    $(document).ready(function () {
+
+        // ===== Mensagem via TempData =====
+        var tipoMensagem = '@TempData["TipoMensagem"]';
+        var mensagem = '@TempData["Mensagem"]';
+
+        if (tipoMensagem && tipoMensagem !== '') {
+            ModalMensagem(tipoMensagem, mensagem);
+        }
+
+        // ===== Função para mostrar/ocultar overlay =====
+        function on() {
+            var overlay = document.getElementById("overlay");
+            if (overlay) overlay.style.display = "block";
+        }
+
+        function off() {
+            var overlay = document.getElementById("overlay");
+            if (overlay) overlay.style.display = "none";
+        }
+
+        // Se houver mensagem → remove overlay
+        if ((('@ViewBag.TipoMensagem' !== '') && ('@ViewBag.TipoMensagem' !== undefined)) ||
+            (tipoMensagem && tipoMensagem !== '')) {
+            off();
+        }
+
+        // ===== Toggle senha =====
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('passwordInput');
+
+        if (togglePassword && passwordInput) {
+            togglePassword.addEventListener('click', function () {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+
+        // ===== Modal Mensagem =====
+        function ModalMensagem(tipoModal, mensagemModal) {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            switch (tipoModal) {
+                case "warning": toastr.warning(mensagemModal); break;
+                case "danger": toastr.error(mensagemModal, "ERRO"); break;
+                case "info": toastr.info(mensagemModal); break;
+                case "success": toastr.success(mensagemModal); break;
+                default: toastr.success(mensagemModal); break;
+            }
+        }
+
+        // ===== Links de navegação =====
+        $(document).on("click", "a.nav-link, a[data-link], a.menu-link, a.btn-warning, a.btn-danger, a.btn-default", function (e) {
+            const href = $(this).attr("href");
+            if (!href || href === "#" || href.startsWith("#")) return;
+
+            e.preventDefault();
+            on();
+            window.location.href = href;
+        });
+
+        // ===== Links que abrem modais via AJAX =====
+        $(document).on("click", "a[data-modal]", function (e) {
+            e.preventDefault();
+            on();
+            $('#myModalContent').load(this.href, function () {
+                $('#myModal').modal({ keyboard: true, show: true });
+                if (typeof bindForm === "function") bindForm(this);
+                off();
+            });
+        });
+
+        // ===== Formulários =====
+        $(document).on("submit", "form", function () { on(); });
+
+        // ===== Overlay global =====
+        $(window).on("load error", function () { off(); });
+
+        $(document).ajaxStart(function () { on(); });
+        $(document).ajaxStop(function () { off(); });
+        $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+            off();
+            toastr.error("Erro na requisição: " + thrownError);
+        });
+
+        // ===== Modal fechado manualmente =====
+        $(document).on('hidden.bs.modal', '#myModal', function () { off(); });
+
+    });
+</script>

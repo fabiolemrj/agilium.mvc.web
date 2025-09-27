@@ -96,7 +96,7 @@ $(document).ready(function () {
    
 });
 
-async function CadastroProdutoEstoque() {
+async function CadastroProdutoEstoque(id) {
 
     var cadastroTodosProdutosEstoque = await Swal.fire({
         title: 'Cadastro automatico de produtos por estoque',
@@ -109,7 +109,8 @@ async function CadastroProdutoEstoque() {
     });
 
     if (cadastroTodosProdutosEstoque.isConfirmed) {
-        const id = $('#idInventario').val();
+        if (!id)
+            id = $('#idInventario').val();
         on();
         $.ajax({
             type: "get",

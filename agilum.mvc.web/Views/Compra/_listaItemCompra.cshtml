@@ -5,7 +5,7 @@
     importada = (ViewBag.importada != null || ViewData["importada"] != null) ? (ViewBag.importada || (bool)ViewData["importada"] == true) : false;
 
 }
-<div>
+<div class="table-responsive-custom">
     <table class="table table-hover">
         <thead class="table thead-dark">
             <tr>
@@ -21,15 +21,15 @@
                 <th>CFOP</th>
                 <th>Estoque</th>
                 <th>Descr. NF</th>
-                <th>CEST</th>
+                <th>Impostos</th>
+                @*   <th>CEST</th>
                 <th>NCM</th>
                 <th>EAN</th>
                 <th>CST ICMS</th>
                 <th>CST Cofins</th>
                 <th>CST PIS</th>
-                <th>CST IPI</th>
-                <th>Impostos</th>
-                @*   <th>Aliq. ICMS</th>
+                <th>CST IPI</th>               
+                <th>Aliq. ICMS</th>
                 <th>Aliq. Cofins</th>
                 <th>Aliq. PIS</th>
                 <th>Aliq. IPI</th>
@@ -83,15 +83,16 @@
                     <td> @Html.DisplayFor(modelItem => item.NumeroCFOP)</td>
                     <td> @Html.DisplayFor(modelItem => item.NomeEstoque)</td>
                     <td> @Html.DisplayFor(modelItem => item.DescricaoProdutoCompra)</td>
-                    <td> @Html.DisplayFor(modelItem => item.CodigoCEST)</td>
+                    <td> @Html.Raw(impostos.ToString("N"))</td>
+                    @*<td> @Html.DisplayFor(modelItem => item.CodigoCEST)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoNCM)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoEan)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoCstIcms)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoCstCofins)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
                     <td> @Html.DisplayFor(modelItem => item.CodigoCstPis)</td>
-                    <td> @Html.Raw(impostos.ToString("N"))</td>
-                    @*         <td> @Html.Raw(valorAliquotaIcms?.ToString("N"))</td>
+            
+                    <td> @Html.Raw(valorAliquotaIcms?.ToString("N"))</td>
                 <td> @Html.Raw(valorAliquotaCofins?.ToString("N"))</td>
                 <td> @Html.Raw(valorAliquotaPis?.ToString("N"))</td>
                 <td> @Html.Raw(valorAliquotaIpi?.ToString("N"))</td>
@@ -105,7 +106,7 @@
                 <td> @Html.Raw(valorCofins?.ToString("N"))</td>
                 <td> @Html.Raw(valorOUTROS?.ToString("N"))</td>*@
                     <td>
-                        <a class="btn btn-default" asp-action="EditarItemModal" asp-route-id="@item.Id" title="Editar dados básicos do item" data-modal-local="0"><spam class="fas fa-edit"></spam></a>
+                        <a class="btn btn-default" asp-action="EditarItemModal" asp-route-id="@item.Id" title="Editar dados básicos do item"><spam class="fas fa-edit"></spam></a>
 
                         @if (!importada)
                         {

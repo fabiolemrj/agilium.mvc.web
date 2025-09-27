@@ -34,6 +34,8 @@ using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
 using System.Collections.Generic;
 using Endereco = agilium.api.business.Models.Endereco;
+using agilum.mvc.web.ViewModels.Licenca;
+using agilium_manager_azure_business.Models.CustomReturn.CompraViewModel;
 
 namespace agilum.mvc.web.Configuration
 {
@@ -159,7 +161,11 @@ namespace agilum.mvc.web.Configuration
             CreateMap<ProdutoFoto, ProdutoFotoViewModel>()
                .ForMember(dest => dest.Foto, act => act.Ignore())
           .ReverseMap();
-
+            CreateMap<agilium.api.business.Models.Produto, ListaProdutos>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.NMPRODUTO))
+          .ReverseMap();
+            
             CreateMap<agilium.api.business.Models.Produto, ProdutoViewModel>()
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDPRODUTO))
                 .ForMember(dest => dest.Nome, opt => opt.MapFrom(src => src.NMPRODUTO))
@@ -375,12 +381,13 @@ namespace agilum.mvc.web.Configuration
                .ForMember(dest => dest.RazaoSocial, opt => opt.MapFrom(src => src.NMRZSOCIAL))
                .ForMember(dest => dest.TipoPessoa, opt => opt.MapFrom(src => src.TPPESSOA))
                      .ForMember(dest => dest.TipoPessoa, opt => opt.MapFrom(src => src.TPPESSOA == "J" ? ETipoPessoa.J : ETipoPessoa.F))
-               // .ForMember(dest => dest.TipoFiscal, opt => opt.MapFrom(src => src.TPFISCAL))
+                
                .ForMember(dest => dest.CpfCnpj, opt => opt.MapFrom(src => src.NUCPFCNPJ))
                .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDFORN))
                .ForMember(dest => dest.InscricaoEstdualMunicipal, opt => opt.MapFrom(src => src.DSINSCR))
                  .ForMember(dest => dest.TipoFiscal, opt => opt.MapFrom(src => src.TPFISCAL))
                  .ForMember(dest => dest.Endereco, act => act.Ignore())
+                   .ForMember(dest => dest.Contatos, act => act.Ignore())
                .ReverseMap();
             #endregion
 
@@ -574,6 +581,9 @@ namespace agilum.mvc.web.Configuration
             .ForMember(dest => dest.TipoManifesto, opt => opt.MapFrom(src => src.STMANIFESTO))
             .ForMember(dest => dest.Xml, opt => opt.MapFrom(src => src.DSXML))
             .ReverseMap();
+
+            CreateMap<CompraIndexViewModelReturn, CompraIndexViewModel>()
+                .ReverseMap();
             #endregion
 
             #region Perda
@@ -925,6 +935,10 @@ namespace agilum.mvc.web.Configuration
                       .ForMember(dest => dest.Hora, opt => opt.MapFrom(src => src.hora_log))
                       .ForMember(dest => dest.NomeUsuario, opt => opt.MapFrom(src => src.usuario))
                 .ReverseMap();
+            #endregion
+
+            #region Licenca
+            CreateMap<Licenca, LicencaViewModel>().ReverseMap();
             #endregion
 
         }

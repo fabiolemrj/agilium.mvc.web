@@ -214,35 +214,29 @@ namespace agilium.api.infra.Repository.Dapper
         {
             return await ObterProdutoPorCompraAnteriorTransacao(idFornecedor, codigoFornecedor);
 
-            //using (var con = new MySqlConnection(GetConnection()))
-            //{
-            //    try
-            //    {
-            //        con.Open();
-            //        var parametros = new DynamicParameters();
-            //        parametros.Add("@CDPRODFORN", codigoFornecedor, DbType.String, ParameterDirection.Input);
-            //        parametros.Add("@IDFORN", idFornecedor, DbType.Int64, ParameterDirection.Input);
-
-            //        var query = $@"SELECT CI.IDPRODUTO,CI.CDPRODFORN,C.IDFORN   
-            //                        FROM compra_item CI
-            //                        INNER JOIN compra C ON CI.IDCOMPRA = C.IDCOMPRA 
-            //                        WHERE CI.IDPRODUTO IS NOT NULL 
-            //                        AND CI.CDPRODFORN = @CDPRODFORN
-            //                        AND C.IDFORN = @IDFORN 
-            //                        ORDER BY C.DTCOMPRA 
-            //                        DESC LIMIT 1,1";
-
-            //        return con.Query<Produto>(query, parametros).FirstOrDefault();
-            //    }
-            //    catch (Exception)
-            //    {
-
-            //        throw;
-            //    }
-            //    finally { con.Close(); }
-            //}
         }
 
+        public async Task<List<Produto>> ObterTodosProdutos_IdDescricao(long idEmpresa)
+        {
+            var query = $@"SELECT p.IDPRODUTO as Id, p.NMPRODUTO FROM produto p where p.IDEMPRESA = @IDEMPRESA";
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", idEmpresa, DbType.Int64, ParameterDirection.Input);
+
+            return _dbSession.Connection.QueryAsync<Produto>(query, parametros, _dbSession.Transaction).Result.ToList();
+        }
+
+
+        public async Task<List<Produto>> BuscarProdutosJson(long idEmpresa, string filtro)
+        {
+            var query = $@"SELECT p.IDPRODUTO as Id, p.NMPRODUTO FROM produto p where p.IDEMPRESA = @IDEMPRESA AND p.NMPRODUTO LIKE @NMPRODUTO";
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", idEmpresa, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@NMPRODUTO", $"%{filtro}%", DbType.String, ParameterDirection.Input);
+
+            var produtos = _dbSession.Connection.Query<Produto>(query, parametros, _dbSession.Transaction);
+                
+            return produtos.Where(p => p.NMPRODUTO.Contains(filtro)).Take(50).ToList();
+        }
 
         #endregion
 

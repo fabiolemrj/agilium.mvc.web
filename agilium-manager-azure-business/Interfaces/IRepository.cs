@@ -32,6 +32,7 @@ namespace agilium.api.business.Interfaces
         Task<bool> Existe(Expression<Func<TEntity, bool>> predicate);
         Task<string> GerarCodigo(string sql);
         Task<TEntity> GerarCodigoPorSql(string sql);
+        Task Atualizar2(TEntity entity, object key);
     }
 
     public interface IUtilDapperRepository
@@ -40,6 +41,7 @@ namespace agilium.api.business.Interfaces
         Task<string> ConfigRetornaValor(string valor, long? idEmpresa);
         Task<string> GerarCodigo(string sql);
         Task<int> GerarIdInt(string generator);
+        Task<DateTime> ObterDataAtual();
 
     }
 }

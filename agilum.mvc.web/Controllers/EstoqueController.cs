@@ -3,12 +3,15 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Estoque;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -35,7 +38,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public EstoqueController(IEstoqueService estoqueService, IEmpresaService empresaService, IProdutoService produtoService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager
+            ) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _estoqueService = estoqueService;
             _empresaService = empresaService;
@@ -50,6 +54,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2050)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
+
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
@@ -69,7 +74,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
-
+            lista.Query = q;
             return View(lista);
         }
 
@@ -248,33 +253,103 @@ namespace agilum.mvc.web.Controllers
             return View(model);
         }
 
+        [Route("produtos-estoque")]
+        public async Task<IActionResult> IndexProdutos([FromQuery] long idEstoque, [FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        {
+
+            var lista = (await ObterListaPRodutosPaginado(idEstoque, q, page, ps));
+            lista.Query = q; 
+            ViewBag.Pesquisa = q;
+         
+            
+            var estoque = _estoqueService.ObterPorId(idEstoque).Result;
+            if (estoque != null)
+            {
+                ViewBag.Estoque = estoque.Descricao;
+                ViewBag.idEstoque = idEstoque.ToString();
+            }
+
+            return View(lista);
+        }
+
         #endregion
 
         #region Report
+        //[Route("report/posicao")]
+        //public async Task<IActionResult> ReportEstoquePosicao()
+        //{
+        //    var viewModel = new FiltroEstoquePosicao();
+        //    viewModel.IdEstoque = 0;
+        //    viewModel.Estoques = _mapper.Map<List<EstoqueViewModel>>(_estoqueService.ObterTodas().Result.ToList());
+        //    return View("ReportPosicaoEstoque", viewModel);
+        //}
+
+        //[Route("report/posicao")]
+        //[HttpPost]
+        //public async Task<IActionResult> ReportEstoquePosicao(FiltroEstoquePosicao viewModel)
+        //{
+        //    viewModel.Estoques = _mapper.Map <List<EstoqueViewModel>>( _estoqueService.ObterTodas().Result.ToList());
+
+        //    if (!ModelState.IsValid) return View("ReportPosicaoEstoque", viewModel);
+
+
+        //    viewModel.Lista = _mapper.Map<List<EstoquePosicaoReport>>(await _estoqueService.ObterRelatorioPosicaoEstoque(viewModel.IdEstoque));
+
+        //    return View("ReportPosicaoEstoque", viewModel);
+
+        //}
+
+
+        // GET inicial da página de relatório
+        //[HttpGet]
+        //[Route("report/posicao")]
+        //public IActionResult RelatorioPosicaoEstoque()
+        //{
+        //    var viewModel = new FiltroEstoquePosicao
+        //    {
+        //        Estoques = _mapper.Map<List<EstoqueViewModel>>(_estoqueService.ObterTodas().Result.ToList())
+        //    };
+
+        //    return View("ReportPosicaoEstoque", viewModel);
+        //}
+
+
+
+        // GET: retorna partial view com lista filtrada
+        [HttpGet]
         [Route("report/posicao")]
-        public async Task<IActionResult> ReportEstoquePosicao()
+        public IActionResult RelatorioPosicaoEstoque([FromQuery]long? idEstoque)
         {
             var viewModel = new FiltroEstoquePosicao();
-            viewModel.IdEstoque = 0;
+
             viewModel.Estoques = _mapper.Map<List<EstoqueViewModel>>(_estoqueService.ObterTodas().Result.ToList());
+
+            if (!ModelState.IsValid) return View("ReportPosicaoEstoque", viewModel);
+            
+            if(idEstoque.HasValue)
+                viewModel.Lista = _mapper.Map<List<EstoquePosicaoReport>>(_estoqueService.ObterRelatorioPosicaoEstoque(idEstoque.Value).Result);
+
+            // Retorna a partial com a tabela
             return View("ReportPosicaoEstoque", viewModel);
         }
 
-        [Route("report/posicao")]
         [HttpPost]
-        public async Task<IActionResult> ReportEstoquePosicao(FiltroEstoquePosicao viewModel)
+        [Route("report/posicao")]
+        public IActionResult RelatorioPosicaoEstoque(FiltroEstoquePosicao viewModel)
         {
             viewModel.Estoques = _mapper.Map <List<EstoqueViewModel>>( _estoqueService.ObterTodas().Result.ToList());
 
             if (!ModelState.IsValid) return View("ReportPosicaoEstoque", viewModel);
 
 
-            viewModel.Lista = _mapper.Map<List<EstoquePosicaoReport>>(await _estoqueService.ObterRelatorioPosicaoEstoque(viewModel.IdEstoque));
+             viewModel.Lista = _mapper.Map<List<EstoquePosicaoReport>>(_estoqueService.ObterRelatorioPosicaoEstoque(viewModel.IdEstoque).Result);
 
-            return View("ReportPosicaoEstoque", viewModel);
-
+            // Retorna a partial com a tabela
+            return PartialView("_TabelaEstoque", viewModel);
         }
+
         #endregion
+
         #region metodos privados
         private async Task<PagedViewModel<EstoqueViewModel>> ObterListaPaginado(long idempresa, string filtro, int page, int pageSize)
         {
@@ -293,6 +368,47 @@ namespace agilum.mvc.web.Controllers
                 TotalResults = retorno.TotalResults
             };
         }
+
+        private async Task<PagedViewModel<ProdutoPorEstoqueViewModel>> ObterListaPRodutosPaginado(long idEstoque, string filtro, int page, int pageSize)
+        {
+            var retorno = await _estoqueService.ObterProdutoEstoquePorEstoquePaginacao(idEstoque, filtro, page, pageSize);
+
+            var model = new List<ProdutoPorEstoqueViewModel>();
+          
+
+            retorno.List.ToList().ForEach(prod => {
+
+                var produto = new Produto();
+
+                if (prod.IDPRODUTO != produto.Id)
+                    produto = _produtoService.ObterPorId(prod.IDPRODUTO.Value).Result;
+
+                var estoqueProduto = new ProdutoPorEstoqueViewModel()
+                {
+                    Id = prod.Id,
+                    idProduto = prod.IDPRODUTO.Value,
+                    QuantidadeAtual = prod.NUQTD.HasValue ? prod.NUQTD.Value : 0,
+                    Produto = produto.NMPRODUTO,
+                    ValorCustoMedio = produto.VLCUSTOMEDIO.HasValue ? produto.VLCUSTOMEDIO.Value : 0,
+                    ValorUltimaCompra = produto.VLULTIMACOMPRA.HasValue ? produto.VLULTIMACOMPRA.Value : 0,
+                    Codigo = produto.CDPRODUTO
+                };
+
+                model.Add(estoqueProduto);
+            });
+                       
+            return new PagedViewModel<ProdutoPorEstoqueViewModel>()
+            {
+                List = model,
+                PageIndex = retorno.PageIndex,
+                PageSize = retorno.PageSize,
+                Query = retorno.Query,
+                ReferenceAction = "produtos-estoque",
+                ReferenceController = "estoque",
+                TotalResults = retorno.TotalResults
+            };
+        }
+
 
         private async Task<EstoqueViewModel> Obter(string id)
         {

@@ -54,6 +54,6 @@ namespace agilium.api.business.Models
         public void AdicionarEndereco(Endereco endereco) => Endereco = endereco;
 
         public void AdicionarEndereco(long idEndereco) => IDENDERECO = idEndereco;
-
+        
     }
 }

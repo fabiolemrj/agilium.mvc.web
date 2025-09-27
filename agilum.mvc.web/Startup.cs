@@ -1,6 +1,7 @@
 using agilium.api.infra.Context;
 using agilum.mvc.web.Configuration;
 using agilum.mvc.web.Extensions;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -42,6 +43,9 @@ namespace agilum.mvc.web
 
                 options.UseMySql(Configuration.GetConnectionString("ConnectionDb"),
                       b => b.MigrationsAssembly("agilium.mvc.web"));
+                options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled:true);
+                options.EnableDetailedErrors(detailedErrorsEnabled:true);
+          
             });
 
             services.AddControllersWithViews();
@@ -66,12 +70,14 @@ namespace agilum.mvc.web
                 options.IdleTimeout = TimeSpan.FromHours(3);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+
+           
             });
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             if (env.IsDevelopment())
             {
@@ -84,6 +90,14 @@ namespace agilum.mvc.web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.Use(async (context, next) =>
+            {
+                foreach (var header in context.Request.Headers)
+                {
+                    logger.LogInformation("{Header}: {Value}", header.Key, header.Value);
+                }
+                await next.Invoke();
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -98,6 +112,10 @@ namespace agilum.mvc.web
 
             //app.UseGlobalizationConfig();
             var cultura = new CultureInfo("pt-BR");
+            cultura.NumberFormat.NumberDecimalSeparator = ",";
+            cultura.NumberFormat.NumberGroupSeparator = ".";
+            CultureInfo.DefaultThreadCurrentCulture = cultura;
+            CultureInfo.DefaultThreadCurrentUICulture = cultura;
 
             var dateformat = new DateTimeFormatInfo
             {
@@ -122,6 +140,8 @@ namespace agilum.mvc.web
                 endpoints.MapAreaControllerRoute("Back", "Back", "back/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+           
         }
     }
 }

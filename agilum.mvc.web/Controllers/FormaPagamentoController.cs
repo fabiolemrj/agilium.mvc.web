@@ -2,12 +2,15 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.FormaPagamento;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -28,7 +31,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtores
         public FormaPagamentoController(IFormaPagamentoService formaPagamentoService, IEmpresaService empresaService
-            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _formaPagamentoService = formaPagamentoService;
             _empresaService = empresaService;
@@ -42,6 +46,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2214)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
+
             var _nomeEntidadeMotivo = "Forma de Pagamento";
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
@@ -62,7 +67,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
 
             ViewBag.Pesquisa = q;
-
+            //lista.Query = q;
             return View(lista);
         }
 

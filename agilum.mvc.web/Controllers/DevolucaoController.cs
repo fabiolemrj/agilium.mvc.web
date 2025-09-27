@@ -4,6 +4,8 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -13,6 +15,7 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Venda;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -47,7 +50,8 @@ namespace agilum.mvc.web.Controllers
         public DevolucaoController(IDevolucaoService devolucaoService, IEmpresaService empresaService,
             IVendaService vendaService, IUsuarioService usuarioService,
             IClienteService clienteService, IValeService valeService, IDevolucaoDapperRepository devolucaoDapperRepository,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _devolucaoService = devolucaoService;
             _empresaService = empresaService;
@@ -70,6 +74,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(1)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
+
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))

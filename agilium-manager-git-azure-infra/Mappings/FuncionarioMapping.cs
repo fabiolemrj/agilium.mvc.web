@@ -36,6 +36,12 @@ namespace agilium.api.infra.Mappings
             .WithOne(caixa => caixa.Funcionario)
             .HasForeignKey(caixa => new { caixa.IDFUNC })
             .HasPrincipalKey(f => new { f.Id });
+
+            builder.HasOne(f => f.Endereco) // Propriedade de navegação em Funcionario
+                 .WithOne(e => e.Funcionario) // Propriedade de navegação em Endereco
+                 .HasForeignKey<Funcionario>(f => f.IDENDERECO) // Chave estrangeira na entidade Funcionario
+                 .HasConstraintName("fk_ender_func"); // Nome da constraint no BD (opcional, mas recomendado)
+
         }
     }
 }

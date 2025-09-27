@@ -1,6 +1,8 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -9,6 +11,7 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Vale;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -30,8 +33,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public ValeController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
-            ILogService logService, IMapper mapper, IValeService valeService, IClienteService clienteService, IEmpresaService empresaService) : 
-            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            ILogService logService, IMapper mapper, IValeService valeService, IClienteService clienteService, IEmpresaService empresaService, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : 
+            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _valeService = valeService;
             _clienteService = clienteService;
@@ -82,7 +85,7 @@ namespace agilum.mvc.web.Controllers
 
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
             lista.ReferenceAction = "lista";
-
+            lista.Query = q;
             ViewBag.Pesquisa = q;
 
             return View(lista);

@@ -1,0 +1,226 @@
+﻿@model agilum.mvc.web.ViewModels.Inventario.AdicionarListaProdutosDisponiveisViewModel
+@{
+    ViewData["Title"] = "Produtos Disponiveis para Inventario";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+            <a href="#"> Incluir Produtos </a>
+        </div>
+    </article>
+</section>
+<form method="post" asp-action="SalvarSelecao" class="sidebar-form">
+    <input type="hidden" asp-for="idInventario" />
+    <input type="hidden" asp-for="IDEMPRESA" />
+    <input type="hidden" asp-for="NomeInventario" />
+
+    <div class="card">
+        <div class="card-head">
+            <div class="col-12">
+                <div class="form-group">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Inventário</span>
+                            <span class="info-box-number">@Model.NomeInventario</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-6">
+                    <input type="text" id="txtPesquisa" class="form-control" placeholder="Pesquisar produto..." />
+                </div>
+            </div>
+            <table class="table table-hover" id="tabela">
+                <thead class="table thead-dark">
+                    <tr>
+                        <th>Código</th>
+                        <th style="min-width:300px">Produto</th>
+                        <th>Seleção</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-produtos">
+                    <!-- preenchido via JS -->
+                </tbody>
+            </table>
+        </div>
+        <div class="card-body">
+            <!-- Paginação -->
+            <nav>
+                <ul class="pagination justify-content-center" id="pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="visibility:hidden" id="btnSendForm">Salvar Seleção</button>
+</form>
+
+<!-- jQuery primeiro -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Bootstrap ou outros plugins que dependem de jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Seu script -->
+<script src="~/local/processo/inventario.js"></script>
+
+<script>
+    var produtos = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Produtos));
+
+    // Expondo globalmente
+    window.normalizeItem = function (item) {
+        var id = item.Id_String ?? item.IdString ?? item.idString ?? item.id ?? item.Id;
+        var sel = item.Selecionado ?? item.selecionado ?? item.Selected ?? item.selected;
+
+        var idStr = id != null ? String(id) : null;
+
+        var isSelected = false;
+        if (sel === true || sel === 1) {
+            isSelected = true;
+        } else if (typeof sel === "string") {
+            if (sel.toLowerCase() === "true" || sel === "1") isSelected = true;
+        }
+
+        return { idStr, isSelected };
+    };
+
+    $(function () {
+        var pageSize = 15;
+        var currentPage = 1;
+        var selectedItems = {};
+        var termoPesquisa = "";
+
+        // Função utilitária já existe (normalizeItem)
+
+        // 🔹 Retorna lista filtrada
+        function getFilteredProdutos() {
+            if (!termoPesquisa) return produtos;
+            return produtos.filter(p => {
+                let nome = (p.Nome || "").toLowerCase();
+                let codigo = (p.Codigo || "").toString().toLowerCase();
+                return nome.includes(termoPesquisa) || codigo.includes(termoPesquisa);
+            });
+        }
+
+        function renderPage(page) {
+            currentPage = page;
+            var lista = getFilteredProdutos();
+
+            var start = (page - 1) * pageSize;
+            var end = start + pageSize;
+            var pageItems = lista.slice(start, end);
+
+            var $tbody = $("#tbody-produtos");
+            $tbody.empty();
+
+            $.each(pageItems, function (i, item) {
+                var { idStr } = normalizeItem(item);
+                var checked = selectedItems[idStr] ? "checked" : "";
+
+                var row = `
+                    <tr>
+                        <td>${item.Codigo}</td>
+                        <td>${item.Nome}</td>
+                        <td>
+                            <input type="checkbox" class="chk-produto" data-id="${idStr}" ${checked} />
+                        </td>
+                    </tr>`;
+                $tbody.append(row);
+            });
+
+            renderPagination(lista.length);
+        }
+
+        function renderPagination(total) {
+            var totalPages = Math.ceil(total / pageSize);
+            var $pagination = $("#pagination");
+            $pagination.empty();
+
+            if (totalPages <= 1) return;
+
+            var maxVisible = 10;
+            var start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            var end = Math.min(totalPages, start + maxVisible - 1);
+            start = Math.max(1, end - maxVisible + 1);
+
+            if (currentPage > 1) {
+                $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo;</a></li>`);
+            }
+            if (start > 1) {
+                $pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+            for (var i = start; i <= end; i++) {
+                var active = (i === currentPage) ? "active" : "";
+                $pagination.append(`<li class="page-item ${active}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
+            }
+            if (end < totalPages) {
+                $pagination.append(`<li class="page-item disabled"><span class="page-link">...</span></li>`);
+            }
+            if (currentPage < totalPages) {
+                $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">&raquo;</a></li>`);
+            }
+        }
+
+        // Paginação
+        $("#pagination").on("click", "a", function (e) {
+            e.preventDefault();
+            var page = parseInt($(this).data("page"));
+            renderPage(page);
+        });
+
+        // Pesquisa
+        $("#txtPesquisa").on("input", function () {
+            termoPesquisa = $(this).val().toLowerCase();
+            renderPage(1);
+        });
+
+        // Seleção de checkboxes
+        $("#tbody-produtos").on("change", ".chk-produto", function () {
+            var id = String($(this).data("id"));
+            if ($(this).is(":checked")) {
+                selectedItems[id] = true;
+            } else {
+                delete selectedItems[id];
+            }
+        });
+
+        // Envio do form
+        $("form").on("submit", function () {
+            var $form = $(this);
+            $form.find("input[name='SelectedIds']").remove();
+            Object.keys(selectedItems).forEach(function (id) {
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "SelectedIds",
+                    value: id
+                }).appendTo($form);
+            });
+        });
+
+        // Preenche seleção inicial
+        produtos.forEach(function (item) {
+            var { idStr, isSelected } = normalizeItem(item);
+            if (isSelected && idStr) {
+                selectedItems[idStr] = true;
+            }
+        });
+
+        // Render inicial
+        renderPage(1);
+    });
+
+</script>
+

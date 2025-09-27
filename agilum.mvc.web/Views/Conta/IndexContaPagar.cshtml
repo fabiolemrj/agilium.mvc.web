@@ -50,10 +50,11 @@
             <tr>
 
                 <th>
-                    Data Pagamento
+                    Data Vencimento
+                   
                 </th>
                 <th>
-                    Data Vencimento
+                    Data Pagamento
                 </th>
                 <th>
                     Descrição
@@ -115,10 +116,11 @@
                 <tr>
 
                     <td>
-                        @Html.Raw(dtPagamento)
+                        @Html.Raw(dtVencimento)
                     </td>
                     <td>
-                        @Html.Raw(dtVencimento)
+                        @Html.Raw(dtPagamento)
+                       
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Descricao)
@@ -155,13 +157,13 @@
                     </td>
                     @if (item.Situacao == 2)
                     {
-                        <td class="text-right">
+                        <td class="acao-botoes text-right">
                             <a class="btn btn-danger" asp-action="DesConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Desconsolidar"><i class="fas fa-check-circle"></i></a>
                         </td>
                     }
                     else
                     {
-                        <td class="text-right">
+                        <td class="acao-botoes text-right">
 
                             <a class="btn btn-success" asp-action="ConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Consolidar"><i class="fas fa-check-circle"></i></a>
                             <a class="btn btn-warning" asp-action="EditContaPagar" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>

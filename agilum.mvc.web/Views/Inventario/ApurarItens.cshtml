@@ -1,0 +1,216 @@
+﻿@model agilum.mvc.web.ViewModels.Inventario.ListaInventarioItemViewModel
+@using agilum.mvc.web.Extensions
+
+@{
+    ViewData["Title"] = "Apurar Itens do Inventario (Produtos)";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" title="Voltar" id="btnVoltar">
+            <span class="fas fa-reply sns-tool-action" id="btnReturn"></span>
+        </a>
+            <a href="#" type="button" title="Salvar dados" id="btnSalvar">
+                <span class="fa fa-save sns-tool-action"></span>
+            </a>
+        
+
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda">
+            <span class="fa fa-question sns-tool-action"></span>
+        </a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home">Início</a> /
+            <a href="@Url.Action("Index","Inventario")"><i class="fa fa-dashboard"></i> Inventario</a> /
+            <a href="#"> Apurar Itens </a>
+        </div>
+    </article>
+</section>
+
+<br />
+
+<form id="frmEditarItemInventario" method="post" asp-action="ApurarItens">
+    <vc:Summary></vc:Summary>
+
+    <!-- Hidden inputs -->
+    <input type="hidden" asp-for="idInventario" />
+    <input type="hidden" asp-for="PaginaAtual" id="PaginaAtual" />
+
+    <div class="card">
+        <div class="card-head">
+            <div class="col-md-12" id="areaFiltro">
+                <div class="row">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Inventário</span>
+                            <span class="info-box-number">@Model.NomeInventario</span>
+                        </div>
+                        <div class="card-tools">
+                            <button class="btn btn-block btn-outline-primary" type="submit" id="btnSendForm">Salvar Pagina</button>
+                           
+                           @*  <btn class="btn btn-app" type="submit" id="btnSendForm">
+                                <i class="fas fa-save"></i> Salvar Pagina
+                            </btn> *@
+                        </div>
+                    </div>
+                </div>
+          
+      @*           <button class="btn btn-block btn-outline-primary" id="btnSendForm" type="submit"></button> *@
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div id="resultado">
+                <table class="table table-hover" id="tabela">
+                    <thead class="table thead-dark">
+                        <tr>
+                            <th style="min-width:500px">Produto</th>
+                            <th>Data Analise</th>
+                            <th>Usuario Analise</th>
+                            <th>Custo Médio</th>
+                            <th>Quant. Apurada</th>
+                            <th>Quant. Estoque</th>
+                            <th>Perda/Sobra</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Itens.Count; i++)
+                        {
+                            var item = Model.Itens[i];
+                            var nomeProduto = $"{item.CodigoProduto} - {item.NomeProduto}";
+                            var valorCustoMedio = item.ValorCustoMedio ?? 0;
+                            var quantidadeApurada = item.QuantidadeAnalise ?? 0;
+                            var quantidadeEstoque = item.QuantidadeEstoque ?? 0;
+
+                            double perdaSobra = quantidadeEstoque - quantidadeApurada;
+                            string classeAtivo;
+                            if (perdaSobra > 0)
+                            {
+                                classeAtivo = "bg-success";
+                            }
+                            else if (perdaSobra < 0)
+                            {
+                                classeAtivo = "bg-danger";
+                                perdaSobra = -perdaSobra;
+                            }
+                            else
+                            {
+                                classeAtivo = "";
+                            }
+
+                            <tr class="@classeAtivo">
+                                <td>
+                                    @nomeProduto
+                                    <input type="hidden" asp-for="Itens[i].Id" />
+                                    <input type="hidden" asp-for="Itens[i].IDINVENT" />
+                                    <input type="hidden" asp-for="Itens[i].IDPRODUTO" />
+                                    <input type="hidden" asp-for="Itens[i].IDPERDA" />
+                                </td>
+                                <td><input type="date" asp-for="Itens[i].DataHora" class="form-control" /></td>
+                                <td>@item.NomeUsuarioAnalise</td>
+                                <td>@valorCustoMedio</td>
+                                <td><input asp-for="Itens[i].QuantidadeAnalise" class="form-control" /></td>
+                                <td>@quantidadeEstoque</td>
+                                <td>@perdaSobra</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <!-- Paginação -->
+                @{
+                    int maxPaginasVisiveis = 5;
+                    int inicio = Math.Max(1, Model.PaginaAtual - (maxPaginasVisiveis / 2));
+                    int fim = Math.Min(Model.TotalPaginas, inicio + maxPaginasVisiveis - 1);
+                    if ((fim - inicio + 1) < maxPaginasVisiveis)
+                        inicio = Math.Max(1, fim - maxPaginasVisiveis + 1);
+                }
+
+                <div class="mt-3 d-flex flex-wrap">
+                    <!-- Primeira página -->
+                    @if (Model.PaginaAtual > 1)
+                    {
+                        <a asp-action="ApurarItens" asp-route-idInventario="@Model.idInventario" asp-route-pagina="1" class="btn btn-sm btn-light m-1">««</a>
+                    }
+
+                    <!-- Página anterior -->
+                    @if (Model.TemPaginaAnterior)
+                    {
+                        <a asp-action="ApurarItens" asp-route-idInventario="@Model.idInventario" asp-route-pagina="@(Model.PaginaAtual - 1)" class="btn btn-sm btn-light m-1">«</a>
+                    }
+
+                    <!-- Números de páginas -->
+                    @for (int p = inicio; p <= fim; p++)
+                    {
+                        <a asp-action="ApurarItens" asp-route-idInventario="@Model.idInventario" asp-route-pagina="@p"
+                           class="btn btn-sm m-1 @(p == Model.PaginaAtual ? "btn-primary" : "btn-light")">@p</a>
+                    }
+
+                    <!-- Próxima página -->
+                    @if (Model.TemProximaPagina)
+                    {
+                        <a asp-action="ApurarItens" asp-route-idInventario="@Model.idInventario" asp-route-pagina="@(Model.PaginaAtual + 1)" class="btn btn-sm btn-light m-1">»</a>
+                    }
+
+                    <!-- Última página -->
+                    @if (Model.PaginaAtual < Model.TotalPaginas)
+                    {
+                        <a asp-action="ApurarItens" asp-route-idInventario="@Model.idInventario" asp-route-pagina="@Model.TotalPaginas" class="btn btn-sm btn-light m-1">»»</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/inventario.js"></script>
+
+    <script>
+        var formAlterado = false;
+
+        // Marca quando o form foi alterado
+        $('#frmEditarItemInventario').on('change', 'input', function () {
+            formAlterado = true;
+        });
+
+        // Botão Salvar
+        $('#btnSalvar').click(function () {
+            $('#frmEditarItemInventario').submit();
+        });
+
+        // Atualiza PaginaAtual e alerta se houver alterações
+        $('.btn-light, .btn-primary').click(function (e) {
+            e.preventDefault();
+
+            var linkPagina = $(this).attr('href');
+            var texto = $(this).text().trim();
+
+            var pagina;
+            if (texto === '««') pagina = 1;
+            else if (texto === '«') pagina = parseInt($('#PaginaAtual').val()) - 1;
+            else if (texto === '»') pagina = parseInt($('#PaginaAtual').val()) + 1;
+            else if (texto === '»»') pagina = parseInt($(this).data('ultimapagina')) || $(this).data('pagina');
+            else pagina = parseInt(texto);
+
+            $('#PaginaAtual').val(pagina);
+
+            if (formAlterado) {
+                if (!confirm("Você alterou itens nesta página. Deseja salvar antes de navegar?")) return;
+            }
+
+            // Navega para a página clicada
+            window.location.href = linkPagina;
+        });
+    </script>
+}

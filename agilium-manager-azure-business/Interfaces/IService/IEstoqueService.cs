@@ -27,6 +27,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<EstoqueProduto> ObterProdutoPorId(long id);
         Task<List<EstoqueProduto>> ObterProdutoEstoquePorProduto(long idProduto);
         Task<List<EstoqueProduto>> ObterProdutoEstoquePorEstoque(long idEstoque);
+        Task<PagedResult<EstoqueProduto>> ObterProdutoEstoquePorEstoquePaginacao(long idEstoque, string descricao, int page = 1, int pageSize = 15);
         #endregion
 
         #region Estoque Historico

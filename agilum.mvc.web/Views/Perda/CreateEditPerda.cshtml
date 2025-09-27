@@ -39,6 +39,7 @@
             <input type="hidden" asp-for="IDESTOQUEHST" />
             <input type="hidden" asp-for="IDUSUARIO" />
             <input type="hidden" asp-for="DataHora" />
+            <input type="hidden" asp-for="IDEMPRESA" />
             <div class="card" id="labelcardGerais">
                 <div class="card-header">
                     @if (ViewBag.operacao == "I")
@@ -52,18 +53,7 @@
 
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
-                                <select asp-for="IDEMPRESA"
-                                        asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
-                                        class="form-control"></select>
-                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
-                            </div>
-
-                        </div>
-                    </div>
+                  
                     <div class="row">
                         <div class="col-2">
                             <div class="form-group">
@@ -108,6 +98,21 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label asp-for="IDPRODUTO" id="labelProduto"></label>
+
+                                <select class="form-control select2" asp-for="IDPRODUTO">
+                                    <option value="">Selecione um produto...</option>
+                               
+                                </select>
+
+                                <span asp-validation-for="IDPRODUTO" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                      @*   <div class="col-4">
+                            <div class="form-group">
+                                <label asp-for="IDPRODUTO" id="labelProduto"></label>
                                 <select asp-for="IDPRODUTO"
                                         asp-items="@Model.Produtos.Select(x => new SelectListItem(){Text = x.Nome.ToString(), Value = x.Id.ToString()})"
                                         class="form-control">
@@ -115,7 +120,8 @@
                                 </select>
                                 <span asp-validation-for="IDPRODUTO" class="text-danger"></span>
                             </div>
-                        </div>
+                        </div> *@
+                     
                         <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Quantidade" id="labelQuant"></label>
@@ -142,10 +148,66 @@
     </div>
 </div>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+
+
     <script src="~/local/Processo/perda.js"></script>
+
+
     <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                maximumInputLength: 3,
+                theme: 'bootstrap4',
+                placeholder: "selecione um produto",
+                allowClear: true,
+                ajax: {
+                    url: '@Url.Action("BuscarProdutosJson", "Produto")',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term || ''
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    id: item.Id,       // pega do C#
+                                    text: item.Nome    // mostra no select
+                                };
+                            })
+                        };
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erro na busca:", status, error);
+                        console.error("Resposta do servidor:", xhr.responseText);
+
+                        // feedback simples ao usuário
+                        alert("Erro ao buscar produtos: " + error);
+                    }
+                },
+                minimumInputLength: 2
+            });
 
 
+            // Preenche caso já tenha produto selecionado (ex: edição)
+            let idSelecionado = '@Model.IDPRODUTO';
+            if (idSelecionado) {
+                $.ajax({
+                    url: '@Url.Action("BuscarProdutosJson", "Produto")',
+                    data: { q: '' }, // busca vazia retorna a lista inicial
+                    success: function (data) {
+                        let item = data.find(x => x.id == idSelecionado);
+                        if (item) {
+                            let option = new Option(item.text, item.id, true, true);
+                            $('.select2').append(option).trigger('change');
+                        }
+                    }
+                });
+            }
+        });
     </script>
+
+
 }

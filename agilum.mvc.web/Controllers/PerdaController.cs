@@ -3,6 +3,8 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -12,6 +14,7 @@ using agilum.mvc.web.ViewModels.Perda;
 using agilum.mvc.web.ViewModels.Produtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -39,7 +42,7 @@ namespace agilum.mvc.web.Controllers
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
             ILogService logService, IMapper mapper, IPerdaService perdaService, IProdutoService produtoService, 
             IEmpresaService empresaService, IEstoqueService estoqueService, IUsuarioService usuarioService,
-            IPerdaDapperRepository perdaDapperRepository) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            IPerdaDapperRepository perdaDapperRepository, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _perdaService = perdaService;
             _produtoService = produtoService;
@@ -59,7 +62,7 @@ namespace agilum.mvc.web.Controllers
             if (listaEstoqueViewModels.Count == 0)
                 listaEstoqueViewModels = _mapper.Map<List<EstoqueViewModel>>( _estoqueService.ObterTodas().Result.ToList());
             if (listaprodutoViewModels.Count == 0)
-                listaprodutoViewModels = _mapper.Map<List<ProdutoViewModel>>(_produtoService.ObterTodas(idEmpresa).Result.ToList());
+                listaprodutoViewModels = _mapper.Map<List<ProdutoViewModel>>(_produtoService.ObterTodosProdutos_IdDescricao(idEmpresa).Result.ToList());
 
             if (valeViewModel.Empresas.Count == 0)
                 valeViewModel.Empresas = listaEmpresaViewModels;
@@ -98,7 +101,7 @@ namespace agilum.mvc.web.Controllers
 
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
             lista.ReferenceAction = "Index";
-
+            lista.Query = q;
             ViewBag.Pesquisa = q;
 
             return View(lista);

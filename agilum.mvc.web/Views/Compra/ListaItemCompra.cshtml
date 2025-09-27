@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<agilum.mvc.web.ViewModels.Compra.CompraItemViewModel>
 @using agilum.mvc.web.Extensions
-<link rel="stylesheet" href="~/css/scroll_Horizontal.css">
+
 
 @{
     ViewData["Title"] = "Itens da Compra";
@@ -12,14 +12,14 @@
     <section class="barra-de-menu-principal">
         
         <div class="barra-de-botoes-menu-principal">
+            <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
             @if (!importada)
             {
                 <a asp-action="AdicionarItem" asp-route-idCompra="@ViewBag.idCompra" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
                 <a asp-action="Importar" class="ImportarXML" asp-route-idCompra="@ViewBag.idCompra" data-idcompra="@ViewBag.idCompra" type="button" as title="Importar XML NFE" id="btnImportar"><span class="fas fa-file-import"></span></a>
             }
             <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
-            <a asp-action="Index" asp-controller="Compra" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
-
+           
         </div>
 
         <article>
@@ -49,7 +49,7 @@
         </div>
     </div>
     @*<div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">*@
-    <div id="ContatoTarget" class="col-md-12">
+    <div id="ContatoTarget" class="col-12">
         @*       @await Html.PartialAsync("_listaItemCompra", Model,new ViewDataDictionary(ViewData){ { "import", importada } })*@
         <partial name="_listaItemCompra" model="Model"></partial>
     </div>
@@ -61,6 +61,16 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
+    <!-- jQuery 3.6 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Popper.js (Bootstrap 4) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+
+        <!-- MaskMoney -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+
+    <!-- Seu JS -->
     <script src="~/local/processo/compra.js"></script>
 
 }

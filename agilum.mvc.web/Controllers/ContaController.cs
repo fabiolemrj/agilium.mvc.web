@@ -2,6 +2,8 @@
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -13,6 +15,7 @@ using agilum.mvc.web.ViewModels.Fornecedor;
 using agilum.mvc.web.ViewModels.PlanoConta;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -45,7 +48,7 @@ namespace agilum.mvc.web.Controllers
             ICategoriaFinanceiraService categoriaFinanceiraService, IEmpresaService empresaService, IFornecedorService fornecedorService,
             IClienteService clienteService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _contaService = contaService;
             _planoContaService = planoContaService;
@@ -120,7 +123,7 @@ namespace agilum.mvc.web.Controllers
 
         #region contas pagar
 
-        [Route("pagar/lista")]
+        [Route("pagar")]
         [ClaimsAuthorizeAttribute(2079)]
         public async Task<IActionResult> IndexContaPagar([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
@@ -144,7 +147,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaContaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
-            lista.ReferenceAction = "pagar/lista";
+            lista.ReferenceAction = "pagar";
             return View(lista);
         }
 
@@ -178,7 +181,7 @@ namespace agilum.mvc.web.Controllers
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA) > 0 ? Convert.ToInt64(empresaSelecionada.IDEMPRESA) : 0;
 
             PreencherListaAuxiliaresContaPagar(model);
-
+            model.SincronizarValoresString();
             return View("CreateEditContaPagar", model);
         }
 
@@ -207,7 +210,7 @@ namespace agilum.mvc.web.Controllers
                 if (usuario != null)
                     model.IDUSUARIO = usuario.Id;
             }
-
+            model.SincronizarValores();
             var contaPagar = _mapper.Map<ContaPagar>(model);
 
             await _contaService.Adicionar(contaPagar);
@@ -249,6 +252,7 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("IndexContaPagar");
             }
             PreencherListaAuxiliaresContaPagar(model);
+            model.SincronizarValoresString();
             return View("CreateEditContaPagar", model);
         }
 
@@ -263,6 +267,7 @@ namespace agilum.mvc.web.Controllers
             PreencherListaAuxiliaresContaPagar(model);
             if (!ModelState.IsValid) return View("CreateEditContaPagar", model);
 
+            model.SincronizarValores();
             var produto = _mapper.Map<ContaPagar>(model);
 
             await _contaService.Atualizar(produto);
@@ -302,7 +307,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("IndexContaPagar");
             }
-
+            model.SincronizarValoresString();
             return View(model);
         }
 
@@ -363,8 +368,18 @@ namespace agilum.mvc.web.Controllers
             var msgResultado = "";
             try
             {
-                await _contaService.DesconsolidarContaReceberPorId(id);
+                await _contaService.DesconsolidarContaPorId(id);
                 msgResultado = "Conta a pagar desconsolidada com sucesso!";
+                if (!OperacaoValida())
+                {
+                    for (int i = 0; i < ObterNotificacoes().ToList().Count; i++)
+                    {
+                        TempData[$"TipoMensagem"] = "danger";
+                        TempData[$"Titulo"] = _nomeEntidadePagar;
+                        TempData[$"Mensagem"] = ObterNotificacoes().ToList()[i];
+                    }
+                 
+                }
             }
             catch
             {
@@ -384,7 +399,7 @@ namespace agilum.mvc.web.Controllers
 
         #region contas receber
 
-        [Route("receber/lista")]
+        [Route("receber")]
         [ClaimsAuthorizeAttribute(2087)]
         public async Task<IActionResult> IndexContaReceber([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
         {
@@ -408,7 +423,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaContaReceberPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
-            lista.ReferenceAction = "receber/lista";
+            lista.ReferenceAction = "receber";
             return View(lista);
         }
 
@@ -428,7 +443,7 @@ namespace agilum.mvc.web.Controllers
             model.IDEMPRESA = empresaSelecionada != null && Convert.ToInt64(empresaSelecionada.IDEMPRESA) > 0 ? Convert.ToInt64(empresaSelecionada.IDEMPRESA) : 0;
 
             PreencherListaAuxiliaresContaReceber(model);
-
+            model.SincronizarDeDoubleParaString();
             return View("CreateEditContaReceber", model);
         }
 
@@ -458,6 +473,7 @@ namespace agilum.mvc.web.Controllers
                     model.IDUSUARIO = usuario.Id;
             }
 
+            model.SincronizarDeStringParaDouble();
             var objeto = _mapper.Map<ContaReceber>(model);
 
             await _contaService.Adicionar(objeto);
@@ -499,6 +515,7 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("IndexContaReceber");
             }
             PreencherListaAuxiliaresContaReceber(model);
+            model.SincronizarDeDoubleParaString();
             return View("CreateEditContaReceber", model);
         }
 
@@ -514,7 +531,7 @@ namespace agilum.mvc.web.Controllers
             if (!ModelState.IsValid) return View("CreateEditContaReceber", model);
 
             var objeto = _mapper.Map<ContaReceber>(model);
-
+            model.SincronizarDeStringParaDouble();
             await _contaService.Atualizar(objeto);
 
             if (!OperacaoValida())
@@ -552,7 +569,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("IndexContaReceber");
             }
-
+            model.SincronizarDeDoubleParaString();
             return View(model);
         }
 
@@ -679,7 +696,6 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "pagar/lista",
                 TotalResults = retorno.TotalResults
             };
         }
@@ -730,7 +746,7 @@ namespace agilum.mvc.web.Controllers
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "receber/lista",
+        
                 TotalResults = retorno.TotalResults
             };
         }

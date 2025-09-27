@@ -325,11 +325,11 @@ namespace agilium.api.infra.Repository.Dapper
                                  INNER JOIN produto P ON VI.IDPRODUTO = P.IDPRODUTO 
                                  inner JOIN prod_grupo G ON P.IDGRUPO = G.IDGRUPO 
                                  INNER JOIN venda V ON VI.IDVENDA = V.IDVENDA 
-                                 WHERE DATE(V.DTHRVENDA) between @dtINicial and @dtFinal
+                                 WHERE DATE(V.DTHRVENDA) between '{dataInicial.ToString("yyyy-MM-dd")}' and '{dataFinal.ToString("yyyy-MM-dd")}'
                         GROUP BY RESULTADO
                         ORDER BY {campoOrdem} DESC";
 
-            var resul = _dbSession.Connection.Query<VendaRankingReport>(query, parametros, _dbSession.Transaction);
+            var resul = _dbSession.Connection.Query<VendaRankingReport>(query, null, _dbSession.Transaction);
             return resul.ToList();
         }
 

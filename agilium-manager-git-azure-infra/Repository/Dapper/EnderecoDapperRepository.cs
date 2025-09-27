@@ -102,6 +102,33 @@ namespace agilium.api.infra.Repository.Dapper
         }
 
         #region transacao
+
+        public async Task<Endereco> AtualizarEnderecoTransacao(Endereco endereco)
+        {
+
+            var query = $@"UPDATE endereco SET ENDER =@ENDER,NUM = @NUM,COMPL = @COMPL,BAIRRO = @BAIRRO,CEP = @CEP,CIDADE = @CIDADE,UF = @UF,
+                            PAIS = @PAIS,IBGE = @IBGE,DSPTREF = @DSPTREF,DTHRATU = @DTHRATU WHERE IDENDERECO = @IDENDERECO";
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDENDERECO", endereco.Id, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@ENDER", endereco.Logradouro, DbType.String, ParameterDirection.Input);
+            parametros.Add("@NUM", endereco.Numero, DbType.String, ParameterDirection.Input);
+            parametros.Add("@BAIRRO", endereco.Bairro, DbType.String, ParameterDirection.Input);
+            parametros.Add("@CEP", endereco.Cep, DbType.String, ParameterDirection.Input);
+            parametros.Add("@CIDADE", endereco.Cidade, DbType.String, ParameterDirection.Input);
+            parametros.Add("@UF", endereco.Uf, DbType.String, ParameterDirection.Input);
+            parametros.Add("@PAIS", endereco.Pais, DbType.String, ParameterDirection.Input);
+            parametros.Add("@IBGE", endereco.Ibge, DbType.String, ParameterDirection.Input);
+            parametros.Add("@DTHRATU", DateTime.Now, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@COMPL", endereco.Complemento, DbType.String, ParameterDirection.Input);
+            parametros.Add("@DSPTREF", endereco.PontoReferencia, DbType.String, ParameterDirection.Input);
+
+            if (_dbSession.Connection.Execute(query, parametros, _dbSession.Transaction) == 0)
+                return null;
+
+            return endereco;
+        }
+
         private async Task<Endereco> AdicionarEnderecoTransacao(Endereco endereco)
         {
             var id = _utilDapperRepository.GerarUUID().Result;

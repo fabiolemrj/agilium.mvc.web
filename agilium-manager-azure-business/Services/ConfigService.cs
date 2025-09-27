@@ -401,10 +401,36 @@ namespace agilium.api.business.Services
             return resultado;
         }
 
+        public async Task AtualizarManualmente(Config config)
+        {
+            if (!ExecutarValidacao(new ConfigValidation(), config))
+                return;
+
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                await _configRepositoryDapperRepository.EditarConfigManualmente(config);
+
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                {
+                    await _dapperRepository.Rollback();
+                    Notificar("Erro ao salvar config");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dapperRepository.Rollback();
+                Notificar(ex.Message);
+            }
+        }
+
         #endregion
 
         #region config balanca
-        
+
         public async Task<IEnumerable<Config>> ObterConfigPreVenda(long idEmpresa)
         {
             var resultado = new List<Config>();
@@ -425,11 +451,8 @@ namespace agilium.api.business.Services
             catch (Exception ex)
             {
                 await _dapperRepository.Rollback();
-                do
-                {
-                    Notificar(ex.Message);
-                }
-                while (ex != null);
+                Notificar(ex.Message);
+             
             }
             return resultado;
         }
@@ -565,6 +588,8 @@ namespace agilium.api.business.Services
             }
             return resultado;
         }
+
+   
         #endregion
 
 

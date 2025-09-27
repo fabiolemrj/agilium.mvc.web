@@ -1,9 +1,12 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.ViewModels.Endereco;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
@@ -18,7 +21,8 @@ namespace agilum.mvc.web.Controllers
  
 
         public EnderecoController(IEnderecoService enderecoService, IMapper mapper, INotificador notificador, 
-            IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _enderecoService = enderecoService;
  

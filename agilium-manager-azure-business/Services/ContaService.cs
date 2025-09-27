@@ -95,11 +95,13 @@ namespace agilium.api.business.Services
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
 
-            var lista = await _contaPagarRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Fornecedor", "PlanoConta");
+            var listaDesordenada = await _contaPagarRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Fornecedor", "PlanoConta");
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD);
 
             return new PagedResult<ContaPagar>
             {
-                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderBy(x => x.DTCAD),
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
                 TotalResults = lista.Count(),
                 PageIndex = page,
                 PageSize = pageSize
@@ -179,9 +181,23 @@ namespace agilium.api.business.Services
 
                     }
                 }
+                else
+                {
+                    Notificar("Conta a pagar não localizada");
+                }
 
-                await _dapperRepository.Commit();
-                resultado = true;
+                if (!TemNotificacao())
+                {
+                    await _dapperRepository.Commit();
+                    resultado = true;
+                }
+                else
+                {
+                    await _dapperRepository.Rollback();
+                    Notificar("Erro ao desconsolidar a conta a pagar");
+                    resultado = false;
+                }
+
             }
             catch (Exception ex)
             {
@@ -238,11 +254,13 @@ namespace agilium.api.business.Services
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
 
-            var lista = await _contaReceberRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Cliente", "PlanoConta");
+            var listaDesordenada = await _contaReceberRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Cliente", "PlanoConta");
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD);
 
             return new PagedResult<ContaReceber>
             {
-                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderBy(x => x.DTCAD),
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize),
                 TotalResults = lista.Count(),
                 PageIndex = page,
                 PageSize = pageSize
@@ -280,7 +298,7 @@ namespace agilium.api.business.Services
                 }
                 
                 await _dapperRepository.Commit();
-                resultado = true;
+                resultado = false;
             }
             catch (Exception ex)
             {
@@ -322,9 +340,22 @@ namespace agilium.api.business.Services
                         }
                     }
                 }
-                
-                await _dapperRepository.Commit();
-                resultado = true;
+                else
+                {
+                    Notificar("Conta a receber não localizada");
+                }
+
+                if (!TemNotificacao()) { 
+                    await _dapperRepository.Commit();
+                    resultado = true;
+                }
+                else
+                {
+                    await _dapperRepository.Rollback();
+                    Notificar("Erro ao tentar realizar suprimento");
+                    resultado = false;
+                }
+               
             }
             catch (Exception ex)
             {

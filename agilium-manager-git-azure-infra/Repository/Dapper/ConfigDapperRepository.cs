@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
@@ -208,7 +209,17 @@ namespace agilium.api.infra.Repository.Dapper
             return _dbSession.Connection.Query<long>(query, parametros, _dbSession.Transaction).FirstOrDefault();
         }
 
+        public async Task<bool> EditarConfigManualmente(business.Models.Config config)
+        {
+            var parametros = new DynamicParameters();
+            parametros.Add("@VALOR", config.VALOR, DbType.String, ParameterDirection.Input);
+            parametros.Add("@IDEMPRESA", config.IDEMPRESA, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@CHAVE", config.CHAVE, DbType.String, ParameterDirection.Input);
 
+            var query = $@"UPDATE config SET VALOR = @VALOR WHERE CHAVE =@CHAVE AND IDEMPRESA =@IDEMPRESA";
+
+            return (_dbSession.Connection.Execute(query, parametros, _dbSession.Transaction) > 0);
+        }
 
         #endregion
 

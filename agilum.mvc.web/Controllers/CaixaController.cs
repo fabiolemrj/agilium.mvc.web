@@ -12,6 +12,9 @@ using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Caixa;
 using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -24,7 +27,9 @@ namespace agilum.mvc.web.Controllers
         private readonly string _nomeEntidadeMotivo = "Caixa";
 
         public CaixaController(IUsuarioService usuarioService, ICaixaService caixaService,
-             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
+             ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) :
+            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _caixaService = caixaService;
             _usuarioService = usuarioService;

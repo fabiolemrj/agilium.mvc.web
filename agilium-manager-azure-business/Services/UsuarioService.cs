@@ -3,6 +3,7 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using agilium.api.business.Models.Validations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -227,16 +228,25 @@ namespace agilium.api.business.Services
         {
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
-
-            var lista = await _usuarioRepository.Buscar(x => x.nome.ToUpper().Contains(_nomeParametro.ToUpper()));
-
-            return new PagedResult<Usuario>
+            try
             {
-                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
-                TotalResults = lista.Count(),
-                PageIndex = page,
-                PageSize = pageSize
-            };
+                var lista = await _usuarioRepository.Buscar(x => x.nome.ToUpper().Contains(_nomeParametro.ToUpper()));
+                return new PagedResult<Usuario>
+                {
+                    List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                    TotalResults = lista.Count(),
+                    PageIndex = page,
+                    PageSize = pageSize
+                };
+            }
+            catch (Exception ex)
+            {
+
+
+             
+            }
+           return new PagedResult<Usuario>();
+
         }
 
         public async Task<bool> Remover(long id)

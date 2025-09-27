@@ -2,6 +2,8 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -10,6 +12,7 @@ using agilum.mvc.web.ViewModels.Endereco;
 using agilum.mvc.web.ViewModels.Fornecedor;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +37,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtores
         public FornecedorController(IFornecedorService fornecedorService, IContatoService contatoService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
 
             _fornecedorService = fornecedorService;
@@ -51,6 +55,7 @@ namespace agilum.mvc.web.Controllers
 
             var lista = await ObterListaPaginado(q, page, ps);
             ViewBag.Pesquisa = q;
+            lista.Query = q;
             return View(lista);
         }
 
@@ -89,7 +94,7 @@ namespace agilum.mvc.web.Controllers
 
             var fornecedor = _mapper.Map<Fornecedor>(model);
 
-            if (fornecedor.Id == 0) fornecedor.Id = fornecedor.GerarId();
+            if (fornecedor.Id == 0) fornecedor.Id =fornecedor.GerarId();
 
             if (model.Endereco != null)
             {
@@ -154,8 +159,13 @@ namespace agilum.mvc.web.Controllers
 
             if (model.Endereco != null && !string.IsNullOrEmpty(model.Endereco.Cep))
                 model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
+            else model.Endereco = null;
 
-            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(model));
+            if(!model.Contatos.Any())
+                model.Contatos = null;
+
+            await _fornecedorService.AtualizarDapper(_mapper.Map<Fornecedor>(model));
+            //await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(model));
 
             if (!OperacaoValida())
             {
@@ -163,7 +173,7 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao(msgErro);
                 return View("CreateEditFornecedor", model);
             }
-            await _fornecedorService.Salvar();
+          //  await _fornecedorService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Fornecedor", "Atualizar", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";

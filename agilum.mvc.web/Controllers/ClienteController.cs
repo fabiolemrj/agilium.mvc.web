@@ -2,6 +2,8 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -9,6 +11,7 @@ using agilum.mvc.web.ViewModels.Cliente;
 using agilum.mvc.web.ViewModels.Endereco;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +36,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public ClienteController(IClienteService clienteService, IEnderecoService enderecoService, IContatoService contatoService, IProdutoService produtoService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _clienteService = clienteService;
             _contatoService = contatoService;
@@ -205,7 +209,7 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao(msgErro);
                 return View("CreateEditCliente", model);
             }
-            await _clienteService.Salvar();
+            //await _clienteService.Salvar();
             LogInformacao($"Objeto adicionado com sucesso {Deserializar(cliente)}", "Cliente", "Atualizar", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
@@ -501,7 +505,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             var cliente = _mapper.Map<Cliente>(viewModel);
-
+            /*
             if (viewModel.Endereco != null && viewModel.Endereco.Id > 0)
             {
                 var _endereco = _mapper.Map<Endereco>(viewModel.Endereco);
@@ -527,7 +531,7 @@ namespace agilum.mvc.web.Controllers
                 await _enderecoService.AtualizarAdicionar(_endereco);
                 cliente.AdicionarEnderecoEntrega(null);
             }
-
+            */
             if (viewModel.TipoPessoa == agilium.api.business.Enums.ETipoPessoa.F && viewModel.ClientePessoaFisica != null)
             {
                 if (viewModel.ClientePessoaFisica.Id == 0) viewModel.ClientePessoaFisica.Id = viewModel.Id;
@@ -540,6 +544,7 @@ namespace agilum.mvc.web.Controllers
                 var clientePJ = _mapper.Map<ClientePJ>(viewModel.ClientePessoaJuridica);
                 cliente.AdicionarPessoaJuridica(clientePJ);
             }
+            
 
             return cliente;
         }

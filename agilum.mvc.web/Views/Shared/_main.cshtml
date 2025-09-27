@@ -2,6 +2,9 @@
 @using agilum.mvc.web.Data
 @inject SignInManager<AppUserAgiliumIdentity> SignInManager
 @inject UserManager<AppUserAgiliumIdentity> UserManager
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -15,30 +18,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png">
 
-    <!-- Google Font: Source Sans Pro -->
+    <!-- Fonts -->
     <link rel="stylesheet" href="~/font/NightMachine-rwMB.ttf" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
-    <!-- overlayScrollbars -->
-    <!-- Theme style -->
 
+    <!-- Icons e Plugins -->
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
+    <!-- CSS do seu site e AdminLTE -->
     <link rel="stylesheet" href="~/css/site.css">
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="~/dist/plugins/chart.js/Chart.css" />
     <link rel="stylesheet" href="~/css/toastr.css" />
     <link href="~/dist/plugins/sweetalert2/sweetalert2.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="~/dist/plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="~/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
-
 
     <!-- DataTables -->
     <link rel="stylesheet" href="~/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <!-- Select2 + tema Bootstrap 4 -->
+    <link href="~/dist/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/dist/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" rel="stylesheet" />
+
+
 </head>
+
 
 <body class="hold-transition sidebar-mini text-md accent-navy">
     @*<div id="overlay" onclick="off()">
@@ -48,7 +57,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <div id="overlay">
         <div class="loader">
+            <p class="mt-3 text-white font-weight-bold">Carregando...</p>
             <img id="imgLoader" src="~/Images/loading-gif-png-5.gif" alt="Aguarde o carregamento..." />
+          
         </div>
     </div>
 
@@ -142,15 +153,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
  
     <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script src="~/dist/plugins/select2/js/select2.full.min.js"></script>
+
     @*<script src="~/dist/js/demo.js"></script>
         <script src="~/dist/js/pages/dashboard.js"></script>*@
 
     @RenderSection("Scripts", required: false)
 
     <script>
-    
+
+        var configuracaoApp = {
+            ambiente: "@HostingEnvironment.EnvironmentName", // Ex: "Development"
+            valorParaCliente: "@Configuration["MinhaSecao:ValorQueVaParaCliente"]",
+            apiUrl: "@Url.Content("~/api/algumEndpoint")" // Exemplo de como gerar uma URL
+        };
+     
         function SetModal() {
 
             $(document).ready(function () {
@@ -285,9 +304,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
         function ObterEmpresaSelecionado(){
+            const ambiente= "@HostingEnvironment.EnvironmentName"; // Ex: "Development";
+            let _url = "";
+            if (ambiente == "Development")
+                _url = "/empresa/ObterEmpresaSelecionada";
+            else
+                _url = "/mvc/empresa/ObterEmpresaSelecionada"
             $.ajax({
                 type: 'get',
-                url: '/empresa/ObterEmpresaSelecionada',
+                url: _url,
                 success: function (resultado) {
                     if (resultado == null ) {
                         toastr.error("Erro")
@@ -306,9 +331,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
 
         function ObterVersaoSistema(){
+            const ambiente = "@HostingEnvironment.EnvironmentName"; // Ex: "Development";
+            let _url = "";
+            if (ambiente == "Development")
+                _url = '/ObterVersaoSistema';
+            else
+                _url = '/mvc/ObterVersaoSistema'
+
             $.ajax({
                 type:'get',
-                url: '/ObterVersaoSistema',
+                url: _url,
                 success:function(resultado){
                     if(resultado)
                     {
@@ -320,6 +352,83 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         }
 
+
     </script>
+
+    <script>
+        $(document).ready(function () {
+
+            if (("@ViewBag.TipoMensagem" != '') || ("@TempData["TipoMensagem"]" != '')) 
+            { 
+                off();
+            }
+
+            // 1️⃣ Links de menu e links gerais que levam para outra página
+            $(document).on("click", "a.nav-link, a[data-link], a.menu-link, a.btn-warning, a.btn-danger, a.btn-default", function (e) {
+                const href = $(this).attr("href");
+
+                // Se for vazio, # ou apenas âncora interna, não faz overlay
+                if (!href || href === "#" || href.startsWith("#")) {
+                    return; // deixa o Bootstrap tab funcionar normalmente
+                }
+
+                // Se for navegação real → mostra overlay e redireciona
+                e.preventDefault();
+                on();
+                window.location.href = href;
+            });
+
+            // 2️⃣ Links que abrem modais via AJAX
+            $(document).on("click", "a[data-modal]", function (e) {
+                e.preventDefault();
+                on();
+                $('#myModalContent').load(this.href, function () {
+                    $('#myModal').modal({ keyboard: true }, 'show');
+                    bindForm(this);
+                    off(); // opcional: remove overlay após o modal carregar
+                });
+            });
+
+            // 3️⃣ Formulários - qualquer submit
+            $(document).on("submit", "form", function () {
+                on();
+            });
+
+            // Esconde overlay quando a nova página terminar de carregar
+            $(window).on("load", function () {
+                off();
+            });
+
+            // 4️⃣ Links ou botões específicos com classe load__tela
+            $(document).on("click", ".load__tela", function () {
+                on();
+            });
+
+            $(window).on("error", function () {
+                off();
+            });
+
+            $(document).ajaxStart(function () {
+                on();
+            });
+
+            $(document).ajaxStop(function () {
+                off();
+            });
+
+            $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+                off(); // se houve erro, some com overlay
+                toastr.error("Erro na requisição: " + thrownError);
+            });
+
+            // 6️⃣ Se modal for fechado manualmente → garantir off()
+            $(document).on('hidden.bs.modal', '#myModal', function () {
+                off();
+            });
+
+        });
+    </script>
+
+
 </body>
 </html>

@@ -26,11 +26,11 @@ namespace agilium.api.infra.Mappings
             builder.Property(x => x.Ibge).HasColumnType("int").HasColumnName("IBGE");
             builder.Property(x => x.PontoReferencia).HasColumnType("varchar(100)").HasColumnName("DSPTREF");
 
-            builder
-          .HasMany(ender => ender.Fornecedores)
-          .WithOne(fornec => fornec.Endereco)
-          .HasForeignKey(fornec => new { fornec.IDENDERECO })
-          .HasPrincipalKey(ender => new { ender.Id });
+          //  builder
+          //.HasMany(ender => ender.Fornecedores)
+          //.WithOne(fornec => fornec.Endereco)
+          //.HasForeignKey(fornec => new { fornec.IDENDERECO })
+          //.HasPrincipalKey(ender => new { ender.Id });
 
             builder
           .HasMany(cliEnd => cliEnd.ClienteEndereco)
@@ -57,11 +57,6 @@ namespace agilium.api.infra.Mappings
              .HasForeignKey(cli => new { cli.IDENDERECOFAT })
              .HasPrincipalKey(cliEnd => new { cliEnd.Id });
 
-            builder
-             .HasMany(ender => ender.Funcionarios)
-             .WithOne(func => func.Endereco)
-             .HasForeignKey(func => new { func.IDENDERECO })
-             .HasPrincipalKey(ender => new { ender.Id });
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using agilium.api.business.Enums;
 using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn.ComprasNFEViewModel;
+using agilium_manager_azure_business.Models.CustomReturn.CompraViewModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
@@ -37,6 +38,8 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<bool> AtualizarCompraItemComIdProduto(long idProduto, long idItem);
         Task<int> ObterQtdItensNaoAssociados(long idCompra);
         Task<bool> AtualizarProdutoNoItemCompra(long idItem, long idCompra, long? idProduto, long? idEstoque, string SGUN, double? Quantidade, double? Relacao, double? ValorUnitario, double? ValorTotal, double? NovoPrecoVenda);
+        Task<List<CompraIndexViewModelReturn>> ObterCompraPorPaginacao(long idEmpresa, DateTime dtIni, DateTime dtFim);
+   
     }
 
   

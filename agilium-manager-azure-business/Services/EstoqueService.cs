@@ -5,6 +5,7 @@ using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn.ReportViewModel.EstoqueReportViewModel;
 using agilium.api.business.Models.Validations;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -135,6 +136,22 @@ namespace agilium.api.business.Services
             return _estoqueProdutoRepository.Buscar(x => x.IDESTOQUE == idEstoque).Result.ToList();
         }
 
+
+        public async Task<PagedResult<EstoqueProduto>> ObterProdutoEstoquePorEstoquePaginacao(long idEstoque, string descricao, int page = 1, int pageSize = 15)
+        {
+            var _descricao = !string.IsNullOrEmpty(descricao) ? descricao.ToLower() : string.Empty;
+            var lista = _estoqueProdutoRepository.Buscar(x => x.IDESTOQUE == idEstoque && x.Produto.NMPRODUTO.ToLower().Contains(_descricao)).Result;
+            int pagina = page > 0 ? page : 1;
+
+            return new PagedResult<EstoqueProduto>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            };
+        }
+
         #endregion
 
         #region Historico Estoque
@@ -199,11 +216,7 @@ namespace agilium.api.business.Services
             }
             catch (Exception ex)
             {
-                do
-                {
-                    Notificar(ex.Message);
-                }
-                while (ex != null);
+                Notificar(ex.Message);
 
                 //await _dapperRepository.Rollback();
             }
@@ -220,6 +233,7 @@ namespace agilium.api.business.Services
             return !estoqueHistorico.Any() && !produtosEstoque.Any();
         }
 
+       
 
         #endregion
 

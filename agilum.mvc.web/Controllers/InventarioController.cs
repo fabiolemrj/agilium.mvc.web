@@ -2,6 +2,8 @@
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
@@ -10,6 +12,7 @@ using agilum.mvc.web.ViewModels.Inventario;
 using agilum.mvc.web.ViewModels.Produtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -39,7 +42,7 @@ namespace agilum.mvc.web.Controllers
                                     IProdutoService produtoService, IEstoqueService estoqueService, IPerdaService perdaService,
                                     INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
                                     IUsuarioService usuarioService,
-                                    ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+                                    ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _inventarioService = inventarioService;
             _empresaService = empresaService;
@@ -74,6 +77,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2107)]
         public async Task<IActionResult> Index([FromQuery] int ps = 10, [FromQuery] int page = 1, [FromQuery] string q = null)
         {
+
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
@@ -93,7 +97,7 @@ namespace agilum.mvc.web.Controllers
             var lista = await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps);
             ViewBag.Pesquisa = q;
             lista.ReferenceAction = "Index";
-
+            lista.Query = q;
             return View(lista);
         }
 
@@ -377,7 +381,7 @@ namespace agilum.mvc.web.Controllers
             model.idInventario = objeto.Id;
             model.TipoAnalise = objeto.TipoAnalise;
 
-            return View("IndexItemEdit", model);
+            return View("ListItemEdit", model);
         }
 
         [Route("editar-itens")]
@@ -393,13 +397,13 @@ namespace agilum.mvc.web.Controllers
             if (!OperacaoValida())
             {
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Inventario", "ApuracaoInventario", "Web", Deserializar(model)));
-                return View(model);
+                return View("ListItemEdit", model);
             }
           
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return View(model);
+            return View("ListItemEdit", model);
         }
 
         [Route("apagar-itens")]
@@ -686,6 +690,186 @@ namespace agilum.mvc.web.Controllers
             return RedirectToAction("IndexItem", new { id = model.idInventario });
         }
 
+        public async Task<ActionResult> SalvarSelecao(long id)
+        {
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+            if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+            {
+                var msgErro = $"Selecione uma empresa para acessar {_nomeEntidadeMotivo}";
+
+                TempData["TipoMensagem"] = "danger";
+                TempData["Titulo"] = _nomeEntidadeMotivo;
+                TempData["Mensagem"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidadeMotivo;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("Index", "Home");
+            }
+
+            var objeto = _mapper.Map<InventarioViewModel>(await _inventarioService.ObterPorId(id));
+
+            if (objeto == null)
+            {
+                var msgErro = $"Inventario não localizado";
+                AdicionarErroValidacao(msgErro);
+                TempData["Mensagem"] = msgErro;
+                TempData["TipoMensagem"] = "danger";
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = "Inventario";
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("Index");
+            }
+            var objetos = await _inventarioService.ObetrProdutoDisponvelInventario(Convert.ToInt64(empresaSelecionada.IDEMPRESA), objeto.Id);
+            var listaProdutos = _mapper.Map<List<ProdutoViewModel>>(objetos);
+
+            var model = new AdicionarListaProdutosDisponiveisViewModel();
+            model.idInventario = objeto.Id;
+            model.IDEMPRESA = objeto.IDEMPRESA;
+            model.NomeInventario = $"{objeto.Codigo} - {objeto.Descricao}";
+            model.Situacao = objeto.Situacao;
+            listaProdutos.ForEach(item => {
+                model.Produtos.Add(new ProdutoDisponivelViewModel()
+                {
+                    Id = item.Id,
+                    Categoria = item.Categoria,
+                    Codigo = item.Codigo,
+                    idEmpresa = item.idEmpresa,
+                    IDGRUPO = item.IDGRUPO,
+                    Nome = item.Nome,
+                    Tipo = item.Tipo
+                });
+            });
+
+            return View("_ProdutosDispInventarios",model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SalvarSelecao(List<long> SelectedIds, string idInventario, string IDEMPRESA, string NomeInventario)
+        {
+            // Aqui você terá os IDs dos produtos selecionados
+            // salvar no banco, processar, etc.
+            var ids = SelectedIds;
+
+            var itensInventario = new List<InventarioItem>();
+
+            foreach(var id in SelectedIds)
+            {
+                var inventarioItem = new InventarioItem(Int64.Parse(idInventario), id, null, null, null, null, null, null);
+                itensInventario.Add(inventarioItem);
+            }
+            
+            await _inventarioService.IncluirProdutoInventario(itensInventario);
+
+            if (!OperacaoValida())
+            {
+                var model = await PreencherObjetoModel(idInventario, IDEMPRESA, NomeInventario, SelectedIds);
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Inventario", "AdicionarProdutos", "Web", Deserializar(itensInventario)));
+                return View("_ProdutosDispInventarios", model);
+            }
+
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            return RedirectToAction("IndexItem", new { id = idInventario });
+        }
+
+        private async Task<AdicionarListaProdutosDisponiveisViewModel> PreencherObjetoModel(string idInventario, string IDEMPRESA, string NomeInventario, List<long> SelectedIds)
+        {
+            var produtos = _mapper.Map<List<ProdutoViewModel>>(await _inventarioService.ObetrProdutoDisponvelInventario(Convert.ToInt64(IDEMPRESA), Convert.ToInt64(idInventario)));
+
+            var retorno = new AdicionarListaProdutosDisponiveisViewModel();
+            retorno.idInventario = Int64.Parse(idInventario);
+            retorno.NomeInventario = NomeInventario;
+            retorno.IDEMPRESA = Convert.ToInt64(IDEMPRESA);
+
+            foreach (var item in produtos)
+            {
+                var select = SelectedIds.Any(x => x == item.Id);
+
+                retorno.Produtos.Add(new ProdutoDisponivelViewModel()
+                {
+                    Id = item.Id,
+                    Categoria = item.Categoria,
+                    Codigo = item.Codigo,
+                    idEmpresa = item.idEmpresa,
+                    IDGRUPO = item.IDGRUPO,
+                    Nome = item.Nome,
+                    Tipo = item.Tipo,
+                    Selecionado = select
+                });
+            }
+
+            return retorno;
+        }
+
+        [Route("ApurarItens")]
+        public IActionResult ApurarItens(long idInventario, int pagina = 1, int tamanhoPagina = 20)
+        {
+            var inventario = _inventarioService.ObterItensPorInventario(idInventario).Result;
+
+            var totalItens = inventario.Count();
+
+            var itens = inventario
+                .OrderBy(x => x.Produto.CDPRODUTO)
+                .Skip((pagina - 1) * tamanhoPagina)
+                .Take(tamanhoPagina)
+                .ToList();
+            List<InventarioItemViewModel> listaItens = new List<InventarioItemViewModel>();
+            itens.ForEach(async item =>
+            {
+                listaItens.Add(await ConverterObjetoEmViewModel(item));
+            });
+
+            var viewModel = new ListaInventarioItemViewModel
+            {
+                idInventario = idInventario,
+                Itens = listaItens,
+                PaginaAtual = pagina,
+                TotalPaginas = (int)Math.Ceiling((double)totalItens / tamanhoPagina)
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("ApurarItens")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApurarItens(ListaInventarioItemViewModel model)
+        {
+            // 🔹 Validação
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // 🔹 Obtém o usuário logado
+            var usuario = await _usuarioService.ObterPorUsuarioAspNetPorId(AppUser.GetUserId().ToString());
+
+            // 🔹 Mapeia os itens do ViewModel para a entidade
+            var itens = _mapper.Map<List<InventarioItem>>(model.Itens).ToList();
+
+            // 🔹 Chama o serviço para atualizar os itens no inventário
+            await _inventarioService.AlterarInventarioItem(itens, usuario.Id);
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Inventario", "ApuracaoInventario", "Web", Deserializar(model)));
+                return View("ListItemEdit", model);
+            }
+
+            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["TipoMensagem"] = "success";
+
+            // 🔹 Redireciona para GET mantendo a paginação atual
+            // Redireciona para a mesma página da lista
+            return RedirectToAction(nameof(ApurarItens), new
+            {
+                idInventario = model.idInventario,
+                pagina = model.PaginaAtual
+            });
+        }
+
         #endregion
 
         #region private
@@ -701,6 +885,28 @@ namespace agilum.mvc.web.Controllers
                 lista.Add(viewModel);
             });
             return new PagedViewModel<InventarioViewModel>()
+            {
+                List = lista,
+                PageIndex = retorno.PageIndex,
+                PageSize = retorno.PageSize,
+                Query = retorno.Query,
+                ReferenceAction = "Index",
+                TotalResults = retorno.TotalResults
+            };
+        }
+
+        private async Task<PagedViewModel<InventarioItemViewModel>> ObterListaItemPaginado(long id, string descricao, int page, int pageSize)
+        {
+            var lista = new List<InventarioItemViewModel>();
+            var retorno = await _inventarioService.ObterItensPorInventarioPaginacao(id, descricao, page, pageSize);
+
+            retorno.List.ToList().ForEach(async dev =>
+            {
+                var viewModel = await ConverterObjetoEmViewModel(dev) ;
+
+                lista.Add(viewModel);
+            });
+            return new PagedViewModel<InventarioItemViewModel>()
             {
                 List = lista,
                 PageIndex = retorno.PageIndex,

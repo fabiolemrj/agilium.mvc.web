@@ -33,10 +33,12 @@ function InicializarComponente() {
 async function SelecionarItensVendaPorVenda(id,iddev) {
     //alert(id);
     on();
+    const _url = "/devolucao/ObterItemVendaPorId?idvenda=" + id + "&iddev=" + iddev;
+    //const _url = "/mvc/devolucao/ObterItemVendaPorId?idvenda=" + id + "&iddev=" + iddev;
     $.ajax({
         type: 'get',
         dataType: 'json',
-        url: "/devolucao/ObterItemVendaPorId?idvenda=" + id + "&iddev=" + iddev,
+        url: _url,
         success: function (result) {
             var objeto = JSON.parse(JSON.stringify(result));
             if (objeto.error) {
@@ -151,11 +153,14 @@ async function Selecionarvenda() {
     let getDay = dateConverted.toLocaleString("default", { day: "2-digit" });
     let data = getYear + "-" + getMonth + "-" + getDay;
 
+    //const _url = "/mvc/devolucao/ObterVendaPorData?data=" + data;
+    const _url = "/devolucao/ObterVendaPorData?data=" + data;
+
     on();
     $.ajax({
         type: 'get',
         dataType: 'json',
-        url: "/devolucao/ObterVendaPorData?data="+data ,
+        url: _url,
         success: function (result) {
             var objeto = JSON.parse(JSON.stringify(result));
             if (objeto.error) {

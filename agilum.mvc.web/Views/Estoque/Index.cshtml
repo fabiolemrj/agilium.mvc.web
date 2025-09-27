@@ -107,6 +107,7 @@
                         }
                     </td>
                     <td class="text-right">
+                        <a class="btn btn-success" asp-action="IndexProdutos" asp-route-idEstoque="@item.Id" title="Produtos por Estoque"><spam class="fas fa-box-open"></spam></a>
                         <a class="btn btn-success" asp-action="ProdutoEstoque" asp-route-idEstoque="@item.Id" title="Produtos por Estoque"><spam class="fas fa-box-open"></spam></a>
                         <a class="btn btn-warning" asp-action="EditEstoque" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
                         <a class="btn btn-danger" asp-action="DeleteEstoque" asp-route-id="@item.Id" title="Apagar"><spam class="fa fa-trash"></spam></a>

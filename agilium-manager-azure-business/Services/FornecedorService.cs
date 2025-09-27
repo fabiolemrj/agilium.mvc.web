@@ -16,12 +16,18 @@ namespace agilium.api.business.Services
         private readonly IFornecedorRepsoitory _fornecedorRepsoitory;
         private readonly IFornecedorContatoRepsoitory _fornecedorContatoRepository;
         private readonly IContatoRepository _contatoRepository;
+        private readonly IFornecedorDapperRepository _fornecedorDapperRepository;
+        private readonly IDapperRepository _dapperRepository;
+
         public FornecedorService(INotificador notificador, IFornecedorContatoRepsoitory contatoRepsoitory,
-                                    IFornecedorRepsoitory fornecedorRepsoitory, IContatoRepository contatoRepository) : base(notificador)
+                                    IFornecedorRepsoitory fornecedorRepsoitory, IContatoRepository contatoRepository,
+                                    IFornecedorDapperRepository fornecedorDapperRepository, IDapperRepository dapperRepository) : base(notificador)
         {
             _fornecedorContatoRepository = contatoRepsoitory;
             _fornecedorRepsoitory = fornecedorRepsoitory;
             _contatoRepository = contatoRepository;
+            _fornecedorDapperRepository = fornecedorDapperRepository;
+            _dapperRepository = dapperRepository;
         }
 
         #region Fornecedor
@@ -51,6 +57,32 @@ namespace agilium.api.business.Services
             await _fornecedorRepsoitory.AtualizarSemSalvar(fornecedor);
         }
 
+        public async Task AtualizarDapper(Fornecedor fornecedor)
+        {
+            if (!ExecutarValidacao(new FornecedorValidation(), fornecedor))
+                return;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
+
+                await _fornecedorDapperRepository.AtualizarFornecedorTransacao(fornecedor);
+
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                {
+                    await _dapperRepository.Rollback();
+                    Notificar("Erro ao tentar abrir caixa");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dapperRepository.Rollback();
+                Notificar(ex.Message);
+            }
+
+        }
+
         public async Task<Fornecedor> ObterCompletoPorId(long id)
         {
             var lista = _fornecedorRepsoitory.Obter(x => x.Id == id, "Endereco", "FornecedoresContatos", "FornecedoresContatos.Contato").Result;
@@ -59,7 +91,7 @@ namespace agilium.api.business.Services
 
         public async Task<Fornecedor> ObterPorId(long id)
         {
-            return _fornecedorRepsoitory.ObterPorId(id).Result;
+            return _fornecedorDapperRepository.ObterFornecedorPorId(id).Result;
         }
 
         public async Task<List<Fornecedor>> ObterPorRazaoSocial(string descricao)

@@ -25,6 +25,7 @@ using System.Text.Encodings.Web;
 using agilum.mvc.web.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using agilum.mvc.web.Extensions;
+using agilium_manager_azure_business.Interfaces.IService;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -42,7 +43,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public UsuarioController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
             ILogService logService, IMapper mapper, IUsuarioService usuarioService, IAutenticacaoService autenticacaoService, ICaService controleAcessoService,
-            UserManager<AppUserAgiliumIdentity> userManager, IEmailSender emailSender) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            UserManager<AppUserAgiliumIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _usuarioService = usuarioService;
             _autenticacaoService = autenticacaoService;
@@ -64,6 +65,7 @@ namespace agilum.mvc.web.Controllers
             ViewBag.Pesquisa = q;
             lista.ReferenceAction = "lista";
             lista.ReferenceController = "usuario";
+            lista.Query = q;
             return View(lista);
         }
 
@@ -97,6 +99,8 @@ namespace agilum.mvc.web.Controllers
 
             if (result.Succeeded)
             {
+                await AdicionarUsuario(usuario, userNewWeb.Id);
+
                 var returnUrl = Url.Content("~/");
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(userNewWeb);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -107,13 +111,20 @@ namespace agilum.mvc.web.Controllers
                     protocol: Request.Scheme);
                 try
                 {
+                    var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+                    if(empresaSelecionada == null)
+                    {
+                        msgErro = "Erro ao tentar enviar email";
+                        return Json(new { sucesso = sucesso, erro = msgErro });
+                    }
                     await _emailSender.SendEmailAsync(userNewWeb.Email, "Agilium Manager",
-                       $"<h3>Confirme seu email</h3> Por favor, confirme sua conta para acesso ao sistema Agilium Manager Web <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.");
+                       $"<h3>Confirme seu email</h3> Por favor, confirme sua conta para acesso ao sistema Agilium Manager Web <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.",
+                       empresaSelecionada.IDEMPRESA);
                 }
                 catch (Exception ex)
-                {
-
-                    msgErro = ex.Message;
+                {                    
+                   msgErro = ex.Message;
+                    return Json(new { sucesso = sucesso, erro = msgErro });
                 }
                 
             }
@@ -136,6 +147,69 @@ namespace agilum.mvc.web.Controllers
         }
 
         [HttpGet]
+        [Route("reenviar-email")]
+        [ClaimsAuthorizeAttribute(1002)]
+        public async Task<ActionResult> ReenviarEmailConfirmarUsuario(long idUsuario)
+        {
+            var usuario = await _usuarioService.ObterPorUsuarioPorId(idUsuario);
+
+            var msgErro = "";
+            var sucesso = false;
+            if (usuario != null)
+            {
+                if (string.IsNullOrEmpty(usuario.email))
+                {
+                    msgErro = "Campo de email obrigatório para criar novo usuario web";
+                    return Json(new { sucesso = sucesso, erro = msgErro });
+                }
+            }
+            else
+            {
+                msgErro = "Erro ao tentar localizar usuario";
+                return Json(new { sucesso = sucesso, erro = msgErro });
+            }
+
+            var appUserAgilium = await _userManager.FindByIdAsync(usuario.idUserAspNet);
+            
+            if(appUserAgilium == null)
+            {
+                msgErro = "Usuario Web não criado";
+                return Json(new { sucesso = sucesso, erro = msgErro });
+            }
+
+            var returnUrl = Url.Content("~/");
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(appUserAgilium);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var callbackUrl = Url.Page(
+                "/Account/ConfirmarEmail",
+                pageHandler: null,
+                values: new { area = "Identity", userId = appUserAgilium.Id, code = code, returnUrl = returnUrl },
+                protocol: Request.Scheme);
+            try
+            {
+                var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+                if (empresaSelecionada == null)
+                {
+                    msgErro = "Erro ao tentar enviar email";
+                    return Json(new { sucesso = sucesso, erro = msgErro });
+                }
+                await _emailSender.SendEmailAsync(appUserAgilium.Email, "Agilium Manager",
+                   $"<h3>Confirme seu email</h3> Por favor, confirme sua conta para acesso ao sistema Agilium Manager Web <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.",
+                   empresaSelecionada.IDEMPRESA);
+
+                msgErro = "Email enviado com sucesso";
+                sucesso = true;
+
+                return Json(new { sucesso = sucesso, erro = msgErro });
+            }
+            catch (Exception ex)
+            {
+                msgErro = ex.Message;
+                return Json(new { sucesso = sucesso, erro = msgErro });
+            }
+        } 
+
+        [HttpGet]
         [Route("editar")]
         [ClaimsAuthorizeAttribute(1004)]
         public async Task<IActionResult> Edit(string id)
@@ -143,7 +217,7 @@ namespace agilum.mvc.web.Controllers
             ObterEstados();
 
             var model = _mapper.Map<UserFull>(await _usuarioService.ObterPorUsuarioPorId(Convert.ToInt64(id)));
-            model.UsuarioPossuiAcessoWeb = (!await _controleAcessoService.UsuarioPossuiAcessoWeb(id));
+            model.UsuarioPossuiAcessoWeb = (await _controleAcessoService.UsuarioPossuiAcessoWeb(id));
             MontarViewBagListas();
 
             return View("CreateEdit", model);
@@ -160,19 +234,29 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEdit", viewModel);
             }
 
-            if (!string.IsNullOrEmpty(viewModel.cep)) viewModel.cep = viewModel.cep.Replace(".", "").Replace("-", "");
-
-            await _usuarioService.AtualizarSemSalvar(_mapper.Map<Usuario>(viewModel));
-
-            if (!OperacaoValida())
+            try
             {
-                var msgErro = string.Join("\n\r", ObterNotificacoes("Usuario", "Atualizar", "Web", Deserializar(viewModel)));
-                TempData["TipoMensagem"] = "danger";
-                TempData["Mensagem"] = msgErro;
-                return View("CreateEdit", viewModel);
-            }
-            await _usuarioService.Salvar();
+                if (!string.IsNullOrEmpty(viewModel.cep)) viewModel.cep = viewModel.cep.Replace(".", "").Replace("-", "");
 
+                await _usuarioService.Atualizar(_mapper.Map<Usuario>(viewModel));
+
+                if (!OperacaoValida())
+                {
+                    var msgErro = string.Join("\n\r", ObterNotificacoes("Usuario", "Atualizar", "Web", Deserializar(viewModel)));
+                    TempData["TipoMensagem"] = "danger";
+                    TempData["Mensagem"] = msgErro;
+                    return View("CreateEdit", viewModel);
+                }
+              //  await _usuarioService.Salvar();
+
+                LogInformacao($"sucesso: {Deserializar(viewModel)}", "Usuario", "Atualizar", null);
+            }
+            catch (Exception ex)
+            {
+                LogInformacao($"{ex.Message}", "Usuario", "Atualizar", null);
+
+            }
+            
             TempData["TipoMensagem"] = "Success";
             TempData["Mensagem"] = "Operação realizada com Sucesso.";
             return RedirectToAction("Index");
@@ -183,8 +267,9 @@ namespace agilum.mvc.web.Controllers
         #region metodos privados
         private async Task<PagedViewModel<UserFull>> ObterListaPaginado(string filtro, int page, int pageSize)
         {
-            var retorno = await _usuarioService.ObterUsuariosPorNomePuro(filtro, page, pageSize);
+            
 
+            var retorno = await _usuarioService.ObterUsuariosPorNomePuro(filtro, page, pageSize);
             var lista = _mapper.Map<IEnumerable<UserFull>>(retorno.List);
             foreach (var item in lista)
             {
@@ -201,6 +286,7 @@ namespace agilum.mvc.web.Controllers
                 ReferenceController = "usuario",
                 TotalResults = retorno.TotalResults
             };
+           
         }
 
         private void ObterEstados()
@@ -247,7 +333,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.Perfis = new SelectList(ListaPerfis, "IdPerfil", "Descricao");
         }
 
-
+        private async Task<bool> AdicionarUsuario(Usuario usuario, string idUserAspNet)
+        {
+            usuario.idUserAspNet = idUserAspNet;            
+            return await _usuarioService.Atualizar(usuario);
+            
+        }
         #endregion
     }
 }

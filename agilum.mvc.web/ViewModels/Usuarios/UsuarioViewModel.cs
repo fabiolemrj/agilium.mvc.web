@@ -137,8 +137,8 @@ namespace agilum.mvc.web.ViewModels.Usuarios
         [Display(Name = "Ativo?")]
         public bool AtivoBool
         {
-            get { return ativo == "1"; }
-            set { ativo = value ? "1" : "2"; }
+            get { return ativo == "S"; }
+            set { ativo = value ? "S" : "N"; }
         }
         public string idUserAspNet { get; set; }
         [Display(Name = "Nome simplificado")]

@@ -25,7 +25,7 @@
 </section>
 <br />
 <div class="row">
-    <div class="col-md-8" id="areaFiltro">
+    <div class="col-12" id="areaFiltro">
         <form asp-action="Index" class="sidebar-form" method="get">
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
@@ -140,7 +140,8 @@
                                 @if ((item.Situacao == ESituacaoInventario.Execucao)
                                && item.TipoAnalise == ETipoAnalise.Manual)
                                 {
-                                    <a asp-action="IndexItemEdit" asp-route-id="@item.Id" class="dropdown-item">Editar Itens</a>
+                                    @* <a asp-action="IndexItemEdit" asp-route-id="@item.Id" class="dropdown-item" onclick="on()">Editar Itens</a> *@
+                                    <a asp-action="ApurarItens" asp-route-idInventario="@item.Id" class="dropdown-item" onclick="on()">Apurar Itens</a>
                                 }
                                 else
                                 {
@@ -151,9 +152,9 @@
                                 @if ((item.Situacao == ESituacaoInventario.Aberta || item.Situacao == ESituacaoInventario.Execucao)
                                && item.TipoAnalise == ETipoAnalise.Manual)
                                 {
-                                    <a href="#" class="dropdown-item" onclick="CadastroProdutoEstoque()">Todos Produtos Estoque</a>
-
-                                    <a class="dropdown-item" asp-action="IncluirProdutosDisponiveisInventario" asp-route-id="@item.Id">Incluir Itens</a>
+                                    <a href="#" class="dropdown-item" onclick="CadastroProdutoEstoque('@id')">Todos Produtos Estoque</a>
+                                    <a class="dropdown-item" asp-action="SalvarSelecao" asp-route-id="@item.Id">Incluir Itens</a>
+                                    @* <a class="dropdown-item" asp-action="IncluirProdutosDisponiveisInventario" asp-route-id="@item.Id">Incluir Itens</a> *@
                                     <a class="dropdown-item" asp-action="DeleteItemInventario" asp-route-id="@item.Id">Apagar Itenns</a>
 
                                 }

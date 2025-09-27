@@ -79,6 +79,7 @@ namespace agilum.mvc.web.Data
                     index.SetName(index.GetName().ToLower());
             }
         }
+
     }
 
     public class AppUserAgiliumIdentity : IdentityUser

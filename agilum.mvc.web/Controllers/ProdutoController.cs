@@ -4,7 +4,8 @@ using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
-
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Cliente;
@@ -17,6 +18,7 @@ using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -67,7 +69,7 @@ namespace agilum.mvc.web.Controllers
         public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService,IUnidadeService unidadeService, IEstoqueService estoqueService, 
-            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _produtoService = produtoService;
             _empresaService = empresaService;
@@ -121,6 +123,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaProdutoPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
          
             ViewBag.Pesquisa = q;
+            lista.Query = q;
             return View(lista);
         }
 
@@ -210,6 +213,7 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("Index");
             }
             PreencherListaAxuliaresProdutos(objeto);
+            objeto.PreencherViews();
 
             return View("CreateEditProduto", objeto);
         }
@@ -218,10 +222,12 @@ namespace agilum.mvc.web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduto(ProdutoViewModel model)
         {
-
+            //model.Preco = model.Preco / 100;
             ViewBag.operacao = "E";
             ViewBag.acao = "EditProduto";
+
             PreencherListaAxuliaresProdutos(model);
+            model.PreencherViews();
 
             if (!ModelState.IsValid) return View("CreateEditProduto", model);
 
@@ -235,6 +241,8 @@ namespace agilum.mvc.web.Controllers
             if (precoAtual != produto.NUPRECO)
                 await _produtoService.Adicionar(new ProdutoPreco(produto.Id, AppUser.GetUserEmail(), Convert.ToDecimal(produto.NUPRECO), Convert.ToDecimal(precoAtual), DateTime.Now));
 
+            
+            
             await _produtoService.Atualizar(produto);
 
             if (!OperacaoValida())
@@ -252,6 +260,17 @@ namespace agilum.mvc.web.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [Route("BuscarProdutosJson")]
+        public async Task<ActionResult> BuscarProdutosJson([FromQuery] string q)
+        {
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+            var produtos = (await _produtoService.BuscarProdutosJson(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q));
+
+            return Json(_mapper.Map<List<ListaProdutos>> (produtos));
+        }
+
         #endregion
 
         #region GrupoProduto
@@ -279,7 +298,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterGrupo(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
             
             ViewBag.Pesquisa = q;
-
+            lista.Query = q;
             return View(lista);
         }
 
@@ -438,7 +457,7 @@ namespace agilum.mvc.web.Controllers
             ViewBag.Pesquisa = q;
             ViewBag.Grupo = modelGrupo != null ? modelGrupo.Nome : "";
             ViewBag.idGrupo = idGrupo;
-
+            lista.Query = q;
             return View(lista);
         }
 
@@ -453,7 +472,7 @@ namespace agilum.mvc.web.Controllers
             model.Situacao = EAtivo.Ativo;
             model.IDGRUPO = idGrupo;
             model.NomeGrupo = modelGrupo != null ? modelGrupo.Nome : "";
-
+            
             return View("CreateEditSubGrupo", model);
         }
 
@@ -631,7 +650,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterPerfil(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
-
+            lista.Query = q;
             return View(lista);
         }
 
@@ -803,7 +822,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterMarcas(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
 
             ViewBag.Pesquisa = q;
-
+            lista.Query = q;
             return View(lista);
         }
 

@@ -33,5 +33,6 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<bool> AdicionarClientePF(ClientePF cliente);
         Task<Cliente> ObterClienteComEnderecoPorId(long id);
         Task<Cliente> ObterClientePorCpf(string cpf);
+        Task<bool> AdicionarClienteDapper(Cliente cliente);
     }
 }

@@ -16,16 +16,16 @@
 <section class="barra-de-menu-principal">
     <div class="barra-de-botoes-menu-principal">
 
-        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
-        <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar" class="load__tela"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar" class="load__tela"><span class="fa fa-save sns-tool-action"></span></a>
 
-        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda" ><span class="fa fa-question sns-tool-action"></span></a>
     </div>
 
     <article>
         <div class="barra-de-posicao-atual" id="breadcrumb">
             <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
-            <a href="@Url.Action("Index","Compra")"><i class="fa fa-dashboard"></i> Compra</a> /
+            <a href="@Url.Action("IndexCompra","Compra")"><i class="fa fa-dashboard"></i> Compra</a> /
             <a href="#"> @operacao </a>
         </div>
     </article>

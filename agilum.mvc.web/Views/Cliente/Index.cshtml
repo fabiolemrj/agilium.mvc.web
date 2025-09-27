@@ -23,7 +23,7 @@
 </section>
 <br />
 <div class="row">
-    <div class="col-md-8" id="areaFiltro">
+    <div class="col-12" id="areaFiltro">
         <form asp-action="Index" class="sidebar-form" method="get">
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
@@ -128,14 +128,14 @@
             <tr>
 
                 <td colspan="7">
-                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                   
                 </td>
             </tr>
 
         </tfoot>
     </table>
 </div>
-
+<vc:paginacao modelo-paginado="@Model"></vc:paginacao>
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <partial name="_ValidationScriptsPartial" />

@@ -22,6 +22,7 @@ using agilium.api.business.Enums;
 using AutoMapper;
 using agilium.api.business.Models;
 using Microsoft.AspNetCore.Http;
+using agilium_manager_azure_business.Interfaces.IService;
 
 namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
@@ -33,18 +34,19 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmpresaService _empresaService;
         protected readonly IMapper _mapper;
+        protected readonly ILicencaService _licencaService;
 
         public LoginModel(SignInManager<AppUserAgiliumIdentity> signInManager,
             ILogger<LoginModel> logger,
             UserManager<AppUserAgiliumIdentity> userManager,
-            IEmpresaService empresaService, IMapper mapper
-            )
+            IEmpresaService empresaService, IMapper mapper, ILicencaService licencaService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _empresaService = empresaService;
             _mapper = mapper;
+            _licencaService = licencaService;
 
             if (listaEmpresaViewModels.Count() == 0)
                 listaEmpresaViewModels = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result);
@@ -136,18 +138,18 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 
         private async Task AdicionarClaim(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+           // var user = await _userManager.FindByEmailAsync(email);
 
 
-            if(user!=null)
-            {
-                var customClaims = new[] { new Claim("id", user.Id) };
-                var res = await _userManager.AddClaimsAsync(user, customClaims);
-                if (!res.Succeeded)
-                {
-                    ModelState.AddModelError(string.Empty, "Erro ao tentar ccriar claim");
-                }
-            }
+            //if(user!=null)
+            //{
+            //    var customClaims = new[] { new Claim("id", user.Id) };
+            //    var res = await _userManager.AddClaimsAsync(user, customClaims);
+            //    if (!res.Succeeded)
+            //    {
+            //        ModelState.AddModelError(string.Empty, "Erro ao tentar ccriar claim");
+            //    }
+            //}
         }
 
         private async Task<bool> ValidarEmpresa()
@@ -184,6 +186,20 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, "Selecione uma empresa");
                     return Page();
                 }
+
+               
+                    //if (!_licencaService.DataValida(Convert.ToInt64(Input.Empresa)).Result)
+                    //{
+                    //    ObterEmpresas();
+
+                    //    var mensagem = $"Licença da empresa selecionada está vencida ou inválida";
+                    //    TempData["TipoMensagem"] = "danger";
+                    //    TempData["Mensagem"] = mensagem;
+
+                    //    return Page();
+                    //}
+                
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -196,15 +212,18 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
+                    ObterEmpresas();
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
+                    ObterEmpresas();
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
+                    ObterEmpresas();
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }

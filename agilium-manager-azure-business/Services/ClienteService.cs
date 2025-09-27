@@ -66,8 +66,28 @@ namespace agilium.api.business.Services
         {
             if (!ExecutarValidacao(new ClienteValidation(), cliente))
                 return;
+            try
+            {
+                await _dapperRepository.BeginTransaction();
 
-            await _clienteRepository.AtualizarSemSalvar(cliente);
+                await _clienteDapperRepository.AdicionarClienteDapper(cliente);
+
+                if (!TemNotificacao())
+                    await _dapperRepository.Commit();
+                else
+                {
+                    await _dapperRepository.Rollback();
+                    Notificar("Erro ao tentar atualizar cliente");
+                }
+            }
+            catch (Exception ex)
+            {
+                await _dapperRepository.Rollback();
+                Notificar(ex.Message);
+            }
+
+
+          //  await _clienteRepository.AtualizarSemSalvar(cliente);
         }
 
         public async Task<Cliente> ObterCompletoPorId(long id)

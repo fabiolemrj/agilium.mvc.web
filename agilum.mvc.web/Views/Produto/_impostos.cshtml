@@ -1,0 +1,206 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Produtos
+@model ProdutoViewModel
+@using agilum.mvc.web.Extensions
+
+<div class="row">
+    <div class="col-md-12 col-sm-6" id="divAreaImposto">
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-codigoFiscal-tab" data-toggle="pill" href="#custom-tabs-codigoFiscal" role="tab" aria-controls="custom-tabs-codigoFiscal">Codigos Fiscais</a>
+                    </li>                   
+                    <li class="nav-item">
+                        <a class="nav-link active" id="vert-tabs-icms-tab" data-toggle="pill" href="#vert-tabs-icms" role="tab" aria-controls="vert-tabs-icms">ICMS</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vert-tabs-icms_st-tb" data-toggle="pill" href="#vert-tabs-icms_st" role="tab" aria-controls="vert-tabs-icms_st">ICMS ST</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vert-tabs-ipi-tab" data-toggle="pill" href="#vert-tabs-ipi" role="tab" aria-controls="vert-tabs-ipi">IPI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vert-tabs-pis-tab" data-toggle="pill" href="#vert-tabs-pis" role="tab" aria-controls="vert-tabs-pis">PIS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="vert-tabs-cofins-tab" data-toggle="pill" href="#vert-tabs-cofins" role="tab" aria-controls="vert-tabs-cofins">COFINS</a>
+                    </li>
+                                                                                                
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-four-tabContent">
+                    <div class="tab-pane fade" id="custom-tabs-codigoFiscal" role="tabpanel" aria-labelledby="custom-tabs-codigoFiscal-tab">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="CodigoNCM" id="labelCodigoNCM"></label>
+                                    <input asp-for="CodigoNCM" class="form-control" />
+                                    <span asp-validation-for="CodigoNCM" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="CodigoCest" id="labelCodigoCest"></label>
+                                    <select asp-for="CodigoCest"
+                                            asp-items="@Model.Cests.Select(x => new SelectListItem(){Text = x.DSDESCR.ToString(), Value = x.CDCEST.ToString()})"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="STESTOQUE" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="CodigoSefaz" id="labelCodigoSefaz"></label>
+                                    <input asp-for="CodigoSefaz" class="form-control" />
+                                    <span asp-validation-for="CodigoSefaz" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="CodigoServ" id="labelCodigoServ"></label>
+                                    <input asp-for="CodigoServ" class="form-control" />
+                                    <span asp-validation-for="CodigoServ" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="CodigoANP" id="labelCodigoANP"></label>
+                                    <input asp-for="CodigoANP" class="form-control" />
+                                    <span asp-validation-for="CodigoANP" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="vert-tabs-icms">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="form-group">
+                                    <label asp-for="DSICMS_CST" id="labelCodigoICMSCT"></label>
+                                    <select asp-for="DSICMS_CST"
+                                            asp-items="@Model.Csosn.Select(x => new SelectListItem(){Text = x.DESCR.ToString(), Value = x.CST.ToString()})"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="DSICMS_CST" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaICMSView" id="labelCodigoICMS"></label>
+                                    <input asp-for="AliquotaICMSView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaICMSView" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label asp-for="ReducaoBaseCalculoICMSView" id="labelCodigoReducaoBaseCalc"></label>
+                                    <input asp-for="ReducaoBaseCalculoICMSView" class="form-control money" />
+                                    <span asp-validation-for="ReducaoBaseCalculoICMSView" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vert-tabs-icms_st">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaICMS_STView" id="labelAliqICMSTST"></label>
+                                    <input asp-for="AliquotaICMS_STView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaICMS_STView" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label asp-for="ReducaoBaseCalculoICMS_STView" id="labelRedBaseCalcICMSST"></label>
+                                    <input asp-for="ReducaoBaseCalculoICMS_STView" class="form-control money" />
+                                    <span asp-validation-for="ReducaoBaseCalculoICMS_STView" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaMargemValorAgregadoICMS_STView" id="labelAliqMAVST"></label>
+                                    <input asp-for="AliquotaMargemValorAgregadoICMS_STView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaMargemValorAgregadoICMS_STView" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="vert-tabs-ipi">
+
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label asp-for="CodigoSituacaoTributariaIPI" id="labelCodigoIPI"></label>
+                                    <select asp-for="CodigoSituacaoTributariaIPI"
+                                            asp-items="@Model.Csosn.Select(x => new SelectListItem(){Text = x.DESCR.ToString(), Value = x.CST.ToString()})"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="CodigoSituacaoTributariaIPI" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaIPIView" id="labelAliqIPI"></label>
+                                    <input asp-for="AliquotaIPIView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaIPIView" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vert-tabs-pis">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="CodigoSituacaoTributariaPIS" id="labelCodigoPIS"></label>
+                                    <select asp-for="CodigoSituacaoTributariaPIS"
+                                            asp-items="@Model.Csosn.Select(x => new SelectListItem(){Text = x.DESCR.ToString(), Value = x.CST.ToString()})"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="CodigoSituacaoTributariaPIS" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaPISView" id="labelAliqPIS"></label>
+                                    <input asp-for="AliquotaPISView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaPISView" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vert-tabs-cofins" >
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label asp-for="CodigoSituacaoTributariaCofins" id="labelCodigoConfins"></label>
+                                    <select asp-for="CodigoSituacaoTributariaCofins"
+                                            asp-items="@Model.Csosn.Select(x => new SelectListItem(){Text = x.DESCR.ToString(), Value = x.CST.ToString()})"
+                                            class="form-control"></select>
+                                    <span asp-validation-for="CodigoSituacaoTributariaCofins" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label asp-for="AliquotaCofinsView" id="labelAliqCofins"></label>
+                                    <input asp-for="AliquotaCofinsView" class="form-control money" />
+                                    <span asp-validation-for="AliquotaCofinsView" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

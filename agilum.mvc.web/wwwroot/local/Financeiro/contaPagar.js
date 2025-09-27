@@ -4,10 +4,10 @@
     off();
 });
 
-//$(function () {
-//    $('.money').mask('#.##0,00', { reverse: true });
-//    $('.datetime').mask('00/00/0000', { placeholder: "dd/MM/yyyy", selectOnFocus: true });
-//});
+$(function () {
+    $('.money').mask('#.##0,00', { reverse: true });
+    $('.datetime').mask('00/00/0000', { placeholder: "dd/MM/yyyy", selectOnFocus: true });
+});
 
 $(function () {
     $('#btnAjuda').click(function () {

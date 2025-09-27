@@ -8,18 +8,61 @@
 <nav>
     <ul class="pagination justify-content-center">
         @{
-            for (var i = 1; i < Model.TotalPages + 1; i++)
+            int maxPagesToShow = 10;
+            int totalPages = (int)Model.TotalPages;
+            int pageIndex = (int)Model.PageIndex;
+
+            int half = maxPagesToShow / 2;
+            int startPage = Math.Max(1, pageIndex - half);
+            int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+            // Corrige quando o range não completa 5 páginas
+            if (endPage - startPage + 1 < maxPagesToShow)
             {
-                if (i == Model.PageIndex)
+                startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+            }
+
+            // Botão "Anterior"
+            if (pageIndex > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">Anterior</a>
+                </li>
+            }
+
+            // Primeira página + "..."
+            if (startPage > 1)
+            {
+                <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">1</a></li>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            }
+
+            // Loop limitado
+            for (int i = startPage; i <= endPage; i++)
+            {
+                if (i == pageIndex)
                 {
-                    <li class="page-item active">
-                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@decode" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">@i <span class="sr-only">(current)</span></a>
-                    </li>
+                    <li class="page-item active"><span class="page-link">@i</span></li>
                 }
                 else
                 {
-                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@decode" asp-route-ps="@Model.PageSize" asp-route-page="@i" asp-route-q="@Model.Query">@i</a></li>
+                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">@i</a></li>
                 }
+            }
+
+            // Última página + "..."
+            if (endPage < totalPages)
+            {
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+                <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">@totalPages</a></li>
+            }
+
+            // Botão "Próximo"
+            if (pageIndex < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query">Próximo</a>
+                </li>
             }
         }
     </ul>

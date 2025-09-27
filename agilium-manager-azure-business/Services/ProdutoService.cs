@@ -168,6 +168,16 @@ namespace agilium.api.business.Services
                 await _dapperRepository.Rollback();
             }
         }
+
+        public async Task<List<Produto>> ObterTodosProdutos_IdDescricao(long idEmpresa)
+        {
+            return await _produtoDapperRepository.ObterTodosProdutos_IdDescricao(idEmpresa);
+        }
+
+        public async Task<List<Produto>> BuscarProdutosJson(long idEmpresa, string filtro)
+        {
+            return await _produtoDapperRepository.BuscarProdutosJson(idEmpresa, filtro);
+        }
         #endregion
 
         #region ProdutoDepartamento

@@ -11,7 +11,7 @@ $('#btnSalvar').click(function () {
 
 function BuscarCep() {
     const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
-    //ModalMensagem("success",_cep);
+    //const _cep = '/mvc/endereco/buscar-cep?cep=' + $('.cep').val();
     $.ajax({
         type: 'get',
         url: _cep,
@@ -71,10 +71,11 @@ $('.delete').click(function (event) {
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
-
+            const _url = `/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`;
+            //const _url = `/mvc/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`;
             $.ajax({
                 type: 'get',
-                url: `/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`,
+                url: _url,
                 success: function (resultado) {
                     if (resultado.erro) {
                         toastr.error(resultado.erro)

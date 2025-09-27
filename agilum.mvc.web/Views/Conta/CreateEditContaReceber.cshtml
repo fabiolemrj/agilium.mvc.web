@@ -31,7 +31,7 @@
 <br />
 <div class="row">
     <div class="col-12">
-        <form asp-action="@ViewBag.acao" id="CreateEditContaPagar" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+        <form asp-action="@ViewBag.acao" id="CreateEditContaReceber" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <vc:Summary></vc:Summary>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="IDUSUARIO" />
@@ -145,23 +145,23 @@
                     <div class="row">
                         <div class="col-2">
                             <div class="form-group">
-                                <label asp-for="ValorConta" id="labelValorConta"></label>
-                                <input asp-for="ValorConta" class="form-control" />
-                                <span asp-validation-for="ValorConta" class="text-danger"></span>
+                                <label asp-for="ValorConta_String" id="labelValorConta"></label>
+                                <input asp-for="ValorConta_String" class="form-control money" />
+                                <span asp-validation-for="ValorConta_String" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
-                                <label asp-for="ValorDesconto" id="labelValorDesc"></label>
-                                <input asp-for="ValorDesconto" class="form-control" />
-                                <span asp-validation-for="ValorDesconto" class="text-danger"></span>
+                                <label asp-for="ValorDesconto_String" id="labelValorDesc"></label>
+                                <input asp-for="ValorDesconto_String" class="form-control money" />
+                                <span asp-validation-for="ValorDesconto_String" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
-                                <label asp-for="ValorAcrescimo" id="labelValorAcrescimo"></label>
-                                <input asp-for="ValorAcrescimo" class="form-control" />
-                                <span asp-validation-for="ValorAcrescimo" class="text-danger"></span>
+                                <label asp-for="ValorAcrescimo_String" id="labelValorAcrescimo"></label>
+                                <input asp-for="ValorAcrescimo_String" class="form-control money" />
+                                <span asp-validation-for="ValorAcrescimo_String" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -207,6 +207,7 @@
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/dist/plugins/jquery/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/local/Financeiro/contaReceber.js"></script>
 

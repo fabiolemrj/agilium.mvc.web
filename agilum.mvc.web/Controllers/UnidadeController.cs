@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using agilum.mvc.web.Extensions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -33,7 +36,7 @@ namespace agilum.mvc.web.Controllers
 
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
             IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
-            ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            ICaService caService, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _unidadeService = unidadeService;
             _caService = caService;
@@ -55,6 +58,7 @@ namespace agilum.mvc.web.Controllers
 
             var lista = (await ObterListaPaginado(q, page, ps));
             ViewBag.Pesquisa = q;
+            lista.Query = q;
             return View(lista);
         }
 

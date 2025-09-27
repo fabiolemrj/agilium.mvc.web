@@ -24,7 +24,7 @@
 <br />
 <div class="row">
     <div class="col-12" id="areaFiltro">
-        <form asp-action="IndexContaPagar" class="sidebar-form" method="get">
+        <form asp-action="IndexContaReceber" class="sidebar-form" method="get">
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
             <div class="row">
@@ -153,13 +153,13 @@
                     </td>
                     @if (item.Situacao == 2)
                     {
-                        <td class="text-right">
+                        <td class="acao-botoes text-right">
                             <a class="btn btn-danger" asp-action="DesConsolidarContaReceberPorId" asp-route-id="@item.Id" title="Desconsolidar"><i class="fas fa-check-circle"></i></a>
                         </td>
                     }
                     else
                     {
-                        <td class="text-right">
+                        <td class="acao-botoes text-right">
 
                             <a class="btn btn-success" asp-action="ConsolidarContaReceberPorId" asp-route-id="@item.Id" title="Consolidar"><i class="fas fa-check-circle"></i></a>
                             <a class="btn btn-warning" asp-action="EditContaReceber" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>

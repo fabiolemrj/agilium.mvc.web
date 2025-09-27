@@ -27,6 +27,9 @@ using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
 using System.Net.Http;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilium_manager_azure_business.Services;
+
 
 namespace agilum.mvc.web.Configuration
 {
@@ -318,6 +321,11 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILogDapper, LogDapperRepository>();
             services.AddScoped<ILogService, LogService>();
+            #endregion
+
+            #region licenca
+            services.AddScoped<ILicencaService, LicencaService>();
+            services.AddScoped<ILicencaRepository, LicencaRepository>();
             #endregion
 
             return services;

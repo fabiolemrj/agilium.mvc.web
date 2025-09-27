@@ -334,9 +334,9 @@ namespace agilium.api.infra.Repository.Dapper
                         inner join aspnetusers a on a.Id = u.idUserAspNet
                         where id_usuario = @id_usuario";
             var parametros = new DynamicParameters();
-            parametros.Add("@id_usuario", id, DbType.String, ParameterDirection.Input);
-
-            return _dbSession.Connection.QueryAsync<Usuario>(query, parametros, _dbSession.Transaction).Result.Any();
+            parametros.Add("@id_usuario", id, DbType.Int64, ParameterDirection.Input);
+            var usuario = _dbSession.Connection.QueryAsync<Usuario>(query, parametros, _dbSession.Transaction).Result.FirstOrDefault();
+            return usuario != null;
         }
 
         public async Task<Usuario> ObterUsuarioPorId(string id)

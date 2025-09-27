@@ -420,11 +420,8 @@ namespace agilium.api.business.Services
             }
             catch (Exception ex)
             {
-                do
-                {
-                    Notificar(ex.Message);
-                }
-                while (ex != null);
+                Notificar(ex.Message);
+            
 
                 await _dapperRepository.Rollback();
             }

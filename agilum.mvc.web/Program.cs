@@ -21,6 +21,11 @@ namespace agilum.mvc.web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.MaxRequestHeadersTotalSize = 65536; // 64 KB
+                    });
+
                 });
     }
 }

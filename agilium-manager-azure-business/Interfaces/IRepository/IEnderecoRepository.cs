@@ -19,6 +19,7 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<Endereco> AdicionarEndereco(string logradouro, string numero, string complemento,string bairro, string cep, string cidade,string uf, string pais);
         Task<Endereco> AdicionarEndereco(Endereco endereco);
         Task<Cep> ObterEnderecoPorCep(string cep);
+        Task<Endereco> AtualizarEnderecoTransacao(Endereco endereco);
 
     }
 }

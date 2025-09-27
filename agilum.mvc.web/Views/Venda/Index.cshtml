@@ -23,13 +23,13 @@
     </article>
 </section>
 <div class="row">
-    <div class="col-md-8" id="areaFiltro">
+    <div class="col-12" id="areaFiltro">
         <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate>
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-2">
                     <div class="form-group">
                         <label id="lbDataInicial">Data Inicial</label>
                         <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-2">
                     <div class="form-group">
                         <label id="lbDataFinal">Data Final</label>
                         <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
@@ -194,18 +194,61 @@
                     <nav>
                         <ul class="pagination justify-content-center">
                             @{
-                                for (var i = 1; i < Model.TotalPages + 1; i++)
+                                int maxPagesToShow = 10;
+                                int totalPages = (int)Model.TotalPages;
+                                int pageIndex = (int)Model.PageIndex;
+
+                                int half = maxPagesToShow / 2;
+                                int startPage = Math.Max(1, pageIndex - half);
+                                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                                // Corrige quando o range não completa 5 páginas
+                                if (endPage - startPage + 1 < maxPagesToShow)
                                 {
-                                    if (i == Model.PageIndex)
+                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                                }
+
+                                // Botão "Anterior"
+                                if (pageIndex > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">Anterior</a>
+                                    </li>
+                                }
+
+                                // Primeira página + "..."
+                                if (startPage > 1)
+                                {
+                                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">1</a></li>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                }
+
+                                // Loop limitado
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    if (i == pageIndex)
                                     {
-                                        <li class="page-item active">
-                                            <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i <span class="sr-only">(current)</span></a>
-                                        </li>
+                                        <li class="page-item active"><span class="page-link">@i</span></li>
                                     }
                                     else
                                     {
-                                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-ps="@Model.PageSize" asp-route-page="@i" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i</a></li>
+                                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i</a></li>
                                     }
+                                }
+
+                                // Última página + "..."
+                                if (endPage < totalPages)
+                                {
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@totalPages</a></li>
+                                }
+
+                                // Botão "Próximo"
+                                if (pageIndex < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">Próximo</a>
+                                    </li>
                                 }
                             }
                         </ul>
@@ -227,6 +270,8 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/local/processo/venda.js"></script>
 
 }

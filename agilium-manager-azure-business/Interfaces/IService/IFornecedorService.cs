@@ -17,6 +17,8 @@ namespace agilium.api.business.Interfaces.IService
         Task<PagedResult<Fornecedor>> ObterPorRazaoSocialPaginacao(string descricao, int page = 1, int pageSize = 15);
         Task<Fornecedor> ObterCompletoPorId(long id);
         Task<List<Fornecedor>> ObterTodos();
+
+        Task AtualizarDapper(Fornecedor fornecedor);
         #endregion
 
         #region ContatoFornecedor

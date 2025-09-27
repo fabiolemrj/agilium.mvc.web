@@ -1,0 +1,169 @@
+﻿@using agilum.mvc.web.ViewModels.PlanoConta
+@model agilum.mvc.web.ViewModels.PagedViewModel<PlanoContaLancamentoViewModel>
+@using agilum.mvc.web.Extensions
+@using agilum.mvc.web.Enums
+@{
+    ViewData["Title"] = "Planos de Contas - Lançamentos";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" title="Voltar"><span class="fas fa-reply sns-tool-action"></span></a>
+        <a href="#" title="Precisa de Ajuda?"><span class="fa fa-question sns-tool-action"></span></a>
+    </div>
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home">Início</a> /
+            <a href="@Url.Action("Index","PlanoConta")"><i class="fa fa-dashboard"></i> Plano de Conta</a> /
+            <span>Lançamentos</span>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" asp-action="IndexLancamentos" novalidate>
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex" id="PageIndex" />
+            <input type="hidden" name="idConta" id="idConta" value="@ViewBag.idConta" />
+
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Descrição
+                </th>
+                <th>
+                    Valor
+                </th>
+                <th>
+                    Tipo
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                var sentido = item.Tipo == ETipoContaLancacmento.Debito ? "bg-danger disabled color-palette" : "bg-success disabled color-palette";
+                var saldo = item.Valor;
+                var dataHora = item.DataHora.ToString("dd/MM/yyyy");
+                <tr>
+                    <td>
+                        @Html.Raw(dataHora)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DescricaoLancamento)
+                    </td>
+                    <td>
+                        @Html.Raw(saldo.ToString("C"))
+                    </td>
+                    <td class="@sentido">
+                        @Html.DisplayFor(modelItem => item.Tipo)
+                    </td>
+                </tr>
+            }
+        </tbody>  
+    </table>
+    <nav>
+        <ul class="pagination justify-content-center">
+            @{
+                int maxPagesToShow = 10;
+                int totalPages = (int)Model.TotalPages;
+                int pageIndex = (int)Model.PageIndex;
+
+                int half = maxPagesToShow / 2;
+                int startPage = Math.Max(1, pageIndex - half);
+                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                // Corrige quando o range não completa 5 páginas
+                if (endPage - startPage + 1 < maxPagesToShow)
+                {
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                }
+
+                // Botão "Anterior"
+                if (pageIndex > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-idConta="@ViewBag.idConta">Anterior</a>
+                    </li>
+                }
+
+                // Primeira página + "..."
+                if (startPage > 1)
+                {
+                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-idConta="@ViewBag.idConta">1</a></li>
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+
+                // Loop limitado
+                for (int i = startPage; i <= endPage; i++)
+                {
+                    if (i == pageIndex)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-idConta="@ViewBag.idConta">@i</a></li>
+                    }
+                }
+
+                // Última página + "..."
+                if (endPage < totalPages)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-idConta="@ViewBag.idConta">@totalPages</a></li>
+                }
+
+                // Botão "Próximo"
+                if (pageIndex < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-idConta="@ViewBag.idConta">Próximo</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+</div>

@@ -138,8 +138,7 @@ namespace agilium.api.infra.Repository.Dapper
                                 //tipo perda 1
                                 if (perda.TPMOV == business.Enums.ETipoMovimentoPerda.Perda)
                                 {
-                                    idEstoqueHistorico = await RealizaRetiradaRetornaIdHistoricoGerado(perda.IDESTOQUE.Value, perda.IDPRODUTO.Value,
-                                                                                        -1, usuarioPerda, descricaoHistorico, perda.NUQTDPERDA.Value);
+                                    idEstoqueHistorico = await RealizaRetiradaRetornaIdHistoricoGerado(perda.IDESTOQUE.Value, perda.IDPRODUTO.Value,-1, usuarioPerda, descricaoHistorico, perda.NUQTDPERDA.Value);
 
                                 }
                                 else
@@ -246,7 +245,7 @@ namespace agilium.api.infra.Repository.Dapper
                 query = $@"UPDATE estoque_prod SET NUQTD = NUQTD - @NUQTD  WHERE IDESTOQUE_PROD = @IDESTOQUE_PROD";
 
 
-            _dbSession.Connection.Execute(query, parametros);
+            _dbSession.Connection.Execute(query, parametros, _dbSession.Transaction);
         }
 
         private long IncluirEstoqueHistorico(long idEstoque, long idProduto, long idItem, string usuario, int tipoHistorico,
@@ -254,12 +253,16 @@ namespace agilium.api.infra.Repository.Dapper
         {
             var resultado = _utilDapperRepository.GerarUUID().Result;
 
+            long? _idItem = null;
+            if(idItem > 0) 
+                _idItem = idItem;
+
             var parametros = new DynamicParameters();
             parametros.Add("@IDESTOQUEHST", resultado, DbType.Int64, ParameterDirection.Input);
             parametros.Add("@IDESTOQUE", idEstoque, DbType.Int64, ParameterDirection.Input);
             parametros.Add("@IDPRODUTO", idProduto, DbType.Int64, ParameterDirection.Input);
             parametros.Add("@QTDHST", quant, DbType.Double, ParameterDirection.Input);
-            parametros.Add("@IDITEM", idItem, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@IDITEM", _idItem, DbType.Int64, ParameterDirection.Input);
             parametros.Add("@DTHRHST", DateTime.Now, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@TPHST", tipoHistorico, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@DSHST", descricaoHistorico, DbType.String, ParameterDirection.Input);

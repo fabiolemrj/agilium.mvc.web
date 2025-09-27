@@ -168,7 +168,7 @@ $('#btnAjuda').click(function () {
 
 function BuscarCep() {
     const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
-    //ModalMensagem("success",_cep);
+    //const _cep = '/mvc/endereco/buscar-cep?cep=' + $('.cep').val();
 
     if (!_cep) return;
 
@@ -217,6 +217,7 @@ function BuscarCep(_cep, logradouro, bairro, cidade, uf) {
 
     if (!_cep) return;
 
+    //const cep = '/mvc/endereco/buscar-cep?cep=' + _cep;
     const cep = '/endereco/buscar-cep?cep=' + _cep;
 
     $.ajax({
@@ -243,7 +244,7 @@ function BuscarCep(_cep, logradouro, bairro, cidade, uf) {
 
 function ExibirDivTipoPessoa(_tipoPessoa) {
 
-    if (_tipoPessoa == "0") {
+    if (_tipoPessoa == "F" || _tipoPessoa == "0") {
 
         $('#divPJ').hide();
         $('#divPF').show();
@@ -280,10 +281,11 @@ $('.delete').click(function (event) {
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
-
+            const _url = `/Cliente/DeleteContato?idContato=${idContato}&idCliente=${idCliente}`;
+            //const _url = `/mvc/Cliente/DeleteContato?idContato=${idContato}&idCliente=${idCliente}`;
             $.ajax({
                 type: 'get',
-                url: `/Cliente/DeleteContato?idContato=${idContato}&idCliente=${idCliente}`,
+                url: _url,
                 success: function (resultado) {
                     EditarCliente(idCliente)
                 }, error: function (resultado) {
@@ -296,9 +298,11 @@ $('.delete').click(function (event) {
 });
 
 function EditarCliente(idcliente) {
+    const _url = '/Cliente/editar?id=' + idcliente;
+    //const _url = '/mvc / Cliente / editar ? id = ' + idcliente;
     $.ajax({
         type: 'get',
-        url: '/Cliente/editar?id=' + idcliente,
+        url: _url,
         success: function (result) {
             toastr.success('contato criado');
         }

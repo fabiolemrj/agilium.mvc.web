@@ -6,23 +6,23 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-4">
                 <div class="form-group">
                     <label asp-for="ClientePessoaJuridica.RazaoSocial" id="labeldtNasc"></label>
                     <input asp-for="ClientePessoaJuridica.RazaoSocial" class="form-control" size="70" />
                     <span asp-validation-for="ClientePessoaJuridica.RazaoSocial" class="text-danger"></span>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+   
+       
+            <div class="col-2">
                 <div class="form-group">
                     <label asp-for="ClientePessoaJuridica.Cnpj" id="labelCpf"></label>
                     <input asp-for="ClientePessoaJuridica.Cnpj" class="form-control cnpj" size="20" />
                     <span asp-validation-for="ClientePessoaJuridica.Cnpj" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-2">
                 <div class="form-group">
                     <label asp-for="ClientePessoaJuridica.InscricaoEstadual" id="labelNumDoc"></label>
                     <input asp-for="ClientePessoaJuridica.InscricaoEstadual" class="form-control" />
@@ -30,6 +30,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

@@ -13,7 +13,8 @@ namespace agilium.api.infra.Mappings
         {
             builder.ToTable("fornecedor");
             builder.HasKey(c => c.Id);
-            builder.Property(c => c.Id).HasColumnName("IDFORN").HasColumnType("bigint").IsRequired();
+            builder.Property(c => c.Id).HasColumnName("IDFORN").HasColumnType("bigint").IsRequired()
+                  .ValueGeneratedNever(); 
 
             builder.Property(c => c.IDENDERECO).HasColumnName("IDENDERECO").HasColumnType("bigint");
             builder.Property(c => c.CDFORN).HasColumnName("CDFORN").HasColumnType("varchar(6)");
@@ -29,20 +30,26 @@ namespace agilium.api.infra.Mappings
               .HasMany(fornec => fornec.FornecedoresContatos)
               .WithOne(fornecCont => fornecCont.Fornecedor)
               .HasForeignKey(fornecCont => new { fornecCont.IDFORN })
-              .HasPrincipalKey(fornec => new { fornec.Id });
+              .HasPrincipalKey(fornec => new { fornec.Id }).OnDelete(DeleteBehavior.Restrict);
 
             builder
              .HasMany(fornec => fornec.ContaPagar)
              .WithOne(contaPagar => contaPagar.Fornecedor)
              .HasForeignKey(contaPagar => new { contaPagar.IDFORNEC })
-             .HasPrincipalKey(fornec => new { fornec.Id });
+             .HasPrincipalKey(fornec => new { fornec.Id }).OnDelete(DeleteBehavior.Restrict); ;
 
 
             builder
              .HasMany(fornec => fornec.Compras)
              .WithOne(compra => compra.Fornecedor)
              .HasForeignKey(compra => new { compra.IDFORN })
-             .HasPrincipalKey(fornec => new { fornec.Id });
+             .HasPrincipalKey(fornec => new { fornec.Id }).OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(f => f.Endereco)
+       .WithOne(e => e.Fornecedor)
+       .HasForeignKey<Fornecedor>(f => f.IDENDERECO)
+       .HasConstraintName("FKFORNENDER")
+       .OnDelete(DeleteBehavior.Restrict);
         }
 
     }
@@ -62,7 +69,7 @@ namespace agilium.api.infra.Mappings
                .HasOne(fornec => fornec.Contato)
                .WithMany(fornecCont => fornecCont.FornecedoresContatos)
                .HasForeignKey(fornecCont => new { fornecCont.IDCONTATO })
-               .HasPrincipalKey(fornec => new { fornec.Id });
+               .HasPrincipalKey(fornec => new { fornec.Id }).OnDelete(DeleteBehavior.Restrict); ;
 
         }
     }

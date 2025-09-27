@@ -3,12 +3,14 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn.ComprasNFEViewModel;
+using agilium_manager_azure_business.Models.CustomReturn.CompraViewModel;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -645,6 +647,21 @@ namespace agilium.api.infra.Repository.Dapper
             parametros.Add("@SGUN", SGUN, DbType.String, ParameterDirection.Input);
 
             return _dbSession.Connection.Execute(query, parametros, _dbSession.Transaction) > 0; 
+        }
+
+        public async Task<List<CompraIndexViewModelReturn>> ObterCompraPorPaginacao(long idEmpresa, DateTime dtIni, DateTime dtFim)
+        {
+            var query = @$"select c.IDCOMPRA as Id, f.NMFANTASIA as Fornecedor, c.DTCOMPRA as DataCompra , c.TPCOMPROVANTE as TipoComprovante,
+                            c.STCOMPRA as Situacao,c.NUNF as NumeroNF,c.VLDESCONTO as ValorDesconto, c.VLTOTAL as ValorTotal,c.VLISENCAO as ValorIsencao,c.CDCOMPRA as Codigo
+                        from compra c inner join fornecedor f on c.IDFORN = f.IDFORN
+                        where c.IDEMPRESA = @IDEMPRESA and c.DTCOMPRA between @DTINI and @DTFIM";
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@IDEMPRESA", idEmpresa, DbType.Int64, ParameterDirection.Input);
+            parametros.Add("@DTINI", dtIni, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@DTFIM", dtFim, DbType.Date, ParameterDirection.Input);
+
+            return _dbSession.Connection.QueryAsync<CompraIndexViewModelReturn>(query, parametros, _dbSession.Transaction).Result.ToList();
         }
     }
 }

@@ -1,0 +1,254 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Compra
+@model agilum.mvc.web.ViewModels.PagedViewModel<CompraIndexViewModel>
+@using agilum.mvc.web.Extensions
+@{
+    ViewData["Title"] = "Compras";
+
+    double ConverterStringParaDecimal(string valor, double resultado)
+    {
+        resultado = 0;
+        if (!string.IsNullOrEmpty(valor))
+        {
+            Double.TryParse(valor, out resultado);
+        }
+
+        return resultado;
+    }
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a asp-action="Create" onclick="on()" title="Cadastrar Novo Registro"><span class="fa fa-plus-square sns-tool-action" id="btnNovoCadastro"></span></a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a href="#"> Compra </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-md-8" id="areaFiltro">
+        <form id="frmIndexCaixa" class="sidebar-form" method="get" novalidate asp-action="IndexCompra">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Data Inicial</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Data Final</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="align-items-center">
+                    <div class="col-xs-1">
+                        <div class="form-group">
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Código
+                </th>
+                <th class="colunaacao-mudarsituacao">
+                    Fornecedor
+                </th>
+                <th>
+                    Data Compra
+                </th>
+                <th>
+                    Situação
+                </th>
+                <th>
+                    Tipo Comprovante
+                </th>
+                <th class="colunaacao-mudarsituacao">
+                    Nº NF
+                </th>
+                <th>
+                    Total da compra
+                </th>
+                <th>
+                    Desconto
+                </th>
+                <th>
+                    Isenção
+                </th>
+              
+                <th class="colunaacao-mudarsituacao"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List.OrderByDescending(x => x.DataCompra))
+            {
+
+                var situacao = "text-info";
+
+                if (item.Situacao.Value == ESituacaoCompra.Cancelada)
+                    situacao = "text-danger";
+                else if (item.Situacao.Value == ESituacaoCompra.Efetivada)
+                    situacao = "text-success";
+
+                var dataCompra = item.DataCompra.ToString("dd/MM/yyyy");
+             
+                double ValorBaseCalculoIcms = 0, ValorBaseCalculoSub = 0, ValorDesconto = 0, ValorIcms = 0, ValorIcmsRetido = 0, ValorIpi = 0, ValorIsencao = 0,
+                ValorSeguro = 0, ValorOutros = 0, ValorTotal = 0, ValorTotalProduto = 0, ValorIcmsSub = 0, ValorFrete = 0;
+
+                ValorDesconto = ConverterStringParaDecimal(item.ValorDesconto, ValorDesconto);
+                ValorIsencao = ConverterStringParaDecimal(item.ValorIsencao, ValorIsencao);
+                ValorTotal = ConverterStringParaDecimal(item.ValorTotal, ValorTotal);
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fornecedor)
+                    </td>
+                    <td>
+                        @Html.Raw(dataCompra)
+                    </td>
+                    <td>
+                        <span class="@situacao">@Html.DisplayFor(modelItem => item.Situacao)</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoComprovante)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroNF)
+                    </td>
+                    <td>
+                        @Html.Raw(ValorTotal.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.Raw(ValorDesconto.ToString("N"))
+                    </td>
+                    <td>
+                        @Html.Raw(ValorIsencao.ToString("N"))
+                    </td>
+                    <td>
+
+                        @if (item.Situacao.Value == ESituacaoCompra.Aberta)
+                        {
+                            
+                            <a class="btn btn-info" asp-action="Efetivar" asp-route-id="@item.Id" title="Efetivar compra" data-idcompra="@item.Id"><spam class="fas fa-check-square"></spam></a>
+                            <a class="btn btn-secondary" asp-action="CadastroAutomaticoProduto" asp-route-id="@item.Id" title="Cadastro Automatico Produtos"><spam class="fas fa-tasks"></spam></a>
+                            @*  <a class="btn btn-success" asp-action="Realizar" asp-route-id="@item.Id" title="Realizar Devolução"><spam class="fas fa-undo"></spam></a> *@
+                        }<a class="btn btn-default load__tela" asp-action="ListaItemCompra" asp-route-idCompra="@item.Id" title="Itens da Compra"><spam class="fas fa-th-list"></spam></a>
+                        <a class="btn btn-warning load__tela" asp-action="Edit" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
+                        <a class="btn btn-danger cancel load__tela" asp-action="Cancelar" asp-route-id="@item.Id" title="Cancelar compra" data-id="@item.Id" data-dev="@item.Codigo"><spam class="fas fa-window-close"></spam></a>
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>       
+    </table>
+   
+    <nav>
+        <ul class="pagination justify-content-center">
+            @{
+                int maxPagesToShow = 10;
+                int totalPages = (int)Model.TotalPages;
+                int pageIndex = (int)Model.PageIndex;
+
+                int half = maxPagesToShow / 2;
+                int startPage = Math.Max(1, pageIndex - half);
+                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                // Corrige quando o range não completa 5 páginas
+                if (endPage - startPage + 1 < maxPagesToShow)
+                {
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                }
+
+                // Botão "Anterior"
+                if (pageIndex > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">Anterior</a>
+                    </li>
+                }
+
+                // Primeira página + "..."
+                if (startPage > 1)
+                {
+                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">1</a></li>
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+
+                // Loop limitado
+                for (int i = startPage; i <= endPage; i++)
+                {
+                    if (i == pageIndex)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@i</a></li>
+                    }
+                }
+
+                // Última página + "..."
+                if (endPage < totalPages)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">@totalPages</a></li>
+                }
+
+                // Botão "Próximo"
+                if (pageIndex < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal">Próximo</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+</div>
+
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/local/processo/compra.js"></script>
+
+}

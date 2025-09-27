@@ -7,9 +7,10 @@ namespace agilium.api.business.Enums
 {
     public enum ESimNao
     {
-        [Description("Sim")]
-        Sim = 1,
+      
         [Description("Não")]
-        Nao = 2
+        Nao,
+        [Description("Sim")]
+        Sim
     }
 }

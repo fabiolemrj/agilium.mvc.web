@@ -65,6 +65,21 @@ namespace agilium.api.infra.Repository
             await SaveChanges();
         }
 
+        public virtual async Task Atualizar2(TEntity entity, object key)
+        {
+            var objeto = DbSet.Find(key);
+
+            if(objeto != null)
+            {
+                Db.Entry<TEntity>(objeto).CurrentValues.SetValues(entity);
+                Db.Update(entity);
+            }
+            else
+            {
+                Db.Update(entity);
+            }
+        }
+
         public virtual async Task Remover(long id)
         {
             DbSet.Remove(new TEntity { Id = id });
@@ -108,22 +123,22 @@ namespace agilium.api.infra.Repository
             
             foreach (var item in includes)
             {
-                result = result.AsNoTracking().Include(item);
+                result = result.Include(item);
             }
 
-            return result.AsNoTracking().ToList().FirstOrDefault();
+            return result.ToList().FirstOrDefault();
         }
 
         public async Task<IEnumerable<TEntity>> Obter(Expression<Func<TEntity, bool>> predicated, params string[] includes)
         {
-            var result = Db.Set<TEntity>().AsNoTracking().Where(predicated);
+            var result = Db.Set<TEntity>().Where(predicated);
       
             foreach (var item in includes)
             {
-                result = result.AsNoTracking().Include(item);
+                result = result.Include(item);
             }
 
-            return await result.AsNoTracking().ToListAsync();
+            return await result.ToListAsync();
         }
 
         public async Task AdicionarLista(IEnumerable<TEntity> entity)

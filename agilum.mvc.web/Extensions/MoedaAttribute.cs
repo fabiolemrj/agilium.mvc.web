@@ -7,8 +7,10 @@ using System;
 
 namespace agilum.mvc.web.Extensions
 {
+
     public class MoedaAttribute : ValidationAttribute
     {
+     
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             try
@@ -60,4 +62,6 @@ namespace agilum.mvc.web.Extensions
             return _baseProvider.GetAttributeAdapter(attribute, stringLocalizer);
         }
     }
+
+
 }

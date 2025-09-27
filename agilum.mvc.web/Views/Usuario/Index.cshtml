@@ -3,7 +3,9 @@
 @using agilum.mvc.web.ViewModels.Usuarios
 @model agilum.mvc.web.ViewModels.PagedViewModel<UserFull>
 @using agilum.mvc.web.Extensions
+
 @{
+
     ViewData["Title"] = "Usuários";
 }
 
@@ -97,9 +99,13 @@
                     }
                 </td>
                 <td class="text-right">
-                    @if (item.UsuarioPossuiAcessoWeb)
+                    @if (!item.UsuarioPossuiAcessoWeb)
                     {
                         <a class="btn btn-secondary" title="Criar/Associar usuario web" id="btnCriarWeb" onclick="NovoUsuarioWeb('@item.id')"><spam class="fa fa-globe"></spam></a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-info" title="Reenviar email de confirmação" id="btnReenviarEmailConfirma" onclick="ReenviarEmail('@item.id')"><spam class="fa fa-reply"></spam></a>
                     }
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.id" title="Editar Usuario" id="btnEditarClaim"><spam class="fa fa-pencil-alt"></spam></a>
                 </td>

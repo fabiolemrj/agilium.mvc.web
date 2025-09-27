@@ -124,9 +124,25 @@ namespace agilium.api.business.Services
 
         public async Task<List<InventarioItem>> ObterItensPorInventario(long id)
         {
-            return _inventarioItemRepository.Obter(x=>x.IDINVENT == id).Result.ToList();
+            return _inventarioItemRepository.Obter(x=>x.IDINVENT == id,"Produto").Result.ToList();
         }
-        
+
+        public async Task<PagedResult<InventarioItem>> ObterItensPorInventarioPaginacao(long id, string descricao, int page = 1, int pageSize = 15)
+        {
+            int pagina = page > 0 ? page : 1;
+
+            var descricaoUpper = !string.IsNullOrEmpty(descricao) ? descricao.ToUpper() : string.Empty;
+            var lista = _inventarioItemRepository.Obter(x => x.IDINVENT == id && x.Produto.NMPRODUTO.ToUpper().Contains(descricaoUpper),"Produto").Result;
+
+            return new PagedResult<InventarioItem>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            };
+        }
+
         public async Task Atualizar(InventarioItem inventarioItem)
         {
             if (!ExecutarValidacao(new InventarioItemValidation(), inventarioItem))
@@ -162,12 +178,7 @@ namespace agilium.api.business.Services
             }
             catch (Exception ex)
             {
-                do
-                {
-                    Notificar(ex.Message);
-                }
-                while (ex != null);
-
+                Notificar(ex.Message);              
                 await _dapperRepository.Rollback();
             }
             return resultado;

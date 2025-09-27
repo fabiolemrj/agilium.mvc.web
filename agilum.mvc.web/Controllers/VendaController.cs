@@ -21,6 +21,9 @@ using VendaViewModel = agilum.mvc.web.ViewModels.Venda.VendaViewModel;
 
 using agilium.api.business.Services;
 using agilum.mvc.web.Extensions;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -34,7 +37,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public VendaController(IVendaDapperRepository vendaDapperRepository, IVendaService vendaService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, 
+            IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _vendaDapperRepository = vendaDapperRepository;
             _vendaService = vendaService;
@@ -47,7 +51,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
-
+            VerificarValidadeLicenca();
             var dataAtual = DateTime.Now;
             DateTime _dtini, _dtFim;
             if (DataInicial == null)
@@ -406,9 +410,17 @@ namespace agilum.mvc.web.Controllers
             model.dataFinal = new DateTime(model.dataInicial.Year, model.dataInicial.Month, DateTime.DaysInMonth(model.dataInicial.Year, model.dataInicial.Month));
             model.Ordenacao = EOrdenacaoFiltroRanking.Venda;
             model.TipoResultado = EResultadoFiltroRanking.Grupo;
+            try
+            {
 
+                model.ListaVendas = await _vendaService.ObterVendaRankingPorData(model.dataInicial, model.dataFinal, model.TipoResultado, model.Ordenacao);
 
-            model.ListaVendas = await _vendaService.ObterVendaRankingPorData(model.dataInicial, model.dataFinal, model.TipoResultado, model.Ordenacao);
+            }
+            catch (Exception ex)
+            {
+                AdicionarErroValidacao(ex.Message);
+                throw;
+            }
             return View("ReportVendaRanking", model);
         }
 

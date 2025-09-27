@@ -1,5 +1,6 @@
 ﻿using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn.ComprasNFEViewModel;
+using agilium_manager_azure_business.Models.CustomReturn.CompraViewModel;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -46,6 +47,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<bool> AtualizarProdutoNoItemCompra(long idItem, long idCompra, long? idProduto, long? idEstoque, string SGUN, double? Quantidade, double? Relacao, double? ValorUnitario, double? ValorTotal, double? NovoPrecoVenda);
         Task<NFeProc> ImportarArquivoXmlNFESemGravar(long idCompra, string ArquivoXml);
         Task<bool> SalvarArquivoXmlNFE(long idCompra, NFeProc nFeProc, string ArquivoXml);
+        Task<PagedResult<CompraIndexViewModelReturn>> ObterCompraPorPaginacaoDapper(long idEmpresa, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15);
         #endregion
     }
 }

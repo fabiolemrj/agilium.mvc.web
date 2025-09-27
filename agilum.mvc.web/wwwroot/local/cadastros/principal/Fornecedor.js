@@ -56,10 +56,11 @@ $('.delete').click(function (event) {
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
-
+            const _url = `/Fornecedor/DeleteContato?idContato=${idContato}&idFornecedor=${idFornecedor}`;
+            //const _url = `/mvc/Fornecedor/DeleteContato?idContato=${idContato}&idFornecedor=${idFornecedor}`;
             $.ajax({
                 type: 'get',
-                url: `/Fornecedor/DeleteContato?idContato=${idContato}&idFornecedor=${idFornecedor}`,
+                url: _url,
     
             }).then(() => {
                CarregarContatos(idFornecedor, contato);
@@ -70,9 +71,11 @@ $('.delete').click(function (event) {
 });
 
 function CarregarContatos(idfornecedor, contato) {
+    const _url = `/Fornecedor/editar?id=` + idfornecedor; 
+    //const _url = `/mvc/Fornecedor/editar?id=` + idfornecedor;
     $.ajax({
         type: 'get',
-        url: `/Fornecedor/editar?id=` + idfornecedor,
+        url: _url,
         success: function (result) {
           
         }
@@ -96,6 +99,7 @@ function CarregarContatos(idfornecedor, contato) {
 }
 
 function BuscarCep() {
+    //const _cep = '/mvc/endereco/buscar-cep?cep=' + $('.cep').val();
     const _cep = '/endereco/buscar-cep?cep=' + $('.cep').val();
     $.ajax({
         type: 'get',

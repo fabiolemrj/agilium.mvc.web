@@ -1,4 +1,5 @@
 ﻿using agilium.api.business.Models;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -94,6 +95,7 @@ namespace agilium.api.infra.Context
         public DbSet<LogErro> LogErro { get; set; }
         public DbSet<ProdutoSiteMercado> ProdutosSiteMercado { get; set; }
         public DbSet<MoedaSiteMercado> MoedasSiteMercado { get; set; }
+        public DbSet<Licenca> Licenca{ get; set; }
         //public DbSet<Pedido> Pedidos { get; set; }
         //public DbSet<PedidoItem> PedidosItems { get; set; }
         //public DbSet<PedidoItemSitemercado> PedidoItemSitemercados { get; set; }

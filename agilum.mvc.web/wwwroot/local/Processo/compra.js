@@ -25,12 +25,14 @@ $(function () {
 $('.item').click(function (event) {
 
     event.preventDefault();
-    //const id = 1;
+    
     const id = $(this).attr("data-idcompra");
+    const _url = '/compra/IndexItem?id=' + id;
+    //const _url = '/mvc/compra/IndexItem?id=' + id;
     on();
     $.ajax({
         type: 'get',
-        url: '/compra/IndexItem?id='+id,
+        url: _url,
         success: function (resultado) {
             $("#item").html(resultado);
             off();
@@ -41,7 +43,6 @@ $('.item').click(function (event) {
         }
     });
 });
-
 
 function AbrirArquivo() {
     $('#arquivoNFe').click();
@@ -91,9 +92,11 @@ function BuscarProduto()
 {
     const idProduto = $("#IDPRODUTO").val();
     on();
+    const _url = '/produto/ObterProduto?id=' + idProduto;
+    //const _url = '/mvc/produto/ObterProduto?id=' + idProduto;
     $.ajax({
         type: 'get',
-        url: '/produto/ObterProduto?id=' + idProduto,
+        url: _url,
         success: function (resultado) {
             var objeto = JSON.parse(JSON.stringify(resultado));
             $("#Relacao").val(objeto.relacaoCompraVenda);
@@ -107,7 +110,7 @@ function BuscarProduto()
         }
     });
 }
-
+/*
 function SetModalLocal() {
 
     $(document).ready(function () {
@@ -118,6 +121,10 @@ function SetModalLocal() {
                 function (e) {
                     $('#myModalContent').load(this.href,
                         function () {
+                            $('#myModal').on('shown.bs.modal', function () {
+                                // aqui você pode inicializar máscaras e outros plugins
+                            });
+
                             $('#myModal').modal({
                                 keyboard: true
                             },
@@ -157,6 +164,81 @@ function bindFormLocal(dialog) {
         return false;
     });
 }
+*/
+
+// Função para aplicar máscara de moeda
+function aplicarMascaraMoeda() {
+    if ($.fn.maskMoney) {
+        $(".moeda").maskMoney({
+            prefix: "R$ ",
+            allowNegative: false,
+            thousands: ".",
+            decimal: ",",
+            affixesStay: true
+        });
+    }
+}
+
+// Função principal para configurar links que abrem modais
+function SetModalLocal() {
+    // delega eventos para links com data-modal-local
+    $(document).on("click", "a[data-modal-local]", function (e) {
+        e.preventDefault();
+
+        var url = this.href;
+
+        // carrega o conteúdo do modal
+        $('#myModalContent').load(url, function () {
+            // aplica máscara nos campos carregados
+            aplicarMascaraMoeda();
+
+            // exibe o modal
+            $('#myModal').modal({
+                keyboard: true,
+                show: true
+            });
+
+            // vincula o submit do formulário dentro do modal
+            bindFormLocal($('#myModalContent'));
+        });
+    });
+}
+
+// Função para vincular o submit do formulário no modal
+function bindFormLocal(dialog) {
+    $('form', dialog).off('submit').on('submit', function (e) {
+        e.preventDefault();
+
+        var $form = $(this);
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: $form.serialize(),
+            success: function (result) {
+                if (result.success) {
+                    $('#myModal').modal('hide');
+
+                    if (result.url) {
+                        window.location.href = result.url;
+                        ModalMensagem("success", "Operação realizada com sucesso");
+                    }
+                } else {
+                    $('#myModalContent').html(result);
+                    // reaplica bind e máscara para novo conteúdo
+                    bindFormLocal($('#myModalContent'));
+                    aplicarMascaraMoeda();
+                }
+            }
+        });
+    });
+}
+
+// Inicializa a função
+$(document).ready(function () {
+    SetModalLocal();
+});
+
 
 function formatarMoeda(meuInput) {
     const input = document.getElementById(meuInput);

@@ -1,14 +1,18 @@
-﻿$('#btnSalvar').click(function () {
+﻿
+$(document).ready(function () {
+
+});
+
+$('#btnSalvar').click(function () {
     on();
 
     $('#btnSendForm').click();
     off();
 });
-
 $(function () {
-    $('.money').mask('##0,00', { reverse: true });
-
-    // $('.percent').mask('##0,00', { reverse: true });
+    // $('.money').mask('#.##9,99', { reverse: true });
+    $('.money').mask('000.000.000.000.000,00', { reverse: true, placeholder: "0,00" });
+    $('.datetime').mask('99/99/9999', { placeholder: "dd/MM/yyyy", selectOnFocus: true });
 });
 
 $(function () {
@@ -326,9 +330,11 @@ $('.delete').click(function (event) {
     }).then((result) => {
         if (result.isConfirmed) {
 
+            //const _url = `/mvc/produto/DeleteCodigoBarra?id=${id}`;
+            const _url = `/produto/DeleteCodigoBarra?id=${id}`;
             $.ajax({
                 type: 'get',
-                url: `/produto/DeleteCodigoBarra?id=${id}`,
+                url: _url,
                 success: function (resultado) {
                     if (resultado.erro) {
                         toastr.error(resultado.erro)
@@ -368,4 +374,9 @@ $('.delete').click(function (event) {
             });
         }
     })
+
+
 });
+
+
+

@@ -19,5 +19,7 @@ namespace agilium.api.business.Interfaces.IRepository
     {
         Task<Fornecedor> AdicionarFornecedor(string razaoSocial, string nomeFantasia, ETipoPessoa tipoPessoa, string cnpj, string inscricaoEstadual,ETipoFiscal tipoFiscal, Endereco endereco);
         Task<Fornecedor> ObterFornecedorPorCNPJ(string cnpj);
+        Task<Fornecedor> ObterFornecedorPorId(long id);
+        Task<bool> AtualizarFornecedorTransacao(Fornecedor _fornecedor);
     }
 }

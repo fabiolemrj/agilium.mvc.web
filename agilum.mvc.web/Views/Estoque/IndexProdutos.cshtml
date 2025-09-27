@@ -1,0 +1,168 @@
+﻿@using agilium.api.business.Enums
+@using agilum.mvc.web.Enums
+@using agilum.mvc.web.ViewModels.Estoque
+
+@model agilum.mvc.web.ViewModels.PagedViewModel<ProdutoPorEstoqueViewModel>
+@using agilum.mvc.web.Extensions
+@{
+    ViewData["Title"] = "Produtos Por Estoque";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
+        <a href="history.back()" type="button" title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a asp-action="Index" asp-controller="Home"> Início</a> /
+            <a asp-action="Index" asp-controller="Estoque"><i class="fa fa-dashboard"></i> Estoque </a> /
+            <a href="#"><i class="fa fa-dashboard"></i> Produtos </a>
+        </div>
+    </article>
+</section>
+<br />
+<div class="row">
+    <div class="col-12" id="areaFiltro">
+        <form asp-action="IndexProdutos" class="sidebar-form" method="get">
+            <input type="hidden" asp-for="PageSize" id="PageSize" />
+            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
+            <input type="hidden" id="idEstoque" name="idEstoque" value="@ViewBag.idEstoque" />
+            <div class="row">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info"><i class="far fa-bookmark"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Estoque</span>
+                        <span class="info-box-number">@ViewBag.Estoque</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
+                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar produtos por descrição..." id="q" name="q" />
+                </div>
+                <div>
+                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+<div id="divGridResultado">
+    <table class="table table-hover">
+        <thead class="table thead-dark">
+            <tr>
+                <th>
+                    Codigo
+                </th>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Quantidade Atual
+                </th>
+                <th>
+                    Ultima Compra
+                </th>
+                <th>
+                    Custo Medio
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.List)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Produto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QuantidadeAtual)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorUltimaCompra)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValorCustoMedio)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav>
+    <ul class="pagination justify-content-center">
+        @{
+            int maxPagesToShow = 10;
+            int totalPages = (int)Model.TotalPages;
+            int pageIndex = (int)Model.PageIndex;
+
+            int half = maxPagesToShow / 2;
+            int startPage = Math.Max(1, pageIndex - half);
+            int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+            // Corrige quando o range não completa 5 páginas
+            if (endPage - startPage + 1 < maxPagesToShow)
+            {
+                startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+            }
+
+            // Botão "Anterior"
+            if (pageIndex > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idEstoque="@ViewBag.idEstoque">Anterior</a>
+                </li>
+            }
+
+            // Primeira página + "..."
+            if (startPage > 1)
+            {
+                <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idEstoque="@ViewBag.idEstoque">1</a></li>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            }
+
+            // Loop limitado
+            for (int i = startPage; i <= endPage; i++)
+            {
+                if (i == pageIndex)
+                {
+                    <li class="page-item active"><span class="page-link">@i</span></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idEstoque="@ViewBag.idEstoque">@i</a></li>
+                }
+            }
+
+            // Última página + "..."
+            if (endPage < totalPages)
+            {
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+                <li class="page-item"><a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idEstoque="@ViewBag.idEstoque">@totalPages</a></li>
+            }
+
+            // Botão "Próximo"
+            if (pageIndex < totalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-idEstoque="@ViewBag.idEstoque">Próximo</a>
+                </li>
+            }
+        }
+    </ul>
+    </nav>
+</div>

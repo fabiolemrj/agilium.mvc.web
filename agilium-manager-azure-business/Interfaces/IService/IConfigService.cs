@@ -10,6 +10,7 @@ namespace agilium.api.business.Interfaces.IService
     {
         Task Adicionar(Config config);
         Task Atualizar(Config config);
+        Task AtualizarManualmente(Config config);
         Task Apagar(string chave, long idEmpresa);
         Task<Config> ObterPorChave(string chave, long idEmpresa);
         Task<List<Config>> ObterTodosPorEmpresa(long idEmpresa);

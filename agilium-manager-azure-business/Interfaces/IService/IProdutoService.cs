@@ -92,6 +92,8 @@ namespace agilium.api.business.Interfaces.IService
 
         #region dapper
         Task AtualizarIBPTTodosProdutos();
+        Task<List<Produto>> ObterTodosProdutos_IdDescricao(long idEmpresa);
+        Task<List<Produto>> BuscarProdutosJson(long idEmpresa, string filtro);
         #endregion
 
         Task Salvar();

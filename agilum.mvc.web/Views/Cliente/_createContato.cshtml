@@ -54,13 +54,13 @@
                     <div class="card-body">
                         
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-2">
                                 <label asp-for="Contato.TPCONTATO" class="control-label" id="idtpcontato"></label>
                                 <select asp-for="Contato.TPCONTATO" class="form-control" asp-items="Html.GetEnumSelectList<ETipoContato>()">
                                 </select>
                                 <span asp-validation-for="Contato.TPCONTATO" class="text-danger"></span>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label asp-for="Contato.DESCR1" class="control-label" id="labelDescricao"></label>
                                     <input asp-for="Contato.DESCR1" class="form-control" />
@@ -68,7 +68,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label asp-for="Contato.DESCR2" class="control-label" id="labelDescrAux"></label>
                                     <input asp-for="Contato.DESCR2" class="form-control" />

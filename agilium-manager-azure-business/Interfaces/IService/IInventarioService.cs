@@ -29,6 +29,7 @@ namespace agilium.api.business.Interfaces.IService
         Task Atualizar(InventarioItem inventarioItem);
         Task<InventarioItem> ObterItemPorId(long id);
         Task<List<InventarioItem>> ObterItensPorInventario(long id);
+        Task<PagedResult<InventarioItem>> ObterItensPorInventarioPaginacao(long id, string descricao, int page = 1, int pageSize = 15);
         #endregion
 
         #region Dapper

@@ -5,6 +5,7 @@ using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Models.CustomReturn.ComprasNFEViewModel;
 using agilium.api.business.Models.Validations;
+using agilium_manager_azure_business.Models.CustomReturn.CompraViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -666,6 +667,21 @@ namespace agilium.api.business.Services
             return resultado;
         }
 
+        public async Task<PagedResult<CompraIndexViewModelReturn>> ObterCompraPorPaginacaoDapper(long idEmpresa, DateTime dtIni, DateTime dtFim, int page, int pageSize)
+        {
+            int pagina = page > 0 ? page : 1;
+            var lista = await _compraDapperRepository.ObterCompraPorPaginacao(idEmpresa, dtIni, dtFim);
+
+            return new PagedResult<CompraIndexViewModelReturn>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            };
+        }
+
+
         #endregion
 
         #region private
@@ -792,6 +808,7 @@ namespace agilium.api.business.Services
             return resultado;
         }
 
+      
 
         #endregion
 

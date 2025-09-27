@@ -1,9 +1,12 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Notificacoes;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -25,9 +28,17 @@ namespace agilum.mvc.web.Controllers
         protected bool UsuarioAutenticado { get; set; }
         protected readonly IUtilDapperRepository _utilDapperRepository;
         protected readonly ILogService _logService;
+        protected readonly ILicencaService _licencaService;
+        protected readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
+
+        private INotificador notificador;
+        private IConfiguration configuration;
+        private IUtilDapperRepository utilDapperRepository;
+        private ILogService logService;
+        private IMapper mapper;
 
         protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager)
         {
             _notificador = notificador;
             _configuration = configuration;
@@ -40,6 +51,18 @@ namespace agilum.mvc.web.Controllers
                 UsuarioId = appUser.GetUserId();
                 UsuarioAutenticado = true;
             }
+            _licencaService = licencaService;
+            _signInManager = signInManager;
+        }
+
+        protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper)
+        {
+            this.notificador = notificador;
+            this.configuration = configuration;
+            AppUser = appUser;
+            this.utilDapperRepository = utilDapperRepository;
+            this.logService = logService;
+            this.mapper = mapper;
         }
 
         protected bool OperacaoValida()
@@ -130,5 +153,27 @@ namespace agilum.mvc.web.Controllers
             var objeto = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(empresa);
             return objeto;
         }
+
+        protected void VerificarValidadeLicenca()
+        {
+            var empresa = ObterObjetoEmpresaSelecionada();
+            if(empresa != null)
+            {
+                if(! _licencaService.DataValida(Convert.ToInt64(empresa.IDEMPRESA)).Result)
+                {
+                    var retornoErro = new { mensagem = $"Verificação de validade da empresa falhou por divergência na Data de Validade" };
+                    AdicionarErroValidacao(retornoErro.mensagem);
+
+                    Logout();
+                }
+            }
+        }
+
+        private void Logout()
+        {
+            HttpContext.Session.Remove("_empSelec");
+            _signInManager.SignOutAsync();
+        }
     }
 }
+

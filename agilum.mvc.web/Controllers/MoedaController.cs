@@ -2,6 +2,8 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -9,6 +11,7 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Moedas;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +35,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public MoedaController(IMoedaService moedaService, IEmpresaService empresaService
-            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
+            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _moedaService = moedaService;
             _empresaService = empresaService;
@@ -65,6 +69,7 @@ namespace agilum.mvc.web.Controllers
             var lista = (await ObterListaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
 
             ViewBag.Pesquisa = q;
+           // lista.Query = q;
 
             return View(lista);
         }

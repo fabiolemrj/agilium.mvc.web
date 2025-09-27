@@ -29,6 +29,7 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<IEnumerable<PontoVenda>> ObterPdvParaSelecao(long IDEMPRESA, long idUsuario);
         Task<bool> SalvarConfig(Config config);
         Task<long> ObterPdvPorNomeMaquina(long idUsuario);
+        Task<bool> EditarConfigManualmente(business.Models.Config config);
         #endregion
 
         #region Configuracao Balanca

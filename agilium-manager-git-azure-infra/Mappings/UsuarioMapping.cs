@@ -20,7 +20,7 @@ namespace agilium.api.infra.Mappings
             builder.Property(c => c.nome).HasColumnName("nome").HasColumnType("varchar(100)");
             builder.Property(c => c.cpf).HasColumnName("cpf").HasColumnType("varchar(14)");
             builder.Property(c => c.ender).HasColumnName("ender").HasColumnType("varchar(100)");
-            builder.Property(c => c.num).HasColumnName("num").HasColumnType("varchar(20)");
+            builder.Property(c => c.num).HasColumnName("num").HasColumnType("int");
             builder.Property(c => c.compl).HasColumnName("compl").HasColumnType("varchar(35)");
             builder.Property(c => c.bairro).HasColumnName("bairro").HasColumnType("varchar(40)");
             builder.Property(c => c.cep).HasColumnName("cep").HasColumnType("varchar(9)");

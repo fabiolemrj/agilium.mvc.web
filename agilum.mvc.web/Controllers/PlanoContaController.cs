@@ -2,12 +2,15 @@
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.PlanoConta;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -30,8 +33,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public PlanoContaController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, IEmpresaService empresaService,
-            ILogService logService, IMapper mapper, IPlanoContaService planoContaService, IPlanoContaDapperRepository planoContaDapperRepository) : 
-            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            ILogService logService, IMapper mapper, IPlanoContaService planoContaService, IPlanoContaDapperRepository planoContaDapperRepository, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : 
+            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _planoContaService = planoContaService;
             _planoContaDapperRepository = planoContaDapperRepository;
@@ -79,6 +82,7 @@ namespace agilum.mvc.web.Controllers
 
             ViewBag.Pesquisa = q;
             lista.ReferenceAction = "Index";
+            lista.Query = q;
             return View(lista);
         }
 
@@ -305,7 +309,7 @@ namespace agilum.mvc.web.Controllers
             return View("_planoContaLancamento", model);
         }
 
-        [Route("lacamentos")]
+        [Route("lacamentos-por-plano")]
         [HttpPost]
         public async Task<IActionResult> LancamentoPorPlano(PlanoContaLancamentoListaViewModel model)
         {
@@ -332,8 +336,9 @@ namespace agilum.mvc.web.Controllers
         }
 
 
-        [Route("lacamentos/lista")]
+        
         [ClaimsAuthorizeAttribute(2073)]
+        [HttpGet("lacamentos-por-data")]
         public async Task<IActionResult> IndexLancamentos([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null, [FromQuery] long idConta = 0)
         {
 
@@ -377,9 +382,10 @@ namespace agilum.mvc.web.Controllers
             ViewBag.idConta = idConta;
             ViewBag.Saldo = CalcularSaldo(lista.List.ToList());
 
-            lista.ReferenceAction = "IndexLancamentos";
+            lista.ReferenceAction = "lacamentos-por-data";
+            lista.ReferenceController = "plano-conta";
 
-            return View(lista);
+            return View("ListaLancamentos",lista);
         }
 
         #endregion

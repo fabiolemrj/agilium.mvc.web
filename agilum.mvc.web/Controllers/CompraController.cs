@@ -33,6 +33,9 @@ using System.Xml;
 using NFeProc = agilum.mvc.web.ViewModels.Compra.NFeProc;
 using agilum.mvc.web.Configuration;
 using agilum.mvc.web.Extensions;
+using agilium_manager_azure_business.Interfaces.IService;
+using agilum.mvc.web.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -65,7 +68,9 @@ namespace agilum.mvc.web.Controllers
         public CompraController(ICompraService compraService, IEmpresaService empresaService, IFornecedorService fornecedorService,
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService, ITurnoService turnoService, IProdutoService produtoService,
             IEstoqueService estoqueService, IUnidadeService unidadeService,  IUsuarioService usuarioService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
+            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, 
+                utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _compraService = compraService;
             _empresaService = empresaService;
@@ -96,10 +101,60 @@ namespace agilum.mvc.web.Controllers
 
         #region compras
 
+      //  [Route("lista")]
+        //[ClaimsAuthorizeAttribute(2066)]
+        //public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
+        //{
+
+        //    var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+        //    if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+        //    {
+        //        var msgErro = $"Selecione uma empresa para acessar {_nomeEntidadeMotivo}";
+
+        //        TempData["TipoMensagem"] = "danger";
+        //        TempData["Titulo"] = _nomeEntidadeMotivo;
+        //        TempData["Mensagem"] = msgErro;
+
+        //        ViewBag.TipoMensagem = "danger";
+        //        ViewBag.Titulo = _nomeEntidadeMotivo;
+        //        ViewBag.Mensagem = msgErro;
+        //        return RedirectToAction("Index", "Home");
+        //    }
+
+        //    var dataAtual = DateTime.Now;
+        //    DateTime _dtini, _dtFim;
+        //    if (DataInicial == null)
+        //    {
+        //        DateTime primeiroDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, 1);
+        //        _dtini = primeiroDiaDoMes;
+        //    }
+        //    else _dtini = Convert.ToDateTime(DataInicial);
+
+        //    if (DataFinal == null)
+        //    {
+        //        DateTime ultimoDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, DateTime.DaysInMonth(dataAtual.Year, dataAtual.Month));
+        //        _dtFim = ultimoDiaDoMes;
+        //    }
+        //    else _dtFim = Convert.ToDateTime(DataFinal);
+
+        //    if (_dtini > _dtFim)
+        //    {
+        //        AdicionarErroValidacao("Data Final deve ser maior ou igual a data inicial");
+        //    }
+        //    var lista = (await ObterListaCompraPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), _dtini, _dtFim, page, ps));
+
+        //    ViewBag.DataInicial = _dtini;
+        //    ViewBag.DataFinal = _dtFim;
+
+        //    return View("Index", lista);
+        //}
+
         [Route("lista")]
         [ClaimsAuthorizeAttribute(2066)]
-        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
+        public async Task<IActionResult> IndexCompra([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
+
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
@@ -113,7 +168,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.TipoMensagem = "danger";
                 ViewBag.Titulo = _nomeEntidadeMotivo;
                 ViewBag.Mensagem = msgErro;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("IndexCompra", "Home");
             }
 
             var dataAtual = DateTime.Now;
@@ -136,12 +191,12 @@ namespace agilum.mvc.web.Controllers
             {
                 AdicionarErroValidacao("Data Final deve ser maior ou igual a data inicial");
             }
-            var lista = (await ObterListaCompraPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), _dtini, _dtFim, page, ps));
-
+            var lista = (await ObterListaCompraIndexPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), _dtini, _dtFim, page, ps));
+            
             ViewBag.DataInicial = _dtini;
             ViewBag.DataFinal = _dtFim;
 
-            return View("Index", lista);
+            return View(lista);
         }
 
         [Route("novo")]
@@ -279,7 +334,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexCompra");
         }
 
         [Route("editar")]
@@ -304,7 +359,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.TipoMensagem = "danger";
                 ViewBag.Titulo = "Compra";
                 ViewBag.Mensagem = msgErro;
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexCompra");
             }
 
             return View("CreateEdit", model);
@@ -339,7 +394,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexCompra");
         }
 
         [HttpGet]
@@ -361,7 +416,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.TipoMensagem = "danger";
                 ViewBag.Titulo = "Compra";
                 ViewBag.Mensagem = msgErro;
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexCompra");
             }
 
             return View("Cancelar", model);
@@ -387,7 +442,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexCompra");
         }
 
         [Route("importar")]
@@ -493,7 +548,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.TipoMensagem = "danger";
                 ViewBag.Titulo = "Compra";
                 ViewBag.Mensagem = msgErro;
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexCompra");
             }
 
             return View(model);
@@ -517,7 +572,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexCompra");
         }
 
         [Route("efetivar")]
@@ -538,7 +593,7 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.TipoMensagem = "danger";
                 ViewBag.Titulo = "Compra";
                 ViewBag.Mensagem = msgErro;
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexCompra");
             }
 
             return View(model);
@@ -566,7 +621,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexCompra");
         }
 
         #endregion
@@ -649,6 +704,7 @@ namespace agilum.mvc.web.Controllers
             if (!viewModel.ValorUnitario.HasValue) viewModel.ValorUnitario = 0;
             if (!viewModel.ValorNovoPrecoVenda.HasValue) viewModel.ValorNovoPrecoVenda = 0;
 
+            viewModel.AtualizarDoubles();
             var objeto = _mapper.Map<CompraItem>(viewModel);
 
             await _compraService.Adicionar(objeto);
@@ -675,6 +731,7 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "EditarItem";
             ViewBag.operacao = "E";
 
+            ;
             var model =  _mapper.Map<CompraItemViewModel>(_compraService.ObterItemPorId(id).Result);
             if (model == null)
             {
@@ -688,6 +745,8 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("ListaItemCompra", new { idCompra = model.IDCOMPRA });
             }
+
+            model.AtualizarStrings();
 
             PopularListasAuxiliares(model);
             ObterDadosCompraParaViewBag(model.IDCOMPRA.Value);
@@ -706,6 +765,7 @@ namespace agilum.mvc.web.Controllers
 
             if (!ModelState.IsValid) return View("_createEditItemCompra", model);
 
+            model.AtualizarDoubles();
             var objeto = _mapper.Map<CompraItem>(model);
 
             await _compraService.Atualizar(objeto);
@@ -758,10 +818,13 @@ namespace agilum.mvc.web.Controllers
             viewModel.Quantidade = model.Quantidade;
             viewModel.certo = "N";
 
-            PopularListasAuxiliares(model);
-            ObterDadosCompraParaViewBag(viewModel.IDCOMPRA.Value);
+      
 
-            return PartialView("_editarItemCompra", viewModel);
+            PopularListasAuxiliares(viewModel);
+            ObterDadosCompraParaViewBag(viewModel.IDCOMPRA.Value);
+            model.AtualizarStrings();
+
+            return View("_editarItemCompra", viewModel);
         }
 
         [Route("EditarItemModal")]
@@ -774,10 +837,13 @@ namespace agilum.mvc.web.Controllers
             
             if (!ModelState.IsValid)
             {
+                PopularListasAuxiliares(model);
                 model.certo = "S";
                 model.Importada = true;
                 return PartialView("_editarItemCompra", model);
             }
+            model.AtualizarDoubles();
+           
 
             if(!await _compraService.AtualizarProdutoNoItemCompra(model.Id, model.IDCOMPRA.Value, model.IDPRODUTO, model.IDESTOQUE, model.SGUN, 
                 model.Quantidade,model.Relacao, model.ValorUnitario, model.ValorTotal, model.ValorNovoPrecoVenda))
@@ -787,6 +853,7 @@ namespace agilum.mvc.web.Controllers
 
             if (!OperacaoValida())
             {
+                PopularListasAuxiliares(model);
                 model.certo = "S";
                 model.Importada = true;
                 model.SGUN = "0101";
@@ -797,8 +864,8 @@ namespace agilum.mvc.web.Controllers
 
             var url = Url.Action("ListaItemCompra", "Compra", new { idCompra = model.IDCOMPRA });
 
-            return Json(new { success = true, url });
-            // return PartialView("_listaItemCompra",lista);
+            return RedirectToAction("ListaItemCompra", new { idCompra = model.IDCOMPRA });
+
         }
 
         #endregion
@@ -835,22 +902,33 @@ namespace agilum.mvc.web.Controllers
         private async Task<PagedViewModel<CompraViewModel>> ObterListaCompraPaginado(long idempresa, DateTime dtIni, DateTime dtFinal, int page, int pageSize)
         {
             var lista = new List<CompraViewModel>();
-            var retorno = await _compraService.ObterCompraPorPaginacao(idempresa, dtIni, dtFinal, page, pageSize);
+            var retorno = await _compraService.ObterCompraPorPaginacaoDapper(idempresa, dtIni, dtFinal, page, pageSize);
 
-            retorno.List.ToList().ForEach(async dev =>
-            {
-                CompraViewModel viewModel = await ConverterObjetoEmViewModel(dev);
-
-                lista.Add(viewModel);
-            });
             return new PagedViewModel<CompraViewModel>()
             {
                 List = lista,
                 PageIndex = retorno.PageIndex,
                 PageSize = retorno.PageSize,
                 Query = retorno.Query,
-                ReferenceAction = "Index",
+                ReferenceAction = "IndexCompra",
                 ReferenceController ="compra",
+                TotalResults = retorno.TotalResults
+            };
+        }
+
+        private async Task<PagedViewModel<CompraIndexViewModel>> ObterListaCompraIndexPaginado(long idempresa, DateTime dtIni, DateTime dtFinal, int page, int pageSize)
+        {
+            //var lista = new List<CompraIndexViewModel>();
+            var retorno = await _compraService.ObterCompraPorPaginacaoDapper(idempresa, dtIni, dtFinal, page, pageSize);
+            var lista = _mapper.Map<List<CompraIndexViewModel>>(retorno.List);
+            return new PagedViewModel<CompraIndexViewModel>()
+            {
+                List = lista,
+                PageIndex = retorno.PageIndex,
+                PageSize = retorno.PageSize,
+                Query = retorno.Query,
+                ReferenceAction = "lista",
+                ReferenceController = "compra",
                 TotalResults = retorno.TotalResults
             };
         }
@@ -867,8 +945,8 @@ namespace agilum.mvc.web.Controllers
 
             if (dev.IDTURNO.HasValue)
             {
-                var turno = _turnoService.ObterCompletoPorId(dev.IDTURNO.Value).Result;
-                viewModel.NomeTurno = turno != null && turno.NUTURNO.HasValue ? $"{turno.DTTURNO?.ToString("dd/MM/yyyy")} - Nº {turno.NUTURNO.ToString()}" : string.Empty;
+                //var turno = _turnoService.Obterpo(dev.IDTURNO.Value).Result;
+                //viewModel.NomeTurno = turno != null && turno.NUTURNO.HasValue ? $"{turno.DTTURNO?.ToString("dd/MM/yyyy")} - Nº {turno.NUTURNO.ToString()}" : string.Empty;
             }
 
             return viewModel;
@@ -919,6 +997,20 @@ namespace agilum.mvc.web.Controllers
 
 
         private void PopularListasAuxiliares(CompraItemViewModel model)
+        {
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+            if (model.Produtos.Count() == 0)
+                model.Produtos = _mapper.Map<List<ViewModels.Produtos.ProdutoViewModel>>(_produtoService.ObterTodas(Convert.ToInt64(empresaSelecionada.IDEMPRESA)).Result.ToList());
+
+            if (model.Estoques.Count() == 0)
+                model.Estoques = _mapper.Map<List<EstoqueViewModel>>(_estoqueService.ObterTodas().Result.ToList());
+
+            if (model.Unidades.Count() == 0)
+                model.Unidades = _mapper.Map<List<UnidadeIndexViewModel>>(_unidadeService.ObterTodas().Result.ToList());
+        }
+
+        private void PopularListasAuxiliares(CompraItemEditViewModel model)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 

@@ -2,6 +2,7 @@
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
+using agilium_manager_azure_business.Interfaces.IService;
 using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
@@ -45,7 +46,7 @@ namespace agilum.mvc.web.Controllers
         #region construtores
         public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
             IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, SignInManager<AppUserAgiliumIdentity> signInManager,
-            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper)
+            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService, ILicencaService licencaService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _empresaService = empresaService;
             _logger = logger;
@@ -67,6 +68,7 @@ namespace agilum.mvc.web.Controllers
 
             var lista = await ObterListaPaginado(q, page, ps);
             ViewBag.Pesquisa = q;
+            lista.Query = q;
             return View(lista);
         }
 

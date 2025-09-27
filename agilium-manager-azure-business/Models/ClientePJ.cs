@@ -22,5 +22,6 @@ namespace agilium.api.business.Models
         }
 
         public void AdicionarCliente(Cliente cliente) => Cliente = cliente;
+        public void AdicionarIdCliente(long id) => Id = id;
     }
 }

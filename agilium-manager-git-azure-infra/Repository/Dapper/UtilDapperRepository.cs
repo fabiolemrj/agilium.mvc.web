@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -58,6 +59,8 @@ namespace agilium.api.infra.Repository.Dapper
             return con.Query<long>(query).FirstOrDefault();
         }
 
+ 
+
         public async Task<long> GerarUUIDPrivate()
         {
             var query = $@"SELECT uuid_short() AS ID";
@@ -98,6 +101,12 @@ namespace agilium.api.infra.Repository.Dapper
             return resultadoConvertido.ToString().PadLeft(6,'0');
         }
 
-       
+        public async Task<DateTime> ObterDataAtual()
+        {
+            var query = $@"select now()";
+
+            return _dbSession.Connection.Query<DateTime>(query, null, _dbSession.Transaction).FirstOrDefault();
+        }
+
     }
 }

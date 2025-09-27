@@ -77,6 +77,16 @@ namespace agilum.mvc.web.ViewModels.Inventario
         public string NomeInventario { get; set; }
         public ETipoAnalise? TipoAnalise { get; set; }
         public List<InventarioItemViewModel> Itens { get; set; } = new List<InventarioItemViewModel>();
+
+        // 🔹 Paginação
+        public int PaginaAtual { get; set; } = 1;         // Página que está sendo exibida
+        public int TotalPaginas { get; set; } = 1;        // Quantidade total de páginas
+        public int TamanhoPagina { get; set; } = 20;      // Itens por página (default 20)
+        public int TotalItens { get; set; } = 0;          // Quantidade total de registros
+
+        // 🔹 Helpers (úteis para a View)
+        public bool TemPaginaAnterior => PaginaAtual > 1;
+        public bool TemProximaPagina => PaginaAtual < TotalPaginas;
     }
 
     public class AdicionarListaProdutosDisponiveisViewModel
@@ -90,7 +100,19 @@ namespace agilum.mvc.web.ViewModels.Inventario
 
     public class ProdutoDisponivelViewModel
     {
-        public long Id { get; set; }
+        private long _id;
+
+        public long Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                Id_String = value.ToString(); // atualiza automaticamente
+            }
+        }
+
+        public string Id_String { get; set; }
         [Display(Name = "Empresa")]
         public Int64? idEmpresa { get; set; }
         [Display(Name = "Grupo")]

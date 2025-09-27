@@ -254,10 +254,10 @@ namespace agilium.api.manager.V1
         {
             var listaObjeto = _compraService.ObterItensPorCompra(idCompra).Result;
             var listaViewModel = new List<CompraItemViewModel>();
-            listaObjeto.ForEach(async item => {
-                var viewModel = await ConverterObjetoEmViewModel(item);
-                listaViewModel.Add(viewModel);  
-            });
+            //listaObjeto.ForEach(async item => {
+            //    var viewModel = await ConverterObjetoEmViewModel(item);
+            //    listaViewModel.Add(viewModel);  
+            //});
 
             return CustomResponse(listaViewModel);
         }
@@ -452,12 +452,12 @@ namespace agilium.api.manager.V1
             var lista = new List<CompraViewModel>();
             var retorno = await _compraService.ObterCompraPorPaginacao(idempresa, dtIni, dtFinal, page, pageSize);
 
-            retorno.List.ToList().ForEach(async dev =>
-            {
-                CompraViewModel viewModel = await ConverterObjetoEmViewModel(dev);
+            //retorno.List.ToList().ForEach(async dev =>
+            //{
+            //    CompraViewModel viewModel = await ConverterObjetoEmViewModel(dev);
 
-                lista.Add(viewModel);
-            });
+            //    lista.Add(viewModel);
+            //});
             return new PagedResult<CompraViewModel>()
             {
                 List = lista,
@@ -472,7 +472,7 @@ namespace agilium.api.manager.V1
         private async Task<CompraViewModel> ConverterObjetoEmViewModel(Compra dev)
         {
             var viewModel = _mapper.Map<CompraViewModel>(dev);
-
+            /*
             if (dev.IDFORN.HasValue)
             {
                 var fornecedor = _fornecedorService.ObterPorId(dev.IDFORN.Value).Result;
@@ -484,6 +484,7 @@ namespace agilium.api.manager.V1
                 var turno = _turnoService.ObterCompletoPorId(dev.IDTURNO.Value).Result;
                 viewModel.NomeTurno = turno != null && turno.NUTURNO.HasValue ? $"{turno.DTTURNO?.ToString("dd/MM/yyyy")} - Nº {turno.NUTURNO.ToString()}"  : string.Empty;
             }
+            */
 
             return viewModel;
         }
@@ -491,6 +492,7 @@ namespace agilium.api.manager.V1
         private async Task<CompraItemViewModel> ConverterObjetoEmViewModel(CompraItem objeto)
         {
             var viewModel = _mapper.Map<CompraItemViewModel>(objeto);
+            /*
             if (objeto.IDPRODUTO.HasValue)
             {
                 var produto = _produtoService.ObterPorId(objeto.IDPRODUTO.Value).Result;
@@ -503,7 +505,7 @@ namespace agilium.api.manager.V1
                 var estoque = _estoqueService.ObterPorId(objeto.IDESTOQUE.Value).Result;
                 viewModel.NomeEstoque = estoque != null && !string.IsNullOrEmpty(estoque.Descricao) ? estoque.Descricao : "";
             }
-
+            */
             return viewModel;
         }
 
