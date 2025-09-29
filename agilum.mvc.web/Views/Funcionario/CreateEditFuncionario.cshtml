@@ -7,6 +7,8 @@
     var inclusao = ViewBag.operacao == "I";
     var operacao = inclusao ? "Novo" : "Editar";
     ViewData["Title"] = "Funcionario";
+
+    var empresa = Model.Empresas.FirstOrDefault(x => x.Id == Model.IDEMPRESA);
 }
 <h5>@ViewData["Title"]</h5>
 <hr />
@@ -32,6 +34,7 @@
         <form asp-action="@ViewBag.acao" id="CreateEditEstoque" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <vc:Summary></vc:Summary>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IDEMPRESA" />
             <div class="card" id="labelcardGerais">
                 <div class="card-header">
                     @if (ViewBag.operacao == "I")
@@ -67,23 +70,24 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
-                                <select asp-for="IDEMPRESA"
+                                <input class="form-control" value="@empresa.NMRZSOCIAL" disabled="disabled" />
+                       @*          <select asp-for="IDEMPRESA"
                                         asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
                                         class="form-control"></select>
-                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span> *@
                             </div>
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Codigo" id="labelCodigo"></label>
                                 <input asp-for="Codigo" class="form-control" size="6" />
                                 <span asp-validation-for="Codigo" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="TipoFuncionario" id="labelCapacidade"></label>
                                 <select asp-for="TipoFuncionario"
@@ -95,7 +99,7 @@
                         @if (ViewBag.operacao == "E")
                         {
 
-                            <div class="col-md-3">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label asp-for="Situacao" id="labelativo"></label>
                                     <select asp-for="Situacao"
@@ -122,21 +126,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="CPF" id="labelCpf"></label>
                                 <input asp-for="CPF" class="form-control cpf" size="15" />
                                 <span asp-validation-for="CPF" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Documento" id="labelCpf"></label>
                                 <input asp-for="Documento" class="form-control cpf" size="20" />
                                 <span asp-validation-for="Documento" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="DSRFID" id="labelCpf"></label>
                                 <input asp-for="DSRFID" class="form-control cpf" size="50" />
@@ -145,14 +149,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Turno" id="labelCapacidade"></label>
                                 <input asp-for="Turno" class="form-control" size="20" />
                                 <span asp-validation-for="Turno" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Noturno" id="labelCapacidade"></label>
                                 <select asp-for="Noturno"
@@ -164,14 +168,14 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="DataAdmissao" id="labelCodigo"></label>
                                 <input asp-for="DataAdmissao" class="form-control" size="12" />
                                 <span asp-validation-for="DataAdmissao" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="DataDemissao" id="labelCodigo"></label>
                                 <input asp-for="DataDemissao" class="form-control" size="12" />
@@ -180,7 +184,7 @@
                         </div>
                     </div>    
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-12">
                             @await Html.PartialAsync("_endereco.cshtml")
                         </div>
                     </div>

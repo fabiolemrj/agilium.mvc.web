@@ -7,6 +7,8 @@
     var inclusao = ViewBag.operacao == "I";
     var operacao = inclusao ? "Novo" : "Editar";
     ViewData["Title"] = "Moeda";
+
+    var empresa = Model.Empresas.FirstOrDefault(x => x.Id == Model.IDEMPRESA);
 }
 <h5>@ViewData["Title"]</h5>
 <hr />
@@ -33,6 +35,8 @@
         <form asp-action="@ViewBag.acao" id="CreateEditMoeda" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <vc:Summary></vc:Summary>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IDEMPRESA" />
+
             <div class="card" id="labelcardGerais">
                 <div class="card-header">
                     @if (ViewBag.operacao == "I")
@@ -69,10 +73,11 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label asp-for="IDEMPRESA" id="labelEmpresa"></label>
-                                <select asp-for="IDEMPRESA"
+                                <input class="form-control" value="@empresa.NMRZSOCIAL" disabled="disabled" />
+                               @*  <select asp-for="IDEMPRESA"
                                         asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
                                         class="form-control"></select>
-                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span>
+                                <span asp-validation-for="IDEMPRESA" class="text-danger"></span> *@
                             </div>
 
                         </div>

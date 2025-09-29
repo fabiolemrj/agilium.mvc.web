@@ -9,6 +9,7 @@
     var operacao = inclusao ? "Novo" : "Editar";
 
     ViewData["Title"] = "Forma de Pagamento";
+    var empresa = Model.Empresas.FirstOrDefault(x => x.Id == Model.IDEmpresa);
 }
 <h5>@ViewData["Title"]</h5>
 <hr />
@@ -53,10 +54,11 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label asp-for="IDEmpresa" id="labelEmpresa"></label>
-                                <select asp-for="IDEmpresa"
+                                <input class="form-control" value="@empresa.NMRZSOCIAL" disabled="disabled" />
+                            @*     <select asp-for="IDEmpresa"
                                         asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
                                         class="form-control"></select>
-                                <span asp-validation-for="IDEmpresa" class="text-danger"></span>
+                                <span asp-validation-for="IDEmpresa" class="text-danger"></span> *@
                             </div>
 
                         </div>

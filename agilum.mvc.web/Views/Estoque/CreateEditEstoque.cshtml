@@ -7,6 +7,8 @@
     var inclusao = ViewBag.operacao == "I";
     var operacao = inclusao ? "Novo" : "Editar";
     ViewData["Title"] = "Estoque";
+
+    var empresa = Model.Empresas.FirstOrDefault(x => x.Id == Model.idEmpresa);
 }
 <h5>@ViewData["Title"]</h5>
 <hr />
@@ -29,10 +31,11 @@
 </section>
 <br />
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-12">
         <form asp-action="@ViewBag.acao" id="CreateEditEstoque" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
             <vc:Summary></vc:Summary>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="idEmpresa" />
             <div class="card" id="labelcardGerais">
                 <div class="card-header">
                     @if (ViewBag.operacao == "I")
@@ -47,28 +50,27 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-3">
                             <div class="form-group">
                                 <label asp-for="idEmpresa" id="labelEmpresa"></label>
-                                <select asp-for="idEmpresa"
+                                <input class="form-control" value="@empresa.NMRZSOCIAL" disabled="disabled" />
+                         @*        <select asp-for="idEmpresa"
                                         asp-items="@Model.Empresas.Select(x => new SelectListItem(){Text = x.NMRZSOCIAL, Value = x.Id.ToString()})"
                                         class="form-control"></select>
-                                <span asp-validation-for="idEmpresa" class="text-danger"></span>
+                                <span asp-validation-for="idEmpresa" class="text-danger"></span> *@
                             </div>
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-3">
                             <div class="form-group">
                                 <label asp-for="Descricao" id="labeldescr"></label>
                                 <input asp-for="Descricao" class="form-control" size="20" />
                                 <span asp-validation-for="Descricao" class="text-danger"></span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Tipo" id="labeltipo"></label>
                                 <select asp-for="Tipo"
@@ -76,11 +78,8 @@
                                         class="form-control"></select>
                                 <span asp-validation-for="Tipo" class="text-danger"></span>
                             </div>
-
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Capacidade" id="labelCapacidade"></label>
                                 <input asp-for="Capacidade" class="form-control" size="20" />
@@ -92,7 +91,7 @@
                     @if (ViewBag.operacao == "E")
                     {
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label asp-for="situacao" id="labelativo"></label>
                                     <select asp-for="situacao"
