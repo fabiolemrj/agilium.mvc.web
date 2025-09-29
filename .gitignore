@@ -443,3 +443,7 @@ FodyWeavers.xsd
 /agilum.mvc.web/obj/Debug/netcoreapp3.1/Razor/Views/_ViewStart.cshtml.g.cs
 /agilum.mvc.web/obj/project.assets.json
 /agilum.mvc.web/obj/project.nuget.cache
+/agilium-manager-azure-api/obj/agilium-manager-azure-api.csproj.nuget.dgspec.json
+/agilium-manager-azure-api/obj/Debug/netcoreapp3.1/agilium-manager-azure-api.assets.cache
+/agilium-manager-azure-api/obj/project.assets.json
+/agilium-manager-azure-api/obj/project.nuget.cache
