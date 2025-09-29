@@ -90,14 +90,23 @@ namespace agilium.api.business.Services
             return await _contaPagarRepository.ObterPorId(id);
         }
 
-        public async Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15)
+        public async Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor = null, int page = 1, int pageSize = 15)
         {
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
 
-            var listaDesordenada = await _contaPagarRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Fornecedor", "PlanoConta");
+            var _fornecedor = string.IsNullOrEmpty(fornecedor)? string.Empty : fornecedor;
 
-            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD);
+            var listaDesordenada = await _contaPagarRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DTVENC >= dtIni && x.DTVENC <= dtFim && 
+            x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()) && x.Fornecedor.NMRZSOCIAL.ToUpper().Contains(_fornecedor.ToUpper()),
+                "CategFinanc", "Fornecedor", "PlanoConta") ;
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD).ToList();
+            
+            if (!string.IsNullOrEmpty(situacao))
+            {
+                lista = lista.Where(x => x.STCONTA == int.Parse(situacao)).ToList();
+            }
 
             return new PagedResult<ContaPagar>
             {
@@ -249,14 +258,23 @@ namespace agilium.api.business.Services
             return _contaReceberRepository.Buscar(x => x.DESCR.ToUpper().Contains(descricao.ToUpper())).Result.ToList();
         }
 
-        public async Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15)
+        public async Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor = null, int page = 1, int pageSize = 15)
         {
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
 
-            var listaDesordenada = await _contaReceberRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), "CategFinanc", "Cliente", "PlanoConta");
+            var _cliente = string.IsNullOrEmpty(fornecedor) ? string.Empty : fornecedor;
 
-            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD);
+            var listaDesordenada = await _contaReceberRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DTVENC >= dtIni && x.DTVENC <= dtFim && 
+                      x.Cliente.NMCLIENTE.ToUpper().Contains(_cliente) && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()), 
+                        "CategFinanc", "Cliente", "PlanoConta");
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD).ToList();
+            
+            if (!string.IsNullOrEmpty(situacao))
+            {
+                lista = lista.Where(x => x.STCONTA == int.Parse(situacao)).ToList();
+            }
 
             return new PagedResult<ContaReceber>
             {
@@ -264,7 +282,7 @@ namespace agilium.api.business.Services
                 TotalResults = lista.Count(),
                 PageIndex = page,
                 PageSize = pageSize
-            }; ;
+            }; 
         }
 
         public async Task<ContaReceber> ObterContaReceberCompletoPorId(long id)

@@ -12,6 +12,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace agilum.mvc.web.Controllers
         #region plano conta
         [ClaimsAuthorizeAttribute(2073)]
         [Route("lista")]
-        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null, string tipoLancamento = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
@@ -73,7 +74,7 @@ namespace agilum.mvc.web.Controllers
             if (PlanosContas.Count == 0)
                 PlanosContas = _mapper.Map<List<PlanoContaViewModel>>( await _planoContaService.ObterTodas(Convert.ToInt64(empresaSelecionada.IDEMPRESA)));
 
-            var lista = (await ObterListaPlanoContaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps));
+            var lista = (await ObterListaPlanoContaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps,tipoLancamento));
 
             lista.List.ToList().ForEach(x => {
                 var contaPai = PlanosContas.FirstOrDefault(y => y.Id == x.IDCONTAPAI);
@@ -81,8 +82,10 @@ namespace agilum.mvc.web.Controllers
             });
 
             ViewBag.Pesquisa = q;
-            lista.ReferenceAction = "Index";
+            lista.ReferenceAction = "lista";
+            lista.ReferenceController = "plano-conta";
             lista.Query = q;
+            ViewBag.TipoLancamento = tipoLancamento;
             return View(lista);
         }
 
@@ -339,7 +342,7 @@ namespace agilum.mvc.web.Controllers
         
         [ClaimsAuthorizeAttribute(2073)]
         [HttpGet("lacamentos-por-data")]
-        public async Task<IActionResult> IndexLancamentos([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null, [FromQuery] long idConta = 0)
+        public async Task<IActionResult> IndexLancamentos([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null, [FromQuery] long idConta = 0, string tipoLancamento = null)
         {
 
 
@@ -368,7 +371,7 @@ namespace agilum.mvc.web.Controllers
             {
 
             }
-            var lista = (await ObterListaPlanoContaPaginado(idConta, _dtini, _dtFim, page, ps));
+            var lista = (await ObterListaPlanoContaPaginado(idConta, _dtini, _dtFim, page, ps, tipoLancamento));
 
             var planoConta = _mapper.Map<PlanoContaViewModel>(await _planoContaService.ObterCompletoPorId(idConta));
 
@@ -382,6 +385,8 @@ namespace agilum.mvc.web.Controllers
             ViewBag.idConta = idConta;
             ViewBag.Saldo = CalcularSaldo(lista.List.ToList());
 
+            ViewBag.TipoLancamento = tipoLancamento;
+
             lista.ReferenceAction = "lacamentos-por-data";
             lista.ReferenceController = "plano-conta";
 
@@ -391,9 +396,9 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region Private
-        private async Task<PagedViewModel<PlanoContaViewModel>> ObterListaPlanoContaPaginado(long idEmpresa, string filtro, int page, int pageSize)
+        private async Task<PagedViewModel<PlanoContaViewModel>> ObterListaPlanoContaPaginado(long idEmpresa, string filtro, int page, int pageSize, string tipoLancamento)
         {
-            var retorno = await _planoContaService.ObterPorPaginacao(idEmpresa, filtro, page, pageSize);
+            var retorno = await _planoContaService.ObterPorPaginacao(idEmpresa, filtro, page, pageSize,tipoLancamento);
 
             var lista = _mapper.Map<IEnumerable<PlanoContaViewModel>>(retorno.List);
 
@@ -412,9 +417,9 @@ namespace agilum.mvc.web.Controllers
             };
         }
 
-        private async Task<PagedViewModel<PlanoContaLancamentoViewModel>> ObterListaPlanoContaPaginado(long idPlano, DateTime dtIni, DateTime dtFinal, int page, int pageSize)
+        private async Task<PagedViewModel<PlanoContaLancamentoViewModel>> ObterListaPlanoContaPaginado(long idPlano, DateTime dtIni, DateTime dtFinal, int page, int pageSize, string tipoLancamento)
         {
-            var retorno = await _planoContaService.ObterLancamentoPorPaginacao(idPlano, dtIni, dtFinal, page, pageSize);
+            var retorno = await _planoContaService.ObterLancamentoPorPaginacao(idPlano, dtIni, dtFinal, page, pageSize, tipoLancamento);
 
             var lista = _mapper.Map<IEnumerable<PlanoContaLancamentoViewModel>>(retorno.List);
 

@@ -49,11 +49,35 @@
                         </div>
                     </div>
                 </div>
+                <!-- Select Tipo Lançamento abaixo do Data Final -->
+                <div class="form-group col-2">
+                    <label id="lbTipoLancamento">Tipo Lançamento</label>
+                    <select class="form-control" id="tipoLancamento" name="tipoLancamento">
+                        <option value="">-- Selecione --</option>
+                        @if (ViewBag.TipoLancamento == "D")
+                        {
+                            <option value="D" selected>Débito</option>
+                            <option value="C">Crédito</option>
+                        }
+                        else if (ViewBag.TipoLancamento == "C")
+                        {
+                            <option value="D">Débito</option>
+                            <option value="C" selected>Crédito</option>
+                        }
+                        else
+                        {
+                            <option value="D">Débito</option>
+                            <option value="C">Crédito</option>
+                        }
+                    </select>
+                </div>
                 <div class="align-items-center">
-                    <div class="col-xs-1">
-                        <div class="form-group">
+                    <div>
+                        <div >
                             <label id="lbbotao">&nbsp</label>
-                            <button type="submit" class="nav-link btn btn-outline-secondary" name="search-btn" id="search-btn" title="Filtrar"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="btn btn-info btn-flat w-100" title="Pesquisar">
+                                <i class="fa fa-search"></i> Pesquisar
+                            </button>
                         </div>
                     </div>
                 </div>

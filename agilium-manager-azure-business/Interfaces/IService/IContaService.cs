@@ -16,7 +16,7 @@ namespace agilium.api.business.Interfaces.IService
         Task Apagar(long id);
         Task<ContaPagar> ObterPorId(long id);
         Task<List<ContaPagar>> ObterPorDescricao(string descricao);
-        Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15);
+        Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor, int page = 1, int pageSize = 15);
         Task<ContaPagar> ObterCompletoPorId(long id);
         Task<List<ContaPagar>> ObterTodas(long idEmpresa);
         Task<bool> ConsolidarContaPorId(long id);
@@ -29,7 +29,7 @@ namespace agilium.api.business.Interfaces.IService
         Task ApagarContaReceber(long id);
         Task<ContaReceber> ObterContaReceberPorId(long id);
         Task<List<ContaReceber>> ObterContaReceberPorDescricao(string descricao);
-        Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15);
+        Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor, int page = 1, int pageSize = 15);
         Task<ContaReceber> ObterContaReceberCompletoPorId(long id);
         Task<List<ContaReceber>> ObterTodasContaReceber(long idEmpresa);
         Task<bool> ConsolidarContaReceberPorId(long id);

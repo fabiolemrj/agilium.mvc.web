@@ -14,7 +14,7 @@ namespace agilium.api.business.Interfaces.IService
         Task Apagar(long id);
         Task<PlanoConta> ObterPorId(long id);
         Task<List<PlanoConta>> ObterPorDescricao(string descricao);
-        Task<PagedResult<PlanoConta>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15);
+        Task<PagedResult<PlanoConta>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15, string tipoLancamento = null);
         Task<PlanoConta> ObterCompletoPorId(long id);
         Task<List<PlanoConta>> ObterTodas(long idEmpresa);
 
@@ -32,7 +32,7 @@ namespace agilium.api.business.Interfaces.IService
 
 
         #region Plano Conta Lancamento
-        Task<PagedResult<PlanoContaLancamento>> ObterLancamentoPorPaginacao(long idPlano, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15);
+        Task<PagedResult<PlanoContaLancamento>> ObterLancamentoPorPaginacao(long idPlano, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15, string tipoLancamento=null);
         Task Adicionar(PlanoContaLancamento planoConta);
         Task Atualizar(PlanoContaLancamento planoConta);
         Task ApagarLancamento(long id);

@@ -105,13 +105,16 @@ namespace agilium.api.business.Services
             return await _planoContaRepository.ObterPorId(id);
         }
 
-        public async Task<PagedResult<PlanoConta>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15)
+        public async Task<PagedResult<PlanoConta>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15, string tipoLancamento = null)
         {
             int pagina = page > 0 ? page : 1;
             var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
 
             var lista = await _planoContaRepository.Buscar(x => x.IDEMPRESA == idEmpresa && x.DSCONTA.ToUpper().Contains(_nomeParametro.ToUpper()));
-
+            if (!string.IsNullOrEmpty(tipoLancamento))
+            {
+                lista = tipoLancamento == "C" ? lista.Where(x => x.TPCONTA == Enums.ETipoContaLancacmento.Credito) : lista.Where(x => x.TPCONTA == Enums.ETipoContaLancacmento.Debito);
+            }
             return new PagedResult<PlanoConta>
             {
                 List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderBy(x => x.CDCONTA),
@@ -177,15 +180,20 @@ namespace agilium.api.business.Services
         #endregion
 
         #region Plano Conta Lancamento
-        public async Task<PagedResult<PlanoContaLancamento>> ObterLancamentoPorPaginacao(long idPlano, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15)
+        public async Task<PagedResult<PlanoContaLancamento>> ObterLancamentoPorPaginacao(long idPlano, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15, string tipoLancamento = null)
         {
             int pagina = page > 0 ? page : 1;
 
             var lista = await _planoContaLancamentoRepository.Buscar(x => x.IDCONTA == idPlano && (x.DTCAD.Value >= dtIni && x.DTCAD <= dtFim));
-
+            
+            if (!string.IsNullOrEmpty(tipoLancamento))
+            {
+                lista = tipoLancamento == "C" ? lista.Where(x => x.TPLANC == Enums.ETipoContaLancacmento.Credito) : lista.Where(x => x.TPLANC == Enums.ETipoContaLancacmento.Debito);
+            }
+            
             return new PagedResult<PlanoContaLancamento>
             {
-                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderBy(x => x.DTCAD.Value),
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderByDescending(x => x.DTCAD.Value),
                 TotalResults = lista.Count(),
                 PageIndex = page,
                 PageSize = pageSize

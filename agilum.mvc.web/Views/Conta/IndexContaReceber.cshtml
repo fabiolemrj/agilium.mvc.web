@@ -28,15 +28,67 @@
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
-                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Descrição</label>
+                        <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+                    </div>
                 </div>
-                <div>
-                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
-                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbFornecedor">Cliente</label>
+                        <input value="@ViewBag.Fornecedor" class="form-control" title="Pesquisar por Nome Cliente" placeholder="Pesquisar por fornecedor..." id="fornecedor" name="fornecedor" />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataInicial">Dt Inicio Vencimento</label>
+                        <input class="form-control datetime" type="text" id="DataInicial" name="DataInicial" value="@ViewBag.DataInicial" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label id="lbDataFinal">Dt Fim Vencimento</label>
+                        <input class="form-control datetime" type="text" id="DataFinal" name="DataFinal" value="@ViewBag.DataFinal" data-mask="00/00/0000" />
+                        <div class="invalid-feedback">
+                            Campo deve ser fornecido.
+                        </div>
+                    </div>
+                </div>
+                <!-- Select Tipo Lançamento abaixo do Data Final -->
+                <div class="form-group col-2">
+                    <label id="lbTipoLancamento">Situação</label>
+                    <select class="form-control" id="situacao" name="situacao">
+                        <option value="">-- Selecione --</option>
+                        @if (ViewBag.Situacao == "1")
+                        {
+                            <option value="1" selected>Prevista</option>
+                            <option value="2">Consolidada</option>
+                        }
+                        else if (ViewBag.Situacao == "2")
+                        {
+                            <option value="1">Prevista</option>
+                            <option value="2" selected>Consolidada</option>
+                        }
+                        else
+                        {
+                            <option value="1">Prevista</option>
+                            <option value="2">Consolidada</option>
+                        }
+                    </select>
+                </div>
+                <div class="align-items-center">
+                    <div>
+                        <div>
+                            <label id="lbbotao">&nbsp</label>
+                            <button type="submit" class="btn btn-info btn-flat w-100" title="Pesquisar">
+                                <i class="fa fa-search"></i> Pesquisar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
@@ -170,16 +222,69 @@
                 </tr>
             }
         </tbody>
-        <tfoot>
-            <tr>
-
-                <td colspan="15">
-                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
-                </td>
-            </tr>
-
-        </tfoot>
     </table>
+    <nav>
+        <ul class="pagination justify-content-center">
+            @{
+                int maxPagesToShow = 10;
+                int totalPages = (int)Model.TotalPages;
+                int pageIndex = (int)Model.PageIndex;
+
+                int half = maxPagesToShow / 2;
+                int startPage = Math.Max(1, pageIndex - half);
+                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                // Corrige quando o range não completa 5 páginas
+                if (endPage - startPage + 1 < maxPagesToShow)
+                {
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                }
+
+                // Botão "Anterior"
+                if (pageIndex > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-situacao="@ViewBag.Situacao" asp-route-fornecedor="@ViewBag.Fornecedor">Anterior</a>
+                    </li>
+                }
+
+                // Primeira página + "..."
+                if (startPage > 1)
+                {
+                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-situacao="@ViewBag.Situacao" asp-route-fornecedor="@ViewBag.Fornecedor">1</a></li>
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                }
+
+                // Loop limitado
+                for (int i = startPage; i <= endPage; i++)
+                {
+                    if (i == pageIndex)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-situacao="@ViewBag.Situacao" asp-route-fornecedor="@ViewBag.Fornecedor">@i</a></li>
+                    }
+                }
+
+                // Última página + "..."
+                if (endPage < totalPages)
+                {
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-situacao="@ViewBag.Situacao" asp-route-fornecedor="@ViewBag.Fornecedor">@totalPages</a></li>
+                }
+
+                // Botão "Próximo"
+                if (pageIndex < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-DataInicial="@ViewBag.DataInicial" asp-route-DataFinal="@ViewBag.DataFinal" asp-route-situacao="@ViewBag.Situacao" asp-route-fornecedor="@ViewBag.Fornecedor">Próximo</a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
 </div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

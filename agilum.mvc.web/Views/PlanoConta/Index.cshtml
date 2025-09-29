@@ -24,25 +24,56 @@
 </section>
 <br />
 <div class="row">
-    <div class="col-md-8" id="areaFiltro">
+    <div class="col-12" id="areaFiltro">
         <form asp-action="Index" class="sidebar-form" method="get">
             <input type="hidden" asp-for="PageSize" id="PageSize" />
-            <input type="hidden" asp-for="PageIndex " id="PageIndex" />
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="labelPromocao">
-                    <input value="@ViewBag.Pesquisa" class="form-control" title="Pesquisar por descrição" placeholder="Pesquisar por descrição..." id="q" name="q" />
+            <input type="hidden" asp-for="PageIndex" id="PageIndex" />
+
+            <div class="row mb-2">
+                <!-- Campo de pesquisa -->
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
+                    <input value="@ViewBag.Pesquisa"
+                           class="form-control"
+                           title="Pesquisar por descrição"
+                           placeholder="Pesquisar por descrição..."
+                           id="q" name="q" />
                 </div>
-                <div>
-                    <span class="col-lg-2 col-md-2 col-sm-2" input-group-btn">
-                        <button type="submit" name="search" id="search-btn" class="btn btn-info btn-flat" title="Pesquisar">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </span>
+
+                <!-- Campo Natureza -->
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-2">
+                    <select class="form-control" id="tipoLancamento" name="tipoLancamento">
+                        <option value="">-- Selecione --</option>
+                        @if (ViewBag.TipoLancamento == "D")
+                        {
+                            <option value="D" selected>Débito</option>
+                            <option value="C">Crédito</option>
+                        }
+                        else if (ViewBag.TipoLancamento == "C")
+                        {
+                            <option value="D">Débito</option>
+                            <option value="C" selected>Crédito</option>
+                        }
+                        else
+                        {
+                            <option value="D">Débito</option>
+                            <option value="C">Crédito</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Botão de submit -->
+                <div class="">
+                    <button type="submit" class="btn btn-info btn-flat w-100" title="Pesquisar">
+                        <i class="fa fa-search"></i> Pesquisar
+                    </button>
                 </div>
             </div>
-            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
 
+            <!-- Botão escondido para compatibilidade com scripts existentes -->
+            <button class="btn" id="btnSendForm" type="submit" style="visibility:hidden"></button>
         </form>
+
+
     </div>
 </div>
 <div id="divGridResultado">
@@ -121,7 +152,68 @@
             <tr>
 
                 <td colspan="6">
-                    <vc:paginacao modelo-paginado="@Model"></vc:paginacao>
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            @{
+                                int maxPagesToShow = 10;
+                                int totalPages = (int)Model.TotalPages;
+                                int pageIndex = (int)Model.PageIndex;
+
+                                int half = maxPagesToShow / 2;
+                                int startPage = Math.Max(1, pageIndex - half);
+                                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+
+                                // Corrige quando o range não completa 5 páginas
+                                if (endPage - startPage + 1 < maxPagesToShow)
+                                {
+                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+                                }
+
+                                // Botão "Anterior"
+                                if (pageIndex > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex - 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-tipoLancamento="@ViewBag.TipoLancamento">Anterior</a>
+                                    </li>
+                                }
+
+                                // Primeira página + "..."
+                                if (startPage > 1)
+                                {
+                                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="1" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-tipoLancamento="@ViewBag.TipoLancamento">1</a></li>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                }
+
+                                // Loop limitado
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    if (i == pageIndex)
+                                    {
+                                        <li class="page-item active"><span class="page-link">@i</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@i" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-tipoLancamento="@ViewBag.TipoLancamento">@i</a></li>
+                                    }
+                                }
+
+                                // Última página + "..."
+                                if (endPage < totalPages)
+                                {
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <li class="page-item"><a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@totalPages" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-tipoLancamento="@ViewBag.TipoLancamento">@totalPages</a></li>
+                                }
+
+                                // Botão "Próximo"
+                                if (pageIndex < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" asp-controller="@Model.ReferenceController" asp-action="@Model.ReferenceAction" asp-route-page="@(pageIndex + 1)" asp-route-ps="@Model.PageSize" asp-route-q="@Model.Query" asp-route-tipoLancamento="@ViewBag.TipoLancamento">Próximo</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </nav>
                 </td>
             </tr>
 

@@ -45,7 +45,7 @@ namespace agilium.api.manager.V1
         {
             //ps = ObterQuantidadeLinhasPorPaginas();
 
-            var lista = (await ObterListaPlanoContaPaginado(idEmpresa, q, page, ps));
+            var lista = (await ObterListaPlanoContaPaginado(idEmpresa, q, page, ps, ""));
             ViewBag.Pesquisa = q;
 
             return CustomResponse(lista);
@@ -357,9 +357,9 @@ namespace agilium.api.manager.V1
         #endregion
 
         #region Private
-        private async Task<business.Models.PagedResult<PlanoContaViewModel>> ObterListaPlanoContaPaginado(long idEmpresa, string filtro, int page, int pageSize)
+        private async Task<business.Models.PagedResult<PlanoContaViewModel>> ObterListaPlanoContaPaginado(long idEmpresa, string filtro, int page, int pageSize, string tipoLancamento)
         {
-            var retorno = await _planoContaService.ObterPorPaginacao(idEmpresa, filtro, page, pageSize);
+            var retorno = await _planoContaService.ObterPorPaginacao(idEmpresa, filtro, page, pageSize, tipoLancamento);
 
             var lista = _mapper.Map<IEnumerable<PlanoContaViewModel>>(retorno.List);
 

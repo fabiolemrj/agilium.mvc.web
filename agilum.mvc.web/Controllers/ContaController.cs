@@ -125,7 +125,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("pagar")]
         [ClaimsAuthorizeAttribute(2079)]
-        public async Task<IActionResult> IndexContaPagar([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        public async Task<IActionResult> IndexContaPagar([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null, [FromQuery] string fornecedor = null, [FromQuery] string DataFinal = null, [FromQuery] string DataInicial = null, string situacao = null)
         {
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
@@ -143,11 +143,38 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            var dataAtual = DateTime.Now;
+            DateTime _dtini, _dtFim;
+            if (DataInicial == null)
+            {
+                DateTime primeiroDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, 1);
+                _dtini = primeiroDiaDoMes;
+            }
+            else _dtini = Convert.ToDateTime(DataInicial);
 
-            var lista = (await ObterListaContaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
+            if (DataFinal == null)
+            {
+                DateTime ultimoDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, DateTime.DaysInMonth(dataAtual.Year, dataAtual.Month));
+                _dtFim = ultimoDiaDoMes;
+            }
+            else _dtFim = Convert.ToDateTime(DataFinal);
 
+            if (_dtini > _dtFim)
+            {
+                AdicionarErroValidacao("Data Final deve ser maior ou igual a data inicial");
+            }
+
+            var lista = (await ObterListaContaPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps, situacao, _dtini, _dtFim, fornecedor)); ;
+
+
+            ViewBag.DataInicial = _dtini;
+            ViewBag.DataFinal = _dtFim;
+            ViewBag.Fornecedor = fornecedor;
+            ViewBag.Situacao = situacao;
             ViewBag.Pesquisa = q;
+
             lista.ReferenceAction = "pagar";
+            lista.ReferenceController = "conta";
             return View(lista);
         }
 
@@ -401,7 +428,7 @@ namespace agilum.mvc.web.Controllers
 
         [Route("receber")]
         [ClaimsAuthorizeAttribute(2087)]
-        public async Task<IActionResult> IndexContaReceber([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null)
+        public async Task<IActionResult> IndexContaReceber([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string q = null, [FromQuery] string fornecedor = null, [FromQuery] string DataFinal = null, [FromQuery] string DataInicial = null, string situacao = null)
         {
 
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -419,11 +446,39 @@ namespace agilum.mvc.web.Controllers
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("Index", "Home");
             }
+            var dataAtual = DateTime.Now;
+            DateTime _dtini, _dtFim;
+            if (DataInicial == null)
+            {
+                DateTime primeiroDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, 1);
+                _dtini = primeiroDiaDoMes;
+            }
+            else _dtini = Convert.ToDateTime(DataInicial);
 
-            var lista = (await ObterListaContaReceberPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps)); ;
+            if (DataFinal == null)
+            {
+                DateTime ultimoDiaDoMes = new DateTime(dataAtual.Year, dataAtual.Month, DateTime.DaysInMonth(dataAtual.Year, dataAtual.Month));
+                _dtFim = ultimoDiaDoMes;
+            }
+            else _dtFim = Convert.ToDateTime(DataFinal);
 
+            if (_dtini > _dtFim)
+            {
+                AdicionarErroValidacao("Data Final deve ser maior ou igual a data inicial");
+            }
+
+            var lista = (await ObterListaContaReceberPaginado(Convert.ToInt64(empresaSelecionada.IDEMPRESA), q, page, ps,situacao,_dtini,_dtFim,fornecedor)); 
+            
+            ViewBag.DataInicial = _dtini;
+            ViewBag.DataFinal = _dtFim;
+            ViewBag.Fornecedor = fornecedor;
+            ViewBag.Situacao = situacao;
             ViewBag.Pesquisa = q;
+
             lista.ReferenceAction = "receber";
+            lista.ReferenceController = "conta";
+
+            
             return View(lista);
         }
 
@@ -650,9 +705,9 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region Private
-        private async Task<PagedViewModel<ContaPagarViewModelIndex>> ObterListaContaPaginado(long idEmpresa, string filtro, int page, int pageSize)
+        private async Task<PagedViewModel<ContaPagarViewModelIndex>> ObterListaContaPaginado(long idEmpresa, string filtro, int page, int pageSize, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor)
         {
-            var retorno = await _contaService.ObterPorPaginacao(idEmpresa, filtro, page, pageSize);
+            var retorno = await _contaService.ObterPorPaginacao(idEmpresa, filtro, situacao, dtIni, dtFim, fornecedor, page, pageSize);
 
             var listaContaPagarViewModel = new List<ContaPagarViewModelIndex>();
 
@@ -700,9 +755,9 @@ namespace agilum.mvc.web.Controllers
             };
         }
 
-        private async Task<PagedViewModel<ContaReceberViewModelIndex>> ObterListaContaReceberPaginado(long idEmpresa, string filtro, int page, int pageSize)
+        private async Task<PagedViewModel<ContaReceberViewModelIndex>> ObterListaContaReceberPaginado(long idEmpresa, string filtro, int page, int pageSize, string situacao, DateTime dtIni, DateTime dtFim, string fornecedor)
         {
-            var retorno = await _contaService.ObterContaReceberPorPaginacao(idEmpresa, filtro, page, pageSize);
+            var retorno = await _contaService.ObterContaReceberPorPaginacao(idEmpresa, filtro,situacao,dtIni,dtFim,fornecedor, page, pageSize);
 
             var listaContaReceberViewModel = new List<ContaReceberViewModelIndex>();
 
