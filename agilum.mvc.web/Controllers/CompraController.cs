@@ -514,9 +514,9 @@ namespace agilum.mvc.web.Controllers
                     model.ArquivoXml = arquivoStringConvertidoDeByte;
                     model.idCompra = idCompra;
                     
-                    if (!OperacaoValida())
+                    if (OperacaoValida())
                     {
-                       
+                        LogInformacao($"Objeto importado com sucesso id:{Deserializar(model)}", "Compra", "ImportarXML", null);
                     }
                 }
             }
@@ -524,6 +524,7 @@ namespace agilum.mvc.web.Controllers
             {
                 model = new agilium.api.business.Models.CustomReturn.ComprasNFEViewModel.NFeProc();
                 AdicionarErroValidacao("Formato do arquivo XML invalido");
+                LogErro(ex.Message, "Compra", "ImportarXML",null,"Web");
             }
 
             return PartialView("RetornoXmlNfeImportada", model);
@@ -568,7 +569,7 @@ namespace agilum.mvc.web.Controllers
                 ObterDadosCompraParaViewBag(viewModel.Id);
                 return View(viewModel);
             }
-            
+            LogInformacao($"Cadastro automatico de produtos:{Deserializar(viewModel)}", "Compra", "CadastroAutomaticoProduto", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -617,7 +618,7 @@ namespace agilum.mvc.web.Controllers
                 ObterNotificacoes("Compra", "Efetivar", "Web");
                 return View(viewModel);
             }
-
+            LogInformacao("Objeto efetivado com sucesso id:{viewModel.Id}", "Compra", "Efetivar", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -770,16 +771,16 @@ namespace agilum.mvc.web.Controllers
 
             await _compraService.Atualizar(objeto);
 
+            await _compraService.Salvar();
+
             if (!OperacaoValida())
             {
                 var retornoErro = new { mensagem = $"Erro ao editar item de compra" };
 
                 AdicionarErroValidacao(retornoErro.mensagem);
-                return View("_createEditItemCompra", model); 
+                return View("_createEditItemCompra", model);
             }
-
-            await _compraService.Salvar();
-          
+            LogInformacao($"Objeto efetivado com sucesso id:{Deserializar(objeto)}", "Compra", "EditarItem", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -860,6 +861,7 @@ namespace agilum.mvc.web.Controllers
                 return PartialView("_editarItemCompra", model);
             }
 
+            LogInformacao($"Objeto efetivado com sucesso id:{Deserializar(model)}", "Compra", "EditarItemModal", null);
             var lista = await _compraService.ObterItemPorId(model.IDCOMPRA.Value);
 
             var url = Url.Action("ListaItemCompra", "Compra", new { idCompra = model.IDCOMPRA });

@@ -185,6 +185,7 @@ namespace agilum.mvc.web.Controllers
             await _perdaService.Salvar();
             
             var id = _perdaDapperRepository.lancarPerdaRetornaIdHistoricoGerado(perda.Id, AppUser.GetUserEmail()).Result;
+            LogInformacao($"Lançada perda/sobra Id: {perda.Id} - IdHistorico: {id} - Usuário: {AppUser.GetUserEmail()}","novo","Create",null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -243,6 +244,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _perdaService.Salvar();
+            LogInformacao($"Editada perda/sobra Id: {perda.Id} - Usuário: {AppUser.GetUserEmail()}", "editar", "Edit", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -294,7 +296,8 @@ namespace agilum.mvc.web.Controllers
 
             }
             PopularListaAuxiliares(model, model.IDEMPRESA.Value);
-          
+            LogInformacao($"Apagada perda/sobra Id: {model.Id} - Usuário: {AppUser.GetUserEmail()}", "apagar", "Delete", null);
+
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 

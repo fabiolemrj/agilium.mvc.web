@@ -111,7 +111,7 @@ namespace agilum.mvc.web.Controllers
             
             await _empresaService.Adicionar(empresa);
             await _empresaService.Salvar();
-
+            LogInformacao($"Empresa {empresa.NMRZSOCIAL} - {empresa.NUCNPJ} criada com sucesso.","nova","Create",null);
             if (!OperacaoValida())
             {
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Empresa", "Adicionar", "Web", Deserializar(empresa)));
@@ -165,6 +165,7 @@ namespace agilum.mvc.web.Controllers
             var empresa = _mapper.Map<Empresa>(model);
             await _empresaService.Atualizar(empresa);
             await _empresaService.Salvar();
+            LogInformacao($"Empresa {empresa.NMRZSOCIAL} - {empresa.NUCNPJ} editada com sucesso.", "editar", "Edit", null);
             if (!OperacaoValida())
             {
                 var retornoErro = new { mensagem = $"Erro ao editar nova {_nomeEntidade}" };
@@ -206,6 +207,7 @@ namespace agilum.mvc.web.Controllers
 
             await _empresaService.Apagar(model.Id);
             await _empresaService.Salvar();
+            LogInformacao($"Empresa {model.NMRZSOCIAL} - {model.NUCNPJ} apagada com sucesso.", "apagar", "Delete", null);
             if (!OperacaoValida())
             {
                 var retornoErro = new { mensagem = $"Erro ao editar nova {_nomeEntidade}" };
@@ -289,6 +291,7 @@ namespace agilum.mvc.web.Controllers
 
             await _contatoService.Atualizar(_mapper.Map<ContatoEmpresa>(model));
             await _contatoService.Salvar();
+            LogInformacao($"Contato {model.Contato.DESCR1} - {model.Contato.DESCR2} editado com sucesso.", "EditarContato", "EditarContato", null);
             if (!OperacaoValida()) return PartialView("_createContato", model);
 
             var url = Url.Action("ObterEndereco", "Empresa", new { id = model.IDEMPRESA });
@@ -318,6 +321,7 @@ namespace agilum.mvc.web.Controllers
 
             await _contatoService.Adicionar(contatoEmpresa);
             await _contatoService.Salvar();
+            LogInformacao($"Contato {model.Contato.DESCR1} - {model.Contato.DESCR2} adicionado com sucesso.", "AdicionarContato", "AdicionarContato", null);
 
             if (!OperacaoValida()) return PartialView("_createContato", model);
 

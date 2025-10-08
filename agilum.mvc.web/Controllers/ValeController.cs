@@ -155,6 +155,7 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEditVale", model);
             }
             await _valeService.Salvar();
+            LogInformacao($"Novo vale criado: {vale.Id}", "novo","Create",null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -215,6 +216,7 @@ namespace agilum.mvc.web.Controllers
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Vale presente editado: {vale.Id}", "editar", "Edit", null);
 
             return RedirectToAction("Index");
         }
@@ -256,7 +258,8 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _valeService.Salvar();
-                  
+            LogInformacao($"Vale presente apagado: {model.Id}", "apagar", "Delete", null);
+
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -289,6 +292,7 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("Index");
             }
             await _valeService.Salvar();
+            LogInformacao($"Vale cancelado: {vale.Id}", "cancelar", "Cancel", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 

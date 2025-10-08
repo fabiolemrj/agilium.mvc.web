@@ -82,7 +82,8 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEdit", model);
             }
             await _categoriaService.Salvar();
-            
+            LogInformacao($"Objeto adicionado com sucesso {Deserializar(model)}", "CategoriaFinanceira", "Adicionar", null);
+
             return RedirectToAction("Index");
         }
 
@@ -127,6 +128,7 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEdit", model);
             }
             await _categoriaService.Salvar();
+            LogInformacao($"Objeto editado com sucesso {Deserializar(model)}", "CategoriaFinanceira", "Editar", null);
 
             return RedirectToAction("Index");
         }
@@ -167,7 +169,8 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _categoriaService.Salvar();
-           
+            LogInformacao($"Objeto apagado com sucesso {Deserializar(model)}", "CategoriaFinanceira", "Delete", null);
+
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 

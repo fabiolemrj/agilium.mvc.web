@@ -9,6 +9,7 @@ using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Cliente;
+using agilum.mvc.web.ViewModels.Compra;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Estoque;
 using agilum.mvc.web.ViewModels.Impostos;
@@ -440,6 +441,7 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _produtoService.Salvar();
+            LogInformacao($"sucesso:id:{model.Id}", "Produto", "ApagarGrupo", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -1243,7 +1245,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _clienteService.Salvar();
-            LogInformacao($"Objeto adicionado com sucesso {Deserializar(objeto)}", "Cliente", "AtualiarContato", null);
+            LogInformacao($"Objeto adicionado com sucesso {Deserializar(objeto)}", "Cliente", "AdicionarPrecoCliente", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -1457,6 +1459,7 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _turnoService.Salvar();
+            LogInformacao($"Objeto excluido com sucesso id:{model.Id}", "Turno", "ExcluirPreco", null);
 
             LogInformacao($"sucesso id:{model.Id}", "Turno", "ExcluirPreco", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
@@ -1507,6 +1510,7 @@ namespace agilum.mvc.web.Controllers
             var model = new ProdutoFotoViewModel();
             model.idProduto = idProduto;
             model.Data = DateTime.Now;
+            
 
             return View("_createEditFoto", model);
         }
@@ -1562,6 +1566,7 @@ namespace agilum.mvc.web.Controllers
            
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"iniciando inclusão de foto do produto idProduto:{idProduto}", "Produto", "AdicionarFoto", null);
 
             return RedirectToAction("ListaFoto", new { idProduto = model.idProduto });
         }
@@ -1607,6 +1612,7 @@ namespace agilum.mvc.web.Controllers
           
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Excluir foto com sucesso id:{model.Id}", "Produto", "ExcluirFoto", null);
 
             return RedirectToAction("ListaFoto", new { idProduto = model.idProduto });
         }

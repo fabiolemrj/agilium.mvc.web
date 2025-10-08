@@ -163,7 +163,7 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEdit", model);
             }
             await _inventarioService.Salvar();
-                      
+            LogInformacao($"Inventario {objeto.Id} - {objeto.DSINVENT} criado com sucesso", "Create", "InventarioController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -223,7 +223,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _inventarioService.Salvar();
-
+            LogInformacao($"Inventario {objeto.Id} - {objeto.DSINVENT} editado com sucesso", "Edit", "InventarioController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -285,7 +285,8 @@ namespace agilum.mvc.web.Controllers
                 return View(model); ;
             }
             await _inventarioService.Salvar();
-           
+            LogInformacao($"Inventario {objeto.Id} - {objeto.DSINVENT} apagado com sucesso", "Cancelar", "InventarioController", null);
+
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -402,6 +403,7 @@ namespace agilum.mvc.web.Controllers
           
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Itens do Inventario {model.idInventario} - {model.NomeInventario} editados com sucesso", "IndexItemEdit", "InventarioController", null);
 
             return View("ListItemEdit", model);
         }
@@ -485,6 +487,7 @@ namespace agilum.mvc.web.Controllers
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Itens do Inventario {model.idInventario} - {model.NomeInventario} apagados com sucesso", "DeleteItemInventario", "InventarioController", null);
 
             return RedirectToAction("IndexItem", new { id = model.idInventario });
         }
@@ -504,7 +507,7 @@ namespace agilum.mvc.web.Controllers
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Inventario", "CadastrarProdutoPorEstoque", "Web", Deserializar(objeto)));
                 return View("IndexItem", new { id = id });
             }
-            
+            LogInformacao($"Cadastro automático de produtos no Inventario {objeto.Id} - {objeto.DSINVENT} realizado com sucesso", "CadastroAutomaticoProdutos", "InventarioController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -559,6 +562,7 @@ namespace agilum.mvc.web.Controllers
             await _inventarioService.Salvar();
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Inventario {objeto.Id} - {objeto.DSINVENT} concluído com sucesso", "Concluir", "InventarioController", null);
 
             return Json(new { success = true, url });
         }
@@ -583,6 +587,7 @@ namespace agilum.mvc.web.Controllers
             
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
+            LogInformacao($"Inventario {objeto.Id} - {objeto.DSINVENT} iniciado com sucesso", "Inventariar", "InventarioController", null);
 
             var url = Url.Action("Index", "Inventario");
 
@@ -644,7 +649,7 @@ namespace agilum.mvc.web.Controllers
                     Tipo = item.Tipo
                 });
             });
-
+            LogInformacao($"Acessou a tela de inclusão de produtos disponíveis no Inventario {model.idInventario} - {model.NomeInventario}", "IncluirProdutosDisponiveisInventario", "InventarioController", null);
             return View("AddProdutoDisp", model);
         }
 
@@ -684,6 +689,7 @@ namespace agilum.mvc.web.Controllers
                 return View("AddProdutoDisp", model);
             }
 
+            LogInformacao($"Produtos adicionados no Inventario {model.idInventario} - {model.NomeInventario} com sucesso", "IncluirProdutosDisponiveisInventario", "InventarioController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -861,6 +867,7 @@ namespace agilum.mvc.web.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
+            LogInformacao($"Itens do Inventario {model.idInventario} - {model.NomeInventario} apurados com sucesso", "ApurarItens", "InventarioController", null);
             // 🔹 Redireciona para GET mantendo a paginação atual
             // Redireciona para a mesma página da lista
             return RedirectToAction(nameof(ApurarItens), new

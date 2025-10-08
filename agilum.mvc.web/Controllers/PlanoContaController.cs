@@ -143,6 +143,7 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEditPlanoConta", model);
             }
             await _planoContaService.Salvar();
+            LogInformacao($"Novo {_nomeEntidadeDepart} criado: {planoConta.DSCONTA} - ID: {planoConta.Id}","novo", "CreatePlanoConta",null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -208,7 +209,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _planoContaService.Salvar();
-
+            LogInformacao($"Plano de Conta editado: {produto.DSCONTA} - ID: {produto.Id}", "editar", "EditPlanoConta", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -260,6 +261,7 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _planoContaService.Salvar();
+            LogInformacao($"Plano de Conta apagado: {model.Descricao} - ID: {model.Id}", "apagar", "DeletePlanoConta", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -283,6 +285,7 @@ namespace agilum.mvc.web.Controllers
             }
             else
             {
+                LogInformacao($"Saldo do Plano de Conta atualizado - ID: {id}", "atualizar", "AtualizarSaldoPorId", null);
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }

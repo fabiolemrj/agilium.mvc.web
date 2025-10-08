@@ -402,6 +402,7 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
                 return View(model);
             }
+            LogInformacao($"Objeto apagado com sucesso {Deserializar(model)}", "Cliente", "DeleteContato", null);
             return RedirectToAction("EditCliente", new { id = model.IDCLIENTE });
         }
 

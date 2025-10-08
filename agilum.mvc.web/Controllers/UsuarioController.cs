@@ -199,11 +199,13 @@ namespace agilum.mvc.web.Controllers
 
                 msgErro = "Email enviado com sucesso";
                 sucesso = true;
+                LogInformacao($"sucesso: {Deserializar(appUserAgilium)}", "Usuario", "ReenviarEmailConfirmarUsuario", null);
 
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }
             catch (Exception ex)
             {
+                LogErro($"{ex.Message}", "Usuario", "ReenviarEmailConfirmarUsuario", null,"Web");
                 msgErro = ex.Message;
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }

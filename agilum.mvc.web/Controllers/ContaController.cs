@@ -250,7 +250,7 @@ namespace agilum.mvc.web.Controllers
                 return View("CreateEditContaPagar", model);
             }
             await _contaService.Salvar();
-
+            LogInformacao($"Conta a pagar {model.Id} - {model.Descricao} criada com sucesso", "CreateContaPagar", "ContaController",null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -308,7 +308,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _contaService.Salvar();
-
+            LogInformacao($"Conta a pagar {model.Id} - {model.Descricao} editada com sucesso", "EditContaPagar", "ContaController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -353,6 +353,7 @@ namespace agilum.mvc.web.Controllers
             }
             await _contaService.Salvar();
             PreencherListaAuxiliaresContaPagar(model);
+            LogInformacao($"Conta a pagar {model.Id} - {model.Descricao} apagada com sucesso", "DeleteContaPagar", "ContaController", null);
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
@@ -379,6 +380,7 @@ namespace agilum.mvc.web.Controllers
 
             if (OperacaoValida())
             {
+                LogInformacao($"Conta a pagar {id} consolidada com sucesso", "ConsolidarContaPagarPorId", "ContaController", null);
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
@@ -416,6 +418,7 @@ namespace agilum.mvc.web.Controllers
 
             if (OperacaoValida())
             {
+                LogInformacao($"Conta a pagar {id} desconsolidada com sucesso", "DesConsolidarContaPagarPorId", "ContaController", null);
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
@@ -544,7 +547,7 @@ namespace agilum.mvc.web.Controllers
 
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
-
+            LogInformacao($"Conta a receber {model.Id} - {model.Descricao} criada com sucesso", "CreateContaReceber", "ContaController", null);
             return RedirectToAction("IndexContaReceber");
         }
 
@@ -598,7 +601,7 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _contaService.Salvar();
-            
+            LogInformacao($"Conta a receber {model.Id} - {model.Descricao} editada com sucesso", "EditContaReceber", "ContaController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -645,6 +648,7 @@ namespace agilum.mvc.web.Controllers
 
             PreencherListaAuxiliaresContaReceber(model);
            
+            LogInformacao($"Conta a receber {model.Id} - {model.Descricao} apagada com sucesso", "DeleteContaReceber", "ContaController", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -670,6 +674,7 @@ namespace agilum.mvc.web.Controllers
 
             if (OperacaoValida())
             {
+                LogInformacao($"Conta a receber {id} consolidada com sucesso", "ConsolidarContaReceberPorId", "ContaController", null);
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
@@ -696,6 +701,7 @@ namespace agilum.mvc.web.Controllers
 
             if (OperacaoValida())
             {
+                LogInformacao($"Conta a receber {id} desconsolidada com sucesso", "DesConsolidarContaReceberPorId", "ContaController", null);
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }

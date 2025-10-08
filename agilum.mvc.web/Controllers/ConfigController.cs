@@ -188,7 +188,7 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _configService.Salvar();
-
+            LogInformacao("Config", "AtualizaConfigImagem", "Web", $"Configuração de imagem {model.CHAVE} atualizada com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
             ViewBag.Mensagem = "Operação realizada com sucesso";
@@ -245,7 +245,7 @@ namespace agilum.mvc.web.Controllers
                 return View(model);
             }
             await _configService.Salvar();
-          
+          LogInformacao("Config", "AtualizaConfigCampos", "Web", $"Configurações atualizadas com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
             ViewBag.Mensagem = "Operação realizada com sucesso";
@@ -292,8 +292,8 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
-           
-          
+
+            LogInformacao("Config", "AtualizaConfigItem", "Web", $"Configuração {model.Chave} atualizada com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
             ViewBag.Mensagem = "Operação realizada com sucesso";
@@ -357,7 +357,7 @@ namespace agilum.mvc.web.Controllers
                 TempData["TipoMensagem"] = "danger";
                 TempData["Mensagem"] = retornoErro;
             }
-           
+           LogInformacao("Config", "AtualizaCertificado", "Web", $"Certificado atualizado com sucesso");
             TempData["TipoMensagem"] = "success";
             TempData["Mensagem"] = "Certificado atualizado com sucesso";
 

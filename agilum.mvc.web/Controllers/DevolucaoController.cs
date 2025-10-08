@@ -258,6 +258,7 @@ namespace agilum.mvc.web.Controllers
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View("CreateEdit", model);
             }
+            LogInformacao($"incluir {Deserializar(devolucao)}", "Devolucao", "Adicionar", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -353,6 +354,7 @@ namespace agilum.mvc.web.Controllers
             }
             await _devolucaoService.Salvar();
 
+            LogInformacao($"cancelar {Deserializar(devolucao)}", "Devolucao", "Cancelar", null);
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
@@ -375,7 +377,7 @@ namespace agilum.mvc.web.Controllers
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
-           
+            LogInformacao($"gerar-vale id:{id}", "Devolucao", "GerarVale", null);
 
             return RedirectToAction("Index");
         }
@@ -389,7 +391,8 @@ namespace agilum.mvc.web.Controllers
             {
                 TempData["Mensagem"] = "Operação realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
-            }
+            }else
+                LogInformacao($"realizar id:{id}", "Devolucao", "Realizar", null);
 
             return RedirectToAction("Index");
         }

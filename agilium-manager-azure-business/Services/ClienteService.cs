@@ -117,7 +117,7 @@ namespace agilium.api.business.Services
 
             return new PagedResult<Cliente>
             {
-                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList().OrderBy(x=>x.CDCLIENTE),
                 TotalResults = lista.Count(),
                 PageIndex = page,
                 PageSize = pageSize
