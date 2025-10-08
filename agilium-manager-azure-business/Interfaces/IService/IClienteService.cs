@@ -45,8 +45,8 @@ namespace agilium.api.business.Interfaces.IService
         Task<Cliente> ObterClientePorId(long id);
         Task<long> AdicionarClienteBasico(Cliente cliente,string cpf);
         Task<Cliente> ObterClienteComEnderecoPorId(long id);
-
         Task<Cliente> ObterClientePorCpf(string cpf);
+        Task<string> GerarCodigo(long idEmpresa);
 
         #endregion
     }

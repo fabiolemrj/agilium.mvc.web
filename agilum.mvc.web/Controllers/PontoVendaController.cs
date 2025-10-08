@@ -89,6 +89,8 @@ namespace agilum.mvc.web.Controllers
             model.Estoques = _estoqueLista;
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDPDV AS UNSIGNED)) AS CD FROM pdv where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
+
             return View("CreateEdit", model);
         }
 

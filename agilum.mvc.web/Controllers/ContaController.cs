@@ -206,6 +206,7 @@ namespace agilum.mvc.web.Controllers
             model.Situacao = 1;
             model.Id = 0;
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA) > 0 ? Convert.ToInt64(empresaSelecionada.IDEMPRESA) : 0;
+            
 
             PreencherListaAuxiliaresContaPagar(model);
             model.SincronizarValoresString();

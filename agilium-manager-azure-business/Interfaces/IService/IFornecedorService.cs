@@ -31,5 +31,6 @@ namespace agilium.api.business.Interfaces.IService
         #endregion
 
         Task Salvar();
+        Task<string> GerarCodigo();
     }
 }

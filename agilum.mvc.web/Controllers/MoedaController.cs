@@ -87,6 +87,7 @@ namespace agilum.mvc.web.Controllers
             model.Empresas = _empresaViewModels;
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDMOEDA AS UNSIGNED)) AS CD FROM moeda where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
 
             return View("CreateEditMoeda", model);
         }

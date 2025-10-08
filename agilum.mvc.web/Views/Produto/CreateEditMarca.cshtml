@@ -66,8 +66,9 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label asp-for="Codigo" id="labelCod"></label>
-                                <input asp-for="Codigo" class="form-control" size="20" />
+                                <input asp-for="Codigo" class="form-control" size="6" readonly="readonly"/>
                                 <span asp-validation-for="Codigo" class="text-danger"></span>
+                                <input type="hidden" asp-for="Codigo" />
                             </div>
                         </div>
                     </div>

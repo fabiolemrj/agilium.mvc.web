@@ -38,6 +38,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<bool> AlterarInventarioItem(List<InventarioItem> itens, long idUsuario);
         Task<bool> ApagarInventarioItem(List<InventarioItem> itens);
         Task<bool> ConcluirInventario(long idInventario, ESituacaoInventario situacaoInventario, long idUsuario);
+        Task<string> GerarCodigo(long idEmpresa);
         #endregion
     }
 }

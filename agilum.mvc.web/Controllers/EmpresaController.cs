@@ -86,6 +86,7 @@ namespace agilum.mvc.web.Controllers
             model.STLUCROPRESUMIDO = agilium.api.business.Enums.ESimNao.Sim;
             model.STMICROEMPRESA = agilium.api.business.Enums.ESimNao.Nao;
             model.Endereco.Id = 0;
+            model.CDEMPRESA = _empresaService.GerarCodigo().Result;
 
             return View(model);
         }
@@ -98,17 +99,25 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "Create";
             if (!ModelState.IsValid) return View(model);
 
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro))
+            {
+                AdicionarErroValidacao("Campo Logradouro obrigatório");
+                return View(model);
+            }
+            
             model.NUCNPJ = RetirarPontos(model.NUCNPJ);
 
             if (model.Endereco != null && !string.IsNullOrEmpty(model.Endereco.Cep))
                 model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
 
+            
             var empresa = _mapper.Map<Empresa>(model);
-            if (empresa.Endereco.Id == 0)
+
+            if (empresa.Endereco != null && empresa.Endereco.Id == 0 && !string.IsNullOrEmpty(empresa.Endereco.Logradouro))
                 empresa.Endereco.Id = await GerarId();
 
-            if (empresa.Id == 0) empresa.Id = await GerarId(); 
-            
+            if (empresa.Id == 0) empresa.Id = await GerarId();
+
             await _empresaService.Adicionar(empresa);
             await _empresaService.Salvar();
             LogInformacao($"Empresa {empresa.NMRZSOCIAL} - {empresa.NUCNPJ} criada com sucesso.","nova","Create",null);
@@ -156,6 +165,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "Edit";
 
             if (!ModelState.IsValid) return View("Create", model);
+
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro))
+            {
+                AdicionarErroValidacao("Campo Logradouro obrigatório");
+                return View(model);
+            }
 
             model.NUCNPJ = RetirarPontos(model.NUCNPJ);
 

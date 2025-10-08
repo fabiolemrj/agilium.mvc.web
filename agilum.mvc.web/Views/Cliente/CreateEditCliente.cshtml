@@ -35,6 +35,7 @@
             <vc:Summary></vc:Summary>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="TipoPessoa" />
+          
             <div class="card" id="labelcardGerais">
                 <div class="card-header">
                     @if (ViewBag.operacao == "I")
@@ -52,8 +53,9 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label asp-for="Codigo" id="labelCodigo"></label>
-                                <input asp-for="Codigo" class="form-control" size="6" />
+                                <input asp-for="Codigo" class="form-control" size="6" readonly="readonly"/>
                                 <span asp-validation-for="Codigo" class="text-danger"></span>
+                                <input type="hidden" asp-for="Codigo" />
                             </div>
                         </div>
                         @if (ViewBag.operacao == "E")

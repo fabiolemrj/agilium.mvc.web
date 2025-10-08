@@ -14,9 +14,11 @@ namespace agilium.api.business.Services
     public class EmpresaService : BaseService, IEmpresaService
     {
         private readonly IEmpresaRepository _empresaRepository;
-        public EmpresaService(INotificador notificador, IEmpresaRepository empresaRepository) : base(notificador)
+        private readonly IUtilDapperRepository _utilDapperRepository;
+        public EmpresaService(INotificador notificador, IEmpresaRepository empresaRepository,IUtilDapperRepository utilDapperRepository) : base(notificador)
         {
             _empresaRepository = empresaRepository;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         public async Task Adicionar(Empresa empresa)
@@ -45,15 +47,21 @@ namespace agilium.api.business.Services
             _empresaRepository?.Dispose();
         }
 
+        public async Task<string> GerarCodigo()
+        {
+            return await _utilDapperRepository.GerarCodigo("SELECT MAX(CAST(CDEMPRESA AS UNSIGNED)) AS CD FROM empresa");
+        }
+
         public async Task<Empresa> ObterCompletoPorId(long id)
         {
-            var lista = _empresaRepository.Obter(x=> x.Id == id, "Endereco", "ContatoEmpresas", "ContatoEmpresas.Contato").Result;
+            var lista = await _empresaRepository.Obter(x => x.Id == id, "Endereco", "ContatoEmpresas", "ContatoEmpresas.Contato");
             return lista.FirstOrDefault();
         }
 
         public async Task<List<Empresa>> ObterPorDescricao(string descricao)
         {
-            return _empresaRepository.Buscar(x => x.NMRZSOCIAL.ToUpper().Contains(descricao.ToUpper())).Result.ToList();
+            var resultado = await _empresaRepository.Buscar(x => x.NMRZSOCIAL.ToUpper().Contains(descricao.ToUpper()));
+            return resultado.ToList();
         }
 
         public async Task<PagedResult<Empresa>> ObterPorDescricaoPaginacao(string descricao, int page = 1, int pageSize = 15)
@@ -74,12 +82,12 @@ namespace agilium.api.business.Services
 
         public async Task<Empresa> ObterPorId(long id)
         {
-            return _empresaRepository.ObterPorId(id).Result;
+            return await _empresaRepository.ObterPorId(id);
         }
 
         public async Task<List<Empresa>> ObterTodas()
         {
-            return _empresaRepository.ObterTodos().Result; 
+            return await _empresaRepository.ObterTodos();
         }
 
         public async Task Salvar()

@@ -88,6 +88,7 @@ namespace agilum.mvc.web.Controllers
             var model = new EstoqueViewModel();
             model.situacao = EAtivo.Ativo;
             model.Empresas = listaEmpresaViewModels.ToList();
+            
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
 
             if (empresaSelecionada != null && !string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))

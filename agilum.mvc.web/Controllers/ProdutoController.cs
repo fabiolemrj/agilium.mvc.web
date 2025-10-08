@@ -156,6 +156,8 @@ namespace agilum.mvc.web.Controllers
             PreencherListaAxuliaresProdutos(model);
             model.Id = 0;
             model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDPRODUTO AS UNSIGNED)) AS CD FROM produto where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
+            
             return View("CreateEditProduto", model);
         }
 
@@ -171,7 +173,7 @@ namespace agilum.mvc.web.Controllers
             if (!ModelState.IsValid) return View("CreateEditProduto", model);
             if (model.Id == 0) model.Id = await GerarId();
 
-            var produto = _mapper.Map<Produto>(model);
+            var produto = _mapper.Map<agilium.api.business.Models.Produto>(model);
             if (string.IsNullOrEmpty(produto.CTPRODUTO))
                 produto.AdicionarCategoria(model.Categoria);
 
@@ -232,7 +234,7 @@ namespace agilum.mvc.web.Controllers
 
             if (!ModelState.IsValid) return View("CreateEditProduto", model);
 
-            var produto = _mapper.Map<Produto>(model);
+            var produto = _mapper.Map<agilium.api.business.Models.Produto>(model);
             var precoAtual = _produtoService.ObterPrecoAtual(model.Id).Result;
 
             if (string.IsNullOrEmpty(produto.CTPRODUTO))
@@ -315,6 +317,7 @@ namespace agilum.mvc.web.Controllers
             model.Situacao = EAtivo.Ativo;
             model.Empresas = listaEmpresaViewModels.ToList();
             model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDGRUPO AS UNSIGNED)) AS CD FROM prod_grupo where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
             return View("CreateEditGrupo", model);
         }
 
@@ -474,7 +477,7 @@ namespace agilum.mvc.web.Controllers
             model.Situacao = EAtivo.Ativo;
             model.IDGRUPO = idGrupo;
             model.NomeGrupo = modelGrupo != null ? modelGrupo.Nome : "";
-            
+                        
             return View("CreateEditSubGrupo", model);
         }
 
@@ -666,10 +669,12 @@ namespace agilum.mvc.web.Controllers
             var model = new ProdutoDepartamentoViewModel();
             model.situacao = EAtivo.Ativo;
             model.Empresas = listaEmpresaViewModels.ToList();
+        
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
             if(empresaSelecionada != null && !string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
                 model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
-            
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDDEP AS UNSIGNED)) AS CD FROM prod_departamento where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
+
             return View("CreateEditDepartamento", model);
         }
 
@@ -839,11 +844,14 @@ namespace agilum.mvc.web.Controllers
             var model = new ProdutoMarcaViewModel();
             model.situacao = EAtivo.Ativo;
             model.Empresas = listaEmpresaViewModels.ToList();
-
+          
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
             
             if (empresaSelecionada != null && !string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
                 model.idEmpresa = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDMARCA AS UNSIGNED)) AS CD FROM prod_marca where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
+
             return View("CreateEditMarca", model);
         }
 
@@ -1016,7 +1024,7 @@ namespace agilum.mvc.web.Controllers
 
             ProdutoCodigoBarraViewModel model = new ProdutoCodigoBarraViewModel();
             model.IDPRODUTO = idProduto;
-
+            
             return View("_createEditCodigoBarra", model);
         }
 
@@ -1510,7 +1518,6 @@ namespace agilum.mvc.web.Controllers
             var model = new ProdutoFotoViewModel();
             model.idProduto = idProduto;
             model.Data = DateTime.Now;
-            
 
             return View("_createEditFoto", model);
         }
@@ -1566,7 +1573,7 @@ namespace agilum.mvc.web.Controllers
            
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
-            LogInformacao($"iniciando inclusão de foto do produto idProduto:{idProduto}", "Produto", "AdicionarFoto", null);
+            LogInformacao($"iniciando inclusão de foto do produto idProduto:{model.idProduto}", "Produto", "AdicionarFoto", null);
 
             return RedirectToAction("ListaFoto", new { idProduto = model.idProduto });
         }

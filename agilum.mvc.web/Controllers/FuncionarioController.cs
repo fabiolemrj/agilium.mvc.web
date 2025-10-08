@@ -102,8 +102,9 @@ namespace agilum.mvc.web.Controllers
                 model.Empresas = objeto.Empresas;
                 model.Usuarios = objeto.Usuarios;
             }
+        
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
-
+            model.Codigo = await _funcionarioService.GerarCodigo(Convert.ToInt64(empresaSelecionada.IDEMPRESA));
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
             return View("CreateEditFuncionario", model);
         }
@@ -116,6 +117,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "I";
             ViewBag.acao = "CreateFuncionario";
             if (!ModelState.IsValid) return View("CreateEditFuncionario", model);
+
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade é obrigatório");
+
 
             ValidarFuncionario(model);
             if (model.IDENDERECO != null)
@@ -136,7 +143,15 @@ namespace agilum.mvc.web.Controllers
 
             if (!OperacaoValida())
             {
+                var objeto = await ObterListaEmpresaUsuario();
+                if (objeto != null)
+                {
+                    model.Empresas = objeto.Empresas;
+                    model.Usuarios = objeto.Usuarios;
+                }
+
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Funcionario", "Adicionar", "Web", Deserializar(model)));
+                AdicionarErroValidacao(msgErro);
                 return View("CreateEditFuncionario", model);
             }
             await _funcionarioService.Salvar();
@@ -183,6 +198,14 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "EditFuncionario";
 
             if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
+
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade é obrigatório");
+
+            if (!OperacaoValida())
+                View("CreateEditFuncionario", model);
 
             ValidarFuncionario(model);
             if (model.IDENDERECO != null)

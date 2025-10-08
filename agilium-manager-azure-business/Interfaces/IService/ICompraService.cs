@@ -48,6 +48,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<NFeProc> ImportarArquivoXmlNFESemGravar(long idCompra, string ArquivoXml);
         Task<bool> SalvarArquivoXmlNFE(long idCompra, NFeProc nFeProc, string ArquivoXml);
         Task<PagedResult<CompraIndexViewModelReturn>> ObterCompraPorPaginacaoDapper(long idEmpresa, DateTime dtIni, DateTime dtFim, int page = 1, int pageSize = 15);
+        Task<string> GerarCodigoCompra(long? iDEMPRESA);
         #endregion
     }
 }

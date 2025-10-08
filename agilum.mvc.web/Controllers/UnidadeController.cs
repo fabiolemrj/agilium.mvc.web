@@ -69,7 +69,6 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "I";
             ViewBag.acao = "Create";
             var model = new UnidadeIndexViewModel();
-
             return View(model);
         }
 

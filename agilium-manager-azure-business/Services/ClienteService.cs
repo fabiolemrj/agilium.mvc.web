@@ -313,6 +313,11 @@ namespace agilium.api.business.Services
             return await _clienteDapperRepository.ObterClientePorCpf(cpf);
         }
 
+        public async Task<string> GerarCodigo(long idEmpresa)
+        {
+            return await _clienteDapperRepository.GerarCodigo(idEmpresa);
+        }
+
 
         #endregion
     }

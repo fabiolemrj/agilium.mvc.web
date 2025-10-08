@@ -130,6 +130,8 @@ namespace agilum.mvc.web.Controllers
             model.Data = DateTime.Now;
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
 
+            model.Codigo = await _inventarioService.GerarCodigo(Convert.ToInt64(empresaSelecionada.IDEMPRESA));
+
             model.Id = 0;
             PopularListasAuxiliares(model);
             return View("CreateEdit", model);
@@ -148,6 +150,7 @@ namespace agilum.mvc.web.Controllers
 
             if (!model.Data.HasValue)
                 model.Data = DateTime.Now;
+
 
             if (model.Id == 0) model.Id = await GerarId();
 

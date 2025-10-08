@@ -42,6 +42,5 @@ namespace agilium.api.business.Interfaces
         Task<string> GerarCodigo(string sql);
         Task<int> GerarIdInt(string generator);
         Task<DateTime> ObterDataAtual();
-
     }
 }

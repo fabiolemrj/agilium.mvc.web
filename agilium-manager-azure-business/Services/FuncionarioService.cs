@@ -14,10 +14,12 @@ namespace agilium.api.business.Services
     public class FuncionarioService : BaseService, IFuncionarioService
     {
         private readonly IFuncionarioRepository _funcionarioRepository;
+        private readonly IUtilDapperRepository _utilDapperRepository;
 
-        public FuncionarioService(INotificador notificador, IFuncionarioRepository funcionarioRepository) : base(notificador)
+        public FuncionarioService(INotificador notificador, IFuncionarioRepository funcionarioRepository, IUtilDapperRepository utilDapperRepository) : base(notificador)
         {
             _funcionarioRepository = funcionarioRepository;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         #region endpoint
@@ -51,6 +53,11 @@ namespace agilium.api.business.Services
         public void Dispose()
         {
             _funcionarioRepository?.Dispose();
+        }
+
+        public async Task<string> GerarCodigo(long v)
+        {
+            return await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDFUNC AS UNSIGNED)) AS CD FROM funcionario where IDEMPRESA = {v}");
         }
 
         public async Task<Funcionario> ObterCompletoPorId(long id)

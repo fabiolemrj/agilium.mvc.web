@@ -73,6 +73,7 @@ namespace agilum.mvc.web.Controllers
             model.TipoPessoa = ETipoPessoa.F;
             model.TipoFiscal = ETipoFiscal.SimplesNacional;
             model.Endereco.Id = 0;
+            model.Codigo = await _fornecedorService.GerarCodigo();
 
             return View("CreateEditFornecedor", model);
         }
@@ -85,6 +86,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "I";
             ViewBag.acao = "CreateFornecedor";
             if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
+
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro))
+            {
+                AdicionarErroValidacao("Campo Logradouro é obrigatório");
+                return View(model);
+            }
 
             if (!string.IsNullOrEmpty(model.CpfCnpj))
                 model.CpfCnpj = RetirarPontos(model.CpfCnpj);
@@ -153,6 +160,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "EditFornecedor";
 
             if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
+
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro))
+            {
+                AdicionarErroValidacao("Campo Logradouro é obrigatório");
+                return View(model);
+            }
 
             if (!string.IsNullOrEmpty(model.CpfCnpj))
                 model.CpfCnpj = RetirarPontos(model.CpfCnpj);

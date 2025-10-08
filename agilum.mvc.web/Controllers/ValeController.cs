@@ -121,6 +121,7 @@ namespace agilum.mvc.web.Controllers
             model.Tipo = ETipoVale.Promocao;
             model.DataHora = DateTime.Now;
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDVALE AS UNSIGNED)) AS CD FROM vale where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
 
             model.Id = 0;
             PopularListaAuxiliares(model);

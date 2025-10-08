@@ -18,16 +18,19 @@ namespace agilium.api.business.Services
         private readonly IContatoRepository _contatoRepository;
         private readonly IFornecedorDapperRepository _fornecedorDapperRepository;
         private readonly IDapperRepository _dapperRepository;
+        private readonly IUtilDapperRepository _utilDapperRepository;
 
         public FornecedorService(INotificador notificador, IFornecedorContatoRepsoitory contatoRepsoitory,
                                     IFornecedorRepsoitory fornecedorRepsoitory, IContatoRepository contatoRepository,
-                                    IFornecedorDapperRepository fornecedorDapperRepository, IDapperRepository dapperRepository) : base(notificador)
+                                    IFornecedorDapperRepository fornecedorDapperRepository, IDapperRepository dapperRepository,
+                                    IUtilDapperRepository utilDapperRepository) : base(notificador)
         {
             _fornecedorContatoRepository = contatoRepsoitory;
             _fornecedorRepsoitory = fornecedorRepsoitory;
             _contatoRepository = contatoRepository;
             _fornecedorDapperRepository = fornecedorDapperRepository;
             _dapperRepository = dapperRepository;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         #region Fornecedor
@@ -181,6 +184,9 @@ namespace agilium.api.business.Services
             await _fornecedorRepsoitory.SaveChanges();
         }
 
-        
+        public async Task<string> GerarCodigo()
+        {
+            return await _utilDapperRepository.GerarCodigo("SELECT MAX(CAST(CDFORN AS UNSIGNED)) AS CD FROM fornecedor");
+        }
     }
 }

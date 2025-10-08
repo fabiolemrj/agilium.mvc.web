@@ -20,8 +20,9 @@ namespace agilium.api.business.Services
         private readonly IDapperRepository _dapperRepository;
         private readonly IProdutoDapper _produtoDapper;
         private readonly IPerdaDapperRepository _perdaDapperRepository;
+        private readonly IUtilDapperRepository _utilDapperRepository;
         public InventarioService(INotificador notificador, IInventarioDapperRepository inventarioDapperRepository, 
-                                IInventarioItemRepository inventarioItemRepository, IInventarioRepository inventarioRepository, 
+                                IInventarioItemRepository inventarioItemRepository, IInventarioRepository inventarioRepository, IUtilDapperRepository utilDapperRepository,
                                 IDapperRepository dapperRepository, IProdutoDapper produtoDapper, IPerdaDapperRepository perdaDapperRepository) : base(notificador)
         {
             _inventarioDapperRepository = inventarioDapperRepository;
@@ -30,6 +31,7 @@ namespace agilium.api.business.Services
             _dapperRepository = dapperRepository;
             _produtoDapper = produtoDapper;
             _perdaDapperRepository = perdaDapperRepository;
+            _utilDapperRepository = utilDapperRepository;
         }
 
         public void Dispose()
@@ -366,6 +368,13 @@ namespace agilium.api.business.Services
             }
             return resultado;
         }
+
+
+        public async Task<string> GerarCodigo(long idEmpresa)
+        {
+            return _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDINVENT AS UNSIGNED)) AS CD FROM inventario where IDEMPRESA ={idEmpresa}").Result;
+        }
+
 
         #endregion
 

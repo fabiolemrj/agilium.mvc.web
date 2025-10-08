@@ -107,6 +107,7 @@ namespace agilum.mvc.web.Controllers
             model.IDEMPRESA = Convert.ToInt64(empresaSelecionada.IDEMPRESA);
             model.PlanosContas = PlanosContas;
             model.Empresas = listaEmpresaViewModels;
+            model.Codigo = await _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDCONTA AS UNSIGNED)) AS CD FROM planoconta where IDEMPRESA={empresaSelecionada.IDEMPRESA}");
 
             return View("CreateEditPlanoConta", model);
         }

@@ -17,5 +17,6 @@ namespace agilium.api.business.Interfaces.IService
         Task<Funcionario> ObterCompletoPorId(long id);
         Task<List<Funcionario>> ObterTodas();
         Task Salvar();
+        Task<string> GerarCodigo(long v);
     }
 }

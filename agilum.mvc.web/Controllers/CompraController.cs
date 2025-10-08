@@ -231,6 +231,8 @@ namespace agilum.mvc.web.Controllers
             model.DataCompra = DateTime.Now;
             model.NumeroCFOP = 1102;
             model.Importada = ESimNao.Nao;
+            model.Codigo = _compraService.GerarCodigoCompra(model.IDEMPRESA).Result;
+
             //model.ValorBaseCalculoIcms = 0;
             //model.ValorBaseCalculoSub = 0;
             //model.ValorDesconto = 0;

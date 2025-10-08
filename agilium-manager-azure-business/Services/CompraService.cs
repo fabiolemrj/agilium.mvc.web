@@ -808,7 +808,12 @@ namespace agilium.api.business.Services
             return resultado;
         }
 
-      
+        public async Task<string> GerarCodigoCompra(long? iDEMPRESA)
+        {
+            return _utilDapperRepository.GerarCodigo($"SELECT MAX(CAST(CDCOMPRA AS UNSIGNED)) AS CD FROM compra WHERE IDEMPRESA ={iDEMPRESA}").Result;
+        }
+
+
 
         #endregion
 

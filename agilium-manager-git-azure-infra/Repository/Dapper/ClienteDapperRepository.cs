@@ -340,5 +340,10 @@ namespace agilium.api.infra.Repository.Dapper
 
             return null;
         }
+
+        public async Task<string> GerarCodigo(long idEmpresa)
+        {
+            return _utilDapperRepository.GerarCodigo("SELECT MAX(CAST(CDCLIENTE AS UNSIGNED)) AS CD FROM cliente").Result;
+        }
     }
 }

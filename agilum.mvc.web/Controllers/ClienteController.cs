@@ -95,7 +95,8 @@ namespace agilum.mvc.web.Controllers
             model.EnderecoCobranca.Id = 0;
             model.EnderecoEntrega.Id = 0;
             model.EnderecoFaturamento.Id = 0;
-            
+            model.Codigo = await _clienteService.GerarCodigo(Convert.ToInt64(empresaSelecionada.IDEMPRESA));
+
             InicializarObjetos(model);
 
             return View("CreateEditCliente", model);

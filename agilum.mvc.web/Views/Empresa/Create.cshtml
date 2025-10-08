@@ -51,8 +51,9 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label asp-for="CDEMPRESA" id="labelCodigo"></label>
-                                <input asp-for="CDEMPRESA" class="form-control" size="6" />
+                                <input asp-for="CDEMPRESA" class="form-control" size="6" readonly="readonly" />
                                 <span asp-validation-for="CDEMPRESA" class="text-danger"></span>
+                                <input type="hidden" asp-for="CDEMPRESA" />
                             </div>
                         </div>
                         <div class="col-md-3">
