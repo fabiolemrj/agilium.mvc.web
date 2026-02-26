@@ -154,10 +154,10 @@ namespace agilium.api.infra.Mappings
                    .HasForeignKey("IDEMPRESA")
                    .HasPrincipalKey(empresa => empresa.Id);
 
-            builder.HasMany(empresa => empresa.Produtos)
-                   .WithOne(prod => prod.Empresa)
-                   .HasForeignKey("IDEMPRESA")
-                   .HasPrincipalKey(empresa => empresa.Id);
+            //builder.HasMany(empresa => empresa.Produtos)
+            //       .WithOne(prod => prod.Empresa)
+            //       .HasForeignKey("IDEMPRESA")
+            //       .HasPrincipalKey(empresa => empresa.Id);
 
             builder.HasMany(empresa => empresa.PlanoContas)
                    .WithOne(pc => pc.Empresa)

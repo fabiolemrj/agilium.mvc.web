@@ -315,4 +315,29 @@ td.limited-cell-actions, th.limited-cell-actions {
     white-space: nowrap !important;
 }
 
+td .dropdown-menu {
+    position: fixed !important;
+    transform: translate(0, 0) !important;
+}
 
+.no-overflow {
+    overflow: visible !important;
+    white-space: normal !important;
+}
+
+.dropdown-wrapper {
+    overflow: visible !important;
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute !important;
+    transform: translate3d(0, 38px, 0) !important;
+    will-change: transform;
+    display: block;
+    visibility: hidden;
+}
+
+.show > .dropdown-menu {
+    visibility: visible !important;
+}

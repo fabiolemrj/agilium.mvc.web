@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "QR Code / Barcode";
+}
+<h5>@ViewData["Title"]</h5>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="#" title="Voltar" id="btnVoltar"> <span class="fas fa-reply sns-tool-action"></span> </a>
+   
+@*         <a href="#" type="button" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a> *@
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="#"> @ViewData["Title"]  </a>
+        </div>
+    </article>
+</section>
+<br />
+<h3>@ViewBag.NomeProduto</h3>
+<hr />
+
+<div class="text-center">
+    <img src="data:image/png;base64,@ViewBag.ImagemBase64"
+         class="img-fluid"
+         style="max-width:350px; border:1px solid #ccc; padding:10px; background:white" />
+
+    <br /><br />
+
+    <a class="btn btn-secondary" asp-action="Index">
+        <i class="fa fa-arrow-left"></i> Voltar
+    </a>
+</div>

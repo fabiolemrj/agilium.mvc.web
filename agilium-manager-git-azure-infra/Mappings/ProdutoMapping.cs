@@ -168,6 +168,13 @@ namespace agilium.api.infra.Mappings
                 .WithOne(inventarioItem => inventarioItem.Produto)
                 .HasForeignKey(inventarioItem => new { inventarioItem.IDPRODUTO })
                 .HasPrincipalKey(produto => new { produto.Id });
+
+            builder
+                .HasOne(p => p.Empresa)
+                .WithMany(e => e.Produtos)
+                .HasForeignKey(p => p.idEmpresa)
+                .HasPrincipalKey(e => e.Id)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
 
     }

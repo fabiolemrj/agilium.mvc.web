@@ -45,7 +45,8 @@ namespace agilum.mvc.web
                       b => b.MigrationsAssembly("agilium.mvc.web"));
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled:true);
                 options.EnableDetailedErrors(detailedErrorsEnabled:true);
-          
+ 
+
             });
 
             services.AddControllersWithViews();

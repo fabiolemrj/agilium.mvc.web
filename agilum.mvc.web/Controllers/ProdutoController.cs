@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -987,6 +988,41 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region codigo de barras
+        [HttpGet]
+        [Route("exibir-codigo")]
+        public async Task<IActionResult> MostrarCodigo(long id, string tipo = "qrcode")
+        {
+
+            var listaCodigoBaarras = ObterCodigoBarra(id).Result;
+
+            if(!listaCodigoBaarras.Any())
+                return NotFound("Produto não encontrado.");
+
+            var produtoCodigoBarra = listaCodigoBaarras.FirstOrDefault();
+            // Gera imagem conforme parâmetro
+            byte[] imagem;
+
+            if (tipo.ToLower() == "qrcode")
+                imagem = CodigoProdutoGenerator.GerarQrCodePng(produtoCodigoBarra.CDBARRA);
+            else
+                imagem = CodigoProdutoGenerator.GerarBarcodePng(produtoCodigoBarra.CDBARRA);
+
+            // Converte para Base64 para exibir da View
+            string base64 = Convert.ToBase64String(imagem);
+
+            var produto = Obter(produtoCodigoBarra.IDPRODUTO.ToString()).Result;
+
+            ViewBag.NomeProduto = $"{produto.Codigo} - {produto.Nome}" ;
+            ViewBag.idProduto = produto.Id;
+
+            // Envia para a view
+            ViewBag.ImagemBase64 = base64;
+            ViewBag.Tipo = tipo;
+
+            return View("ExibirCodigo");
+        }
+
+
         [Route("codigo-barra")]
         public async Task<IActionResult> ListaCodigoBarra(long idProduto)
         {

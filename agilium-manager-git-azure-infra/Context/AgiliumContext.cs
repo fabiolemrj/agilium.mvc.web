@@ -111,18 +111,16 @@ namespace agilium.api.infra.Context
         public DbSet<CaAreaManager> CaAreaManager { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(e => e.GetProperties()
-                    .Where(p => p.ClrType == typeof(string))))
-                property.SetColumnType("varchar(100)");
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AgiliumContext).Assembly);
-
-            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
-            
             base.OnModelCreating(modelBuilder);
 
-         
+            // APLICA TODOS OS MAPEAMENTOS (ProdutoMapping, EmpresaMapping, etc)
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AgiliumContext).Assembly);
+
+            // GARANTE REGRA GLOBAL PARA FKs
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
