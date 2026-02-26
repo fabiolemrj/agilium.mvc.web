@@ -52,73 +52,52 @@ function AdicionarContato(tpcontato, descr1, descr2) {
 }
 
 
-$('.delete').click(function (event) {
+$(document).on('click', '.delete', function (e) {
+    e.preventDefault();
 
-    event.preventDefault();
-
-    const idContato = $(this).attr("data-idContato");
-    const idEmpresa = $(this).attr("data-idEmpresa");
-    const contato = $(this).attr("data-tpcontato") + " - " + $(this).attr("data-descr1");
+    const idContato = $(this).data('idcontato');
+    const idEmpresa = $(this).data('idempresa');
+    const contato = `${$(this).data('tpcontato')} - ${$(this).data('descr1')}`;
 
     Swal.fire({
-        title: 'Deseja realmente apagar o contato selecionado?',
-        text: `${contato}?`,
-        icon: 'danger',
+        title: 'Confirmar exclusão',
+        text: `Deseja realmente apagar o contato ${contato}?`,
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: 'Sair',
-        confirmButtonText: 'OK'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const _url = `/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`;
-            //const _url = `/mvc/empresa/contato/apagar?idContato=${idContato}&idEmpresa=${idEmpresa}`;
-            $.ajax({
-                type: 'get',
-                url: _url,
-                success: function (resultado) {
-                    if (resultado.erro) {
-                        toastr.error(resultado.erro)
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: resultado.erro
-                        });
-                        if (res.url) {
-                            $('#ContatoTarget').load(res.url);
-                        }
-                        return;
-                    }
-                },
-                error: function (result) {
-                    toastr.error(result)
-                }
-            }).then((result) => {
-                let icone = "success";
-                let titulo = "Sucesso"
-                let msg = `Contato ${contato} Removido!`;
-                if (result.erro) {
-                    icone = "error"
-                    msg = erro;
-                    titulo = 'Oops...'
+        confirmButtonText: 'Sim, apagar',
+        cancelButtonText: 'Cancelar'
+    }).then((confirmacao) => {
+
+        if (!confirmacao.isConfirmed) return;
+
+        $.ajax({
+            url: '/empresa/contato/apagar',
+            type: 'get',
+            data: {
+                idContato: idContato,
+                idEmpresa: idEmpresa,
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+
+                if (!response.success) {
+                    Swal.fire('Erro', response.message, 'error');
+                    return;
                 }
 
-                Swal.fire({
-                    icon: icone,
-                    title: titulo,
-                    text: msg
-                }).then((res) => {
-                    if (result.url) {
-                        $('#ContatoTarget').load(result.url);
-                    }
-                })
-            });
+                Swal.fire('Sucesso', response.message, 'success');
 
-
-
-        }
-    })
+                if (response.url) {
+                    $('#ContatoTarget').load(response.url);
+                }
+            },
+            error: function () {
+                Swal.fire('Erro', 'Erro inesperado ao remover o contato.', 'error');
+            }
+        });
+    });
 });
+
 
 
 $(function () {

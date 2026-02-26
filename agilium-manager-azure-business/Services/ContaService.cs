@@ -117,6 +117,25 @@ namespace agilium.api.business.Services
             }; ;
         }
 
+        public async Task<PagedResult<ContaPagar>> ObterPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15)
+        {
+            int pagina = page > 0 ? page : 1;
+            var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
+
+            var listaDesordenada = await _contaPagarRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()),
+                "CategFinanc", "Fornecedor", "PlanoConta");
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD).ToList();
+
+            return new PagedResult<ContaPagar>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize).ToList(),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            }; ;
+        }
+
         public async Task<List<ContaPagar>> ObterTodas(long idEmpresa)
         {
             return _contaPagarRepository.Obter(x=>x.IDEMPRESA == idEmpresa).Result.ToList();
@@ -285,6 +304,25 @@ namespace agilium.api.business.Services
             }; 
         }
 
+        public async Task<PagedResult<ContaReceber>> ObterContaReceberPorPaginacao(long idEmpresa, string nome, int page = 1, int pageSize = 15)
+        {
+            int pagina = page > 0 ? page : 1;
+            var _nomeParametro = string.IsNullOrEmpty(nome) ? string.Empty : nome;
+
+            var listaDesordenada = await _contaReceberRepository.Obter(x => x.IDEMPRESA == idEmpresa && x.DESCR.ToUpper().Contains(_nomeParametro.ToUpper()),
+                        "CategFinanc", "Cliente", "PlanoConta");
+
+            var lista = listaDesordenada.OrderByDescending(x => x.DTCAD).ToList();
+
+            return new PagedResult<ContaReceber>
+            {
+                List = lista.Skip((pagina - 1) * pageSize).Take(pageSize),
+                TotalResults = lista.Count(),
+                PageIndex = page,
+                PageSize = pageSize
+            };
+        }
+
         public async Task<ContaReceber> ObterContaReceberCompletoPorId(long id)
         {
             return await _contaReceberRepository.ObterPorId(id);
@@ -394,6 +432,7 @@ namespace agilium.api.business.Services
         private async Task<bool> ContaPagarNaoPodeSerExcluido(long id) => false;
 
         private async Task<bool> ContaReceberNaoPodeSerExcluido(long id) => false;
+
 
 
         #endregion

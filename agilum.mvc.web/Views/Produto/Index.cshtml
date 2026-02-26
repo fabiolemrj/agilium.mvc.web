@@ -47,13 +47,13 @@
     </div>
 </div>
 <div id="divGridResultado">
-    <table class="table table-hover">
+    <table class="table table-hover table-limit">
         <thead class="table thead-dark">
             <tr>
                 <th>
                     Codigo
                 </th>
-                <th>
+                <th class="limited-cell-actions">
                     Descrição
                 </th>
                 <th>
@@ -70,7 +70,7 @@
                 </th>
                 <th>Estoque</th>
                 <th>Preço Diferenciado</th>
-                <th class=""></th>
+                <th class="limited-cell-actions"></th>
             </tr>
         </thead>
         <tbody>
@@ -95,7 +95,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Codigo)
                     </td>
-                    <td>
+                    <td class="limited-cell-actions">
                         @Html.DisplayFor(modelItem => item.Nome)
                     </td>
                     <td>
@@ -144,7 +144,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="text-right">
+                    <td class="text-right limited-cell-actions">
                         <a class="btn btn-default" asp-action="ListaFoto" asp-route-idProduto="@item.Id" title="Fotos"><spam class="fas fa-image" data-toggle="modal" data-target="#myModal"></spam></a>
                         <a class="btn btn-default" asp-route-id="@item.Id" title="Codigo de Barra" id="btnaddCodBarra" asp-action="ListaCodigoBarra" asp-route-idProduto="@item.Id"><spam class="fas fa-barcode"></spam></a>
                         <a class="btn btn-default" asp-route-id="@item.Id" title="Testar NFCe"><spam class="fas fa-check"></spam></a>

@@ -577,6 +577,179 @@ namespace agilium.api.business.Services
 
         #region Dapper
 
+        #region Cupom
+
+        private string Completar(string valor, char caracter, char alinhamento, int tamanho)
+        {
+            valor ??= "";
+
+            if (valor.Length > tamanho)
+                return valor.Substring(0, tamanho);
+
+            return alinhamento == 'E'
+                ? valor.PadLeft(tamanho, caracter)
+                : valor.PadRight(tamanho, caracter);
+        }
+
+        private string LancarItemCupom(
+            int sqItem,
+            string cdProd,
+            string nmProd,
+            double qtd,
+            string unidade,
+            decimal vlUnit,
+            decimal vlDesc,
+            decimal vlAcres)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(Completar(sqItem.ToString(), ' ', 'E', 4)).Append("  ");
+            sb.Append(Completar(cdProd, '0', 'E', 6)).Append("   ");
+            sb.Append(Completar(nmProd, ' ', 'D', 30)).Append(" ");
+            sb.Append(Completar(qtd.ToString("0.###"), ' ', 'E', 7)).Append(" ");
+            sb.Append(Completar(unidade, ' ', 'D', 5)).Append("  x");
+            sb.Append(Completar(vlUnit.ToString("0.00"), ' ', 'E', 10)).Append("  ");
+
+            var totalItem = vlUnit * (decimal)qtd;
+            sb.Append(Completar(totalItem.ToString("0.00"), ' ', 'E', 10));
+
+            sb.Append("\n");
+
+            // acrescimo ou desconto
+            if (vlAcres > 0)
+            {
+                sb.Append(Completar("", ' ', 'E', 25))
+                  .Append(" Acréscimo ")
+                  .Append(Completar(vlAcres.ToString("0.00"), ' ', 'E', 10))
+                  .Append("\n");
+            }
+            else if (vlDesc > 0)
+            {
+                sb.Append(Completar("", ' ', 'E', 25))
+                  .Append(" Desconto ")
+                  .Append(Completar("-" + vlDesc.ToString("0.00"), ' ', 'E', 10))
+                  .Append("\n");
+            }
+
+            return sb.ToString();
+        }
+
+        private string LancarMoedasCupom(Venda venda, List<VendaMoeda> moedasVenda, int totalItens)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append("\n");
+
+            sb.Append("    ")
+              .Append(Completar("TOTAL DE ITENS", ' ', 'D', 15))
+              .Append(Completar(totalItens.ToString(), ' ', 'E', 15))
+              .Append("\n");
+
+            sb.Append("    ")
+              .Append(Completar("SUBTOTAL", ' ', 'D', 15))
+              .Append(Completar(venda.VLVENDA?.ToString("R$ #,##0.00"), ' ', 'E', 15))
+              .Append("\n");
+
+            sb.Append("    ")
+              .Append(Completar("DESCONTOS", ' ', 'D', 15))
+              .Append(Completar(venda.VLDESC?.ToString("R$ #,##0.00"), ' ', 'E', 15))
+              .Append("\n");
+
+            sb.Append("    ")
+              .Append(Completar("ACRÉSCIMOS", ' ', 'D', 15))
+              .Append(Completar(venda.VLACRES?.ToString("R$ #,##0.00"), ' ', 'E', 15))
+              .Append("\n");
+
+            sb.Append("    ")
+              .Append(Completar("TOTAL DA VENDA", ' ', 'D', 15))
+              .Append(Completar(venda.VLTOTAL?.ToString("R$ #,##0.00"), ' ', 'E', 15))
+              .Append("\n\n");
+
+            sb.Append("   FORMAS DE PAGAMENTO\n");
+
+            double vlTotal = 0;
+            double vlTroco = 0;
+
+            foreach (var pag in moedasVenda)
+            {
+                sb.Append("    ")
+                  .Append(Completar(pag.Moeda.DSMOEDA, ' ', 'D', 30))
+                  .Append(Completar(pag.VLPAGO.Value. ToString("R$ #,##0.00"), ' ', 'E', 15))
+                  .Append("\n");
+
+                // CARTÃO DE DÉBITO
+                if (pag.Moeda.TPMOEDA == ETipoMoeda.CartaoDebito)
+                {
+                    if (!string.IsNullOrWhiteSpace(pag.NSU))
+                    {
+                        sb.Append("      ")
+                          .Append(Completar("NSU: " + pag.NSU, ' ', 'D', 25))
+                          .Append("\n");
+                    }
+                }
+
+                // CARTÃO DE CRÉDITO
+                if (pag.Moeda.TPMOEDA == ETipoMoeda.CartaoCredito)
+                {
+                    var linha = "";
+
+                    if (!string.IsNullOrWhiteSpace(pag.NSU))
+                        linha = "      " + Completar("NSU: " + pag.NSU, ' ', 'D', 25);
+
+                    linha += Completar($"PARCELAS: {pag.NUPARCELAS}", ' ', 'D', 15);
+
+                    sb.Append(linha).Append("\n");
+                }
+
+                vlTotal += pag.VLPAGO.Value;
+                vlTroco += pag.VLTROCO.Value;
+            }
+
+            sb.Append("\n    ")
+              .Append(Completar("TOTAL PAGO", ' ', 'D', 30))
+              .Append(Completar(vlTotal.ToString("R$ #,##0.00"), ' ', 'E', 15))
+              .Append("\n");
+
+            if (vlTroco > 0)
+            {
+                sb.Append("    ")
+                  .Append(Completar("TROCO", ' ', 'D', 30))
+                  .Append(Completar(vlTroco.ToString("R$ #,##0.00"), ' ', 'E', 15))
+                  .Append("\n");
+            }
+
+            sb.Append("\n");
+
+            // IBPT
+            string original = venda.DSINFCOMPL ?? "";
+            var ibpt = new StringBuilder();
+
+            ibpt.Append("Val aprox Tributos ");
+            ibpt.Append(" Federal R$ ").Append((venda.VLTOTIBPTFED + venda.VLTOTIBPTIMP)?.ToString("#,##0.00"))
+                .Append(" (")
+                .Append((((venda.VLTOTIBPTFED + venda.VLTOTIBPTIMP) * 100) / venda.VLVENDA)?.ToString("#0.00"))
+                .Append("%)");
+
+            ibpt.Append(" Estadual R$ ").Append(venda.VLTOTIBPTEST?.ToString("#,##0.00"))
+                .Append(" (")
+                .Append(((venda.VLTOTIBPTEST * 100) / venda.VLVENDA)?.ToString("#0.00"))
+                .Append("%)");
+
+            ibpt.Append(" Municipal R$ ").Append(venda.VLTOTIBPTMUN?.ToString("#,##0.00"))
+                .Append(" (")
+                .Append(((venda.VLTOTIBPTMUN * 100) / venda.VLVENDA)?.ToString("#0.00"))
+                .Append("%)");
+
+            ibpt.Append(" Fonte: IBPT ").Append(original);
+
+            sb.Append("   ").Append(ibpt.ToString()).Append("\n");
+
+            return sb.ToString();
+        }
+
+        #endregion
+
+
         public async Task<bool> RealizarVenda(Venda venda, long idUsusario, long IdEmpresa)
         {
             var resultado = false;
@@ -713,10 +886,17 @@ namespace agilium.api.business.Services
                 if(idVendatemp > 0)
                 {                 
                     var idVenda = await _vendaDapperRepository.AdicionarVenda(venda, idestoque, caixaAberto.SQCAIXA.Value, usuario.nome, cpf);
+                    if(idVenda > 0)
+                    {
+
+                        string resumo = LancarMoedasCupom(venda, venda.VendaMoeda.ToList(), venda.VendaItem.Count);
+
+                    }
                     await _vendaDapperRepository.ApagarVendaTemporaria(idVendatemp);
 
                     await _valeDapperRepository.UtilizarValePorVenda(idVenda);
                 }
+
                                
                 if (!TemNotificacao())
                 {

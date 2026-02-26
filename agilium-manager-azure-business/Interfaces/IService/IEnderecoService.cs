@@ -14,6 +14,7 @@ namespace agilium.api.business.Interfaces.IService
         Task<Endereco> ObterEnderecoPorId(long id);
         Task<Cep> ObterCepPorNumeroCep(string cep);
         Task<bool> AtualizarAdicionar(Endereco endereco);
+        Task<bool> SalvarEnderecoDapper(Endereco endereco);
         Task Salvar();
     }
 }

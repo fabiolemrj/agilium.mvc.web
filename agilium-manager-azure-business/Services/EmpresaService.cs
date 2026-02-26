@@ -15,10 +15,15 @@ namespace agilium.api.business.Services
     {
         private readonly IEmpresaRepository _empresaRepository;
         private readonly IUtilDapperRepository _utilDapperRepository;
-        public EmpresaService(INotificador notificador, IEmpresaRepository empresaRepository,IUtilDapperRepository utilDapperRepository) : base(notificador)
+        private readonly IEmpresaDapperRepository _empresaDapperRepository;
+        private readonly IEnderecoDapperRepository _enderecoDapperRepository;
+        public EmpresaService(INotificador notificador, IEmpresaRepository empresaRepository,IUtilDapperRepository utilDapperRepository,
+            IEmpresaDapperRepository empresaDapperRepository, IEnderecoDapperRepository enderecoDapperRepository) : base(notificador)
         {
             _empresaRepository = empresaRepository;
             _utilDapperRepository = utilDapperRepository;
+            _empresaDapperRepository = empresaDapperRepository;
+            _enderecoDapperRepository = enderecoDapperRepository;
         }
 
         public async Task Adicionar(Empresa empresa)
@@ -40,6 +45,13 @@ namespace agilium.api.business.Services
                 return;
 
             await _empresaRepository.AtualizarSemSalvar(empresa);
+        }
+
+        public async Task Atualizar(Empresa empresaDb, object model)
+        {
+            // aplica apenas valores escalares
+            await _empresaRepository.AtualizarComSetValues(empresaDb, model);
+
         }
 
         public void Dispose()
@@ -85,6 +97,24 @@ namespace agilium.api.business.Services
             return await _empresaRepository.ObterPorId(id);
         }
 
+        public async Task<Empresa> ObterPorIdCompleto(long id)
+        {
+            var lista = await _empresaRepository.Obter(
+                e => e.Id == id,
+                "Endereco",
+                "ContatoEmpresas",
+                "ContatoEmpresas.Contato"
+            );
+
+            return lista.FirstOrDefault();
+        }
+
+        public async Task<Empresa> ObterPorIdCompletoTracking(long id)
+        {
+            return await _empresaRepository.ObterCompletoTracking(id);
+        }
+
+
         public async Task<List<Empresa>> ObterTodas()
         {
             return await _empresaRepository.ObterTodos();
@@ -94,5 +124,20 @@ namespace agilium.api.business.Services
         {
             await _empresaRepository.SaveChanges();
         }
+
+        public async Task<bool> EditarEmpresa(Empresa empresa)
+        {
+            if (empresa == null)
+                return false;
+
+            // Chama o método Dapper que atualiza os campos alterados
+            var atualizado = await _empresaDapperRepository.EditarEmpresa(empresa);
+            if (atualizado)
+            {
+                await _enderecoDapperRepository.SalvarEndereco(empresa.Endereco);
+            }
+            return atualizado;
+        }
+
     }
 }

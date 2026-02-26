@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -113,13 +114,38 @@ namespace agilum.mvc.web.Controllers
             
             var empresa = _mapper.Map<Empresa>(model);
 
-            if (empresa.Endereco != null && empresa.Endereco.Id == 0 && !string.IsNullOrEmpty(empresa.Endereco.Logradouro))
-                empresa.Endereco.Id = await GerarId();
+       
+          
+
+            // 3️⃣ Atualizar endereço
+            if (empresa.Endereco == null)
+            {
+                empresa.Endereco = _mapper.Map<Endereco>(model.Endereco);
+            }
+            else
+            {
+                _mapper.Map(model.Endereco, empresa.Endereco);
+            }
 
             if (empresa.Id == 0) empresa.Id = await GerarId();
 
-            await _empresaService.Adicionar(empresa);
-            await _empresaService.Salvar();
+            if (empresa.Endereco != null && empresa.Endereco.Id == 0 && !string.IsNullOrEmpty(empresa.Endereco.Logradouro))
+                empresa.Endereco.Id = await GerarId();
+
+
+            try
+            {
+                await _empresaService.Adicionar(empresa);
+                // 4️⃣ EF rastreia tudo, apenas SaveChanges é necessário
+                await _empresaService.Salvar();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                AdicionarErroValidacao("Os dados foram modificados por outro usuário. Recarregue e tente novamente.");
+                return View(model);
+            }
+
             LogInformacao($"Empresa {empresa.NMRZSOCIAL} - {empresa.NUCNPJ} criada com sucesso.","nova","Create",null);
             if (!OperacaoValida())
             {
@@ -164,34 +190,179 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "E";
             ViewBag.acao = "Edit";
 
-            if (!ModelState.IsValid) return View("Create", model);
+            if (!ModelState.IsValid)
+                return View("Create", model);
 
-            if (string.IsNullOrEmpty(model.Endereco.Logradouro))
+            if (string.IsNullOrEmpty(model.Endereco?.Logradouro))
             {
                 AdicionarErroValidacao("Campo Logradouro obrigatório");
                 return View(model);
             }
 
+            // Normaliza CNPJ e CEP
             model.NUCNPJ = RetirarPontos(model.NUCNPJ);
-
-            if (model.Endereco != null && !string.IsNullOrEmpty(model.Endereco.Cep))
+            if (!string.IsNullOrEmpty(model.Endereco?.Cep))
                 model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
-            
-            var empresa = _mapper.Map<Empresa>(model);
-            await _empresaService.Atualizar(empresa);
-            await _empresaService.Salvar();
-            LogInformacao($"Empresa {empresa.NMRZSOCIAL} - {empresa.NUCNPJ} editada com sucesso.", "editar", "Edit", null);
+
+            // 1️⃣ Buscar entidade do banco COM TRACKING
+            var empresaDb = await _empresaService.ObterPorId(model.Id);
+
+            if (empresaDb == null)
+            {
+                AdicionarErroValidacao("Empresa não encontrada.");
+                return View("Create", model);
+            }
+
+            // 2️⃣ Mapear APENAS campos simples para a entidade rastreada
+            Console.WriteLine("ANTES: " + empresaDb.NMRZSOCIAL);
+
+            _mapper.Map(model, empresaDb);
+
+            Console.WriteLine("DEPOIS: " + empresaDb.NMRZSOCIAL);
+
+
+            // 3️⃣ Atualizar endereço
+            if (empresaDb.Endereco == null)
+            {
+                empresaDb.Endereco = _mapper.Map<Endereco>(model.Endereco);
+            }
+            else
+            {
+                _mapper.Map(model.Endereco, empresaDb.Endereco);
+            }
+
+            try
+            {
+                await _empresaService.Atualizar(empresaDb, model);
+                // 4️⃣ EF rastreia tudo, apenas SaveChanges é necessário
+                await _empresaService.Salvar();
+
+                LogInformacao(
+                    $"Empresa {empresaDb.NMRZSOCIAL} - {empresaDb.NUCNPJ} editada com sucesso.",
+                    "editar",
+                    "Edit",
+                    null
+                );
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                AdicionarErroValidacao("Os dados foram modificados por outro usuário. Recarregue e tente novamente.");
+                return View(model);
+            }
+
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao editar nova {_nomeEntidade}" };
-
-                _logger.LogError(retornoErro.ToString());
+                var retornoErro = new { mensagem = $"Erro ao editar {_nomeEntidade}" };
+                _logger.LogError(retornoErro.mensagem);
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
-            
+
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        [Route("editar-empresa")]
+        public async Task<IActionResult> EditarEmpresa(long id)
+        {
+            ObterEstados();
+            ViewBag.operacao = "E";
+            ViewBag.acao = "EditarEmpresa";
+
+            // Carrega empresa completa (endereço + contatos + tipo de contato)
+            var empresaCompleta = await _empresaService.ObterPorIdCompletoTracking(id);
+
+            if (empresaCompleta == null)
+            {
+                var msgErro = "Empresa não encontrada.";
+                AdicionarErroValidacao(msgErro);
+                TempData["Erros"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = "Empresa";
+                ViewBag.Mensagem = msgErro;
+
+                return RedirectToAction("Index");
+            }
+
+            // Mapeia para ViewModel
+            var model = _mapper.Map<EmpresaCreateViewModel>(empresaCompleta);
+
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        [Route("editar-empresa")]
+        public async Task<IActionResult> EditarEmpresa(EmpresaCreateViewModel model)
+        {
+            ObterEstados();
+
+            if (!ModelState.IsValid)
+                return View("Edit", model);
+
+            // Normaliza CNPJ e CEP
+            model.NUCNPJ = RetirarPontos(model.NUCNPJ);
+            if (!string.IsNullOrEmpty(model.Endereco?.Cep))
+                model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
+
+
+            // 1️⃣ Carregar a empresa COMPLETA (tracking + navegações)
+            var empresaDb = await _empresaService.ObterPorIdCompletoTracking(model.Id);
+            
+
+
+            if (empresaDb == null)
+            {
+                AdicionarErroValidacao("Empresa não encontrada.");
+                return View("Edit", model);
+            }
+
+            // 2️⃣ Atualiza propriedades escalares manualmente (evita private-set/AutoMapper bugs)
+            empresaDb.AlterarRazaoSocial(model.NMRZSOCIAL);
+            empresaDb.AlterarNomeFantasia(model.NMFANTASIA);
+            empresaDb.AlterarInscricaoEstadual(model.DSINSCREST);
+            empresaDb.AlterarInscricaoEstadualVinculada(model.DSINSCRESTVINC);
+            empresaDb.AlterarInscricaoMunicipal(model.DSINSCRMUN);
+            empresaDb.AlterarCnae(model.NUCNAE);
+            empresaDb.AlterarCrt(model.CRT);
+            empresaDb.AlterarLucroPresumido(model.STLUCROPRESUMIDO);
+            empresaDb.AlterarMicroEmpresa(model.STMICROEMPRESA);
+            // etc.
+
+
+            // 3️⃣ Atualização do endereço
+            if (empresaDb.Endereco == null)
+            {
+                empresaDb.Endereco = _mapper.Map<Endereco>(model.Endereco);
+            }
+            else
+            {
+                empresaDb.Endereco.AtualizarLogradouro(model.Endereco.Logradouro);
+                empresaDb.Endereco.AtualizarBairro(model.Endereco.Bairro);
+                empresaDb.Endereco.AtualizarCidade(model.Endereco.Cidade);
+                empresaDb.Endereco.AtualizarUf(model.Endereco.Uf);
+                empresaDb.Endereco.AtualizarCep(model.Endereco.Cep);
+                empresaDb.Endereco.AtualizarNumero(model.Endereco.Numero);
+                empresaDb.Endereco.AtualizarComplemento(model.Endereco.Complemento);
+                empresaDb.Endereco.AtualizarIbge(model.Endereco.Ibge);
+            }
+
+
+            // 4️⃣ EF já está rastreando → só salvar
+            var sucesso = await _empresaService.EditarEmpresa(empresaDb);
+
+            if (!OperacaoValida())
+            {
+                var retornoErro = new { mensagem = $"Erro ao editar {_nomeEntidade}" };
+                _logger.LogError(retornoErro.mensagem);
+                AdicionarErroValidacao(retornoErro.mensagem);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
 
         [HttpGet]
         [Route("apagar")]
@@ -240,7 +411,7 @@ namespace agilum.mvc.web.Controllers
         [Route("contato/novo")]
         public async Task<IActionResult> AdicionarContato(long idEmpresa)
         {
-            ViewBag.acao = "AdicionarContato";
+            ViewBag.acaoModal = "AdicionarContato";
             ViewBag.operacao = "I";
 
             var model = new ContatoEmpresaViewModel();
@@ -253,7 +424,7 @@ namespace agilum.mvc.web.Controllers
         [Route("contato/editar")]
         public async Task<IActionResult> EditarContato(long idEmpresa, long idContato)
         {
-            ViewBag.acao = "EditarContato";
+            ViewBag.acaoModal = "EditarContato";
             ViewBag.operacao = "E";
 
             var contatoEmpresa = await _contatoService.ObterPorId(idContato, idEmpresa);
@@ -297,7 +468,7 @@ namespace agilum.mvc.web.Controllers
         [Route("contato/editar")]
         public async Task<IActionResult> EditarContato(ContatoEmpresaViewModel model)
         {
-            ViewBag.acao = "EditarContato";
+            ViewBag.acaoModal = "EditarContato";
             ViewBag.operacao = "E";
 
             if (!ModelState.IsValid) return PartialView("_createContato", model);
@@ -321,30 +492,39 @@ namespace agilum.mvc.web.Controllers
         [Route("contato/novo")]
         public async Task<IActionResult> AdicionarContato(ContatoEmpresaViewModel model)
         {
-            ViewBag.acao = "AdicionarContato";
+            ViewBag.acaoModal = "AdicionarContato";
             ViewBag.operacao = "I";
 
-            if (!ModelState.IsValid) return PartialView("_createContato", model);
+            if (!ModelState.IsValid)
+                return PartialView("_createContato", model);
 
+            // Converte a ViewModel para entidade
             var contatoEmpresa = _mapper.Map<ContatoEmpresa>(model);
 
             if (contatoEmpresa.IDCONTATO == 0)
                 contatoEmpresa.PopularContato(await GerarId());
 
+            // Gera ID da entidade Contato (tabela Contato)
             if (contatoEmpresa.Contato.Id == 0)
                 contatoEmpresa.Contato.Id = contatoEmpresa.IDCONTATO;
-
+                       
+            // Salva no banco
             await _contatoService.Adicionar(contatoEmpresa);
             await _contatoService.Salvar();
-            LogInformacao($"Contato {model.Contato.DESCR1} - {model.Contato.DESCR2} adicionado com sucesso.", "AdicionarContato", "AdicionarContato", null);
 
-            if (!OperacaoValida()) return PartialView("_createContato", model);
+            LogInformacao(
+                $"Contato {model.Contato.DESCR1} - {model.Contato.DESCR2} adicionado com sucesso.",
+                "AdicionarContato", "AdicionarContato", null);
 
+            if (!OperacaoValida())
+                return PartialView("_createContato", model);
+
+            // 🔥 ACTION CORRETA → retorna só o partial de contatos
             var url = Url.Action("ObterEndereco", "Empresa", new { id = model.IDEMPRESA });
-
 
             return Json(new { success = true, url });
         }
+
         [HttpGet]
         [AllowAnonymous]
         [Route("contato")]
@@ -357,7 +537,7 @@ namespace agilum.mvc.web.Controllers
                 return NotFound();
             }
 
-            return PartialView("_contato", empresa);
+            return PartialView("_contatoLista", empresa);
         }
         #endregion
 

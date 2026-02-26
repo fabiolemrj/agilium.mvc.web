@@ -11,7 +11,7 @@ namespace agilium.api.business.Models
         public long IDENDERECO { get; private set; }
         public virtual Endereco Endereco { get; set; }
         public string CDEMPRESA { get; private set; }
-        public string NMRZSOCIAL { get; private set; }
+        public string NMRZSOCIAL { get; set; }
         public string NMFANTASIA { get; private set; }
         public string DSINSCREST { get; private set; }
         public string DSINSCRESTVINC { get; private set; }
@@ -94,5 +94,51 @@ namespace agilium.api.business.Models
             CLIENTID_SITEMERCADO = cLIENTID_SITEMERCADO;
             CLIENTSECRET_SITEMERCADO = cLIENTSECRET_SITEMERCADO;
         }
+
+        public void AlterarRazaoSocial(string valor)
+        {
+            NMRZSOCIAL = valor;
+        }
+
+        public void AlterarNomeFantasia(string valor)
+        {
+            NMFANTASIA = valor;
+        }
+
+        public void AlterarInscricaoEstadual(string valor)
+        {
+            DSINSCREST = valor;
+        }
+
+        public void AlterarInscricaoEstadualVinculada(string valor)
+        {
+            DSINSCRESTVINC = valor;
+        }
+
+        public void AlterarInscricaoMunicipal(string valor)
+        {
+            DSINSCRMUN = valor;
+        }
+
+        public void AlterarCnae(string valor)
+        {
+            NUCNAE = valor;
+        }
+
+        public void AlterarCrt(ECodigoRegimeTributario valor)
+        {
+            CRT = valor;
+        }
+
+        public void AlterarMicroEmpresa(ESimNao? valor)
+        {
+            STMICROEMPRESA = valor;
+        }
+
+        public void AlterarLucroPresumido(ESimNao? valor)
+        {
+            STLUCROPRESUMIDO = valor;
+        }
+
     }
 }

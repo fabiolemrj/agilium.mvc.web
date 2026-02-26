@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-agilum.mvc.web-55113476-1654-4186-9786-f0f9ccf66b0c</UserSecretsId>
+    <ApplicationIcon>wwwroot\Images\logo_v3c_SIMBOLO_ico.fw.ico</ApplicationIcon>
+    <Title>Agilium Manager</Title>
+    <PackageIcon>logo_v3c_SIMBOLO.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,6 +43,13 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\logo_v3c_SIMBOLO.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

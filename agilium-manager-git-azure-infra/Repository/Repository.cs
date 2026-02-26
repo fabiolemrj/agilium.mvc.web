@@ -1,16 +1,12 @@
 ﻿using agilium.api.business.Interfaces;
 using agilium.api.business.Models;
 using agilium.api.infra.Context;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Data;
-using System.Text;
 using System.Threading.Tasks;
-using static FluentValidation.Validators.IPredicateValidator;
 
 namespace agilium.api.infra.Repository
 {
@@ -25,140 +21,192 @@ namespace agilium.api.infra.Repository
             DbSet = db.Set<TEntity>();
         }
 
+        #region ===================== CONSULTAS =====================
+
+        /// <summary>
+        /// Consulta sem tracking: ideal para listagens e consultas somente leitura.
+        /// </summary>
         public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
         {
-            return await DbSet.AsNoTracking().Where(predicate).ToListAsync();
+            return await DbSet.AsNoTracking()
+                              .Where(predicate)
+                              .ToListAsync();
         }
 
+        /// <summary>
+        /// Consulta com tracking: ideal para atualização.
+        /// </summary>
         public async Task<TEntity> ObterPorId(long id)
         {
-            var objeto = await DbSet.FindAsync(id);
-            
-            return objeto;
+            return await DbSet.FindAsync(id);
         }
 
-        public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicated, params string[] includes)
+        /// <summary>
+        /// Consulta completa (sem tracking + includes).
+        /// </summary>
+        public async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate, params string[] includes)
         {
-            var result = Db.Set<TEntity>().AsNoTracking().Where(predicated);
+            IQueryable<TEntity> query = DbSet.AsNoTracking().Where(predicate);
 
-            foreach (var item in includes)
-            {
-                result = result.AsNoTracking().Include(item);
-            }
+            foreach (var inc in includes)
+                query = query.Include(inc);
 
-            return await result.AsNoTracking().ToListAsync(); ;
+            return await query.ToListAsync();
         }
+
+        public async Task<TEntity> ObterCompletoPorId(long id, params string[] includes)
+        {
+            IQueryable<TEntity> query = DbSet.AsNoTracking().Where(x => x.Id == id);
+
+            foreach (var inc in includes)
+                query = query.Include(inc);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> Obter(Expression<Func<TEntity, bool>> predicate, params string[] includes)
+        {
+            IQueryable<TEntity> query = DbSet.Where(predicate);
+
+            foreach (var inc in includes)
+                query = query.Include(inc);
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<bool> Existe(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await DbSet.AsNoTracking().AnyAsync(predicate);
+        }
+
         public virtual async Task<List<TEntity>> ObterTodos()
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
-        public virtual async Task Adicionar(TEntity entity)
+        #endregion
+
+        #region ===================== COMANDOS =====================
+
+        public async Task Adicionar(TEntity entity)
         {
-            DbSet.Add(entity);
+            await DbSet.AddAsync(entity);
             await SaveChanges();
         }
 
-        public virtual async Task Atualizar(TEntity entity)
+        public async Task AdicionarSemSalvar(TEntity entity)
         {
-            DbSet.Update(entity);
+            await DbSet.AddAsync(entity);
+        }
+
+        public async Task AdicionarLista(IEnumerable<TEntity> entities)
+        {
+            await DbSet.AddRangeAsync(entities);
+        }
+
+        /// <summary>
+        /// Atualização segura: evita problemas de entidades detachadas.
+        /// </summary>
+        public async Task Atualizar(TEntity entity)
+        {
+            await AtualizarSemSalvar(entity);
             await SaveChanges();
         }
 
-        public virtual async Task Atualizar2(TEntity entity, object key)
+        public async Task AtualizarSemSalvar(TEntity entity)
         {
-            var objeto = DbSet.Find(key);
+            var entry = Db.Entry(entity);
 
-            if(objeto != null)
+            if (entry.State == EntityState.Detached)
             {
-                Db.Entry<TEntity>(objeto).CurrentValues.SetValues(entity);
-                Db.Update(entity);
-            }
-            else
-            {
-                Db.Update(entity);
+                var noBanco = await DbSet.FindAsync(entity.Id);
+
+                if (noBanco != null)
+                {
+                    Db.Entry(noBanco).CurrentValues.SetValues(entity);
+                }
+                else
+                {
+                    DbSet.Attach(entity);
+                    entry.State = EntityState.Modified;
+                }
             }
         }
 
-        public virtual async Task Remover(long id)
+        public async Task AtualizarComSetValues(TEntity entity, object model)
+        {
+            var entry = Db.Entry(entity);
+            entry.CurrentValues.SetValues(model);
+        }
+
+
+        public async Task AtualizarLista(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+                await AtualizarSemSalvar(entity);
+        }
+
+        public async Task Remover(long id)
         {
             DbSet.Remove(new TEntity { Id = id });
             await SaveChanges();
         }
 
-        public virtual async Task RemoverSemSalvar(TEntity entity)
+        public async Task RemoverSemSalvar(long id)
         {
-            DbSet.Remove(entity);            
+            DbSet.Remove(new TEntity { Id = id });
         }
+
+        public async Task RemoverSemSalvar(TEntity entity)
+        {
+            DbSet.Remove(entity);
+        }
+
+        public async Task RemoverSemSalvar(IEnumerable<TEntity> entities)
+        {
+            DbSet.RemoveRange(entities);
+        }
+
+        #endregion
+
+        #region ===================== SAVE =====================
+
+        public async Task<int> SaveChanges()
+        {
+            try
+            {
+                return await Db.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException(
+                    "Erro de concorrência ao salvar a entidade. Nenhuma linha foi afetada. Dados podem ter sido alterados por outro processo.",
+                    ex
+                );
+            }
+        }
+
+        #endregion
+
+        #region ===================== OUTROS =====================
 
         public void Dispose()
         {
             Db?.Dispose();
         }
 
-        public async Task<int> SaveChanges()
+        public virtual Task<string> GerarCodigo(string sql)
         {
-            return await Db.SaveChangesAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task AdicionarSemSalvar(TEntity entity)
+        public virtual Task<TEntity> GerarCodigoPorSql(string sql)
         {
-            DbSet.Add(entity);
-        }
-
-        public async Task AtualizarSemSalvar(TEntity entity)
-        {
-            DbSet.Update(entity);
-        }
-
-        public async Task RemoverSemSalvar(long id)
-        {
-            var entity = new TEntity { Id = id };
-            Db.Remove(entity);
-        }
-
-        public async Task<TEntity> ObterCompletoPorId(long id, params string[] includes)
-        {
-            var result = Db.Set<TEntity>().AsNoTracking().Where(x=>x.Id == id);
-            
-            foreach (var item in includes)
-            {
-                result = result.Include(item);
-            }
-
-            return result.ToList().FirstOrDefault();
-        }
-
-        public async Task<IEnumerable<TEntity>> Obter(Expression<Func<TEntity, bool>> predicated, params string[] includes)
-        {
-            var result = Db.Set<TEntity>().Where(predicated);
-      
-            foreach (var item in includes)
-            {
-                result = result.Include(item);
-            }
-
-            return await result.ToListAsync();
-        }
-
-        public async Task AdicionarLista(IEnumerable<TEntity> entity)
-        {
-            await DbSet.AddRangeAsync(entity);
-        }
-
-        public async Task AtualizarLista(IEnumerable<TEntity> entity)
-        {
-            DbSet.UpdateRange(entity);
-        }
-
-        public async Task RemoverSemSalvar(IEnumerable<TEntity> entity)
-        {
-            DbSet.RemoveRange(entity);
+            throw new NotImplementedException();
         }
 
         public void AtualizarSincrona(TEntity entity)
         {
-           
             DbSet.Update(entity);
         }
 
@@ -172,19 +220,11 @@ namespace agilium.api.infra.Repository
             DbSet.Add(entity);
         }
 
-        public async Task<bool> Existe(Expression<Func<TEntity, bool>> predicated)
-        {
-            return await Db.Set<TEntity>().AsNoTracking().AnyAsync(predicated);
-        }
-
-        public virtual async Task<string> GerarCodigo(string sql)
+        public Task Atualizar2(TEntity entity, object key)
         {
             throw new NotImplementedException();
         }
 
-        public virtual async Task<TEntity> GerarCodigoPorSql(string sql)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

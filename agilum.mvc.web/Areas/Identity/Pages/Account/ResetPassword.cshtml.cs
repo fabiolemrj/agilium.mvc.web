@@ -45,6 +45,8 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
+            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            public string Empresa { get; set; }
         }
 
         public IActionResult OnGet(string code = null)

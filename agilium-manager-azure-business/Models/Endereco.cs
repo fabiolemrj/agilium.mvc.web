@@ -47,5 +47,15 @@ namespace agilium.api.business.Models
             PontoReferencia = pontoReferencia;
             Numero = numero;
         }
+
+        public void AtualizarLogradouro(string valor) => Logradouro = valor;
+        public void AtualizarNumero(string valor) => Numero = valor;
+        public void AtualizarComplemento(string valor) => Complemento = valor;
+        public void AtualizarBairro(string valor) => Bairro = valor;
+        public void AtualizarCidade(string valor) => Cidade = valor;
+        public void AtualizarUf(string valor) => Uf = valor;
+        public void AtualizarCep(string valor) => Cep = valor;
+        public void AtualizarIbge(int? valor) => Ibge = valor;
+
     }
 }

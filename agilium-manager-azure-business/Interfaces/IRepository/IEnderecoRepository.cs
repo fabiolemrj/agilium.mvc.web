@@ -20,6 +20,7 @@ namespace agilium.api.business.Interfaces.IRepository
         Task<Endereco> AdicionarEndereco(Endereco endereco);
         Task<Cep> ObterEnderecoPorCep(string cep);
         Task<Endereco> AtualizarEnderecoTransacao(Endereco endereco);
+        Task<bool> SalvarEndereco(Endereco endereco);
 
     }
 }

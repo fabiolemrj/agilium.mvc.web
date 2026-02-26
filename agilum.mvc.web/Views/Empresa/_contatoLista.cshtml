@@ -1,0 +1,66 @@
+﻿@model agilum.mvc.web.ViewModels.Empresa.EmpresaCreateViewModel
+
+
+
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h4 class="card-title">Contatos da Empresa</h4>
+
+        <a href="@Url.Action("AdicionarContato", "Empresa", new { idEmpresa = Model.Id })"
+           data-modal
+           class="btn btn-success float-right">
+            <i class="fa fa-plus"></i> Novo Contato
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        @if (Model.ContatosEmpresa != null && Model.ContatosEmpresa.Any())
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Auxiliar</th>
+                        <th style="width: 120px;">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (int i = 0; i < Model.ContatosEmpresa.Count; i++)
+                    {
+                        var c = Model.ContatosEmpresa[i];
+
+                        <!-- CAMPOS HIDDEN ESSENCIAIS PARA O MODEL BINDER -->
+                        <input type="hidden" name="ContatosEmpresa[@i].IDCONTATO" value="@c.IDCONTATO" />
+                        <input type="hidden" name="ContatosEmpresa[@i].IDEMPRESA" value="@c.IDEMPRESA" />
+
+                        <input type="hidden" name="ContatosEmpresa[@i].Contato.Id" value="@c.Contato.Id" />
+                        <input type="hidden" name="ContatosEmpresa[@i].Contato.TPCONTATO" value="@c.Contato.TPCONTATO" />
+                        <input type="hidden" name="ContatosEmpresa[@i].Contato.DESCR1" value="@c.Contato.DESCR1" />
+                        <input type="hidden" name="ContatosEmpresa[@i].Contato.DESCR2" value="@c.Contato.DESCR2" />
+
+                        <tr>
+                            <td>@c.Contato.TPCONTATO</td>
+                            <td>@c.Contato.DESCR1</td>
+                            <td>@c.Contato.DESCR2</td>
+
+                            <td>
+
+
+                                <a class="btn btn-danger delete" id="btnDeleteContato" title="Apagar" data-idContato="@c.IDCONTATO" data-idEmpresa="@c.IDEMPRESA" data-tpcontato="@c.Contato.TPCONTATO" data-descr1="@c.Contato.DESCR1"><spam class="fa fa-trash"></spam></a>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-muted">Nenhum contato cadastrado.</p>
+        }
+
+    </div>
+</div>

@@ -33,6 +33,77 @@ namespace agilium.api.infra.Repository.Dapper
             return autenticacaoUrl;
         }
 
+        public async Task<bool> SalvarEndereco(Endereco endereco)
+        {
+            if (endereco == null)
+                return false;
+
+            // Verifica se o endereço já existe
+            const string sqlExists = @"
+        SELECT COUNT(1) 
+        FROM endereco 
+        WHERE IDENDERECO = @ID";
+
+            var existe = await _dbSession.Connection.ExecuteScalarAsync<int>(
+                sqlExists,
+                new { ID = endereco.Id },
+                _dbSession.Transaction
+            );
+
+            // ==================== INSERT ====================
+            if (existe == 0)
+            {
+                const string insertSql = @"
+            INSERT INTO endereco
+            (IDENDERECO, ENDER, COMPL, NUM, BAIRRO, CIDADE, UF, PAIS, IBGE, DSPTREF)
+            VALUES
+            (@IDENDERECO, @ENDER, @COMPL, @NUM, @BAIRRO, @CIDADE, @UF, @PAIS, @IBGE, @DSPTREF)";
+
+                return await _dbSession.Connection.ExecuteAsync(insertSql, new
+                {
+                    IDENDERECO = endereco.Id,
+                    ENDER = endereco.Logradouro,
+                    COMPL = endereco.Complemento,
+                    NUM = endereco.Numero,
+                    BAIRRO = endereco.Bairro,
+                    CIDADE = endereco.Cidade,
+                    UF = endereco.Uf,
+                    PAIS = endereco.Pais,
+                    IBGE = endereco.Ibge,
+                    DSPTREF = endereco.PontoReferencia
+
+                }, _dbSession.Transaction) > 0;
+            }
+
+            // ==================== UPDATE ====================
+            const string updateSql = @"
+        UPDATE endereco SET
+            ENDER = @ENDER,
+            COMPL = @COMPL,
+            NUM = @NUM,
+            BAIRRO = @BAIRRO,
+            CIDADE = @CIDADE,
+            UF = @UF,
+            PAIS = @PAIS,
+            IBGE = @IBGE,
+            DSPTREF = @DSPTREF
+        WHERE IDENDERECO = @IDENDERECO";
+
+            return await _dbSession.Connection.ExecuteAsync(updateSql, new
+            {
+                IDENDERECO = endereco.Id,
+                ENDER = endereco.Logradouro,
+                COMPL = endereco.Complemento,
+                NUM = endereco.Numero,
+                BAIRRO = endereco.Bairro,
+                CIDADE = endereco.Cidade,
+                UF = endereco.Uf,
+                PAIS = endereco.Pais,
+                IBGE = endereco.Ibge,
+                DSPTREF = endereco.PontoReferencia
+
+            }, _dbSession.Transaction) > 0;
+        }
 
         public Task<Endereco> AdicionarEndereco(string logradouro, string numero, string complemento, string bairro, string cep, string cidade, string uf, string pais)
         {
@@ -162,6 +233,8 @@ namespace agilium.api.infra.Repository.Dapper
             return _dbSession.Connection.Query<Cep>(query, parametros,_dbSession.Transaction).FirstOrDefault();
             }
         }
+
+
         #endregion
     
 }

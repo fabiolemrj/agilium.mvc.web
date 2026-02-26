@@ -1,0 +1,231 @@
+﻿@using agilium.api.business.Enums
+@model agilum.mvc.web.ViewModels.Empresa.EmpresaCreateViewModel
+@using agilum.mvc.web.Extensions
+
+@{
+    ViewData["Title"] = "Editar Empresa";
+}
+
+<h5>@ViewData["Title"]</h5>
+<hr />
+
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+
+        <a href="#" title="Voltar" id="btnVoltar">
+            <span class="fas fa-reply sns-tool-action"></span>
+        </a>
+
+        <a href="#" type="button" title="Salvar dados" id="btnSalvar">
+            <span class="fa fa-save sns-tool-action"></span>
+        </a>
+
+        <a href="#" type="button" title="Ajuda" id="btnAjuda">
+            <span class="fa fa-question sns-tool-action"></span>
+        </a>
+
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a href="@Url.Action("Index","Empresa")"><i class="fa fa-building"></i> Empresas</a> /
+            <a href="#">Editar</a>
+        </div>
+    </article>
+</section>
+
+<br />
+
+<div class="row">
+    <div class="col-12">
+
+        <form asp-action="EditarEmpresa" method="post" id="frmEditEmpresa">
+            @Html.AntiForgeryToken()
+            <vc:Summary></vc:Summary>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="card-title">Dados da Empresa</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- =================== CÓDIGO E TIPO =================== -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="CDEMPRESA"></label>
+                            <input asp-for="CDEMPRESA" class="form-control" readonly />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="TPEMPRESA"></label>
+                            <select asp-for="TPEMPRESA"
+                                    asp-items="Html.GetEnumSelectList<ETipoEmpresa>()"
+                                    class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <!-- =================== RAZÃO SOCIAL =================== -->
+                    <div class="row">
+                        <div class="col-md-9">
+                            <label asp-for="NMRZSOCIAL"></label>
+                            <input asp-for="NMRZSOCIAL" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- =================== NOME FANTASIA =================== -->
+                    <div class="row">
+                        <div class="col-md-9">
+                            <label asp-for="NMFANTASIA"></label>
+                            <input asp-for="NMFANTASIA" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- =================== DOCUMENTAÇÃO =================== -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="NUCNPJ"></label>
+                            <input asp-for="NUCNPJ" class="form-control cnpj" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="DSINSCREST"></label>
+                            <input asp-for="DSINSCREST" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="DSINSCRESTVINC"></label>
+                            <input asp-for="DSINSCRESTVINC" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="DSINSCRMUN"></label>
+                            <input asp-for="DSINSCRMUN" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- =================== SITE MERCADO =================== -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="CLIENTID_SITEMERCADO"></label>
+                            <input asp-for="CLIENTID_SITEMERCADO" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="CLIENTSECRET_SITEMERCADO"></label>
+                            <input asp-for="CLIENTSECRET_SITEMERCADO" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="IDLOJA_SITEMARCADO"></label>
+                            <input asp-for="IDLOJA_SITEMARCADO" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- =================== CNAE / CSC =================== -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="NUCNAE"></label>
+                            <input asp-for="NUCNAE" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="IDCSC"></label>
+                            <input asp-for="IDCSC" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="CSC"></label>
+                            <input asp-for="CSC" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- =================== TRIBUTAÇÃO =================== -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="NUREGJUNTACOM"></label>
+                            <input asp-for="NUREGJUNTACOM" class="form-control" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="CRT"></label>
+                            <select asp-for="CRT"
+                                    asp-items="Html.GetEnumSelectList<ECodigoRegimeTributario>()"
+                                    class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <!-- =================== DISTRIBUIÇÃO =================== -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="NMDISTRIBUIDORA"></label>
+                            <input asp-for="NMDISTRIBUIDORA" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="STLUCROPRESUMIDO"></label>
+                            <select asp-for="STLUCROPRESUMIDO"
+                                    asp-items="Html.GetEnumSelectList<ESimNao>()"
+                                    class="form-control"></select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="STMICROEMPRESA"></label>
+                            <select asp-for="STMICROEMPRESA"
+                                    asp-items="Html.GetEnumSelectList<ESimNao>()"
+                                    class="form-control"></select>
+                        </div>
+                    </div>
+
+                    <!-- =================== ENDEREÇO =================== -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            @await Html.PartialAsync("_endereco.cshtml", Model)
+                        </div>
+                    </div>
+
+                    <!-- =================== CONTATOS =================== -->
+                    <div class="row mt-4">
+                        <div class="col-md-12" id="ContatoTarget">
+                            @await Html.PartialAsync("_contatoLista.cshtml", Model)
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button type="submit" id="btnSendForm" style="visibility:hidden"></button>
+
+        </form>
+    </div>
+</div>
+
+<!-- MODAL PARA CONTATOS -->
+<div id="myModal" class="modal fade in">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="myModalContent"></div>
+        </div>
+    </div>
+</div>
+
+<script src="~/dist/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+<script src="~/local/empresaCreate.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            SetModal();
+
+            $("#btnSalvar").click(function () {
+                $("#btnSendForm").click();
+            });
+        });
+    </script>
+}

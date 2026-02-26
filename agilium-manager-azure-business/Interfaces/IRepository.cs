@@ -19,6 +19,7 @@ namespace agilium.api.business.Interfaces
         Task AtualizarSemSalvar(TEntity entity);
         Task AtualizarLista(IEnumerable<TEntity> entity);
         void AtualizarSincrona(TEntity entity);
+        Task AtualizarComSetValues(TEntity entity, object model);
         void RemoverSincrona(TEntity entity);
         void AdicionarSincrona(TEntity entity);
         Task Remover(long id);

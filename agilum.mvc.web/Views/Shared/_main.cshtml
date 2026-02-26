@@ -6,128 +6,96 @@
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Agilium Painel</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agilium Manager</title>
 
-    <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png">
+    <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png" />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="~/font/NightMachine-rwMB.ttf" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
 
     <!-- Icons e Plugins -->
-    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="~/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" href="~/dist/plugins/icheck-bootstrap/icheck-bootstrap.min.css" />
 
-    <!-- CSS do seu site e AdminLTE -->
-    <link rel="stylesheet" href="~/css/site.css">
-    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <!-- CSS do site e AdminLTE -->
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css" />
     <link rel="stylesheet" href="~/dist/plugins/chart.js/Chart.css" />
     <link rel="stylesheet" href="~/css/toastr.css" />
-    <link href="~/dist/plugins/sweetalert2/sweetalert2.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/dist/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="~/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="~/dist/plugins/sweetalert2/sweetalert2.css" />
+    <link rel="stylesheet" href="~/dist/plugins/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="~/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" />
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="~/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="~/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- DataTables + Select2 -->
+    <link rel="stylesheet" href="~/dist/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/dist/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/dist/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" />
+    <link rel="stylesheet" href="~/dist/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/dist/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" />
 
-    <!-- Select2 + tema Bootstrap 4 -->
-    <link href="~/dist/plugins/select2/css/select2.min.css" rel="stylesheet" />
-    <link href="~/dist/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" rel="stylesheet" />
-
-
+    @RenderSection("Head", required: false)
 </head>
 
-
 <body class="hold-transition sidebar-mini text-md accent-navy">
-    @*<div id="overlay" onclick="off()">
-            <img id="imgLoader" src="~/Images/ajax-loader.gif" alt="Aguarde o carregamento..." />
-
-        </div>*@
-
-    <div id="overlay">
+    <div id="overlay" style="display:none;">
         <div class="loader">
             <p class="mt-3 text-white font-weight-bold">Carregando...</p>
             <img id="imgLoader" src="~/Images/loading-gif-png-5.gif" alt="Aguarde o carregamento..." />
-          
         </div>
     </div>
 
     <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-light navbar-warning">
-            <!-- Left navbar links -->
-            <a class="brand-link text-lg-left">
-                @*<img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">*@
-                @*<span class="fonteLogoAgilium" >AGILIUM PAINEL</span>*@
-            </a>
-
-            <!-- Right navbar links -->
+            <a class="brand-link text-lg-left"></a>
             <partial name="_LoginPartial" />
-          
         </nav>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
 
         <aside class="main-sidebar sidebar-light-navy elevation-4">
-            <!-- Brand Logo -->
             <a class="brand-link navbar-warning" data-widget="pushmenu" href="#" role="button">
-                <img src="~/Images/logo_v3c_SIMBOLO.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="fonteLogoAgilium">AGILIUM</span>
+                <div class="logoAgilium">
+                    <img src="~/Images/logo_v3c_SIMBOLO.png" alt="Logo" id="_logo_Agilium" class="brand-image img-circle elevation-3" style="opacity: .8" />
+                    <span class="fonteLogoAgilium">AGILIUM MANAGER</span>
+                </div>
             </a>
 
             <partial name="_AsideMenu" />
         </aside>
 
-        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-
-            </div>
-            <!-- /.content-header -->
-            <!-- Main content -->
+            <div class="content-header"></div>
             <div class="conteudo content">
                 <div class="container-fluid">
                     @RenderBody()
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+                </div>
             </div>
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
-        <!-- Control Sidebar -->
-        <!-- /.control-sidebar -->
-        <!-- Main Footer -->
+
         <partial name="_rodape" />
     </div>
-    
-    <!-- ./wrapper -->
-    <!-- REQUIRED SCRIPTS -->
-    <!-- Bootstrap 4 -->
-    <!-- AdminLTE App -->
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- jQuery -->
+    <!-- Modal global (usado para carregar partials via AJAX) -->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="myModalContent"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS: carregue bibliotecas uma vez -->
     <script src="~/dist/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
     <script src="~/dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
     <script src="~/dist/js/adminlte.min.js"></script>
     <script src="~/dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+
     <script src="~/dist/plugins/chart.js/Chart.js"></script>
 
-    <!-- DataTables  & Plugins -->
+    <!-- DataTables -->
     <script src="~/dist/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/dist/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="~/dist/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -140,114 +108,195 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/dist/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="~/dist/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/dist/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="~/js/dknotus-tour.min.js"></script>
+
+    <script src="~/dist/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/dist/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
     <script src="~/dist/plugins/daterangepicker/daterangepicker.js"></script>
 
     <script src="~/js/toastr.min.js"></script>
     <script src="~/dist/plugins/sweetalert2/sweetalert2.js"></script>
-    <script src="~/js/toastr.min.js"></script>
+
+    <!-- util scripts (masks, input helper) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/dist/js/jqueryInputMask.js"></script>
 
-    <!--forms-->
-    <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
- 
-    <script src="~/dist/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    @* Seu script de site principal (se tiver) *@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/dknotus-tour.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
-    <script src="~/dist/plugins/select2/js/select2.full.min.js"></script>
-
-    @*<script src="~/dist/js/demo.js"></script>
-        <script src="~/dist/js/pages/dashboard.js"></script>*@
-
-    @RenderSection("Scripts", required: false)
-
+    @* =================== SCRIPTS CONSOLIDADOS E SEGUROS =================== *@
     <script>
+        $(document).ready(function () {
+            $('#btnVoltar').on('click', function (e) {
+                e.preventDefault();
+                history.back();
+            });
+        })
 
+        // Configuração inicial
         var configuracaoApp = {
-            ambiente: "@HostingEnvironment.EnvironmentName", // Ex: "Development"
+            ambiente: "@HostingEnvironment.EnvironmentName",
             valorParaCliente: "@Configuration["MinhaSecao:ValorQueVaParaCliente"]",
-            apiUrl: "@Url.Content("~/api/algumEndpoint")" // Exemplo de como gerar uma URL
+            apiUrl: "@Url.Content("~/api/algumEndpoint")"
         };
-     
+
+        // Overlay helpers
+        function on() {
+            document.getElementById("overlay").style.display = "block";
+        }
+        function off() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        // ----------------- MODAL CONTROL (único handler) -----------------
         function SetModal() {
+            // remover binds antigos evita duplicação
+            $(document).off("click", "a[data-modal]");
 
-            $(document).ready(function () {
-                $(function () {
-                    $.ajaxSetup({ cache: false });
+            $(document).on("click", "a[data-modal]", function (e) {
+                e.preventDefault();
 
-                    $("a[data-modal]").on("click",
-                        function (e) {
-                            $('#myModalContent').load(this.href,
-                                function () {
-                                    $('#myModal').modal({
-                                        keyboard: true
-                                    },
-                                        'show');
-                                    bindForm(this);
-                                });
-                            return false;
-                        });
+                var url = $(this).attr("href");
+                if (!url) return;
+
+                // evita abrir várias vezes (desabilita link enquanto carrega)
+                var $link = $(this);
+                if ($link.data("loading")) return;
+                $link.data("loading", true);
+
+                $('#myModalContent').html('<div class="p-4 text-center">Carregando...</div>');
+                $('#myModal').modal('show');
+
+                // carrega partial
+                $('#myModalContent').load(url, function (response, status, xhr) {
+                    // libera o link
+                    $link.data("loading", false);
+
+                    if (status === "error") {
+                        $('#myModalContent').html('<div class="p-4 text-danger text-center">Erro ao carregar.</div>');
+                        return;
+                    }
+
+                    // aplica binds somente dentro do conteúdo do modal
+                    bindForm($('#myModalContent'));
                 });
             });
         }
 
-        function bindForm(dialog) {
-            $('form', dialog).submit(function () {
+        // ----------------- BIND DO FORM DO MODAL (ISOLADO) -----------------
+        function bindForm($dialog) {
+            // $dialog pode ser selector string ou jQuery object
+            var $root = $($dialog);
+
+            // remove handlers antigos (evita múltiplos bindings)
+            $root.find('form').off('submit');
+
+            // aplica novo handler para cada form dentro do modal
+            $root.find('form').on('submit', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+
+                // opcional: validação cliente (se tiver)
+                // if (!$form.valid || !$form.valid()) return;
+
+                // desabilita botão submit para evitar dupla submissão
+                var $btn = $form.find('button[type="submit"], input[type="submit"]').prop('disabled', true);
+
                 $.ajax({
-                    url: this.action,
-                    type: this.method,
-                    data: $(this).serialize(),
+                    url: $form.attr('action'),
+                    type: $form.attr('method') || 'post',
+                    data: $form.serialize(),
                     success: function (result) {
-                        if (result.success) {
+                        $btn.prop('disabled', false);
+                        if (result && result.success) {
                             $('#myModal').modal('hide');
                             if (result.url) {
-                                $('#ContatoTarget').load(result.url); // Carrega o resultado HTML para a div demarcada
+                                // atualiza área de contatos
+                                $('#ContatoTarget').load(result.url);
                             } else {
-                                $('#ContatoTarget').html(result);
+                                // fallback: recarrega partial padrão que lista contatos (ajuste se necessário)
+                                $('#ContatoTarget').load(window.location.href + ' #ContatoTarget > *');
                             }
-
 
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sucesso',
                                 text: 'Operação realizada com sucesso'
                             });
+
                         } else {
+                            // resultado é HTML de validação (partial) -> re-renderiza modal
                             $('#myModalContent').html(result);
-                            bindForm(dialog);
+                            // re-bind para o novo conteúdo
+                            bindForm($('#myModalContent'));
                         }
+                    },
+                    error: function (xhr, status, err) {
+                        $btn.prop('disabled', false);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro',
+                            text: 'Erro ao processar a requisição.'
+                        });
                     }
                 });
 
-                SetModal();
                 return false;
             });
         }
 
-        $(document).ready(function () {
+        // ----------------- LIMPAR AO FECHAR -----------------
+        $(document).on('hidden.bs.modal', '#myModal', function () {
+            // remove handlers e limpa html para evitar "event leakage"
+            $(this).find('form').off('submit');
+            $('#myModalContent').html('');
+            off();
+        });
 
-            //Renderiza a mensagem que retorna da controller
-            if ("@ViewBag.TipoMensagem" != '') {
-                ModalMensagem("@ViewBag.TipoMensagem", "@Html.Raw(ViewBag.Mensagem)");
+        // ----------------- AJAX GLOBAL: evitar overlay para modal -----------------
+        // Guarda a URL da última requisição enviada (via ajaxSend)
+        window.lastAjaxUrl = null;
+
+        $(document).ajaxSend(function (event, xhr, settings) {
+            window.lastAjaxUrl = settings && settings.url ? settings.url : null;
+        });
+
+        $(document).ajaxStart(function () {
+            // se última requisição for do tipo modal (contato/novo ou contato/editar), NÃO ligar overlay
+            if (window.lastAjaxUrl && (window.lastAjaxUrl.indexOf('contato/editar') !== -1 || window.lastAjaxUrl.indexOf('contato/novo') !== -1)) {
+                return;
             }
-            else if ("@TempData["TipoMensagem"]" != '') {
+            on();
+        });
+
+        $(document).ajaxStop(function () {
+            off();
+        });
+
+        $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+            off();
+            toastr.error("Erro na requisição: " + (thrownError || jqxhr.statusText));
+        });
+
+        // ----------------- INICIALIZAÇÃO -----------------
+        $(function () {
+            SetModal();
+
+            // Renderiza mensagens vindas da controller (se existirem)
+        @* Quando ViewBag.TipoMensagem estiver preenchido *@
+                    if ("@ViewBag.TipoMensagem" !== '') {
+                ModalMensagem("@ViewBag.TipoMensagem", "@Html.Raw(ViewBag.Mensagem)");
+            } else if ("@TempData["TipoMensagem"]" !== '') {
                 ModalMensagem("@TempData["TipoMensagem"]", "@TempData["Mensagem"]");
             }
 
+            // exemplo: inicializações que existiam
+            ObterEmpresaSelecionado();
+            ObterVersaoSistema();
         });
 
-        function on() {
-            document.getElementById("overlay").style.display = "block";
-        }
-
-        function off() {
-            document.getElementById("overlay").style.display = "none";
-        }
-
+        // ----------------- UTIL: ModalMensagem, ObterEmpresaSelecionado, ObterVersaoSistema -----------------
         function ModalMensagem(tipoModal, mensagemModal) {
-            var _tipoModal;
-
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -263,172 +312,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
-            }
+            };
 
             switch (tipoModal) {
-
-                case "warning":
-                    toastr.warning(mensagemModal)
-                    break;
-                case "danger":
-                    toastr.error(mensagemModal)
-                    break;
-                case "info":
-                    toastr.info(mensagemModal)
-                    break;
-                case "success":
-                    toastr.success(mensagemModal)
-                    break;
-
-                default:
-                    toastr.success(mensagemModal)
-                    break;
+                case "warning": toastr.warning(mensagemModal); break;
+                case "danger": toastr.error(mensagemModal); break;
+                case "info": toastr.info(mensagemModal); break;
+                case "success": toastr.success(mensagemModal); break;
+                default: toastr.success(mensagemModal); break;
             }
         }
 
-        $('#btnYes').click(function () {
-
-            // handle form processing here
-
-            alert('submit form');
-            $('form').submit();
-
-        });
-
-        $(".indisponivel").click(function () {
-            ModalMensagem("danger", "Recurso Indisponível para versão Web");
-        });
-        $(document).ready(function () {
-            ObterEmpresaSelecionado();
-            ObterVersaoSistema();
-        });
-
-        function ObterEmpresaSelecionado(){
-            const ambiente= "@HostingEnvironment.EnvironmentName"; // Ex: "Development";
-            let _url = "";
-            if (ambiente == "Development")
-                _url = "/empresa/ObterEmpresaSelecionada";
-            else
-                _url = "/mvc/empresa/ObterEmpresaSelecionada"
-            $.ajax({
-                type: 'get',
-                url: _url,
-                success: function (resultado) {
-                    if (resultado == null ) {
-                        toastr.error("Erro")
+        function ObterEmpresaSelecionado() {
+            var ambiente = "@HostingEnvironment.EnvironmentName";
+            var _url = "/empresa/ObterEmpresaSelecionada";
+            $.get(_url)
+                .done(function (resultado) {
+                    if (!resultado) {
+                        $('#idselec-txt').text("Selecione uma empresa");
                         return;
                     }
-                    const idEmpresa = JSON.parse(JSON.stringify(resultado));
-                    if(idEmpresa)
-                        $('#idselec-txt').text(idEmpresa);
-                    else
-                        $('#idselec-txt').text("Selecione uma empresa");
-                },
-                error: function (result) {
-                    $('#idselec-txt').text('Selecione uma empresa');
-                }
-            });
-        }
-
-        function ObterVersaoSistema(){
-            const ambiente = "@HostingEnvironment.EnvironmentName"; // Ex: "Development";
-            let _url = "";
-            if (ambiente == "Development")
-                _url = '/ObterVersaoSistema';
-            else
-                _url = '/mvc/ObterVersaoSistema'
-
-            $.ajax({
-                type:'get',
-                url: _url,
-                success:function(resultado){
-                    if(resultado)
-                    {
-                        const versao = JSON.parse(JSON.stringify(resultado));
-                        $('#versao_sistema').text(versao.versao);
-                    }
-                       
-                }
-            });
-        }
-
-
-    </script>
-
-    <script>
-        $(document).ready(function () {
-
-            if (("@ViewBag.TipoMensagem" != '') || ("@TempData["TipoMensagem"]" != '')) 
-            { 
-                off();
-            }
-
-            // 1️⃣ Links de menu e links gerais que levam para outra página
-            $(document).on("click", "a.nav-link, a[data-link], a.menu-link, a.btn-warning, a.btn-danger, a.btn-default", function (e) {
-                const href = $(this).attr("href");
-
-                // Se for vazio, # ou apenas âncora interna, não faz overlay
-                if (!href || href === "#" || href.startsWith("#")) {
-                    return; // deixa o Bootstrap tab funcionar normalmente
-                }
-
-                // Se for navegação real → mostra overlay e redireciona
-                e.preventDefault();
-                on();
-                window.location.href = href;
-            });
-
-            // 2️⃣ Links que abrem modais via AJAX
-            $(document).on("click", "a[data-modal]", function (e) {
-                e.preventDefault();
-                on();
-                $('#myModalContent').load(this.href, function () {
-                    $('#myModal').modal({ keyboard: true }, 'show');
-                    bindForm(this);
-                    off(); // opcional: remove overlay após o modal carregar
+                    $('#idselec-txt').text(resultado);
+                })
+                .fail(function () {
+                    $('#idselec-txt').text("Selecione uma empresa");
                 });
-            });
+        }
 
-            // 3️⃣ Formulários - qualquer submit
-            $(document).on("submit", "form", function () {
-                on();
-            });
-
-            // Esconde overlay quando a nova página terminar de carregar
-            $(window).on("load", function () {
-                off();
-            });
-
-            // 4️⃣ Links ou botões específicos com classe load__tela
-            $(document).on("click", ".load__tela", function () {
-                on();
-            });
-
-            $(window).on("error", function () {
-                off();
-            });
-
-            $(document).ajaxStart(function () {
-                on();
-            });
-
-            $(document).ajaxStop(function () {
-                off();
-            });
-
-            $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
-                off(); // se houve erro, some com overlay
-                toastr.error("Erro na requisição: " + thrownError);
-            });
-
-            // 6️⃣ Se modal for fechado manualmente → garantir off()
-            $(document).on('hidden.bs.modal', '#myModal', function () {
-                off();
-            });
-
-        });
+        function ObterVersaoSistema() {
+            var _url = '/ObterVersaoSistema';
+            $.get(_url)
+                .done(function (resultado) {
+                    if (resultado && resultado.versao) {
+                        $('#versao_sistema').text(resultado.versao);
+                    }
+                });
+        }
     </script>
 
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

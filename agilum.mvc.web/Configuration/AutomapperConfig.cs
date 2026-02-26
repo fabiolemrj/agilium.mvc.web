@@ -92,36 +92,55 @@ namespace agilum.mvc.web.Configuration
             #endregion
 
             #region Empresa
-            CreateMap<Empresa, EmpresaViewModel>().ReverseMap();
-            CreateMap<Empresa, agilum.mvc.web.Areas.Identity.Pages.Account.LoginModel.EmpresaViewModel>().ReverseMap();
 
+            // Mapeamento simples Empresa → EmpresaViewModel
+            CreateMap<Empresa, EmpresaViewModel>().ReverseMap();
+
+            // Mapeamento usado no Identity
+            CreateMap<Empresa, agilum.mvc.web.Areas.Identity.Pages.Account.LoginModel.EmpresaViewModel>()
+                .ReverseMap();
+
+            // Mapeamento principal Empresa → EmpresaCreateViewModel
             CreateMap<Empresa, EmpresaCreateViewModel>()
-                .ForMember(origem => origem.STMICROEMPRESA, opt => opt.MapFrom(src => src.STMICROEMPRESA))
-                .ForMember(origem => origem.IDENDERECO, opt => opt.MapFrom(src => src.IDENDERECO))
-                .ForMember(origem => origem.CDEMPRESA, opt => opt.MapFrom(src => src.CDEMPRESA))
-                .ForMember(origem => origem.NMRZSOCIAL, opt => opt.MapFrom(src => src.NMRZSOCIAL))
-                .ForMember(origem => origem.NMFANTASIA, opt => opt.MapFrom(src => src.NMFANTASIA))
-                .ForMember(origem => origem.DSINSCREST, opt => opt.MapFrom(src => src.DSINSCREST))
-                .ForMember(origem => origem.DSINSCRESTVINC, opt => opt.MapFrom(src => src.DSINSCRESTVINC))
-                .ForMember(origem => origem.DSINSCRMUN, opt => opt.MapFrom(src => src.DSINSCRMUN))
-                .ForMember(origem => origem.NMDISTRIBUIDORA, opt => opt.MapFrom(src => src.NMDISTRIBUIDORA))
-                .ForMember(origem => origem.NUREGJUNTACOM, opt => opt.MapFrom(src => src.NUREGJUNTACOM))
-                .ForMember(origem => origem.NUCAPARM, opt => opt.MapFrom(src => src.NUCAPARM))
-                .ForMember(origem => origem.STLUCROPRESUMIDO, opt => opt.MapFrom(src => src.STLUCROPRESUMIDO))
-                .ForMember(origem => origem.TPEMPRESA, opt => opt.MapFrom(src => src.TPEMPRESA))
-                .ForMember(origem => origem.CRT, opt => opt.MapFrom(src => src.CRT))
-                .ForMember(origem => origem.IDCSC, opt => opt.MapFrom(src => src.IDCSC))
-                .ForMember(origem => origem.CSC, opt => opt.MapFrom(src => src.CSC))
-                .ForMember(origem => origem.NUCNAE, opt => opt.MapFrom(src => src.NUCNAE))
-                .ForMember(origem => origem.IDCSC_HOMOL, opt => opt.MapFrom(src => src.IDCSC_HOMOL))
-                .ForMember(origem => origem.IDLOJA_SITEMARCADO, opt => opt.MapFrom(src => src.IDLOJA_SITEMARCADO))
-                .ForMember(origem => origem.CLIENTID_SITEMERCADO, opt => opt.MapFrom(src => src.CLIENTID_SITEMERCADO))
-                .ForMember(origem => origem.CLIENTSECRET_SITEMERCADO, opt => opt.MapFrom(src => src.CLIENTSECRET_SITEMERCADO))
-            .ForMember(origem => origem.ContatosEmpresa, opt => opt.MapFrom(src => src.ContatoEmpresas))
-            .ForMember(origem => origem.ContatosEmpresa, opt => opt.MapFrom(src => src.ContatoEmpresas))
-             .ForMember(origem => origem.Endereco, opt => opt.MapFrom(src => src.Endereco))
-            .ReverseMap();
+                .ForMember(dest => dest.ContatosEmpresa, opt => opt.MapFrom(src => src.ContatoEmpresas))
+                .ForMember(dest => dest.Endereco, opt => opt.MapFrom(src => src.Endereco))
+                // OBS: Model tem IDLOJA_SITEMARCADO, banco tem IDLOJA_SITEMERCADO
+                .ForMember(dest => dest.IDLOJA_SITEMARCADO, opt => opt.MapFrom(src => src.IDLOJA_SITEMARCADO))
+                .ReverseMap()
+
+                // ❗ Nunca mapear listas na volta → isso destrói relacionamentos
+                .ForMember(dest => dest.ContatoEmpresas, opt => opt.Ignore())
+                .ForMember(dest => dest.Configuracoes, opt => opt.Ignore())
+                .ForMember(dest => dest.EmpresasAuth, opt => opt.Ignore())
+                .ForMember(dest => dest.ConfigImagem, opt => opt.Ignore())
+                .ForMember(dest => dest.Perfil, opt => opt.Ignore())
+                .ForMember(dest => dest.Estoques, opt => opt.Ignore())
+                .ForMember(dest => dest.Funcionarios, opt => opt.Ignore())
+                .ForMember(dest => dest.Moedas, opt => opt.Ignore())
+                .ForMember(dest => dest.PontosVendas, opt => opt.Ignore())
+                .ForMember(dest => dest.Produtos, opt => opt.Ignore())
+                .ForMember(dest => dest.PlanoContas, opt => opt.Ignore())
+                .ForMember(dest => dest.ContaPagar, opt => opt.Ignore())
+                .ForMember(dest => dest.ContaReceber, opt => opt.Ignore())
+                .ForMember(dest => dest.NotaFiscalInutil, opt => opt.Ignore())
+                .ForMember(dest => dest.Turnos, opt => opt.Ignore())
+                .ForMember(dest => dest.Caixas, opt => opt.Ignore())
+                .ForMember(dest => dest.Vales, opt => opt.Ignore())
+                .ForMember(dest => dest.Perdas, opt => opt.Ignore())
+                .ForMember(dest => dest.Devolucao, opt => opt.Ignore())
+                .ForMember(dest => dest.Compras, opt => opt.Ignore())
+                .ForMember(dest => dest.Inventarios, opt => opt.Ignore())
+                .ForMember(dest => dest.ProdutoSiteMercado, opt => opt.Ignore())
+                .ForMember(dest => dest.MoedasSiteMercados, opt => opt.Ignore())
+
+                // ❗ FK NÃO pode ser alterada via AutoMapper durante edição!
+                .ForMember(dest => dest.IDENDERECO, opt => opt.Ignore())
+
+                // ❗ Endereço é atualizado manualmente no Controller (como você já fez)
+                .ForMember(dest => dest.Endereco, opt => opt.Ignore());
+
             #endregion
+
 
             #region Contato
             CreateMap<Contato, ContatoIndexViewModel>().ReverseMap();

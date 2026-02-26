@@ -29,6 +29,7 @@ using Polly.Retry;
 using System.Net.Http;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium_manager_azure_business.Services;
+using agilium_manager_git_azure_infra.Repository.Dapper;
 
 
 namespace agilum.mvc.web.Configuration
@@ -97,6 +98,7 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IEmpresaRepository, EmpresaRepository>();
             services.AddScoped<IEmpresaService, EmpresaService>();
             services.AddScoped<IEmpresaAuthRepository, EmpresaAuthRepository>();
+            services.AddScoped<IEmpresaDapperRepository, EmpresaDapper>();
             #endregion
 
             #region Unidade

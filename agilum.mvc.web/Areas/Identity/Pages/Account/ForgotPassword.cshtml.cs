@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.WebUtilities;
 
 using agilium.api.infra.Context;
 using agilum.mvc.web.Data;
+using static agilum.mvc.web.Areas.Identity.Pages.Account.LoginModel;
+using agilium.api.business.Interfaces.IService;
+using System.Linq;
+using AutoMapper;
 
 namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
@@ -20,22 +24,44 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<AppUserAgiliumIdentity> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly agilum.mvc.web.Services.IEmailSender _emailSender;
+        private readonly IEmpresaService _empresaService;
+        protected readonly IMapper _mapper;
+        private IEnumerable<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
 
-        public ForgotPasswordModel(UserManager<AppUserAgiliumIdentity> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<AppUserAgiliumIdentity> userManager, agilum.mvc.web.Services.IEmailSender emailSender,
+            IEmpresaService empresaService, IMapper mapper)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _empresaService = empresaService;
+            _mapper = mapper;
+
+            if (listaEmpresaViewModels.Count() == 0)
+                listaEmpresaViewModels = _mapper.Map<List<EmpresaViewModel>>(_empresaService.ObterTodas().Result);
+
+            ObterEmpresas();
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
+
+        [BindProperty]
+        public List<EmpresaViewModel> Empresas { get; set; } = new List<EmpresaViewModel>();
 
         public class InputModel
         {
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            public string Empresa { get; set; }
+        }
+
+        private async void ObterEmpresas()
+        {
+            Empresas = listaEmpresaViewModels.ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -62,7 +88,8 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Alterar a senha",
-                    $"Redefina sua senha em < a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> clicando aqui</a>.");
+                    $"Redefina sua senha em < a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> clicando aqui</a>.",
+                    Input.Empresa);
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

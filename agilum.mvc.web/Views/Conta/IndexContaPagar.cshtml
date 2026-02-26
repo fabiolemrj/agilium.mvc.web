@@ -96,51 +96,52 @@
     </div>
 </div>
 <div id="divGridResultado">
-    <table class="table table-hover">
+    <div class="table-responsive">
+    <table class="table table-hover no-wrap-table">
         <thead class="table thead-dark">
             <tr>
 
-                <th>
+                    <th class="limited-cell">
                     Data Vencimento
                    
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Data Pagamento
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Descrição
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Conta
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Categoria
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Fornecedor
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Situação
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Valor
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Descontos
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Acréscimos
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Total
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Tipo Conta
                 </th>
-                <th>
+                    <th class="limited-cell">
                     Parcela
                 </th>
-                <th class=""></th>
+                    <th class="limited-cell"></th>
             </tr>
         </thead>
         <tbody>
@@ -166,55 +167,55 @@
                 var dtCadastro = item.DatCadastro.HasValue ? item.DatCadastro.Value.ToString("dd/MM/yyyy") : "";
                 <tr>
 
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(dtVencimento)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(dtPagamento)
                        
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.Descricao)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.Conta)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.CategoriaFinanceira)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.Fornecedor)
                     </td>
-                    <td class="@classeSituacao">
+                        <td class="@classeSituacao limited-cell">
                         @Html.Raw(situacao)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(valorConta.ToString("C"))
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(valorDesconto.ToString("C"))
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(valorAcrescimo.ToString("C"))
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.Raw(valorTotal.ToString("C"))
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.TipoConta)
                     </td>
-                    <td>
+                        <td class="limited-cell">
                         @Html.DisplayFor(modelItem => item.ParcelaInicial)
                     </td>
                     @if (item.Situacao == 2)
                     {
-                        <td class="acao-botoes text-right">
+                            <td class="acao-botoes text-right limited-cell">
                             <a class="btn btn-danger" asp-action="DesConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Desconsolidar"><i class="fas fa-check-circle"></i></a>
                         </td>
                     }
                     else
                     {
-                        <td class="acao-botoes text-right">
+                            <td class="acao-botoes text-right limited-cell">
 
                             <a class="btn btn-success" asp-action="ConsolidarContaPagarPorId" asp-route-id="@item.Id" title="Consolidar"><i class="fas fa-check-circle"></i></a>
                             <a class="btn btn-warning" asp-action="EditContaPagar" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>
@@ -289,10 +290,12 @@
         </ul>
     </nav>
 </div>
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/local/Financeiro/contaPagar.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="~/local/Financeiro/contaPagar.js"></script>
+
 
 }

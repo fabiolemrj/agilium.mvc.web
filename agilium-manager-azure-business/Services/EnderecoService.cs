@@ -15,12 +15,14 @@ namespace agilium.api.business.Services
     {
         private readonly IEnderecoRepository _enderecoRepository;
         private readonly ICepRepository _cepRepository;
+        private readonly IEnderecoDapperRepository _enderecoDapperRepository;
 
         public EnderecoService(INotificador notificador, IEnderecoRepository enderecoRepository,
-             ICepRepository cepRepository) : base(notificador)
+             ICepRepository cepRepository, IEnderecoDapperRepository enderecoDapperRepository) : base(notificador)
         {
             _enderecoRepository = enderecoRepository;
             _cepRepository = cepRepository;
+            _enderecoDapperRepository = enderecoDapperRepository;
         }
 
         public async Task<bool> AdicionarEndereco(Endereco endereco)
@@ -78,5 +80,13 @@ namespace agilium.api.business.Services
                 await _enderecoRepository.AtualizarSemSalvar(endereco);
             return true;
         }
+
+        public async Task<bool> SalvarEnderecoDapper(Endereco endereco)
+        {
+            return await _enderecoDapperRepository.SalvarEndereco(endereco);
+        }
+
+
+
     }
 }

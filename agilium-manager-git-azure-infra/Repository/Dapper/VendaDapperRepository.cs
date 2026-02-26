@@ -617,6 +617,7 @@ namespace agilium.api.infra.Repository.Dapper
             
         }
 
+
         #region privados
 
         private async Task<bool> AdicionarItemVenda(VendaItem item, long idVenda, int sqvenda, int sqcaixa, string nomeUsuario, long idEstoque)

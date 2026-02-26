@@ -125,7 +125,6 @@ body {
     white-space: nowrap;
 }
 
-
 /*Barra de menu do topo do layout*/
 .barra-de-menu-principal {
     position: relative;
@@ -238,6 +237,7 @@ body {
 
 .table-responsive {
     overflow-x: auto;
+    width: 100%;
 }
 
 /* Container que permite scroll horizontal e vertical */
@@ -289,3 +289,30 @@ body {
     .table td.acao-botoes .btn {
         flex: 0 0 auto; /* impede os botões de esticarem */
     }
+
+.no-wrap-table td, .no-wrap-table th {
+    white-space: nowrap;
+}
+
+.limited-cell {
+    max-width: 150px; /* ajuste conforme necessário */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-limit td, .table-limit th {
+    max-width: 150px; /* ajuste conforme necessário */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+td.limited-cell-actions, th.limited-cell-actions {
+    max-width: 250px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+
