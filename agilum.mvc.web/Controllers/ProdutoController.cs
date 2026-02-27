@@ -996,7 +996,14 @@ namespace agilum.mvc.web.Controllers
             var listaCodigoBaarras = ObterCodigoBarra(id).Result;
 
             if(!listaCodigoBaarras.Any())
-                return NotFound("Produto não encontrado.");
+                NotificarErro("Produto não encontrado.");
+
+            if (!OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "Adicionar", "Web", "Produto"));
+                AdicionarErroValidacao(msgErro);
+                return View("ExibirCodigo");
+            }
 
             var produtoCodigoBarra = listaCodigoBaarras.FirstOrDefault();
             // Gera imagem conforme parâmetro
