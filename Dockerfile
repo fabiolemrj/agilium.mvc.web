@@ -1,5 +1,5 @@
 # ================================
-# 1) STAGE DE BUILD
+# 1) STAGE DE BUILD (.NET 5)
 # ================================
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
@@ -11,9 +11,9 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
 
 # ================================
-# 2) RUNTIME (.NET Core 3.1)
+# 2) RUNTIME (.NET 5)
 # ================================
-FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 
 COPY --from=build /app/publish .
