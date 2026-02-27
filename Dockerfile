@@ -4,10 +4,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 
-COPY . .
+COPY ["agilium.mvc.web/agilium.mvc.web.csproj", "agilium.mvc.web/"]
+RUN dotnet restore "agilium.mvc.web/agilium.mvc.web.csproj"
 
-WORKDIR "/src/agilum.mvc.web"
-RUN dotnet restore
+COPY . .
+WORKDIR "/src/agilium.mvc.web"
 RUN dotnet publish -c Release -o /app/publish
 
 # ================================
