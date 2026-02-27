@@ -1,7 +1,34 @@
 ﻿
 $(document).ready(function () {
-
+    bindProdutoCodigoDropdownFallback();
 });
+function bindProdutoCodigoDropdownFallback() {
+    // Fallback para ambientes onde o plugin de dropdown do Bootstrap não foi carregado
+    if (typeof $.fn.dropdown === 'function') {
+        return;
+    }
+
+    $(document).off('click.produtoCodigoDropdown', '.produto-codigo-dropdown-wrapper .dropdown-toggle');
+    $(document).on('click.produtoCodigoDropdown', '.produto-codigo-dropdown-wrapper .dropdown-toggle', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $wrapper = $(this).closest('.produto-codigo-dropdown-wrapper');
+        var $group = $wrapper.find('.btn-group').first();
+
+        $('.produto-codigo-dropdown-wrapper .btn-group').not($group).removeClass('show');
+        $('.produto-codigo-dropdown-wrapper .dropdown-menu').not($group.find('.dropdown-menu')).removeClass('show');
+
+        $group.toggleClass('show');
+        $group.find('.dropdown-menu').first().toggleClass('show');
+    });
+
+    $(document).off('click.produtoCodigoDropdownOutside');
+    $(document).on('click.produtoCodigoDropdownOutside', function () {
+        $('.produto-codigo-dropdown-wrapper .btn-group').removeClass('show');
+        $('.produto-codigo-dropdown-wrapper .dropdown-menu').removeClass('show');
+    });
+}
 
 $('#btnSalvar').click(function () {
     on();
