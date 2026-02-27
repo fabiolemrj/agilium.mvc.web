@@ -57,7 +57,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\**\*.*" CopyToOutputDirectory="Always" />
     <Content Update="wwwroot\css\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
