@@ -41,10 +41,10 @@ namespace agilum.mvc.web.Extensions
             {
                 HandleRequestExceptionAsync(httpContext, ex.StatusCode);
             }
-            catch (ValidationApiException ex)
-            {
-                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
-            }
+            //catch (ValidationApiException ex)
+            //{
+            //    HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+            //}
             catch (ApiException ex)
             {
                 HandleRequestExceptionAsync(httpContext, ex.StatusCode);
