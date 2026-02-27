@@ -3,16 +3,16 @@ $(document).ready(function () {
     bindProdutoCodigoDropdownFallback();
 });
 function bindProdutoCodigoDropdownFallback() {
-    // Fallback para ambientes onde o plugin de dropdown do Bootstrap não foi carregado
-    if (typeof $.fn.dropdown === 'function') {
-        return;
-    }
-
+  
     $(document).off('click.produtoCodigoDropdown', '.produto-codigo-dropdown-wrapper .dropdown-toggle');
     $(document).on('click.produtoCodigoDropdown', '.produto-codigo-dropdown-wrapper .dropdown-toggle', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
+        if (typeof $.fn.dropdown === 'function') {
+            $(this).dropdown('toggle');
+            return;
+        }
         var $wrapper = $(this).closest('.produto-codigo-dropdown-wrapper');
         var $group = $wrapper.find('.btn-group').first();
 
