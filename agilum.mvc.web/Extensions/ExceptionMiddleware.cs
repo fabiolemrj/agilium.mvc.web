@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore.Internal;
 using Polly.CircuitBreaker;
-using Refit;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,18 +45,18 @@ namespace agilum.mvc.web.Extensions
             //{
             //    HandleRequestExceptionAsync(httpContext, ex.StatusCode);
             //}
-            catch (ApiException ex)
-            {
-                HandleRequestExceptionAsync(httpContext, ex.StatusCode);
-            }
+            //catch (ApiException ex)
+            //{
+            //    HandleRequestExceptionAsync(httpContext, ex.StatusCode);
+            //}
             catch (BrokenCircuitException ex)
             {
                 HandleCircuitBreakerExceptionAsync(httpContext);
             }
-            //catch(Exception ex)
-            //{
-            //   // HandleCircuitBreakerExceptionAsync(httpContext);
-            //}
+            catch (Exception ex)
+            {
+                 HandleCircuitBreakerExceptionAsync(httpContext);
+            }
 
         }
 
