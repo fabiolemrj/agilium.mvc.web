@@ -406,4 +406,9 @@ $('.delete').click(function (event) {
 });
 
 
+$('#btnToggle').click(function () {
+    alert('teste');
+
+});
+
 
