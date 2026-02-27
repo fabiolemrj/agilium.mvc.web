@@ -1,6 +1,0 @@
-is_global = true
-build_property.RefitInternalNamespace = agilum.mvc.web
-build_property.RootNamespace = agilum.mvc.web
-build_property.ProjectDir = C:\Projetos\agilium.mvc.mvc\agilium.mvc.web\agilum.mvc.web\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 

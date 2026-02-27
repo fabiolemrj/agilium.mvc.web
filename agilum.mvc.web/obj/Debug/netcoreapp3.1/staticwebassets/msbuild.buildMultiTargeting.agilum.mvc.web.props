@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\agilum.mvc.web.props" />
-</Project>

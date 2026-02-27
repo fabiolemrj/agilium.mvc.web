@@ -448,3 +448,4 @@ FodyWeavers.xsd
 /agilium-manager-azure-api/obj/project.assets.json
 /agilium-manager-azure-api/obj/project.nuget.cache
 /agilium-manager-azure-api/obj/Release/netcoreapp3.1/agilium-manager-azure-api.assets.cache
+/agilium-manager-azure-api/obj/Release/netcoreapp3.1/apphost.exe
