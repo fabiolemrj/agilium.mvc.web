@@ -30,7 +30,7 @@ RUN apt-get install -y \
     libpng16-16 \
     libjpeg62-turbo \
     libgif7 \
-    libwebp7 \
+    libwebp6 \
     libx11-6 \
     && rm -rf /var/lib/apt/lists/*
 
