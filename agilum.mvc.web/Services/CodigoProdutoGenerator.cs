@@ -1,66 +1,63 @@
-﻿using SkiaSharp;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using ZXing;
 using ZXing.Common;
-using ZXing.QrCode;
-using ZXing.SkiaSharp;
-using ZXing.SkiaSharp.Rendering;
+using QRCoder;
 
 public static class CodigoProdutoGenerator
 {
-    // ---------------------------
-    //  GERA CÓDIGO DE BARRAS EAN-13
-    // ---------------------------
+    // ============================
+    //  GERA EAN-13 SEM SKIA SHARP
+    // ============================
     public static byte[] GerarBarcodePng(string codigo)
     {
         if (string.IsNullOrWhiteSpace(codigo))
             return null;
 
-        var writer = new BarcodeWriter<SKBitmap>
+        var writer = new BarcodeWriterPixelData
         {
             Format = BarcodeFormat.EAN_13,
             Options = new EncodingOptions
             {
                 Width = 350,
                 Height = 150,
-                Margin = 2
-            },
-            Renderer = new SKBitmapRenderer()
+                Margin = 2,
+                PureBarcode = true
+            }
         };
 
-        var bitmap = writer.Write(codigo);
+        var pixelData = writer.Write(codigo);
 
-        using var image = SKImage.FromBitmap(bitmap);
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+        using var bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
+        var bitmapData = bitmap.LockBits(
+            new Rectangle(0, 0, pixelData.Width, pixelData.Height),
+            ImageLockMode.WriteOnly,
+            PixelFormat.Format32bppRgb);
 
-        return data.ToArray();
+        System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
+        bitmap.UnlockBits(bitmapData);
+
+        using var ms = new MemoryStream();
+        bitmap.Save(ms, ImageFormat.Png);
+        return ms.ToArray();
     }
 
-    // ---------------------------
-    //  GERA QR CODE
-    // ---------------------------
+    // =======================
+    //  GERA QRCODE SEM SKIA
+    // =======================
     public static byte[] GerarQrCodePng(string texto)
     {
         if (string.IsNullOrWhiteSpace(texto))
             return null;
 
-        var writer = new BarcodeWriter<SKBitmap>
-        {
-            Format = BarcodeFormat.QR_CODE,
-            Options = new QrCodeEncodingOptions
-            {
-                Width = 300,
-                Height = 300,
-                Margin = 1,
-                CharacterSet = "UTF-8"
-            },
-            Renderer = new SKBitmapRenderer()
-        };
+        QRCodeGenerator generator = new QRCodeGenerator();
+        QRCodeData data = generator.CreateQrCode(texto, QRCodeGenerator.ECCLevel.Q);
 
-        var bitmap = writer.Write(texto);
+        PngByteQRCode qrCode = new PngByteQRCode(data);
 
-        using var image = SKImage.FromBitmap(bitmap);
-        using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-
-        return data.ToArray();
+        // 300x300 PNG
+        return qrCode.GetGraphic(20);
     }
 }

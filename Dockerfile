@@ -12,27 +12,22 @@ RUN dotnet publish -c Release -o /app/publish
 
 
 # ================================
-# 2) RUNTIME (.NET Core 3.1)
+# 2) RUNTIME (.NET Core 3.1) - ARM friendly
 # ================================
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS runtime
 
-# Corrigir repositórios buster arquivados
+# Corrigir repositórios Debian Buster arquivados
 RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
     sed -i 's|security.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
     sed -i '/deb.*buster-updates/s/^/#/' /etc/apt/sources.list && \
     apt-get update
 
-# Instalar dependências do SkiaSharp
-RUN apt-get install -y \
-    libfontconfig1 \
-    libfreetype6 \
-    libharfbuzz0b \
-    libpng16-16 \
-    libjpeg62-turbo \
-    libgif7 \
-    libwebp6 \
-    libx11-6 \
-    && rm -rf /var/lib/apt/lists/*
+# Instalar libgdiplus (obrigatório para System.Drawing no Linux ARM)
+RUN apt-get install -y --allow-unauthenticated libgdiplus && \
+    ln -s /usr/lib/arm-linux-gnueabihf/libgdiplus.so /usr/lib/libgdiplus.so || true
+
+# Limpar apt
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=build /app/publish .
