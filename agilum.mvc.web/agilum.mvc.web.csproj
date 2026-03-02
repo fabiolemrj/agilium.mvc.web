@@ -35,6 +35,7 @@
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="6.0.0" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.7" />
 
   </ItemGroup>
 

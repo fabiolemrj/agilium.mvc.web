@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using ZXing;
 using ZXing.Common;
 using QRCoder;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Formats.Png;
 
 public static class CodigoProdutoGenerator
 {
     // ============================
-    //  GERA EAN-13 SEM SKIA SHARP
+    //  EAN-13 via ZXing + ImageSharp
     // ============================
     public static byte[] GerarBarcodePng(string codigo)
     {
-        if (string.IsNullOrWhiteSpace(codigo))
-            return null;
-
         var writer = new BarcodeWriterPixelData
         {
             Format = BarcodeFormat.EAN_13,
@@ -23,41 +21,33 @@ public static class CodigoProdutoGenerator
             {
                 Width = 350,
                 Height = 150,
-                Margin = 2,
-                PureBarcode = true
+                Margin = 2
             }
         };
 
         var pixelData = writer.Write(codigo);
 
-        using var bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb);
-        var bitmapData = bitmap.LockBits(
-            new Rectangle(0, 0, pixelData.Width, pixelData.Height),
-            ImageLockMode.WriteOnly,
-            PixelFormat.Format32bppRgb);
-
-        System.Runtime.InteropServices.Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
-        bitmap.UnlockBits(bitmapData);
+        using var image = Image.LoadPixelData<Rgba32>(
+            pixelData.Pixels,
+            pixelData.Width,
+            pixelData.Height
+        );
 
         using var ms = new MemoryStream();
-        bitmap.Save(ms, ImageFormat.Png);
+        image.Save(ms, new PngEncoder());
         return ms.ToArray();
     }
 
-    // =======================
-    //  GERA QRCODE SEM SKIA
-    // =======================
+    // ============================
+    //  QRCode via QRCoder (ImageSharp-free)
+    // ============================
     public static byte[] GerarQrCodePng(string texto)
     {
-        if (string.IsNullOrWhiteSpace(texto))
-            return null;
+        QRCodeGenerator gen = new QRCodeGenerator();
+        QRCodeData data = gen.CreateQrCode(texto, QRCodeGenerator.ECCLevel.Q);
 
-        QRCodeGenerator generator = new QRCodeGenerator();
-        QRCodeData data = generator.CreateQrCode(texto, QRCodeGenerator.ECCLevel.Q);
+        PngByteQRCode qr = new PngByteQRCode(data);
 
-        PngByteQRCode qrCode = new PngByteQRCode(data);
-
-        // 300x300 PNG
-        return qrCode.GetGraphic(20);
+        return qr.GetGraphic(20); // PNG pronto
     }
 }
