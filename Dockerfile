@@ -1,4 +1,4 @@
-# ================================
+﻿# ================================
 # 1) BUILD (.NET Core 3.1)
 # ================================
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
@@ -16,7 +16,7 @@ RUN dotnet publish -c Release -o /app/publish
 # ================================
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS runtime
 
-# Instalar depend�ncias NATIVAS para SkiaSharp
+# Dependências nativas do SkiaSharp
 RUN apt-get update && apt-get install -y \
     libfontconfig1 \
     libfreetype6 \
@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-COPY --from=build 
-app/publish .
+# 🚀 COPIA O BUILD CORRETAMENTE
+COPY --from=build /app/publish .
 
 EXPOSE 80
 ENTRYPOINT ["dotnet", "agilum.mvc.web.dll"]
