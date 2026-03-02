@@ -993,40 +993,51 @@ namespace agilum.mvc.web.Controllers
         public async Task<IActionResult> MostrarCodigo(long id, string tipo = "qrcode")
         {
 
-            var listaCodigoBaarras = ObterCodigoBarra(id).Result;
-
-            if(!listaCodigoBaarras.Any())
-                NotificarErro("Produto não encontrado.");
-
-            if (!OperacaoValida())
+            try
             {
-                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "Adicionar", "Web", "Produto"));
-                AdicionarErroValidacao(msgErro);
+                var listaCodigoBaarras = ObterCodigoBarra(id).Result;
+
+                if (!listaCodigoBaarras.Any())
+                    NotificarErro("Produto não encontrado.");
+
+                if (!OperacaoValida())
+                {
+                    var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "Adicionar", "Web", "Produto"));
+                    AdicionarErroValidacao(msgErro);
+                    return RedirectToAction("Index");
+                }
+
+                var produtoCodigoBarra = listaCodigoBaarras.FirstOrDefault();
+                // Gera imagem conforme parâmetro
+                byte[] imagem;
+
+                if (tipo.ToLower() == "qrcode")
+                    imagem = CodigoProdutoGenerator.GerarQrCodePng(produtoCodigoBarra.CDBARRA);
+                else
+                    imagem = CodigoProdutoGenerator.GerarBarcodePng(produtoCodigoBarra.CDBARRA);
+
+                // Converte para Base64 para exibir da View
+                string base64 = Convert.ToBase64String(imagem);
+
+                var produto = Obter(produtoCodigoBarra.IDPRODUTO.ToString()).Result;
+
+                ViewBag.NomeProduto = $"{produto.Codigo} - {produto.Nome}";
+                ViewBag.idProduto = produto.Id;
+
+                // Envia para a view
+                ViewBag.ImagemBase64 = base64;
+                ViewBag.Tipo = tipo;
+             
+
                 return View("ExibirCodigo");
             }
+            catch (Exception ex)
+            {
+                LogErro(ex.Message, "Produto", "MostrarCodigo", $"id:{id} tipo:{tipo}","E");
+                return RedirectToAction("Index");
+            }
 
-            var produtoCodigoBarra = listaCodigoBaarras.FirstOrDefault();
-            // Gera imagem conforme parâmetro
-            byte[] imagem;
-
-            if (tipo.ToLower() == "qrcode")
-                imagem = CodigoProdutoGenerator.GerarQrCodePng(produtoCodigoBarra.CDBARRA);
-            else
-                imagem = CodigoProdutoGenerator.GerarBarcodePng(produtoCodigoBarra.CDBARRA);
-
-            // Converte para Base64 para exibir da View
-            string base64 = Convert.ToBase64String(imagem);
-
-            var produto = Obter(produtoCodigoBarra.IDPRODUTO.ToString()).Result;
-
-            ViewBag.NomeProduto = $"{produto.Codigo} - {produto.Nome}" ;
-            ViewBag.idProduto = produto.Id;
-
-            // Envia para a view
-            ViewBag.ImagemBase64 = base64;
-            ViewBag.Tipo = tipo;
-
-            return View("ExibirCodigo");
+         
         }
 
 
