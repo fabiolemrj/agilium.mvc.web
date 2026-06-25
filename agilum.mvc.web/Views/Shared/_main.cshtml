@@ -1,7 +1,4 @@
-@using Microsoft.AspNetCore.Identity
 @using agilium.api.business.Models
-@inject SignInManager<CaUsuarioIdentity> SignInManager
-@inject UserManager<CaUsuarioIdentity> UserManager
 
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
@@ -104,9 +101,9 @@
     <!-- Jquery Mask (SOMENTE UMA VEZ) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-    <!-- Seus scripts -->t>
+    <!-- Seus scripts -->
     <script src="~/js/site.js"></script>
-    @* Seu script de site principal (se tiver) *@
+    <script src="~/js/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/dknotus-tour.min.js"></script>
 

@@ -11,7 +11,6 @@ using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Moedas;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -36,7 +35,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public MoedaController(IMoedaService moedaService, IEmpresaService empresaService
             , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _moedaService = moedaService;
             _empresaService = empresaService;

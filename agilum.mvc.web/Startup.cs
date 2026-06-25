@@ -52,7 +52,7 @@ namespace agilum.mvc.web
             services.AddControllersWithViews();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.ResolveDependencies(Configuration);
-            services.AddIdentityConfiguration(Configuration);
+            services.AddIdentityConfiguration();
             
 
             services.AddRazorPages();

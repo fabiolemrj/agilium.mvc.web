@@ -1,6 +1,7 @@
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ namespace agilum.mvc.web.Extensions
             "/Identity/Account/LoginWith2fa",
             "/empresa/ObterListasEmpresasPorUsuario",
             "/empresa/SelecionarEmpresa",
+            "/empresa/ObterEmpresaSelecionada",
             "/Home/Index",
             "/Home/Error",
             "/sistema-indisponivel",
@@ -41,6 +43,10 @@ namespace agilum.mvc.web.Extensions
             "/js/",
             "/dist/",
             "/Images/",
+            "/local/",
+            "/_framework/",
+            "/Usuario/ExibirImagemUsuarioJson",
+            "/Usuario/ObterEmpresasUsuarioJson",
             "/favicon.ico"
         };
 
@@ -51,16 +57,37 @@ namespace agilum.mvc.web.Extensions
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // Só verifica se o usuário está autenticado
-            if (context.User.Identity.IsAuthenticated)
-            {
-                var path = context.Request.Path.Value ?? string.Empty;
+            var path = context.Request.Path.Value ?? string.Empty;
+            var isAuth = context.User.Identity?.IsAuthenticated ?? false;
 
+            // Só verifica se o usuário está autenticado
+            if (isAuth)
+            {
                 // Verifica se a rota atual está na lista de permissão
                 if (!RotaPermitida(path))
                 {
                     // Verifica se há empresa na sessão
                     var empSelec = context.Session.GetString("_empSelec");
+
+                    // Fallback: verifica nas Claims (cookie de autenticação)
+                    if (string.IsNullOrEmpty(empSelec))
+                    {
+                        var idEmpresaClaim = context.User.FindFirst("IDEMPRESA")?.Value;
+                        if (!string.IsNullOrEmpty(idEmpresaClaim))
+                        {
+                            // Reconstrói o objeto de sessão a partir das claims
+                            var nomeEmpresaClaim = context.User.FindFirst("NomeEmpresa")?.Value ?? "Empresa";
+                            var empresaClaim = new EmpresaUsuarioViewModel
+                            {
+                                IDEMPRESA = idEmpresaClaim,
+                                NomeEmpresa = nomeEmpresaClaim,
+                                IDUSUARIO = context.User.FindFirst(ClaimTypes.Name)?.Value ?? ""
+                            };
+                            context.Session.SetString("_empSelec", JsonSerializer.Serialize(empresaClaim));
+                            await _next(context);
+                            return;
+                        }
+                    }
 
                     if (string.IsNullOrEmpty(empSelec))
                     {
@@ -94,6 +121,10 @@ namespace agilum.mvc.web.Extensions
 
         private static bool RotaPermitida(string path)
         {
+            // Root e Home/Index: o próprio controller trata a seleção de empresa
+            if (path == "/" || string.IsNullOrEmpty(path))
+                return true;
+
             foreach (var rota in RotasPermitidas)
             {
                 if (path.StartsWith(rota, StringComparison.OrdinalIgnoreCase))

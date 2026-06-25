@@ -3,9 +3,11 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Cliente;
@@ -19,7 +21,6 @@ using agilum.mvc.web.ViewModels.UnidadeViewModel;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -71,7 +72,7 @@ namespace agilum.mvc.web.Controllers
         public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService,IUnidadeService unidadeService, IEstoqueService estoqueService, 
-            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _produtoService = produtoService;
             _empresaService = empresaService;

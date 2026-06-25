@@ -15,8 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using agilum.mvc.web.Services;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
@@ -48,8 +48,8 @@ namespace agilum.mvc.web.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
-            services.AddScoped<UserManager<CaUsuarioIdentity>>();
-            services.AddScoped<SignInManager<CaUsuarioIdentity>>();
+            // Substitui UserManager/SignInManager do Identity pelo AuthService customizado
+            services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<AgiliumContext>();
             services.AddScoped<IUtilDapperRepository, UtilDapperRepository>();

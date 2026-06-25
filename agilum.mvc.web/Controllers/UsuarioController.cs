@@ -43,7 +43,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public UsuarioController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
             ILogService logService, IMapper mapper, IUsuarioService usuarioService, IAutenticacaoService autenticacaoService, ICaService controleAcessoService,
-            UserManager<CaUsuarioIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            UserManager<CaUsuarioIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _usuarioService = usuarioService;
             _autenticacaoService = autenticacaoService;

@@ -12,7 +12,7 @@ using agilum.mvc.web.ViewModels.Log;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
+using agilum.mvc.web.Services;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -22,7 +22,7 @@ namespace agilum.mvc.web.Controllers
     {
 
         public LogController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
         }
 

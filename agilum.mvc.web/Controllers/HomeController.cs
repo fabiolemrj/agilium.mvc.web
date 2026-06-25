@@ -15,7 +15,6 @@ using agilum.mvc.web.ViewModels.Licenca;
 using PassCrypto;
 using agilium_manager_azure_business.Services;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
 using agilium.api.business.Services;
 using agilum.mvc.web.Services;
 
@@ -29,7 +28,7 @@ namespace agilum.mvc.web.Controllers
 
 
         public HomeController(ILicencaService licenca,INotificador notificador,  IUser appUser, IUtilDapperRepository utilDapperRepository, IEmailSender emailSender,
-        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _emailSender = emailSender;
         }
@@ -87,7 +86,7 @@ namespace agilum.mvc.web.Controllers
                 return RedirectToAction("ObterListasEmpresasPorUsuario", "Empresa");
             }
 
-            await VerificarValidadeLicenca();
+//            await VerificarValidadeLicenca();
             return View();
         }
 

@@ -40,21 +40,21 @@ namespace agilum.mvc.web.Controllers
         private readonly ILogger<EmpresaController> _logger;
         private readonly IUsuarioService _usuarioService;
         private readonly ICaService _caService;
-        private readonly SignInManager<CaUsuarioIdentity> _signInManager;
+        private readonly IAuthService _authService;
         private readonly string _nomeEntidade = "Empresa";
         #endregion
 
         #region construtores
         public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
-            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, SignInManager<CaUsuarioIdentity> signInManager,
-            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService, ILicencaService licencaService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, IAuthService authService,
+            IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService, ILicencaService licencaService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _empresaService = empresaService;
             _logger = logger;
             _contatoService = contatoService;
             _usuarioService = usuarioService;
             _caService = caService;
-            _signInManager = signInManager;
+            _authService = authService;
         }
         #endregion
 
@@ -630,7 +630,16 @@ namespace agilum.mvc.web.Controllers
                 IDUSUARIO = AppUser.GetUserId().ToString(),
                 NomeEmpresa = empresa.NMRZSOCIAL
             };
-            HttpContext.Session.SetString("_empSelec", System.Text.Json.JsonSerializer.Serialize(empresaSelecionada)) ;
+            HttpContext.Session.SetString("_empSelec", System.Text.Json.JsonSerializer.Serialize(empresaSelecionada));
+            await HttpContext.Session.CommitAsync();
+
+            // Atualiza claims com a nova empresa (fallback para quando sessão falhar)
+            var usuario = await _usuarioService.ObterPorUsuarioAspNetPorId(AppUser.GetUserId().ToString());
+            if (usuario != null)
+            {
+                await _authService.SignInAsync(HttpContext, usuario, true,
+                    empresa.Id.ToString(), empresa.NMRZSOCIAL);
+            }
 
             return RedirectToAction("Index", "Home");
 
@@ -668,16 +677,14 @@ namespace agilum.mvc.web.Controllers
 
         }
 
+        [AllowAnonymous]
         [Route("ObterEmpresaSelecionada")]
         public async Task<ActionResult> ObterEmpresaSelecionada()
         {
-            //var empresaSelecionada = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>( ObterStringEmpresaSelecionada());
             var empresaSelecionada = ObterObjetoEmpresaSelecionada();
-            if(empresaSelecionada.IDEMPRESA == null)
-            {
-                await _signInManager.SignOutAsync();           
-            }
-                
+
+            // Não faz sign out aqui — este endpoint é apenas leitura.
+            // O sign out deve ser tratado exclusivamente no fluxo de logout.
 
             return Json(empresaSelecionada?.NomeEmpresa);
         }

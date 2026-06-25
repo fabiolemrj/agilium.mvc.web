@@ -4,9 +4,9 @@ using agilium.api.business.Notificacoes;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
+using agilum.mvc.web.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -29,7 +29,7 @@ namespace agilum.mvc.web.Controllers
         protected readonly IUtilDapperRepository _utilDapperRepository;
         protected readonly ILogService _logService;
         protected readonly ILicencaService _licencaService;
-        protected readonly SignInManager<CaUsuarioIdentity> _signInManager;
+        protected readonly IAuthService _authService;
 
         private INotificador notificador;
         private IConfiguration configuration;
@@ -38,7 +38,7 @@ namespace agilum.mvc.web.Controllers
         private IMapper mapper;
 
         protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService)
         {
             _notificador = notificador;
             _configuration = configuration;
@@ -46,13 +46,13 @@ namespace agilum.mvc.web.Controllers
             _utilDapperRepository = utilDapperRepository;
             _logService = logService;
             _mapper = mapper;
+            _authService = authService;
             if (appUser.IsAuthenticated())
             {
                 UsuarioId = appUser.GetUserId();
                 UsuarioAutenticado = true;
             }
             _licencaService = licencaService;
-            _signInManager = signInManager;
         }
 
         protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper)
@@ -149,7 +149,15 @@ namespace agilum.mvc.web.Controllers
         {
             var empresa = ObterStringEmpresaSelecionada();
             if (empresa == null)
+            {
+                // Fallback: ler das Claims (cookie de autenticação)
+                var idEmpresa = User.FindFirst("IDEMPRESA")?.Value;
+                var nomeEmpresa = User.FindFirst("NomeEmpresa")?.Value;
+                if (!string.IsNullOrEmpty(idEmpresa))
+                    return new EmpresaUsuarioViewModel() { IDEMPRESA = idEmpresa, NomeEmpresa = nomeEmpresa ?? "Empresa" };
+                
                 return new EmpresaUsuarioViewModel() { NomeEmpresa = "Selecionar Empresa"};
+            }
             var objeto = System.Text.Json.JsonSerializer.Deserialize<EmpresaUsuarioViewModel>(empresa);
             return objeto;
         }
@@ -172,7 +180,7 @@ namespace agilum.mvc.web.Controllers
         private async Task Logout()
         {
             HttpContext.Session.Remove("_empSelec");
-            await _signInManager.SignOutAsync();
+            await _authService.SignOutAsync(HttpContext);
         }
     }
 }

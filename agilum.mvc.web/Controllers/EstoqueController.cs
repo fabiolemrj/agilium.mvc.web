@@ -2,16 +2,17 @@ using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
 using agilum.mvc.web.ViewModels.Estoque;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -38,8 +39,8 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public EstoqueController(IEstoqueService estoqueService, IEmpresaService empresaService, IProdutoService produtoService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager
-            ) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService
+            ) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _estoqueService = estoqueService;
             _empresaService = empresaService;
@@ -117,7 +118,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Estoque", "Adicionar", null);
           
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -132,7 +133,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} não localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} nï¿½o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -164,7 +165,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Estoque", "Atualizar", null);
                        
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -177,7 +178,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} não localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} nï¿½o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -207,7 +208,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"excluir {Deserializar(model)}", "Estoque", "Excluir", null);
             
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -301,7 +302,7 @@ namespace agilum.mvc.web.Controllers
         //}
 
 
-        // GET inicial da página de relatório
+        // GET inicial da pï¿½gina de relatï¿½rio
         //[HttpGet]
         //[Route("report/posicao")]
         //public IActionResult RelatorioPosicaoEstoque()

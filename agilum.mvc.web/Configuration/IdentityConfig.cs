@@ -1,45 +1,40 @@
 
-using agilium.api.business.Models;
-using agilum.mvc.web.Data;
-using agilum.mvc.web.Extensions;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace agilum.mvc.web.Configuration
 {
+    /// <summary>
+    /// Configuração de autenticação via Cookie (sem ASP.NET Core Identity).
+    /// Substitui AddDefaultIdentity por AddCookie, autenticando diretamente
+    /// contra a entidade Usuario (tabela ca_usuarios).
+    /// </summary>
     public static class IdentityConfig
     {
-        public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
         {
-            var connectionString = configuration.GetConnectionString("dbIdentityContextConnection");
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services
-                .AddDbContext<dbIdentityContext>(
-                    options => options.UseMySql(connectionString)
-                    .EnableSensitiveDataLogging(true)
-                    .EnableDetailedErrors(true));
-
-            services.AddDefaultIdentity<CaUsuarioIdentity>()
-                .AddEntityFrameworkStores<dbIdentityContext>()
-                .AddErrorDescriber<IdentityMensagensPortugues>()
-                .AddDefaultTokenProviders();
-
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Identity/Account/Login";
+                    options.LogoutPath = "/Identity/Account/Logout";
+                    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.IsEssential = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.SlidingExpiration = true;
+                    options.ExpireTimeSpan = System.TimeSpan.FromHours(3);
+                });
 
             return services;
         }
     }
-
-
 }

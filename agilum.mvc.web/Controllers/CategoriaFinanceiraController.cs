@@ -1,15 +1,16 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.CategeoriaFinanceira;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -27,9 +28,9 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public CategoriaFinanceiraController(ICategoriaFinanceiraService categoriaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) 
+            ILicencaService licencaService, IAuthService authService) 
             : base(notificador, configuration, appUser,utilDapperRepository, logService, mapper, 
-                  licencaService, signInManager)
+                  licencaService, authService)
         {
             _categoriaService = categoriaService;
         }

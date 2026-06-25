@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\agilium-manager-azure-api.props" />
-</Project>

@@ -2,8 +2,10 @@ using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -15,7 +17,6 @@ using agilum.mvc.web.ViewModels.Fornecedor;
 using agilum.mvc.web.ViewModels.PlanoConta;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -48,7 +49,7 @@ namespace agilum.mvc.web.Controllers
             ICategoriaFinanceiraService categoriaFinanceiraService, IEmpresaService empresaService, IFornecedorService fornecedorService,
             IClienteService clienteService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _contaService = contaService;
             _planoContaService = planoContaService;

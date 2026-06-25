@@ -14,7 +14,6 @@ using agilum.mvc.web.ViewModels.Funcionarios;
 using agilum.mvc.web.ViewModels.Usuarios;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -43,7 +42,7 @@ namespace agilum.mvc.web.Controllers
         public FuncionarioController(IFuncionarioService funcionarioService, IEnderecoService enderecoService, ICaService caService,
             IEmpresaService empresaService, IUsuarioService usuarioService
             , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _funcionarioService = funcionarioService;
             _enderecoService = enderecoService;

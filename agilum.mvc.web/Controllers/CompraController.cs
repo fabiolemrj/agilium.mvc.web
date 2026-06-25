@@ -2,6 +2,7 @@ using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Models.CustomReturn.ComprasNFEViewModel;
 using agilium.api.business.Services;
 
@@ -35,7 +36,7 @@ using agilum.mvc.web.Configuration;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
+using agilum.mvc.web.Services;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -69,8 +70,8 @@ namespace agilum.mvc.web.Controllers
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService, ITurnoService turnoService, IProdutoService produtoService,
             IEstoqueService estoqueService, IUnidadeService unidadeService,  IUsuarioService usuarioService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, 
-                utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, 
+                utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _compraService = compraService;
             _empresaService = empresaService;

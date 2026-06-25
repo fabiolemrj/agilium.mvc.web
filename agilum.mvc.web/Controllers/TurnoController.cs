@@ -12,10 +12,11 @@ using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Turno;
 using System.Linq;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
+using agilum.mvc.web.Services;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -34,7 +35,7 @@ namespace agilum.mvc.web.Controllers
         #region construtores
         public TurnoController(ITurnoService turnoService, IMapper mapper, IUsuarioService usuarioService,
                              IEmpresaService empresaService, IPTurnoDapperRepository turnoDapperRepository,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _turnoService = turnoService;
             _empresaService = empresaService;

@@ -11,7 +11,6 @@ using agilum.mvc.web.ViewModels.Cliente;
 using agilum.mvc.web.ViewModels.Endereco;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +36,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public ClienteController(IClienteService clienteService, IEnderecoService enderecoService, IContatoService contatoService, IProdutoService produtoService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _clienteService = clienteService;
             _contatoService = contatoService;

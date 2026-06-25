@@ -1,6 +1,7 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Services;
 
 using agilum.mvc.web.ViewModels.UnidadeViewModel;
@@ -16,7 +17,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
+using agilum.mvc.web.Services;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -36,7 +37,7 @@ namespace agilum.mvc.web.Controllers
 
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
             IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
-            ICaService caService, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ICaService caService, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _unidadeService = unidadeService;
             _caService = caService;

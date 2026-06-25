@@ -1,9 +1,11 @@
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
+using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
@@ -12,7 +14,6 @@ using agilum.mvc.web.ViewModels.Inventario;
 using agilum.mvc.web.ViewModels.Produtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -42,7 +43,7 @@ namespace agilum.mvc.web.Controllers
                                     IProdutoService produtoService, IEstoqueService estoqueService, IPerdaService perdaService,
                                     INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
                                     IUsuarioService usuarioService,
-                                    ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+                                    ILogService logService, IMapper mapper, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _inventarioService = inventarioService;
             _empresaService = empresaService;

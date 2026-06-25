@@ -20,7 +20,6 @@ using agilum.mvc.web.Services;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
 using agilium.api.business.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -34,8 +33,8 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public ConfigController(INotificador notificador, IConfiguration configuration, IUser appUser, 
             IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, IConfigService configService,
-            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : 
-            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, IAuthService authService) : 
+            base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _configService = configService;
         }

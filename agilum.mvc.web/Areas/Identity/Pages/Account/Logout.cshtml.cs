@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using agilium.api.infra.Context;
-using agilium.api.business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using agilum.mvc.web.Services;
 
 namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
@@ -17,12 +12,12 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     [IgnoreAntiforgeryToken]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<CaUsuarioIdentity> _signInManager;
+        private readonly IAuthService _authService;
         private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<CaUsuarioIdentity> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(IAuthService authService, ILogger<LogoutModel> logger)
         {
-            _signInManager = signInManager;
+            _authService = authService;
             _logger = logger;
         }
 
@@ -30,9 +25,9 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         {
             HttpContext.Session.Remove("_empSelec");
 
-            await _signInManager.SignOutAsync();
+            await _authService.SignOutAsync(HttpContext);
             _logger.LogInformation("User logged out.");
-            
+
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
@@ -47,7 +42,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         {
             HttpContext.Session.Remove("_empSelec");
 
-            await _signInManager.SignOutAsync();
+            await _authService.SignOutAsync(HttpContext);
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
@@ -57,7 +52,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             {
                 return RedirectToPage();
             }
-       
         }
     }
 }
+
