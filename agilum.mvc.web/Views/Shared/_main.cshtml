@@ -1,7 +1,7 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using agilum.mvc.web.Data
-@inject SignInManager<AppUserAgiliumIdentity> SignInManager
-@inject UserManager<AppUserAgiliumIdentity> UserManager
+@using Microsoft.AspNetCore.Identity
+@using agilium.api.business.Models
+@inject SignInManager<CaUsuarioIdentity> SignInManager
+@inject UserManager<CaUsuarioIdentity> UserManager
 
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment HostingEnvironment
@@ -14,7 +14,7 @@
 
     <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
 
     <!-- Icons e Plugins -->
     <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css" />
@@ -119,7 +119,7 @@
             });
         })
 
-        // Configuração inicial
+        // Configura��o inicial
         var configuracaoApp = {
             ambiente: "@HostingEnvironment.EnvironmentName",
             valorParaCliente: "@Configuration["MinhaSecao:ValorQueVaParaCliente"]",
@@ -134,9 +134,9 @@
             document.getElementById("overlay").style.display = "none";
         }
 
-        // ----------------- MODAL CONTROL (único handler) -----------------
+        // ----------------- MODAL CONTROL (�nico handler) -----------------
         function SetModal() {
-            // remover binds antigos evita duplicação
+            // remover binds antigos evita duplica��o
             $(document).off("click", "a[data-modal]");
 
             $(document).on("click", "a[data-modal]", function (e) {
@@ -145,7 +145,7 @@
                 var url = $(this).attr("href");
                 if (!url) return;
 
-                // evita abrir várias vezes (desabilita link enquanto carrega)
+                // evita abrir v�rias vezes (desabilita link enquanto carrega)
                 var $link = $(this);
                 if ($link.data("loading")) return;
                 $link.data("loading", true);
@@ -163,7 +163,7 @@
                         return;
                     }
 
-                    // aplica binds somente dentro do conteúdo do modal
+                    // aplica binds somente dentro do conte�do do modal
                     bindForm($('#myModalContent'));
                 });
             });
@@ -174,7 +174,7 @@
             // $dialog pode ser selector string ou jQuery object
             var $root = $($dialog);
 
-            // remove handlers antigos (evita múltiplos bindings)
+            // remove handlers antigos (evita m�ltiplos bindings)
             $root.find('form').off('submit');
 
             // aplica novo handler para cada form dentro do modal
@@ -182,10 +182,10 @@
                 e.preventDefault();
                 var $form = $(this);
 
-                // opcional: validação cliente (se tiver)
+                // opcional: valida��o cliente (se tiver)
                 // if (!$form.valid || !$form.valid()) return;
 
-                // desabilita botão submit para evitar dupla submissão
+                // desabilita bot�o submit para evitar dupla submiss�o
                 var $btn = $form.find('button[type="submit"], input[type="submit"]').prop('disabled', true);
 
                 $.ajax({
@@ -197,23 +197,23 @@
                         if (result && result.success) {
                             $('#myModal').modal('hide');
                             if (result.url) {
-                                // atualiza área de contatos
+                                // atualiza �rea de contatos
                                 $('#ContatoTarget').load(result.url);
                             } else {
-                                // fallback: recarrega partial padrão que lista contatos (ajuste se necessário)
+                                // fallback: recarrega partial padr�o que lista contatos (ajuste se necess�rio)
                                 $('#ContatoTarget').load(window.location.href + ' #ContatoTarget > *');
                             }
 
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sucesso',
-                                text: 'Operação realizada com sucesso'
+                                text: 'Opera��o realizada com sucesso'
                             });
 
                         } else {
-                            // resultado é HTML de validação (partial) -> re-renderiza modal
+                            // resultado � HTML de valida��o (partial) -> re-renderiza modal
                             $('#myModalContent').html(result);
-                            // re-bind para o novo conteúdo
+                            // re-bind para o novo conte�do
                             bindForm($('#myModalContent'));
                         }
                     },
@@ -222,7 +222,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Erro',
-                            text: 'Erro ao processar a requisição.'
+                            text: 'Erro ao processar a requisi��o.'
                         });
                     }
                 });
@@ -240,7 +240,7 @@
         });
 
         // ----------------- AJAX GLOBAL: evitar overlay para modal -----------------
-        // Guarda a URL da última requisição enviada (via ajaxSend)
+        // Guarda a URL da �ltima requisi��o enviada (via ajaxSend)
         window.lastAjaxUrl = null;
 
         $(document).ajaxSend(function (event, xhr, settings) {
@@ -248,7 +248,7 @@
         });
 
         $(document).ajaxStart(function () {
-            // se última requisição for do tipo modal (contato/novo ou contato/editar), NÃO ligar overlay
+            // se �ltima requisi��o for do tipo modal (contato/novo ou contato/editar), N�O ligar overlay
             if (window.lastAjaxUrl && (window.lastAjaxUrl.indexOf('contato/editar') !== -1 || window.lastAjaxUrl.indexOf('contato/novo') !== -1)) {
                 return;
             }
@@ -261,10 +261,10 @@
 
         $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
             off();
-            toastr.error("Erro na requisição: " + (thrownError || jqxhr.statusText));
+            toastr.error("Erro na requisi��o: " + (thrownError || jqxhr.statusText));
         });
 
-        // ----------------- INICIALIZAÇÃO -----------------
+        // ----------------- INICIALIZA��O -----------------
         $(function () {
             SetModal();
 
@@ -276,7 +276,7 @@
                 ModalMensagem("@TempData["TipoMensagem"]", "@TempData["Mensagem"]");
             }
 
-            // exemplo: inicializações que existiam
+            // exemplo: inicializa��es que existiam
             ObterEmpresaSelecionado();
             ObterVersaoSistema();
         });

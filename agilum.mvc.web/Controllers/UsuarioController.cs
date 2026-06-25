@@ -1,4 +1,4 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilum.mvc.web.Interfaces;
 using agilum.mvc.web.ViewModels.Usuarios;
@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using agilium.api.business.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using KissLog.RestClient.Requests.CreateRequestLog;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
@@ -36,14 +36,14 @@ namespace agilum.mvc.web.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ICaService _controleAcessoService;
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
         private readonly IEmailSender _emailSender;
         private IEnumerable<CaPerfilManagerViewModel> ListaPerfis { get; set; } = new List<CaPerfilManagerViewModel>();
 
         #region construtor
         public UsuarioController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
             ILogService logService, IMapper mapper, IUsuarioService usuarioService, IAutenticacaoService autenticacaoService, ICaService controleAcessoService,
-            UserManager<AppUserAgiliumIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            UserManager<CaUsuarioIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _usuarioService = usuarioService;
             _autenticacaoService = autenticacaoService;
@@ -82,7 +82,7 @@ namespace agilum.mvc.web.Controllers
             {
                 if (string.IsNullOrEmpty(usuario.email))
                 {
-                    msgErro = "Campo de email obrigatório para criar novo usuario web";
+                    msgErro = "Campo de email obrigat�rio para criar novo usuario web";
                     return Json(new { sucesso = sucesso, erro = msgErro });
                 }
             }
@@ -94,7 +94,7 @@ namespace agilum.mvc.web.Controllers
 
             var novaSenhaTemporaria = "Agilium_123";
 
-            var userNewWeb = new AppUserAgiliumIdentity { UserName = usuario.email, Email = usuario.email, Nome = usuario.nome};
+            var userNewWeb = new CaUsuarioIdentity(usuario);
             var result = await _userManager.CreateAsync(userNewWeb, novaSenhaTemporaria);
 
             if (result.Succeeded)
@@ -159,7 +159,7 @@ namespace agilum.mvc.web.Controllers
             {
                 if (string.IsNullOrEmpty(usuario.email))
                 {
-                    msgErro = "Campo de email obrigatório para criar novo usuario web";
+                    msgErro = "Campo de email obrigat�rio para criar novo usuario web";
                     return Json(new { sucesso = sucesso, erro = msgErro });
                 }
             }
@@ -173,7 +173,7 @@ namespace agilum.mvc.web.Controllers
             
             if(appUserAgilium == null)
             {
-                msgErro = "Usuario Web não criado";
+                msgErro = "Usuario Web n�o criado";
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }
 
@@ -260,7 +260,7 @@ namespace agilum.mvc.web.Controllers
             }
             
             TempData["TipoMensagem"] = "Success";
-            TempData["Mensagem"] = "Operação realizada com Sucesso.";
+            TempData["Mensagem"] = "Opera��o realizada com Sucesso.";
             return RedirectToAction("Index");
         }
 
@@ -297,17 +297,17 @@ namespace agilum.mvc.web.Controllers
             List<Estado> estados = new List<Estado>();
             estados.Add(new Estado() { Sigla = "RJ", Nome = "Rio de Janeiro" });
             estados.Add(new Estado() { Sigla = "MG", Nome = "Minas Gerais" });
-            estados.Add(new Estado() { Sigla = "SP", Nome = "São Paulo" });
+            estados.Add(new Estado() { Sigla = "SP", Nome = "S�o Paulo" });
             estados.Add(new Estado() { Sigla = "AC", Nome = "Acre" });
             estados.Add(new Estado() { Sigla = "AL", Nome = "Alagoas" });
-            estados.Add(new Estado() { Sigla = "AP", Nome = "Amapá" });
+            estados.Add(new Estado() { Sigla = "AP", Nome = "Amap�" });
             estados.Add(new Estado() { Sigla = "AM", Nome = "Amazonas" });
             estados.Add(new Estado() { Sigla = "BA", Nome = "Bahia" });
-            estados.Add(new Estado() { Sigla = "CE", Nome = "Ceará" });
+            estados.Add(new Estado() { Sigla = "CE", Nome = "Cear�" });
             estados.Add(new Estado() { Sigla = "DF", Nome = "Distrito Federal" });
-            estados.Add(new Estado() { Sigla = "ES", Nome = "Espírito Santo" });
-            estados.Add(new Estado() { Sigla = "GO", Nome = "Goiás" });
-            estados.Add(new Estado() { Sigla = "MA", Nome = "Maranhão" });
+            estados.Add(new Estado() { Sigla = "ES", Nome = "Esp�rito Santo" });
+            estados.Add(new Estado() { Sigla = "GO", Nome = "Goi�s" });
+            estados.Add(new Estado() { Sigla = "MA", Nome = "Maranh�o" });
             estados.Add(new Estado() { Sigla = "RS", Nome = "Rio Grande do Sul" });
             estados.Add(new Estado() { Sigla = "SC", Nome = "Santa Catarina" });
             estados.Add(new Estado() { Sigla = "PR", Nome = "Parana" });
@@ -316,10 +316,10 @@ namespace agilum.mvc.web.Controllers
             estados.Add(new Estado() { Sigla = "RR", Nome = "Roraima" });
             estados.Add(new Estado() { Sigla = "RD", Nome = "Rondonia" });
             estados.Add(new Estado() { Sigla = "TO", Nome = "Tocantis" });
-            estados.Add(new Estado() { Sigla = "PA", Nome = "Pará" });
+            estados.Add(new Estado() { Sigla = "PA", Nome = "Par�" });
             estados.Add(new Estado() { Sigla = "RN", Nome = "Rio Grande do Norte" });
-            estados.Add(new Estado() { Sigla = "RS", Nome = "Paraíba" });
-            estados.Add(new Estado() { Sigla = "PI", Nome = "Piauí" });
+            estados.Add(new Estado() { Sigla = "RS", Nome = "Para�ba" });
+            estados.Add(new Estado() { Sigla = "PI", Nome = "Piau�" });
             estados.Add(new Estado() { Sigla = "SE", Nome = "Sergipe" });
 
             ViewBag.estados = new SelectList(estados, "Sigla", "Nome", "");

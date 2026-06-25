@@ -109,6 +109,7 @@ namespace agilum.mvc.web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<EmpresaSelecionadaMiddleware>();
             app.UseMiddleware<ExceptionMiddleware>();
 
             //app.UseGlobalizationConfig();

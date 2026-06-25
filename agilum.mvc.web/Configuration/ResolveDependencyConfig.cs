@@ -1,4 +1,4 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Notificacoes;
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -48,8 +48,8 @@ namespace agilum.mvc.web.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
-            services.AddScoped<UserManager<AppUserAgiliumIdentity>>();
-            services.AddScoped<SignInManager<AppUserAgiliumIdentity>>();
+            services.AddScoped<UserManager<CaUsuarioIdentity>>();
+            services.AddScoped<SignInManager<CaUsuarioIdentity>>();
 
             services.AddScoped<AgiliumContext>();
             services.AddScoped<IUtilDapperRepository, UtilDapperRepository>();

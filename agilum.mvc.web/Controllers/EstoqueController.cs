@@ -1,10 +1,10 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
@@ -38,7 +38,7 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public EstoqueController(IEstoqueService estoqueService, IEmpresaService empresaService, IProdutoService produtoService,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager
             ) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _estoqueService = estoqueService;
@@ -117,7 +117,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Estoque", "Adicionar", null);
           
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -132,7 +132,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -164,7 +164,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Estoque", "Atualizar", null);
                        
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -177,7 +177,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -207,7 +207,7 @@ namespace agilum.mvc.web.Controllers
             await _estoqueService.Salvar();
             LogInformacao($"excluir {Deserializar(model)}", "Estoque", "Excluir", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -301,7 +301,7 @@ namespace agilum.mvc.web.Controllers
         //}
 
 
-        // GET inicial da p√°gina de relat√≥rio
+        // GET inicial da p·gina de relatÛrio
         //[HttpGet]
         //[Route("report/posicao")]
         //public IActionResult RelatorioPosicaoEstoque()

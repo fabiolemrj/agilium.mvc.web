@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -38,7 +38,7 @@ namespace agilum.mvc.web.Controllers
         #region construtores
         public FornecedorController(IFornecedorService fornecedorService, IContatoService contatoService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
 
             _fornecedorService = fornecedorService;
@@ -89,7 +89,7 @@ namespace agilum.mvc.web.Controllers
 
             if (string.IsNullOrEmpty(model.Endereco.Logradouro))
             {
-                AdicionarErroValidacao("Campo Logradouro √© obrigat√≥rio");
+                AdicionarErroValidacao("Campo Logradouro È obrigatÛrio");
                 return View(model);
             }
 
@@ -119,7 +119,7 @@ namespace agilum.mvc.web.Controllers
             await _fornecedorService.Salvar();
             LogInformacao($"sucesso: {Deserializar(fornecedor)}", "Fornecedor", "Adicionar", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -137,7 +137,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -163,7 +163,7 @@ namespace agilum.mvc.web.Controllers
 
             if (string.IsNullOrEmpty(model.Endereco.Logradouro))
             {
-                AdicionarErroValidacao("Campo Logradouro √© obrigat√≥rio");
+                AdicionarErroValidacao("Campo Logradouro È obrigatÛrio");
                 return View(model);
             }
 
@@ -189,7 +189,7 @@ namespace agilum.mvc.web.Controllers
           //  await _fornecedorService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Fornecedor", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -204,7 +204,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -235,14 +235,14 @@ namespace agilum.mvc.web.Controllers
             await _fornecedorService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Fornecedor", "Excluir", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
         }
         #endregion
 
-        #region contato e endere√ßo
+        #region contato e endereÁo
         [Route("AdicionarContato")]
         public async Task<IActionResult> AdicionarContato(long idFornecedor)
         {
@@ -371,7 +371,7 @@ namespace agilum.mvc.web.Controllers
             var contatoEmpresa = await ObterContatoPorId(idContato, idFornecedor);
             if (contatoEmpresa == null)
             {
-                AdicionarErroValidacao("Erro ao tentar remover endere√ßo contato!");
+                AdicionarErroValidacao("Erro ao tentar remover endereÁo contato!");
                 return RedirectToAction("EditFornecedor", new { id = idFornecedor });
             }
             await PreencherViewBagNomeFornecedor(idFornecedor);
@@ -436,7 +436,7 @@ namespace agilum.mvc.web.Controllers
         //    var contatoEmpresa = await ObterContatoPorId(idContato, idFornecedor);
         //    if (contatoEmpresa == null)
         //    {
-        //        var msg = "Erro ao tentar remover endere√ßo contato!";
+        //        var msg = "Erro ao tentar remover endereÁo contato!";
 
         //      //  return RedirectToAction("EditFornecedor", new { id = idFornecedor });
         //        return Json(new { erro = msg });
@@ -447,7 +447,7 @@ namespace agilum.mvc.web.Controllers
         //    await _fornecedorService.Salvar();
         //    if (!OperacaoValida())
         //    {
-        //        AdicionarErroValidacao("Erro ao tentar remover endere√ßo contato!");
+        //        AdicionarErroValidacao("Erro ao tentar remover endereÁo contato!");
         //        var msgErro = string.Join("\n\r", ModelState.Values
 
 

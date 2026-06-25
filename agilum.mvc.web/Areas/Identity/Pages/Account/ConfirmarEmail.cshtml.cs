@@ -1,9 +1,10 @@
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,9 +13,9 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ConfirmarEmailModel : PageModel
     {
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
 
-        public ConfirmarEmailModel(UserManager<AppUserAgiliumIdentity> userManager)
+        public ConfirmarEmailModel(UserManager<CaUsuarioIdentity> userManager)
         {
             _userManager = userManager;
         }
@@ -32,7 +33,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Incapaz de carregar usuário com ID '{userId}'.");
+                return NotFound($"Incapaz de carregar usuï¿½rio com ID '{userId}'.");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));

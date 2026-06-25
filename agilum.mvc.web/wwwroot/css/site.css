@@ -3,7 +3,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
 @font-face {
     font-family: 'NightMachine';
-    src: url('/font/NightMachine-rwMB.ttf') format('truetype');
+    src: url('../font/NightMachine-rwMB.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -121,7 +121,7 @@ body {
 }
 
 .fonteLogoAgilium{
-    font-family:"night machine";
+    font-family: 'NightMachine';
    }
 
 .box3 {
@@ -229,7 +229,7 @@ body {
 }
 
 .fonteTituloAgilium {
-    font-family: "night machine";
+    font-family: 'NightMachine';
     font-size: 1.3em;
 }
 

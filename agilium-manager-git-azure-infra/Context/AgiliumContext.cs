@@ -108,9 +108,15 @@ namespace agilium.api.infra.Context
 
         public DbSet<CaPermissaoManager> CaPermissaoManager { get; set; }
         public DbSet<CaPerfiManager> CaPerfilManager { get; set; }
-        public DbSet<CaAreaManager> CaAreaManager { get; set; }
+                        public DbSet<CaAreaManager> CaAreaManager { get; set; }
+
+        // DbSet para CaUsuarioIdentity removido - pertence ao dbIdentityContext (Identity)
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Ignora CaUsuarioIdentity para evitar que o EF Core tente mapear
+            // sua navegação Usuario e entrar em conflito com os modelos de negócio
+            modelBuilder.Ignore<CaUsuarioIdentity>();
+
             base.OnModelCreating(modelBuilder);
 
             // APLICA TODOS OS MAPEAMENTOS (ProdutoMapping, EmpresaMapping, etc)
@@ -148,3 +154,4 @@ namespace agilium.api.infra.Context
         }
     }
 }
+

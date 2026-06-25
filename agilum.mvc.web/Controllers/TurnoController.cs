@@ -1,4 +1,4 @@
-ï»¿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using AutoMapper;
@@ -14,7 +14,7 @@ using System.Linq;
 using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
@@ -34,7 +34,7 @@ namespace agilum.mvc.web.Controllers
         #region construtores
         public TurnoController(ITurnoService turnoService, IMapper mapper, IUsuarioService usuarioService,
                              IEmpresaService empresaService, IPTurnoDapperRepository turnoDapperRepository,
-            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _turnoService = turnoService;
             _empresaService = empresaService;
@@ -137,7 +137,7 @@ namespace agilum.mvc.web.Controllers
 
                 if (turnoAberto)
                 {
-                    var msgErro= "JÃ¡ existe um turno aberto para a empresa atual";
+                    var msgErro= "Já existe um turno aberto para a empresa atual";
                     NotificarErro(msgErro);
 
                     TempData["TipoMensagem"] = "danger";
@@ -186,7 +186,7 @@ namespace agilum.mvc.web.Controllers
 
             LogInformacao($"TurnoAberto", "Turno", "AbrirTurno", null);
             
-            TempData["Mensagem"] = "OperaÃ§Ã£o realizada com sucesso";
+            TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
             
             return RedirectToAction("Index");
@@ -219,7 +219,7 @@ namespace agilum.mvc.web.Controllers
             {
                 TempData["TipoMensagem"] = "danger";
                 TempData["Titulo"] = "Turno";
-                TempData["Mensagem"] = "NÃ£o foi encontrado turno aberto";
+                TempData["Mensagem"] = "Não foi encontrado turno aberto";
 
                 return RedirectToAction("Index");
             }
@@ -241,7 +241,7 @@ namespace agilum.mvc.web.Controllers
 
                 if (!turnoAberto)
                 {
-                    NotificarErro("NÃ£o existe um turno aberto para a empresa atual");
+                    NotificarErro("Não existe um turno aberto para a empresa atual");
                     return RedirectToAction("Index");
                 }
 
@@ -288,7 +288,7 @@ namespace agilum.mvc.web.Controllers
                 if (turno.IDEMPRESA.HasValue)
                 {
                     var empresa = _empresaService.ObterPorId(turno.IDEMPRESA.Value).Result;
-                    turno.Empresa = (empresa != null && !string.IsNullOrEmpty(empresa.NMRZSOCIAL)) ? empresa.NMRZSOCIAL : "NÃ£o localizado";
+                    turno.Empresa = (empresa != null && !string.IsNullOrEmpty(empresa.NMRZSOCIAL)) ? empresa.NMRZSOCIAL : "Não localizado";
                 }
 
                 if (turno.IDUSUARIOINI.HasValue)

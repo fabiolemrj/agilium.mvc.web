@@ -1,8 +1,8 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Notificacoes;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.ViewModels.EmpresaUsuario;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +29,7 @@ namespace agilum.mvc.web.Controllers
         protected readonly IUtilDapperRepository _utilDapperRepository;
         protected readonly ILogService _logService;
         protected readonly ILicencaService _licencaService;
-        protected readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
+        protected readonly SignInManager<CaUsuarioIdentity> _signInManager;
 
         private INotificador notificador;
         private IConfiguration configuration;
@@ -38,7 +38,7 @@ namespace agilum.mvc.web.Controllers
         private IMapper mapper;
 
         protected MainController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager)
         {
             _notificador = notificador;
             _configuration = configuration;
@@ -154,7 +154,7 @@ namespace agilum.mvc.web.Controllers
             return objeto;
         }
 
-        protected void VerificarValidadeLicenca()
+        protected async Task VerificarValidadeLicenca()
         {
             var empresa = ObterObjetoEmpresaSelecionada();
             if(empresa != null)
@@ -164,15 +164,15 @@ namespace agilum.mvc.web.Controllers
                     var retornoErro = new { mensagem = $"Verificação de validade da empresa falhou por divergência na Data de Validade" };
                     AdicionarErroValidacao(retornoErro.mensagem);
 
-                    Logout();
+                    await Logout();
                 }
             }
         }
 
-        private void Logout()
+        private async Task Logout()
         {
             HttpContext.Session.Remove("_empSelec");
-            _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
         }
     }
 }

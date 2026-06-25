@@ -1,4 +1,4 @@
-﻿using agilum.mvc.web.ViewModels;
+using agilum.mvc.web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +14,7 @@ using AutoMapper;
 using agilum.mvc.web.ViewModels.Licenca;
 using PassCrypto;
 using agilium_manager_azure_business.Services;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 using agilium.api.business.Services;
 using agilum.mvc.web.Services;
@@ -29,7 +29,7 @@ namespace agilum.mvc.web.Controllers
 
 
         public HomeController(ILicencaService licenca,INotificador notificador,  IUser appUser, IUtilDapperRepository utilDapperRepository, IEmailSender emailSender,
-        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _emailSender = emailSender;
         }
@@ -75,9 +75,19 @@ namespace agilum.mvc.web.Controllers
             var emailService = _emailSender.ObterConfigEmail(Convert.ToInt64(empresaSelecionada.IDEMPRESA));
         }
        
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            //VerificarValidadeLicenca();
+            var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+
+            if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
+            {
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Empresa";
+                TempData["Mensagem"] = "Selecione uma empresa para acessar o sistema";
+                return RedirectToAction("ObterListasEmpresasPorUsuario", "Empresa");
+            }
+
+            await VerificarValidadeLicenca();
             return View();
         }
 
@@ -88,7 +98,7 @@ namespace agilum.mvc.web.Controllers
             
             var versaobd_major = Convert.ToInt32(_configuration.GetConnectionString("versaobd-major"));
             var versao_major = _configuration.GetConnectionString("versao-major");
-            var _versao = $"Versão: {_configuration.GetConnectionString("versao-major")}.{_configuration.GetConnectionString("versao-minor")}.{_configuration.GetConnectionString("versao-build")}" ;
+            var _versao = $"Vers�o: {_configuration.GetConnectionString("versao-major")}.{_configuration.GetConnectionString("versao-minor")}.{_configuration.GetConnectionString("versao-build")}" ;
             return Json(new{versao = _versao });
         }
 
@@ -98,8 +108,8 @@ namespace agilum.mvc.web.Controllers
         {
             var modelErro = new ErrorViewModel
             {
-                Mensagem = "O sistema está temporariamente indisponível, porque ocorreu um erro interno do sistema.",
-                Titulo = "Sistema indisponível.",
+                Mensagem = "O sistema est� temporariamente indispon�vel, porque ocorreu um erro interno do sistema.",
+                Titulo = "Sistema indispon�vel.",
                 ErroCode = 500
             };
 
@@ -115,13 +125,13 @@ namespace agilum.mvc.web.Controllers
            
             if (id == 404)
             {
-                modelErro.Mensagem = "A página que está procurando não existe! <br />Em caso de dúvidas entre em contato com nosso suporte";
-                modelErro.Titulo = "Ops! Página não encontrada.";
+                modelErro.Mensagem = "A p�gina que est� procurando n�o existe! <br />Em caso de d�vidas entre em contato com nosso suporte";
+                modelErro.Titulo = "Ops! P�gina n�o encontrada.";
                 modelErro.ErroCode = id;
             }
             else if (id == 403)
             {
-                modelErro.Mensagem = "Você não tem permissão para fazer isto.";
+                modelErro.Mensagem = "Voc� n�o tem permiss�o para fazer isto.";
                 modelErro.Titulo = "Acesso Negado";
                 modelErro.ErroCode = id;
             }

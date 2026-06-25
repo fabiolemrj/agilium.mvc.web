@@ -1,11 +1,11 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Cliente;
@@ -71,7 +71,7 @@ namespace agilum.mvc.web.Controllers
         public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService,IUnidadeService unidadeService, IEstoqueService estoqueService, 
-            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            IClienteService clienteService, ITurnoService turnoService, IProdutoDapper produtoDapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _produtoService = produtoService;
             _empresaService = empresaService;
@@ -189,7 +189,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(produto)}", "Produto", "Adicionar", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -206,7 +206,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"produto n√£o localizado";
+                var msgErro = $"produto n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -259,7 +259,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Produto", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -344,7 +344,7 @@ namespace agilum.mvc.web.Controllers
 
             await _produtoService.Salvar();
           
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexGrupo");
@@ -359,7 +359,7 @@ namespace agilum.mvc.web.Controllers
             var model = _mapper.Map <GrupoProdutoViewModel>(await _produtoService.ObterPorIdGrupo(id));
             if (model == null)
             {
-                var msgErro = $"{_nomeEntidadeGrupo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeGrupo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -395,7 +395,7 @@ namespace agilum.mvc.web.Controllers
 
             await _produtoService.Salvar();
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexGrupo");
@@ -409,7 +409,7 @@ namespace agilum.mvc.web.Controllers
             var model = _mapper.Map<GrupoProdutoViewModel>(await _produtoService.ObterPorIdGrupo(id));
             if (model == null)
             {
-                var msgErro = $"{_nomeEntidadeGrupo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeGrupo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -447,7 +447,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:id:{model.Id}", "Produto", "ApagarGrupo", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexGrupo");
@@ -503,7 +503,7 @@ namespace agilum.mvc.web.Controllers
 
             await _produtoService.Salvar();
                        
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
             LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AdicionarGrupo", null);
 
@@ -525,7 +525,7 @@ namespace agilum.mvc.web.Controllers
             var model = _mapper.Map<SubGrupoViewModel>(await _produtoService.ObterPorIdSubGrupo(id));
             if(model == null)
             {
-                var msgErro = $"{_nomeEntidadeSubGrupo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeSubGrupo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -565,7 +565,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AtualizarGrupo", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexSubGrupo", new { idGrupo = model.IDGRUPO });
@@ -586,7 +586,7 @@ namespace agilum.mvc.web.Controllers
             model.NomeGrupo = modelGrupo != null ? modelGrupo.Nome : "";
             if (model == null)
             {
-                var msgErro = $"{_nomeEntidadeSubGrupo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeSubGrupo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -624,7 +624,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:id:{model.Id}", "Produto", "ApagarGrupo", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexSubGrupo", new { idGrupo = model.IDGRUPO });
@@ -700,7 +700,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "AdicionarDepartamento", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexDepartamentos");
@@ -715,7 +715,7 @@ namespace agilum.mvc.web.Controllers
             var model = await ObterDepartamentoCompletoPorId(id);
             if (model == null)
             {
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -750,7 +750,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "AdicionarDepartamento", null);
          
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexDepartamentos");
@@ -763,7 +763,7 @@ namespace agilum.mvc.web.Controllers
             var model = await ObterDepartamentoCompletoPorId(id);
             if (model == null)
             {
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -798,7 +798,7 @@ namespace agilum.mvc.web.Controllers
             }
             await _produtoService.Salvar();
             LogInformacao($"sucesso: id:{model.Id}", "Produto", "ApagarDepartamento", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexDepartamentos");
@@ -878,7 +878,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(objeto)}", "Produto", "ApagarDepartamento", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMarcas");
@@ -893,7 +893,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await ObterMarcaCompletoPorId(id);
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -928,7 +928,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AtualizarMarca", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMarcas");
@@ -941,7 +941,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await ObterMarcaCompletoPorId(id);
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -979,7 +979,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso: id:{model.Id}", "Produto", "ApagarMarca", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMarcas");
@@ -998,7 +998,7 @@ namespace agilum.mvc.web.Controllers
                 var listaCodigoBaarras = ObterCodigoBarra(id).Result;
 
                 if (!listaCodigoBaarras.Any())
-                    NotificarErro("Produto n√£o encontrado.");
+                    NotificarErro("Produto n„o encontrado.");
 
                 if (!OperacaoValida())
                 {
@@ -1008,7 +1008,7 @@ namespace agilum.mvc.web.Controllers
                 }
 
                 var produtoCodigoBarra = listaCodigoBaarras.FirstOrDefault();
-                // Gera imagem conforme par√¢metro
+                // Gera imagem conforme par‚metro
                 byte[] imagem;
 
                 if (tipo.ToLower() == "qrcode")
@@ -1107,7 +1107,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AdicionarCodigoBarra", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaCodigoBarra", new { idProduto = model.IDPRODUTO });
@@ -1119,7 +1119,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await ObterCodigoBarraPorId(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"Codigo de barra o produto n√£o localizado";
+                var msgErro = $"Codigo de barra o produto n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -1147,7 +1147,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:id:{model.Id}", "Produto", "ExcluirCodigoBarra", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaCodigoBarra", new { idProduto = model.IDPRODUTO });
@@ -1155,7 +1155,7 @@ namespace agilum.mvc.web.Controllers
 
         #endregion
 
-        #region Produto pre√ßo
+        #region Produto preÁo
         [Route("preco")]
         public async Task<IActionResult> ListaPreco(long idProduto)
         {
@@ -1200,7 +1200,7 @@ namespace agilum.mvc.web.Controllers
         }
         #endregion
 
-        #region Cliente pre√ßo
+        #region Cliente preÁo
         [Route("precos/cliente")]
         public async Task<IActionResult> ListaClientePreco(long idProduto)
         {
@@ -1292,7 +1292,7 @@ namespace agilum.mvc.web.Controllers
             if (model.Id == 0) model.Id = await GerarId();
             if (!ValidarValorPrecoCliente(produto.Preco.Value, model.Valor, model.DescricaoTipoDiferenca, model.DescricaoTipoValor))
             {
-                AdicionarErroValidacao("O valor adicionado n√£o pode, transformar o valor final do produto em valor menor que zero!");
+                AdicionarErroValidacao("O valor adicionado n„o pode, transformar o valor final do produto em valor menor que zero!");
                 return View("_createEditClientePreco", model);
             }
             var objeto = _mapper.Map<ClientePreco>(model);
@@ -1309,7 +1309,7 @@ namespace agilum.mvc.web.Controllers
             await _clienteService.Salvar();
             LogInformacao($"Objeto adicionado com sucesso {Deserializar(objeto)}", "Cliente", "AdicionarPrecoCliente", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaClientePreco", new { idProduto = model.IDPRODUTO });
@@ -1322,13 +1322,13 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<ClientePrecoViewModel>(await _clienteService.ObteClientePrecoPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"Pre√ßo do Cliente n√£o localizado";
+                var msgErro = $"PreÁo do Cliente n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
 
                 ViewBag.TipoMensagem = "danger";
-                ViewBag.Titulo = "Pre√ßo por cliente";
+                ViewBag.Titulo = "PreÁo por cliente";
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("Index");
             }
@@ -1351,13 +1351,13 @@ namespace agilum.mvc.web.Controllers
             await _clienteService.Remover(model.Id);
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao tentar apagar pre√ßo do produto por cliente" };
+                var retornoErro = new { mensagem = $"Erro ao tentar apagar preÁo do produto por cliente" };
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
             await _clienteService.Salvar();
             LogInformacao($"Objeto excluido com sucesso id:{model.Id}", "Cliente", "ExcluirPreco", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaClientePreco", new { idProduto = model.idProduto });
@@ -1451,7 +1451,7 @@ namespace agilum.mvc.web.Controllers
             model.DataHora = DateTime.Now;
             if (!ValidarValorPrecoCliente(produto.Preco.Value, model.Valor, model.DescricaoTipoDiferenca, model.DescricaoTipoValor))
             {
-                AdicionarErroValidacao("O valor adicionado n√£o pode, transformar o valor final do produto em valor menor que zero!");
+                AdicionarErroValidacao("O valor adicionado n„o pode, transformar o valor final do produto em valor menor que zero!");
                 return View("_createEditTurnoPreco", model);
             }
             if (model.Id == 0) model.Id = await GerarId();
@@ -1473,7 +1473,7 @@ namespace agilum.mvc.web.Controllers
             await _turnoService.Salvar();
             LogInformacao($"sucesso{Deserializar(objeto)}", "Turno", "AdicionarPreco", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaTurnoPreco", new { idProduto = model.IDPRODUTO });
@@ -1486,13 +1486,13 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<TurnoPrecoViewModel>( await _turnoService.ObteClientePrecoPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"Pre√ßo do Turno n√£o localizado";
+                var msgErro = $"PreÁo do Turno n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
 
                 ViewBag.TipoMensagem = "danger";
-                ViewBag.Titulo = "Pre√ßo por cliente";
+                ViewBag.Titulo = "PreÁo por cliente";
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("Index");
             }
@@ -1515,7 +1515,7 @@ namespace agilum.mvc.web.Controllers
             await _turnoService.Remover(model.Id);
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao tentar apagar pre√ßo do produto por turno" };
+                var retornoErro = new { mensagem = $"Erro ao tentar apagar preÁo do produto por turno" };
 
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
@@ -1524,7 +1524,7 @@ namespace agilum.mvc.web.Controllers
             LogInformacao($"Objeto excluido com sucesso id:{model.Id}", "Turno", "ExcluirPreco", null);
 
             LogInformacao($"sucesso id:{model.Id}", "Turno", "ExcluirPreco", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaTurnoPreco", new { idProduto = model.IDPRODUTO });
@@ -1589,7 +1589,7 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "AdicionarFoto";
             if (model.Foto == null)
             {
-                var msgErro = "A sele√ß√£o de uma imagem √© obrigatoria";
+                var msgErro = "A seleÁ„o de uma imagem È obrigatoria";
                 AdicionarErroValidacao(msgErro);
 
                 TempData["TipoMensagem"] = "danger";
@@ -1600,7 +1600,7 @@ namespace agilum.mvc.web.Controllers
 
             if (model.Foto.Length > 1048576)
             {
-                var msgErro = "A imagem selecionada deve possuir tamanho de at√© 1 MB ";
+                var msgErro = "A imagem selecionada deve possuir tamanho de atÈ 1 MB ";
                 AdicionarErroValidacao(msgErro);
 
                 TempData["TipoMensagem"] = "danger";
@@ -1625,9 +1625,9 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:{Deserializar(objeto)}", "Produto", "AtualizarFoto", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
-            LogInformacao($"iniciando inclus√£o de foto do produto idProduto:{model.idProduto}", "Produto", "AdicionarFoto", null);
+            LogInformacao($"iniciando inclus„o de foto do produto idProduto:{model.idProduto}", "Produto", "AdicionarFoto", null);
 
             return RedirectToAction("ListaFoto", new { idProduto = model.idProduto });
         }
@@ -1639,7 +1639,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<ProdutoFotoViewModel>(await _produtoService.ObterFotoPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"Foto do produto n√£o localizado";
+                var msgErro = $"Foto do produto n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -1671,7 +1671,7 @@ namespace agilum.mvc.web.Controllers
             await _produtoService.Salvar();
             LogInformacao($"sucesso:id:{model.Id}", "Produto", "ExcluirFoto", null);
           
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
             LogInformacao($"Excluir foto com sucesso id:{model.Id}", "Produto", "ExcluirFoto", null);
 

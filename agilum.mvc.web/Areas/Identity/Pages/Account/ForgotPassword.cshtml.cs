@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
 using agilium.api.infra.Context;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using static agilum.mvc.web.Areas.Identity.Pages.Account.LoginModel;
 using agilium.api.business.Interfaces.IService;
 using System.Linq;
@@ -23,13 +23,13 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
         private readonly agilum.mvc.web.Services.IEmailSender _emailSender;
         private readonly IEmpresaService _empresaService;
         protected readonly IMapper _mapper;
         private IEnumerable<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
 
-        public ForgotPasswordModel(UserManager<AppUserAgiliumIdentity> userManager, agilum.mvc.web.Services.IEmailSender emailSender,
+        public ForgotPasswordModel(UserManager<CaUsuarioIdentity> userManager, agilum.mvc.web.Services.IEmailSender emailSender,
             IEmpresaService empresaService, IMapper mapper)
         {
             _userManager = userManager;
@@ -55,7 +55,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            [Required(ErrorMessage = "Campo {0} obrigat�rio")]
             public string Empresa { get; set; }
         }
 

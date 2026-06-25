@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -37,7 +37,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public ClienteController(IClienteService clienteService, IEnderecoService enderecoService, IContatoService contatoService, IProdutoService produtoService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _clienteService = clienteService;
             _contatoService = contatoService;
@@ -141,7 +141,7 @@ namespace agilum.mvc.web.Controllers
             await _clienteService.Salvar();
             LogInformacao($"Objeto adicionado com sucesso {Deserializar(cliente)}", "Cliente", "Adicionar", null);
                       
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -159,7 +159,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -213,7 +213,7 @@ namespace agilum.mvc.web.Controllers
             //await _clienteService.Salvar();
             LogInformacao($"Objeto adicionado com sucesso {Deserializar(cliente)}", "Cliente", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -228,7 +228,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -262,7 +262,7 @@ namespace agilum.mvc.web.Controllers
             await _clienteService.Salvar();
             LogInformacao($"Objeto excluido com sucesso id:{model.Id}", "Cliente", "Excluir", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -378,7 +378,7 @@ namespace agilum.mvc.web.Controllers
             var contatoCliente = await ObterPorId(idContato, idCliente);
             if (contatoCliente == null)
             {
-                var msg = "Erro ao tentar remover endere√ßo contato!";
+                var msg = "Erro ao tentar remover endereÁo contato!";
                 AdicionarErroValidacao(msg);
 
                 return RedirectToAction("CreateEditCliente", new { id = idCliente });
@@ -400,7 +400,7 @@ namespace agilum.mvc.web.Controllers
             await _clienteService.Salvar();
             if (!OperacaoValida())
             {
-                AdicionarErroValidacao("Erro ao tentar remover endere√ßo contato!");
+                AdicionarErroValidacao("Erro ao tentar remover endereÁo contato!");
                 return View(model);
             }
             LogInformacao($"Objeto apagado com sucesso {Deserializar(model)}", "Cliente", "DeleteContato", null);

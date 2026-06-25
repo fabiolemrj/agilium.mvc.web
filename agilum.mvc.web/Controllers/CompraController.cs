@@ -1,4 +1,4 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
@@ -34,7 +34,7 @@ using NFeProc = agilum.mvc.web.ViewModels.Compra.NFeProc;
 using agilum.mvc.web.Configuration;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
@@ -69,7 +69,7 @@ namespace agilum.mvc.web.Controllers
             ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService, ITurnoService turnoService, IProdutoService produtoService,
             IEstoqueService estoqueService, IUnidadeService unidadeService,  IUsuarioService usuarioService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, 
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, 
                 utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _compraService = compraService;
@@ -333,7 +333,7 @@ namespace agilum.mvc.web.Controllers
             await _compraService.Salvar();
 
             LogInformacao($"Objeto Criado com sucesso {Deserializar(objeto)}", "Cliente", "Adicionar", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexCompra");
@@ -353,7 +353,7 @@ namespace agilum.mvc.web.Controllers
             PopularListasAuxiliares(model);
             if (model == null)
             {
-                var msgErro = $"Compra n√£o localizada";
+                var msgErro = $"Compra n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -393,7 +393,7 @@ namespace agilum.mvc.web.Controllers
             await _compraService.Salvar();
             LogInformacao($"Objeto atualizar com sucesso {Deserializar(objeto)}", "Cliente", "ATUALIZAR", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexCompra");
@@ -410,7 +410,7 @@ namespace agilum.mvc.web.Controllers
             ObterDadosCompraParaViewBag(id);
             if (model == null)
             {
-                var msgErro = $"Compra n√£o localizada";
+                var msgErro = $"Compra n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -441,7 +441,7 @@ namespace agilum.mvc.web.Controllers
             }
             LogInformacao($"Objeto cancelado com sucesso id:{viewModel.Id}", "Cliente", "Cancelar", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexCompra");
@@ -479,7 +479,7 @@ namespace agilum.mvc.web.Controllers
             }
             LogInformacao($"Objeto importado com sucesso id:{Deserializar(viewModel)}", "Compra", "Importar", null);
            
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaItemCompra", new { idCompra = viewModel.idCompra });
@@ -500,7 +500,7 @@ namespace agilum.mvc.web.Controllers
             {
                 if (data == null)
                 {
-                    AdicionarErroValidacao("Erro ao selecionar arquivo XML para importa√ß√£o");                   
+                    AdicionarErroValidacao("Erro ao selecionar arquivo XML para importaÁ„o");                   
                 }
                 else
                 {
@@ -543,7 +543,7 @@ namespace agilum.mvc.web.Controllers
             ObterDadosCompraParaViewBag(id);
             if (model == null)
             {
-                var msgErro = $"Compra n√£o localizada";
+                var msgErro = $"Compra n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -572,7 +572,7 @@ namespace agilum.mvc.web.Controllers
                 return View(viewModel);
             }
             LogInformacao($"Cadastro automatico de produtos:{Deserializar(viewModel)}", "Compra", "CadastroAutomaticoProduto", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexCompra");
@@ -588,7 +588,7 @@ namespace agilum.mvc.web.Controllers
             ObterDadosCompraParaViewBag(id);
             if (model == null)
             {
-                var msgErro = $"Compra n√£o localizada";
+                var msgErro = $"Compra n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -621,7 +621,7 @@ namespace agilum.mvc.web.Controllers
                 return View(viewModel);
             }
             LogInformacao("Objeto efetivado com sucesso id:{viewModel.Id}", "Compra", "Efetivar", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexCompra");
@@ -722,7 +722,7 @@ namespace agilum.mvc.web.Controllers
             await _compraService.Salvar();
             LogInformacao($"Objeto efetivado com sucesso id:{Deserializar(objeto)}", "Compra", "AdicionarItem", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaItemCompra", new { idCompra = viewModel.IDCOMPRA });
@@ -738,7 +738,7 @@ namespace agilum.mvc.web.Controllers
             var model =  _mapper.Map<CompraItemViewModel>(_compraService.ObterItemPorId(id).Result);
             if (model == null)
             {
-                var msgErro = $"Item da Compra n√£o localizado";
+                var msgErro = $"Item da Compra n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -783,7 +783,7 @@ namespace agilum.mvc.web.Controllers
                 return View("_createEditItemCompra", model);
             }
             LogInformacao($"Objeto efetivado com sucesso id:{Deserializar(objeto)}", "Compra", "EditarItem", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("ListaItemCompra", new { idCompra = model.IDCOMPRA });
@@ -795,7 +795,7 @@ namespace agilum.mvc.web.Controllers
             var model = _mapper.Map<CompraItemViewModel>(_compraService.ObterItemPorId(id).Result);
             if (model == null)
             {
-                var msgErro = $"Item da Compra n√£o localizado";
+                var msgErro = $"Item da Compra n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -950,7 +950,7 @@ namespace agilum.mvc.web.Controllers
             if (dev.IDTURNO.HasValue)
             {
                 //var turno = _turnoService.Obterpo(dev.IDTURNO.Value).Result;
-                //viewModel.NomeTurno = turno != null && turno.NUTURNO.HasValue ? $"{turno.DTTURNO?.ToString("dd/MM/yyyy")} - N¬∫ {turno.NUTURNO.ToString()}" : string.Empty;
+                //viewModel.NomeTurno = turno != null && turno.NUTURNO.HasValue ? $"{turno.DTTURNO?.ToString("dd/MM/yyyy")} - N∫ {turno.NUTURNO.ToString()}" : string.Empty;
             }
 
             return viewModel;

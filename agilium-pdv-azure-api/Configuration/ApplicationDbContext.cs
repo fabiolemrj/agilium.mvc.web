@@ -21,7 +21,7 @@ namespace agilium.api.pdv.Configuration
             // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
-    public class AppUserAgilium : IdentityUser
+    public class CaUsuarioIdentity : IdentityUser
     {
         [Column("cpf")]
         [MaxLength(15)]

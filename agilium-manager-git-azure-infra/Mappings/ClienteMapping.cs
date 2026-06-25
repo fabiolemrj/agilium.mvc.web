@@ -80,6 +80,22 @@ namespace agilium.api.infra.Mappings
                   .WithOne(vendaTemp => vendaTemp.Cliente)
                   .HasForeignKey(vendaTemp => new { vendaTemp.IDCLIENTE })
                   .HasPrincipalKey(cliente => new { cliente.Id });
+
+            builder.HasOne(c => c.Endereco)
+       .WithMany(e => e.ClienteEndereco)
+       .HasForeignKey(c => c.IDENDERECO);
+
+            builder.HasOne(c => c.EnderecoCobranca)
+                   .WithMany(e => e.ClienteEnderecoCobranca)
+                   .HasForeignKey(c => c.IDENDERECOCOB);
+
+            builder.HasOne(c => c.EnderecoFaturamento)
+                   .WithMany(e => e.ClienteEnderecoFaturamento)
+                   .HasForeignKey(c => c.IDENDERECOFAT);
+
+            builder.HasOne(c => c.EnderecoEntrega)
+                   .WithMany(e => e.ClienteEnderecoEntrega)
+                   .HasForeignKey(c => c.IDENDERECONTREGA);
         }
     }
 

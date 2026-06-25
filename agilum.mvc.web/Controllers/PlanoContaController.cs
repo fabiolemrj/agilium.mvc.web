@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
@@ -34,7 +34,7 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public PlanoContaController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, IEmpresaService empresaService,
-            ILogService logService, IMapper mapper, IPlanoContaService planoContaService, IPlanoContaDapperRepository planoContaDapperRepository, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : 
+            ILogService logService, IMapper mapper, IPlanoContaService planoContaService, IPlanoContaDapperRepository planoContaDapperRepository, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : 
             base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _planoContaService = planoContaService;
@@ -146,7 +146,7 @@ namespace agilum.mvc.web.Controllers
             await _planoContaService.Salvar();
             LogInformacao($"Novo {_nomeEntidadeDepart} criado: {planoConta.DSCONTA} - ID: {planoConta.Id}","novo", "CreatePlanoConta",null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -165,7 +165,7 @@ namespace agilum.mvc.web.Controllers
             {
 
 
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -211,7 +211,7 @@ namespace agilum.mvc.web.Controllers
 
             await _planoContaService.Salvar();
             LogInformacao($"Plano de Conta editado: {produto.DSCONTA} - ID: {produto.Id}", "editar", "EditPlanoConta", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -228,7 +228,7 @@ namespace agilum.mvc.web.Controllers
             {
 
 
-                var msgErro = $"{_nomeEntidadeDepart} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeDepart} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -264,7 +264,7 @@ namespace agilum.mvc.web.Controllers
             await _planoContaService.Salvar();
             LogInformacao($"Plano de Conta apagado: {model.Descricao} - ID: {model.Id}", "apagar", "DeletePlanoConta", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -287,7 +287,7 @@ namespace agilum.mvc.web.Controllers
             else
             {
                 LogInformacao($"Saldo do Plano de Conta atualizado - ID: {id}", "atualizar", "AtualizarSaldoPorId", null);
-                TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+                TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
 
@@ -324,10 +324,10 @@ namespace agilum.mvc.web.Controllers
             if (!ModelState.IsValid) return View("_planoContaLancamento", model);
 
             if (model.DataInicial == null)
-                AdicionarErroValidacao("Data Inicial √© obrigatoria");
+                AdicionarErroValidacao("Data Inicial È obrigatoria");
 
             if (model.DataFinal == null)
-                AdicionarErroValidacao("Data Final √© obrigatoria");
+                AdicionarErroValidacao("Data Final È obrigatoria");
 
             if (model.DataInicial.HasValue && model.DataFinal.HasValue)
             {
@@ -382,7 +382,7 @@ namespace agilum.mvc.web.Controllers
             if (planoConta != null && !string.IsNullOrEmpty(planoConta.Descricao))
                 ViewBag.Conta = planoConta.Descricao;
             else
-                ViewBag.Conta = "**N√£o Localizada**";
+                ViewBag.Conta = "**N„o Localizada**";
 
             ViewBag.DataInicial = _dtini;
             ViewBag.DataFinal = _dtFim;

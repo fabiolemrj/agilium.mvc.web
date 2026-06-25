@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\agilium-manager-azure-web.props" />
-</Project>

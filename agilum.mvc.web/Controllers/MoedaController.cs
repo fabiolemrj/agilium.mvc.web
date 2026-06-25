@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -36,7 +36,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public MoedaController(IMoedaService moedaService, IEmpresaService empresaService
             , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _moedaService = moedaService;
             _empresaService = empresaService;
@@ -118,7 +118,7 @@ namespace agilum.mvc.web.Controllers
             await _moedaService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Moeda", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -136,7 +136,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -175,7 +175,7 @@ namespace agilum.mvc.web.Controllers
             await _moedaService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Moeda", "Atualizar", null);
           
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -191,7 +191,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -221,7 +221,7 @@ namespace agilum.mvc.web.Controllers
             await _moedaService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Moeda", "Excluir", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

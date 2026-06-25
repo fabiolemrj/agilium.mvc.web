@@ -1,9 +1,9 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels.Contato;
@@ -40,13 +40,13 @@ namespace agilum.mvc.web.Controllers
         private readonly ILogger<EmpresaController> _logger;
         private readonly IUsuarioService _usuarioService;
         private readonly ICaService _caService;
-        private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
+        private readonly SignInManager<CaUsuarioIdentity> _signInManager;
         private readonly string _nomeEntidade = "Empresa";
         #endregion
 
         #region construtores
         public EmpresaController(IEmpresaService empresaService, IUsuarioService usuarioService, ILogger<EmpresaController> logger,
-            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, SignInManager<AppUserAgiliumIdentity> signInManager,
+            IContatoService contatoService,INotificador notificador, IConfiguration configuration, IUser appUser, SignInManager<CaUsuarioIdentity> signInManager,
             IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper, ICaService caService, ILicencaService licencaService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _empresaService = empresaService;
@@ -102,7 +102,7 @@ namespace agilum.mvc.web.Controllers
 
             if (string.IsNullOrEmpty(model.Endereco.Logradouro))
             {
-                AdicionarErroValidacao("Campo Logradouro obrigatório");
+                AdicionarErroValidacao("Campo Logradouro obrigat�rio");
                 return View(model);
             }
             
@@ -117,7 +117,7 @@ namespace agilum.mvc.web.Controllers
        
           
 
-            // 3️⃣ Atualizar endereço
+            // 3?? Atualizar endere�o
             if (empresa.Endereco == null)
             {
                 empresa.Endereco = _mapper.Map<Endereco>(model.Endereco);
@@ -136,13 +136,13 @@ namespace agilum.mvc.web.Controllers
             try
             {
                 await _empresaService.Adicionar(empresa);
-                // 4️⃣ EF rastreia tudo, apenas SaveChanges é necessário
+                // 4?? EF rastreia tudo, apenas SaveChanges � necess�rio
                 await _empresaService.Salvar();
 
             }
             catch (DbUpdateConcurrencyException)
             {
-                AdicionarErroValidacao("Os dados foram modificados por outro usuário. Recarregue e tente novamente.");
+                AdicionarErroValidacao("Os dados foram modificados por outro usu�rio. Recarregue e tente novamente.");
                 return View(model);
             }
 
@@ -169,7 +169,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<EmpresaCreateViewModel>(await _empresaService.ObterCompletoPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} não localizada";
+                var msgErro = $"{_nomeEntidade} n�o localizada";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -195,7 +195,7 @@ namespace agilum.mvc.web.Controllers
 
             if (string.IsNullOrEmpty(model.Endereco?.Logradouro))
             {
-                AdicionarErroValidacao("Campo Logradouro obrigatório");
+                AdicionarErroValidacao("Campo Logradouro obrigat�rio");
                 return View(model);
             }
 
@@ -204,16 +204,16 @@ namespace agilum.mvc.web.Controllers
             if (!string.IsNullOrEmpty(model.Endereco?.Cep))
                 model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
 
-            // 1️⃣ Buscar entidade do banco COM TRACKING
+            // 1?? Buscar entidade do banco COM TRACKING
             var empresaDb = await _empresaService.ObterPorId(model.Id);
 
             if (empresaDb == null)
             {
-                AdicionarErroValidacao("Empresa não encontrada.");
+                AdicionarErroValidacao("Empresa n�o encontrada.");
                 return View("Create", model);
             }
 
-            // 2️⃣ Mapear APENAS campos simples para a entidade rastreada
+            // 2?? Mapear APENAS campos simples para a entidade rastreada
             Console.WriteLine("ANTES: " + empresaDb.NMRZSOCIAL);
 
             _mapper.Map(model, empresaDb);
@@ -221,7 +221,7 @@ namespace agilum.mvc.web.Controllers
             Console.WriteLine("DEPOIS: " + empresaDb.NMRZSOCIAL);
 
 
-            // 3️⃣ Atualizar endereço
+            // 3?? Atualizar endere�o
             if (empresaDb.Endereco == null)
             {
                 empresaDb.Endereco = _mapper.Map<Endereco>(model.Endereco);
@@ -234,7 +234,7 @@ namespace agilum.mvc.web.Controllers
             try
             {
                 await _empresaService.Atualizar(empresaDb, model);
-                // 4️⃣ EF rastreia tudo, apenas SaveChanges é necessário
+                // 4?? EF rastreia tudo, apenas SaveChanges � necess�rio
                 await _empresaService.Salvar();
 
                 LogInformacao(
@@ -246,7 +246,7 @@ namespace agilum.mvc.web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                AdicionarErroValidacao("Os dados foram modificados por outro usuário. Recarregue e tente novamente.");
+                AdicionarErroValidacao("Os dados foram modificados por outro usu�rio. Recarregue e tente novamente.");
                 return View(model);
             }
 
@@ -269,12 +269,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "E";
             ViewBag.acao = "EditarEmpresa";
 
-            // Carrega empresa completa (endereço + contatos + tipo de contato)
+            // Carrega empresa completa (endere�o + contatos + tipo de contato)
             var empresaCompleta = await _empresaService.ObterPorIdCompletoTracking(id);
 
             if (empresaCompleta == null)
             {
-                var msgErro = "Empresa não encontrada.";
+                var msgErro = "Empresa n�o encontrada.";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -306,18 +306,18 @@ namespace agilum.mvc.web.Controllers
                 model.Endereco.Cep = RetirarPontos(model.Endereco.Cep);
 
 
-            // 1️⃣ Carregar a empresa COMPLETA (tracking + navegações)
+            // 1?? Carregar a empresa COMPLETA (tracking + navega��es)
             var empresaDb = await _empresaService.ObterPorIdCompletoTracking(model.Id);
             
 
 
             if (empresaDb == null)
             {
-                AdicionarErroValidacao("Empresa não encontrada.");
+                AdicionarErroValidacao("Empresa n�o encontrada.");
                 return View("Edit", model);
             }
 
-            // 2️⃣ Atualiza propriedades escalares manualmente (evita private-set/AutoMapper bugs)
+            // 2?? Atualiza propriedades escalares manualmente (evita private-set/AutoMapper bugs)
             empresaDb.AlterarRazaoSocial(model.NMRZSOCIAL);
             empresaDb.AlterarNomeFantasia(model.NMFANTASIA);
             empresaDb.AlterarInscricaoEstadual(model.DSINSCREST);
@@ -330,7 +330,7 @@ namespace agilum.mvc.web.Controllers
             // etc.
 
 
-            // 3️⃣ Atualização do endereço
+            // 3?? Atualiza��o do endere�o
             if (empresaDb.Endereco == null)
             {
                 empresaDb.Endereco = _mapper.Map<Endereco>(model.Endereco);
@@ -348,7 +348,7 @@ namespace agilum.mvc.web.Controllers
             }
 
 
-            // 4️⃣ EF já está rastreando → só salvar
+            // 4?? EF j� est� rastreando ? s� salvar
             var sucesso = await _empresaService.EditarEmpresa(empresaDb);
 
             if (!OperacaoValida())
@@ -372,7 +372,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<EmpresaCreateViewModel>(await _empresaService.ObterPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} não localizado";
+                var msgErro = $"{_nomeEntidade} n�o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -443,7 +443,7 @@ namespace agilum.mvc.web.Controllers
             var contatoEmpresa = await _contatoService.ObterPorId(idContato, idEmpresa);
             if (contatoEmpresa == null)
             {
-                var msg = "Erro ao tentar remover endereço contato!";
+                var msg = "Erro ao tentar remover endere�o contato!";
                 return Json(new { erro = msg });
             }
 
@@ -452,7 +452,7 @@ namespace agilum.mvc.web.Controllers
             await _contatoService.Salvar();
             if (!OperacaoValida())
             {
-                AdicionarErroValidacao("Erro ao tentar remover endereço contato!");
+                AdicionarErroValidacao("Erro ao tentar remover endere�o contato!");
                 var msgErro = string.Join("\n\r", ModelState.Values
                               .SelectMany(x => x.Errors)
                               .Select(x => x.ErrorMessage));
@@ -519,7 +519,7 @@ namespace agilum.mvc.web.Controllers
             if (!OperacaoValida())
                 return PartialView("_createContato", model);
 
-            // 🔥 ACTION CORRETA → retorna só o partial de contatos
+            // ?? ACTION CORRETA ? retorna s� o partial de contatos
             var url = Url.Action("ObterEndereco", "Empresa", new { id = model.IDEMPRESA });
 
             return Json(new { success = true, url });
@@ -579,7 +579,7 @@ namespace agilum.mvc.web.Controllers
                 var usuario = (await _usuarioService.ObterPorUsuarioAspNetPorId(idUserAspNet));
                 if (usuario == null)
                 {
-                    var msgErro = "Erro ao tentar obter empresas qu eo usuario tem autorização";
+                    var msgErro = "Erro ao tentar obter empresas qu eo usuario tem autoriza��o";
                     AdicionarErroValidacao(msgErro);
                     msgErro = string.Join("\n\r", ModelState.Values
                                          .SelectMany(x => x.Errors)
@@ -642,14 +642,17 @@ namespace agilum.mvc.web.Controllers
         {
             var idUserAspNet = AppUser.GetUserId().ToString();
             var usuario = (await _usuarioService.ObterPorUsuarioAspNetPorId(idUserAspNet));
+            var listaUsuarioEmpresa = new ListaEmpresasSelecao();
+
             if(usuario == null)
             {
-               var retornoErro = new { mensagem = "Erro ao tentar obter empresas do usuario" };
+                var retornoErro = new { mensagem = "Erro ao tentar obter empresas do usuario" };
                 _logger.LogError(retornoErro.ToString());
                 AdicionarErroValidacao(retornoErro.mensagem);
-                return RedirectToAction("index","Home");
+                // Não redireciona para Home/Index para evitar loop infinito
+                // com EmpresaSelecionadaMiddleware. Mostra a view vazia com erro.
+                return View("_SelecionarEmpresa", listaUsuarioEmpresa);
             }
-            var listaUsuarioEmpresa = new ListaEmpresasSelecao();
             _caService.ObterEmpresasAssociadasPorUsuario(idUserAspNet).Result.ToList().ForEach(item =>
             {
                 listaUsuarioEmpresa.EmpresasDisponiveisAssociacao.Add(_mapper.Map<EmpresaViewModel>(item));

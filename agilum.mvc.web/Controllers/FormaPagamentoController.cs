@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.Empresa;
@@ -32,7 +32,7 @@ namespace agilum.mvc.web.Controllers
         #region construtores
         public FormaPagamentoController(IFormaPagamentoService formaPagamentoService, IEmpresaService empresaService
             , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _formaPagamentoService = formaPagamentoService;
             _empresaService = empresaService;
@@ -131,7 +131,7 @@ namespace agilum.mvc.web.Controllers
             await _formaPagamentoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(objeto)}", "FormaPagamento", "Adicionar", null);
           
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -150,7 +150,7 @@ namespace agilum.mvc.web.Controllers
 
             if (model == null)
             {
-                var msgErro = $"Forma de pagamento n√£o localizado";
+                var msgErro = $"Forma de pagamento n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -186,7 +186,7 @@ namespace agilum.mvc.web.Controllers
             await _formaPagamentoService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "FormaPagamento", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -201,7 +201,7 @@ namespace agilum.mvc.web.Controllers
 
             if (model == null)
             {
-                var msgErro = $"Forma de pagamento n√£o localizada";
+                var msgErro = $"Forma de pagamento n„o localizada";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -233,7 +233,7 @@ namespace agilum.mvc.web.Controllers
             await _formaPagamentoService.Salvar();
             LogInformacao($"excluir {Deserializar(model)}", "FormaPagamento", "Excluir", null);
          
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

@@ -1,4 +1,4 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using AutoMapper;
@@ -22,7 +22,7 @@ using VendaViewModel = agilum.mvc.web.ViewModels.Venda.VendaViewModel;
 using agilium.api.business.Services;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
@@ -38,7 +38,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public VendaController(IVendaDapperRepository vendaDapperRepository, IVendaService vendaService,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, 
-            IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _vendaDapperRepository = vendaDapperRepository;
             _vendaService = vendaService;
@@ -51,7 +51,7 @@ namespace agilum.mvc.web.Controllers
         [ClaimsAuthorizeAttribute(2159)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
         {
-            VerificarValidadeLicenca();
+            await VerificarValidadeLicenca();
             var dataAtual = DateTime.Now;
             DateTime _dtini, _dtFim;
             if (DataInicial == null)

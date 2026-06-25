@@ -1,4 +1,4 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
@@ -15,7 +15,7 @@ using agilum.mvc.web.Extensions;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
@@ -36,7 +36,7 @@ namespace agilum.mvc.web.Controllers
 
         public UnidadeController(IUnidadeService unidadeService, INotificador notificador, IConfiguration configuration,
             IUser appUser, IMapper mapper, IUtilDapperRepository utilDapperRepository, ILogService logService,
-            ICaService caService, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ICaService caService, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _unidadeService = unidadeService;
             _caService = caService;
@@ -113,7 +113,7 @@ namespace agilum.mvc.web.Controllers
             
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -157,7 +157,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await _unidadeService.ObterPorId(id);
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 

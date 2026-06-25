@@ -1,11 +1,11 @@
-Ôªø
+
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -40,7 +40,7 @@ namespace agilum.mvc.web.Controllers
         #endregion
 
         #region Listas auxiliares
-        private readonly string _nomeEntidadeMotivo = "Motivos de Devolu√ß√£o";
+        private readonly string _nomeEntidadeMotivo = "Motivos de DevoluÁ„o";
         private IEnumerable<EmpresaViewModel> listaEmpresaViewModels { get; set; } = new List<EmpresaViewModel>();
         private IEnumerable<VendaViewModel> listaVendasViewModel { get; set; } = new List<VendaViewModel>();
         private List<ClienteViewModel> listaClienteViewModel { get; set; } = new List<ClienteViewModel>();
@@ -51,7 +51,7 @@ namespace agilum.mvc.web.Controllers
             IVendaService vendaService, IUsuarioService usuarioService,
             IClienteService clienteService, IValeService valeService, IDevolucaoDapperRepository devolucaoDapperRepository,
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _devolucaoService = devolucaoService;
             _empresaService = empresaService;
@@ -69,7 +69,7 @@ namespace agilum.mvc.web.Controllers
         }
         #endregion
 
-        #region Devolu√ß√£o
+        #region DevoluÁ„o
         [Route("lista")]
         [ClaimsAuthorizeAttribute(1)]
         public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] int ps = 15, [FromQuery] string? DataFinal = null, [FromQuery] string? DataInicial = null)
@@ -249,17 +249,17 @@ namespace agilum.mvc.web.Controllers
             }
 
             if (!AdicionarItens(model.DevolucaoItens).Result)
-                NotificarErro("Erro ao tentar adicionar Item da devolu√ß√£o");
+                NotificarErro("Erro ao tentar adicionar Item da devoluÁ„o");
 
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao criar nova devolu√ß√£o" };
+                var retornoErro = new { mensagem = $"Erro ao criar nova devoluÁ„o" };
 
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View("CreateEdit", model);
             }
             LogInformacao($"incluir {Deserializar(devolucao)}", "Devolucao", "Adicionar", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -279,7 +279,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(model);
             if (model == null)
             {
-                var msgErro = $"Devolu√ß√£o/perda n√£o localizada";
+                var msgErro = $"DevoluÁ„o/perda n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -309,13 +309,13 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(model);
             if (model == null)
             {
-                var msgErro = $"Devolu√ß√£o n√£o localizada";
+                var msgErro = $"DevoluÁ„o n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
                 ViewBag.TipoMensagem = "danger";
-                ViewBag.Titulo = "Devolu√ß√£o";
+                ViewBag.Titulo = "DevoluÁ„o";
                 ViewBag.Mensagem = msgErro;
                 return RedirectToAction("Index");
             }
@@ -355,7 +355,7 @@ namespace agilum.mvc.web.Controllers
             await _devolucaoService.Salvar();
 
             LogInformacao($"cancelar {Deserializar(devolucao)}", "Devolucao", "Cancelar", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -369,12 +369,12 @@ namespace agilum.mvc.web.Controllers
             var nomeUsuario = usuario != null ? usuario.nome : AppUser.GetUserEmail();
             if (!_devolucaoDapperRepository.RealizarDevolucao(id, nomeUsuario).Result)
             {
-                NotificarErro("Erro: Nao foi possivel realizar devolu√ß√£o");
+                NotificarErro("Erro: Nao foi possivel realizar devoluÁ„o");
             }
 
             if (!OperacaoValida())
             {
-                TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+                TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }
             LogInformacao($"gerar-vale id:{id}", "Devolucao", "GerarVale", null);
@@ -389,7 +389,7 @@ namespace agilum.mvc.web.Controllers
             await _valeService.GerarVale(id);
             if (!OperacaoValida())
             {
-                TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+                TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
                 TempData["TipoMensagem"] = "success";
             }else
                 LogInformacao($"realizar id:{id}", "Devolucao", "Realizar", null);
@@ -462,7 +462,7 @@ namespace agilum.mvc.web.Controllers
             await _devolucaoService.Salvar();
             LogInformacao($"incluir {Deserializar(objeto)}", "Devolucao", "AdicionarMotivo", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMotivos");
@@ -477,7 +477,7 @@ namespace agilum.mvc.web.Controllers
             MotivoDevolucaoViewModel objeto = await ObterMotivoPorId(id);
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -510,7 +510,7 @@ namespace agilum.mvc.web.Controllers
 
             await _devolucaoService.Salvar();
             LogInformacao($"incluir {Deserializar(objeto)}", "Devolucao", "AtualizarMotivo", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMotivos");
@@ -523,7 +523,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await ObterMotivoPorId(id);
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidadeMotivo} n√£o localizado";
+                var msgErro = $"{_nomeEntidadeMotivo} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -561,7 +561,7 @@ namespace agilum.mvc.web.Controllers
             await _devolucaoService.Salvar();
             LogInformacao($"excluir id:{model.Id}", "Devolucao", "ApagarMotivo", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMotivos");

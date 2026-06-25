@@ -1,11 +1,11 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using agilium.api.infra.Context;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +17,9 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
 
-        public ResetPasswordModel(UserManager<AppUserAgiliumIdentity> userManager)
+        public ResetPasswordModel(UserManager<CaUsuarioIdentity> userManager)
         {
             _userManager = userManager;
         }
@@ -35,17 +35,17 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Senha")]
-            [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} e no m√°ximo {1} caracteres.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} e no m·ximo {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar Senha")]
-            [Compare("Password", ErrorMessage = "A senha e a senha de confirma√ß√£o n√£o correspondem.")]
+            [Compare("Password", ErrorMessage = "A senha e a senha de confirmaÁ„o n„o correspondem.")]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
-            [Required(ErrorMessage = "Campo {0} obrigat√≥rio")]
+            [Required(ErrorMessage = "Campo {0} obrigatÛrio")]
             public string Empresa { get; set; }
         }
 
@@ -53,7 +53,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("Um c√≥digo deve ser fornecido para redefinir a senha.");
+                return BadRequest("Um cÛdigo deve ser fornecido para redefinir a senha.");
             }
             else
             {

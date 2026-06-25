@@ -1,8 +1,8 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -33,7 +33,7 @@ namespace agilum.mvc.web.Controllers
 
         #region construtor
         public ValeController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
-            ILogService logService, IMapper mapper, IValeService valeService, IClienteService clienteService, IEmpresaService empresaService, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : 
+            ILogService logService, IMapper mapper, IValeService valeService, IClienteService clienteService, IEmpresaService empresaService, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : 
             base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _valeService = valeService;
@@ -158,7 +158,7 @@ namespace agilum.mvc.web.Controllers
             await _valeService.Salvar();
             LogInformacao($"Novo vale criado: {vale.Id}", "novo","Create",null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -177,7 +177,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto);
             if (objeto == null)
             {
-                var msgErro = $"Vale presente n√£o localizado";
+                var msgErro = $"Vale presente n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -215,7 +215,7 @@ namespace agilum.mvc.web.Controllers
 
             await _valeService.Salvar();
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
             LogInformacao($"Vale presente editado: {vale.Id}", "editar", "Edit", null);
 
@@ -231,7 +231,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto);
             if (objeto == null)
             {
-                var msgErro = $"Vale presente n√£o localizado";
+                var msgErro = $"Vale presente n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -261,7 +261,7 @@ namespace agilum.mvc.web.Controllers
             await _valeService.Salvar();
             LogInformacao($"Vale presente apagado: {model.Id}", "apagar", "Delete", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -277,7 +277,7 @@ namespace agilum.mvc.web.Controllers
 
             if (vale.STVALE == agilium.api.business.Enums.ESituacaoVale.Utilizado)
             {
-                NotificarErro("Vales com status de UTILIZADO n√£o podem ser cancelados.");
+                NotificarErro("Vales com status de UTILIZADO n„o podem ser cancelados.");
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Vale", "cancelar", "Web", $"id:{id}"));
 
                 return RedirectToAction("Index");
@@ -294,7 +294,7 @@ namespace agilum.mvc.web.Controllers
             }
             await _valeService.Salvar();
             LogInformacao($"Vale cancelado: {vale.Id}", "cancelar", "Cancel", null);
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

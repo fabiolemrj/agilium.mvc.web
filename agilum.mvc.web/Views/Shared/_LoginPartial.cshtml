@@ -1,12 +1,12 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using agilum.mvc.web.Data
+@using Microsoft.AspNetCore.Identity
+@using agilium.api.business.Models
 
-
-@inject SignInManager<AppUserAgiliumIdentity> SignInManager
-@inject UserManager<AppUserAgiliumIdentity> UserManager
+@inject SignInManager<CaUsuarioIdentity> SignInManager
+@inject UserManager<CaUsuarioIdentity> UserManager
 
 @{
-    var nomeUsuario = (User != null) ? @UserManager?.GetUserAsync(User).Result?.Nome : "";
+    var userIdentity = (User != null) ? @UserManager?.GetUserAsync(User).Result : null;
+    var nomeUsuario = userIdentity?.UserName ?? "";
     
 }
 

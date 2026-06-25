@@ -1,10 +1,10 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Enums;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
@@ -42,7 +42,7 @@ namespace agilum.mvc.web.Controllers
             INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
             ILogService logService, IMapper mapper, IPerdaService perdaService, IProdutoService produtoService, 
             IEmpresaService empresaService, IEstoqueService estoqueService, IUsuarioService usuarioService,
-            IPerdaDapperRepository perdaDapperRepository, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            IPerdaDapperRepository perdaDapperRepository, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _perdaService = perdaService;
             _produtoService = produtoService;
@@ -186,9 +186,9 @@ namespace agilum.mvc.web.Controllers
             await _perdaService.Salvar();
             
             var id = _perdaDapperRepository.lancarPerdaRetornaIdHistoricoGerado(perda.Id, AppUser.GetUserEmail()).Result;
-            LogInformacao($"Lan√ßada perda/sobra Id: {perda.Id} - IdHistorico: {id} - Usu√°rio: {AppUser.GetUserEmail()}","novo","Create",null);
+            LogInformacao($"LanÁada perda/sobra Id: {perda.Id} - IdHistorico: {id} - Usu·rio: {AppUser.GetUserEmail()}","novo","Create",null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -207,7 +207,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto, objeto.IDEMPRESA.Value);
             if (objeto == null)
             {
-                var msgErro = $"perda/sobra n√£o localizada";
+                var msgErro = $"perda/sobra n„o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -245,9 +245,9 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _perdaService.Salvar();
-            LogInformacao($"Editada perda/sobra Id: {perda.Id} - Usu√°rio: {AppUser.GetUserEmail()}", "editar", "Edit", null);
+            LogInformacao($"Editada perda/sobra Id: {perda.Id} - Usu·rio: {AppUser.GetUserEmail()}", "editar", "Edit", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -262,7 +262,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto, objeto.IDEMPRESA.Value);
             if (objeto == null)
             {
-                var msgErro = $"perda/sobra n√£o localizada";
+                var msgErro = $"perda/sobra n„o localizada";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -297,9 +297,9 @@ namespace agilum.mvc.web.Controllers
 
             }
             PopularListaAuxiliares(model, model.IDEMPRESA.Value);
-            LogInformacao($"Apagada perda/sobra Id: {model.Id} - Usu√°rio: {AppUser.GetUserEmail()}", "apagar", "Delete", null);
+            LogInformacao($"Apagada perda/sobra Id: {model.Id} - Usu·rio: {AppUser.GetUserEmail()}", "apagar", "Delete", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

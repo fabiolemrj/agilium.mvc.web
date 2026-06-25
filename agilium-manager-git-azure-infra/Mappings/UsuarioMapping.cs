@@ -30,7 +30,8 @@ namespace agilium.api.infra.Mappings
             builder.Property(c => c.cel).HasColumnName("cel").HasColumnType("varchar(20)");
             builder.Property(c => c.dtnasc).HasColumnName("dtnasc").HasColumnType("date");
             builder.Property(c => c.usuario).HasColumnName("usuario").HasColumnType("varchar(20)");
-            builder.Property(c => c.senha).HasColumnName("senha").HasColumnType("varchar(40)");
+            // builder.Property(c => c.senha).HasColumnName("senha") - gerenciado pelo CaUsuarioIdentityMapping via PasswordHash
+            builder.Ignore(c => c.senha);
             builder.Property(c => c.email).HasColumnName("email").HasColumnType("varchar(100)");
             builder.Property(c => c.foto).HasColumnName("foto").HasColumnType("varchar(100)");
             builder.Property(c => c.tel2).HasColumnName("tel2").HasColumnType("varchar(20)");

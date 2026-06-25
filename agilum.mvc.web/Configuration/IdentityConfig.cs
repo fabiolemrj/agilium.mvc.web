@@ -1,4 +1,5 @@
-﻿
+
+using agilium.api.business.Models;
 using agilum.mvc.web.Data;
 using agilum.mvc.web.Extensions;
 
@@ -30,7 +31,7 @@ namespace agilum.mvc.web.Configuration
                     .EnableSensitiveDataLogging(true)
                     .EnableDetailedErrors(true));
 
-            services.AddDefaultIdentity<AppUserAgiliumIdentity>()
+            services.AddDefaultIdentity<CaUsuarioIdentity>()
                 .AddEntityFrameworkStores<dbIdentityContext>()
                 .AddErrorDescriber<IdentityMensagensPortugues>()
                 .AddDefaultTokenProviders();

@@ -1,10 +1,10 @@
-Ôªøusing agilium.api.business.Enums;
+using agilium.api.business.Enums;
 using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Services;
 using agilum.mvc.web.ViewModels;
@@ -43,7 +43,7 @@ namespace agilum.mvc.web.Controllers
         public FuncionarioController(IFuncionarioService funcionarioService, IEnderecoService enderecoService, ICaService caService,
             IEmpresaService empresaService, IUsuarioService usuarioService
             , INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _funcionarioService = funcionarioService;
             _enderecoService = enderecoService;
@@ -118,10 +118,10 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "CreateFuncionario";
             if (!ModelState.IsValid) return View("CreateEditFuncionario", model);
 
-            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade √© obrigat√≥rio");
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade È obrigatÛrio");
 
 
             ValidarFuncionario(model);
@@ -157,7 +157,7 @@ namespace agilum.mvc.web.Controllers
             await _funcionarioService.Salvar();
             LogInformacao($"sucesso: {Deserializar(funcionario)}", "Funcionario", "Adicionar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -175,7 +175,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -199,10 +199,10 @@ namespace agilum.mvc.web.Controllers
 
             if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
 
-            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf √© obrigat√≥rio");
-            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade √© obrigat√≥rio");
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf È obrigatÛrio");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade È obrigatÛrio");
 
             if (!OperacaoValida())
                 View("CreateEditFuncionario", model);
@@ -230,7 +230,7 @@ namespace agilum.mvc.web.Controllers
             await _funcionarioService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Funcionario", "Atualizar", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -245,7 +245,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -278,7 +278,7 @@ namespace agilum.mvc.web.Controllers
             
             LogInformacao($"sucesso: {Deserializar(model)}", "Funcionario", "Excluir", null);
             
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

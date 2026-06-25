@@ -1,7 +1,7 @@
-﻿using agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.ViewModels.Endereco;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +22,7 @@ namespace agilum.mvc.web.Controllers
 
         public EnderecoController(IEnderecoService enderecoService, IMapper mapper, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _enderecoService = enderecoService;
  
@@ -36,7 +36,7 @@ namespace agilum.mvc.web.Controllers
             var objetoCep = await _enderecoService.ObterCepPorNumeroCep(cep);
             if (objetoCep == null)
             {
-                var msgErro = "Numero de Cep não localizado";
+                var msgErro = "Numero de Cep n�o localizado";
                 NotificarErro(msgErro);
                 return NotFound(msgErro);
             }

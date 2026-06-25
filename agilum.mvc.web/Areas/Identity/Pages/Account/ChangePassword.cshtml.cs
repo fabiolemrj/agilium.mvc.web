@@ -1,10 +1,10 @@
-Ôªøusing System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using agilium.api.infra.Context;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,13 +13,13 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
-        private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
+        private readonly SignInManager<CaUsuarioIdentity> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<AppUserAgiliumIdentity> userManager,
-            SignInManager<AppUserAgiliumIdentity> signInManager,
+            UserManager<CaUsuarioIdentity> userManager,
+            SignInManager<CaUsuarioIdentity> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
@@ -48,7 +48,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar Nova Senha")]
-            [Compare("NewPassword", ErrorMessage = "A nova senha e a senha de confirma√ß√£o n√£o correspondem")]
+            [Compare("NewPassword", ErrorMessage = "A nova senha e a senha de confirmaÁ„o n„o correspondem")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -57,7 +57,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Incapaz de carregar usu√°rio '{_userManager.GetUserName(User)}'.");
+                return NotFound($"Incapaz de carregar usu·rio '{_userManager.GetUserName(User)}'.");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -79,7 +79,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Incapaz de carregar usu√°rio '{_userManager.GetUserName(User)}'.");
+                return NotFound($"Incapaz de carregar usu·rio '{_userManager.GetUserName(User)}'.");
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
@@ -93,7 +93,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            _logger.LogInformation("O usu√°rio alterou a senha com sucesso.");
+            _logger.LogInformation("O usu·rio alterou a senha com sucesso.");
             StatusMessage = "Sua senha foi alterada.";
 
             return RedirectToPage();

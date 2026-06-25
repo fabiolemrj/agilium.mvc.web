@@ -1,4 +1,4 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +13,7 @@ using agilum.mvc.web.ViewModels.Caixa;
 using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace agilum.mvc.web.Controllers
@@ -28,7 +28,7 @@ namespace agilum.mvc.web.Controllers
 
         public CaixaController(IUsuarioService usuarioService, ICaixaService caixaService,
              INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, 
-             ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) :
+             ILogService logService, IMapper mapper, ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) :
             base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, signInManager)
         {
             _caixaService = caixaService;
@@ -145,7 +145,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<CaixaMoedaViewModel>(caixaMoeda);
             if (objeto == null)
             {
-                var msgErro = $"Caixa Moeda n√£o localizado";
+                var msgErro = $"Caixa Moeda n„o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -204,7 +204,7 @@ namespace agilum.mvc.web.Controllers
 
             await _caixaService.Salvar();
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("IndexMoeda", new { idCaixa = model.IDCAIXA });

@@ -1,9 +1,9 @@
-Ôªøusing agilium.api.business.Interfaces;
+using agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilium_manager_azure_business.Interfaces.IService;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.ViewModels;
 using agilum.mvc.web.ViewModels.CategeoriaFinanceira;
@@ -27,7 +27,7 @@ namespace agilum.mvc.web.Controllers
         #region construtor
         public CategoriaFinanceiraController(ICategoriaFinanceiraService categoriaService, INotificador notificador, 
             IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository, ILogService logService, IMapper mapper,
-            ILicencaService licencaService, SignInManager<AppUserAgiliumIdentity> signInManager) 
+            ILicencaService licencaService, SignInManager<CaUsuarioIdentity> signInManager) 
             : base(notificador, configuration, appUser,utilDapperRepository, logService, mapper, 
                   licencaService, signInManager)
         {
@@ -96,7 +96,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<CategeoriaFinanceiraViewModel>(await _categoriaService.ObterPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -140,7 +140,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<CategeoriaFinanceiraViewModel>(await _categoriaService.ObterPorId(id));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n√£o localizado";
+                var msgErro = $"{_nomeEntidade} n„o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -171,7 +171,7 @@ namespace agilum.mvc.web.Controllers
             await _categoriaService.Salvar();
             LogInformacao($"Objeto apagado com sucesso {Deserializar(model)}", "CategoriaFinanceira", "Delete", null);
 
-            TempData["Mensagem"] = "Opera√ß√£o realizada com sucesso";
+            TempData["Mensagem"] = "OperaÁ„o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
 using agilium.api.infra.Context;
-using agilum.mvc.web.Data;
+using agilium.api.business.Models;
 using KissLog.RestClient.Requests.CreateRequestLog;
 using System.Security.Claims;
 using agilium.api.business.Interfaces.IService;
@@ -29,16 +29,16 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<AppUserAgiliumIdentity> _userManager;
-        private readonly SignInManager<AppUserAgiliumIdentity> _signInManager;
+        private readonly UserManager<CaUsuarioIdentity> _userManager;
+        private readonly SignInManager<CaUsuarioIdentity> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmpresaService _empresaService;
         protected readonly IMapper _mapper;
         protected readonly ILicencaService _licencaService;
 
-        public LoginModel(SignInManager<AppUserAgiliumIdentity> signInManager,
+        public LoginModel(SignInManager<CaUsuarioIdentity> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<AppUserAgiliumIdentity> userManager,
+            UserManager<CaUsuarioIdentity> userManager,
             IEmpresaService empresaService, IMapper mapper, ILicencaService licencaService)
         {
             _userManager = userManager;
@@ -67,17 +67,17 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         public class InputModel
         {
             [EmailAddress]
-            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            [Required(ErrorMessage = "Campo {0} obrigat�rio")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage ="Campo {0} obrigatório")]
+            [Required(ErrorMessage ="Campo {0} obrigat�rio")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
 
-            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            [Required(ErrorMessage = "Campo {0} obrigat�rio")]
             public string Empresa { get; set; }
             
         }
@@ -164,7 +164,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
             var empresaSelecionada = new EmpresaUsuarioViewModel()
             {
                 IDEMPRESA = empresa.Id.ToString(),
-                IDUSUARIO = user.Nome,
+                IDUSUARIO = user.UserName,
                 NomeEmpresa = empresa.NMRZSOCIAL
             };
             HttpContext.Session.SetString("_empSelec", System.Text.Json.JsonSerializer.Serialize(empresaSelecionada));
@@ -192,7 +192,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
                     //{
                     //    ObterEmpresas();
 
-                    //    var mensagem = $"Licença da empresa selecionada está vencida ou inválida";
+                    //    var mensagem = $"Licen�a da empresa selecionada est� vencida ou inv�lida";
                     //    TempData["TipoMensagem"] = "danger";
                     //    TempData["Mensagem"] = mensagem;
 
