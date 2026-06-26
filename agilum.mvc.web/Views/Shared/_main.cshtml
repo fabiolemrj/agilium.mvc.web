@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="~/dist/plugins/chart.js/Chart.css" />
     <link rel="stylesheet" href="~/css/toastr.css" />
     <link rel="stylesheet" href="~/dist/plugins/sweetalert2/sweetalert2.css" />
+    <script src="~/dist/plugins/sweetalert2/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="~/dist/plugins/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="~/dist/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" />
 
@@ -309,16 +310,17 @@
         function ObterEmpresaSelecionado() {
             var ambiente = "@HostingEnvironment.EnvironmentName";
             var _url = "/empresa/ObterEmpresaSelecionada";
+            var $el = $('#idselec-txt');
             $.get(_url)
                 .done(function (resultado) {
                     if (!resultado) {
-                        $('#idselec-txt').text("Selecione uma empresa");
+                        $el.addClass('placeholder').text('');
                         return;
                     }
-                    $('#idselec-txt').text(resultado);
+                    $el.removeClass('placeholder').text(resultado).attr('title', resultado);
                 })
                 .fail(function () {
-                    $('#idselec-txt').text("Selecione uma empresa");
+                    $el.addClass('placeholder').text('');
                 });
         }
 
@@ -331,6 +333,40 @@
                     }
                 });
         }
+
+        // Destaca o item do menu lateral correspondente a pagina atual
+        function DestacarMenuAtivo() {
+            var path = window.location.pathname.toLowerCase();
+            var $sidebar = $('.nav-sidebar');
+
+            // Remove active de todos os links folha primeiro
+            $sidebar.find('.nav-link:not([href="#"])').removeClass('active');
+
+            $sidebar.find('.nav-link[href]').each(function () {
+                var href = (this.getAttribute('href') || '').toLowerCase();
+                if (href === '#' || href === '' || href === '/') return;
+
+                // Match exato ou path termina com o href (ex: /empresa/lista contem /empresa/lista)
+                if (path === href || path.endsWith(href) || (href.length > 2 && path.indexOf(href) !== -1)) {
+                    var $link = $(this);
+                    $link.addClass('active');
+
+                    // Expande todos os niveis pais
+                    $link.parents('.nav-treeview').each(function () {
+                        $(this).css('display', 'block');
+                        $(this).prev('.nav-link').addClass('active');
+                        $(this).closest('.nav-item').addClass('menu-open');
+                    });
+
+                    return false; // para no primeiro match
+                }
+            });
+        }
+
+        // Executa apos o Treeview do AdminLTE inicializar
+        $(function () {
+            setTimeout(DestacarMenuAtivo, 200);
+        });
     </script>
    
     @RenderSection("Scripts", required: false)

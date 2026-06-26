@@ -1,20 +1,31 @@
 ﻿using agilium.api.business.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace agilium.api.business.Models
 {
     public class Perda: Entity
     {
+        [Column("IDEMPRESA")]
+        [ForeignKey("Empresa")]
         public Int64? IDEMPRESA { get; private set; }
         public virtual Empresa Empresa { get; private set; }
+        [Column("IDESTOQUE")]
+        [ForeignKey("Estoque")]
         public Int64? IDESTOQUE { get; private set; }
         public virtual Estoque Estoque { get; private set; }
+        [Column("IDESTOQUEHST")]
+        [ForeignKey("EstoqueHistorico")]
         public Int64? IDESTOQUEHST { get; private set; }
         public virtual EstoqueHistorico EstoqueHistorico { get; private set; }
-        public virtual Produto Produto { get; private set; }
+        [Column("IDPRODUTO")]
+        [ForeignKey("Produto")]
         public Int64? IDPRODUTO { get; private set; }
+        public virtual Produto Produto { get; private set; }
+        [Column("IDUSUARIO")]
+        [ForeignKey("Usuario")]
         public Int64? IDUSUARIO { get; private set; }
         public virtual Usuario Usuario { get; private set; }
         public string CDPERDA { get; private set; }

@@ -9,15 +9,11 @@
 }
 
 <div class="tituloEmpresaBarra">
-
-    <div>
-        <span class="fonteTituloAgilium"></span>
-
+    <i class="fas fa-building mr-2 empresa-icone"></i>
+    <div class="empresa-nome-wrapper">
+        <span class="empresa-nome-label">Empresa</span>
+        <label class="__nomeEmpresa" id="idselec-txt" title="Empresa selecionada"></label>
     </div>
-    <div>
-        <label class="__nomeEmpresa" id="idselec-txt"></label>
-    </div>
-    
 </div>
 
 
@@ -25,27 +21,37 @@
 <ul class="navbar-nav ml-auto">
     @if (User != null && User.Identity.IsAuthenticated)
     {
-        <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-user mr-2"></i>
-                @* @UserManager.GetUserName(User) *@
-                @nomeUsuario
+        <li class="nav-item dropdown user-menu">
+            <a class="nav-link user-trigger" data-toggle="dropdown" href="#" title="Opções do usuário">
+                <span class="user-avatar">@nomeUsuario?.Substring(0, 1).ToUpper()</span>
+                <span class="user-name">@nomeUsuario</span>
+                <i class="fas fa-chevron-down user-arrow"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right user-dropdown">
+                <!-- Cabeçalho do dropdown -->
+                <div class="user-dropdown-header">
+                    <span class="user-avatar-lg">@nomeUsuario?.Substring(0, 1).ToUpper()</span>
+                    <div>
+                        <span class="user-dropdown-name">@nomeUsuario</span>
+                        <span class="user-dropdown-email">@User?.FindFirst(ClaimTypes.Email)?.Value</span>
+                    </div>
+                </div>
 
                 <div class="dropdown-divider"></div>
 
                 <form id="changePasswordForm" class="form-inline" asp-area="Identity" asp-page="/Account/ChangePassword">
-                    <button id="changePassword" type="submit" class="dropdown-item">
-                        <i class="fas fa-retweet mr-2"></i> Mudar Senha
+                    <button id="changePassword" type="submit" class="dropdown-item user-dropdown-item">
+                        <i class="fas fa-key"></i>
+                        <span>Mudar Senha</span>
                     </button>
                 </form>
 
                 <div class="dropdown-divider"></div>
 
                 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Sair
+                    <button id="logout" type="submit" class="dropdown-item user-dropdown-item logout-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
                     </button>
                 </form>
             </div>

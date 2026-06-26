@@ -187,9 +187,9 @@ namespace agilum.mvc.web.Controllers
             await _perdaService.Salvar();
             
             var id = _perdaDapperRepository.lancarPerdaRetornaIdHistoricoGerado(perda.Id, AppUser.GetUserEmail()).Result;
-            LogInformacao($"Lançada perda/sobra Id: {perda.Id} - IdHistorico: {id} - Usuário: {AppUser.GetUserEmail()}","novo","Create",null);
+            LogInformacao($"Lanï¿½ada perda/sobra Id: {perda.Id} - IdHistorico: {id} - Usuï¿½rio: {AppUser.GetUserEmail()}","novo","Create",null);
 
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -208,7 +208,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto, objeto.IDEMPRESA.Value);
             if (objeto == null)
             {
-                var msgErro = $"perda/sobra não localizada";
+                var msgErro = $"perda/sobra nï¿½o localizada";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -246,9 +246,9 @@ namespace agilum.mvc.web.Controllers
             }
 
             await _perdaService.Salvar();
-            LogInformacao($"Editada perda/sobra Id: {perda.Id} - Usuário: {AppUser.GetUserEmail()}", "editar", "Edit", null);
+            LogInformacao($"Editada perda/sobra Id: {perda.Id} - Usuï¿½rio: {AppUser.GetUserEmail()}", "editar", "Edit", null);
 
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -263,7 +263,7 @@ namespace agilum.mvc.web.Controllers
             PopularListaAuxiliares(objeto, objeto.IDEMPRESA.Value);
             if (objeto == null)
             {
-                var msgErro = $"perda/sobra não localizada";
+                var msgErro = $"perda/sobra nï¿½o localizada";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -298,9 +298,9 @@ namespace agilum.mvc.web.Controllers
 
             }
             PopularListaAuxiliares(model, model.IDEMPRESA.Value);
-            LogInformacao($"Apagada perda/sobra Id: {model.Id} - Usuário: {AppUser.GetUserEmail()}", "apagar", "Delete", null);
+            LogInformacao($"Apagada perda/sobra Id: {model.Id} - Usuï¿½rio: {AppUser.GetUserEmail()}", "apagar", "Delete", null);
 
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

@@ -55,7 +55,11 @@ namespace agilum.mvc.web.Extensions
             }
             catch (Exception ex)
             {
-                 HandleCircuitBreakerExceptionAsync(httpContext);
+                 
+                
+                
+                
+                HandleCircuitBreakerExceptionAsync(httpContext);
             }
 
         }
@@ -76,8 +80,8 @@ namespace agilum.mvc.web.Extensions
 
         private static void HandleCircuitBreakerExceptionAsync(HttpContext context)
         {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Response.Redirect($"/error/{context.Response.StatusCode}"); 
-            //context.Response.Redirect("/sistema-indisponivel");
         }
     }
 }

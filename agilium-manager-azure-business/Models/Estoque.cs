@@ -1,17 +1,24 @@
 ﻿using agilium.api.business.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace agilium.api.business.Models
 {
     public class Estoque : Entity
     {
+        [Column("IDEMPRESA")]
+        [ForeignKey("Empresa")]
         public long? idEmpresa { get; private set; }
         public virtual Empresa Empresa { get; private set; }
+        [Column("DSESTOQUE")]
         public string Descricao { get; private set; }
+        [Column("TPESTOQUE")]
         public int? Tipo { get; private set; }
+        [Column("NUCAPACIDADE")]
         public decimal? Capacidade { get; private set; }
+        [Column("STESTOQUE")]
         public EAtivo? STESTOQUE { get; private set; }
         public virtual List<ProdutoComposicao> ProdutosComposicoes { get; set; } = new List<ProdutoComposicao>();
          public virtual List<EstoqueProduto> EstoqueProdutos { get; set; }= new List<EstoqueProduto>();

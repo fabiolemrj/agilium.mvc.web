@@ -22,11 +22,11 @@ namespace agilium.api.infra.Mappings
             builder.Property(x => x.STESTOQUE).HasColumnType("int").HasColumnName("STESTOQUE");
 
             //chaves estrangeiras
-            builder
-                .HasMany(empresa => empresa.PontosVendas)
-               .WithOne(func => func.Estoque)
-               .HasForeignKey(func => new { func.IDESTOQUE})
-               .HasPrincipalKey(empresa => new { empresa.Id });
+            //builder
+            //    .HasMany(empresa => empresa.PontosVendas)
+            //   .WithOne(func => func.Estoque)
+            //   .HasForeignKey(func => new { func.IDESTOQUE})
+            //   .HasPrincipalKey(empresa => new { empresa.Id });
 
             builder
               .HasMany(estoque => estoque.EstoqueProdutos)

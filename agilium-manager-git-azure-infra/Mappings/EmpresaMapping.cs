@@ -134,10 +134,10 @@ namespace agilium.api.infra.Mappings
                    .HasForeignKey("IDEMPRESA")
                    .HasPrincipalKey(empresa => empresa.Id);
 
-            builder.HasMany(empresa => empresa.Estoques)
-                   .WithOne(estoque => estoque.Empresa)
-                   .HasForeignKey("IDEMPRESA")
-                   .HasPrincipalKey(empresa => empresa.Id);
+            //builder.HasMany(empresa => empresa.Estoques)
+            //       .WithOne(estoque => estoque.Empresa)
+            //       .HasForeignKey("IDEMPRESA")
+            //       .HasPrincipalKey(empresa => empresa.Id);
 
             builder.HasMany(empresa => empresa.Funcionarios)
                    .WithOne(func => func.Empresa)
