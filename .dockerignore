@@ -1,0 +1,24 @@
+# .dockerignore - Agilium Manager
+# Exclui arquivos que não são necessários para o build Docker
+
+**/bin/
+**/obj/
+**/.vs/
+**/.git/
+**/.github/
+**/node_modules/
+
+*.user
+*.suo
+*.vs
+*.vssscc
+*.cache
+*.log
+
+**/wwwroot/dist/
+**/wwwroot/local/
+
+Dockerfile
+.dockerignore
+docker-compose*
+.vscode/
