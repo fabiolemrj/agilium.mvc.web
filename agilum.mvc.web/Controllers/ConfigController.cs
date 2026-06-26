@@ -1,4 +1,4 @@
-using agilium.api.business.Interfaces;
+Ôªøusing agilium.api.business.Interfaces;
 using agilium.api.business.Interfaces.IService;
 using agilium.api.business.Services;
 using agilum.mvc.web.ViewModels.Config;
@@ -28,7 +28,7 @@ namespace agilum.mvc.web.Controllers
     public class ConfigController : MainController
     {
         private readonly IConfigService _configService;
-        private readonly string _nomeEntidade = "ConfiguraÁ„o";
+        private readonly string _nomeEntidade = "Configura√ß√£o";
 
         #region construtor
         public ConfigController(INotificador notificador, IConfiguration configuration, IUser appUser, 
@@ -51,7 +51,7 @@ namespace agilum.mvc.web.Controllers
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
             {
-                var msgErro = $"Selecione uma empresa para acessar as configuraÁıes";
+                var msgErro = $"Selecione uma empresa para acessar as configura√ß√µes";
 
                 TempData["TipoMensagem"] = "danger";
                 TempData["Titulo"] = _nomeEntidade;
@@ -71,9 +71,9 @@ namespace agilum.mvc.web.Controllers
 
             var listaEditarChaveConfig = new List<EditarChaveValorViewModel>();
             lista.List.ToList().ForEach(config => {
-                var configuraÁ„Convertida = ConverterCamposConfigViewModel(config, Convert.ToInt64(empresaSelecionada.IDEMPRESA)).Result;
+                var configura√ß√£Convertida = ConverterCamposConfigViewModel(config, Convert.ToInt64(empresaSelecionada.IDEMPRESA)).Result;
 
-                if (configuraÁ„Convertida.Classificacao != EClassificacaoConfiguracao.NaoExibir) listaEditarChaveConfig.Add(configuraÁ„Convertida);
+                if (configura√ß√£Convertida.Classificacao != EClassificacaoConfiguracao.NaoExibir) listaEditarChaveConfig.Add(configura√ß√£Convertida);
             });
             var listaConvertida = new PagedViewModel<EditarChaveValorViewModel>()
             {
@@ -97,7 +97,7 @@ namespace agilum.mvc.web.Controllers
 
             if (empresaSelecionada == null || string.IsNullOrEmpty(empresaSelecionada.IDEMPRESA))
             {
-                var msgErro = $"Selecione uma empresa para acessar as configuraÁıes";
+                var msgErro = $"Selecione uma empresa para acessar as configura√ß√µes";
 
                 TempData["TipoMensagem"] = "danger";
                 TempData["Titulo"] = _nomeEntidade;
@@ -138,7 +138,7 @@ namespace agilum.mvc.web.Controllers
 
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n„o localizado";
+                var msgErro = $"{_nomeEntidade} n√£o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -168,7 +168,7 @@ namespace agilum.mvc.web.Controllers
 
             if (configImagem == null)
             {
-                NotificarErro("erro ao tenta atualizar configuraÁ„o de imagem");
+                NotificarErro("erro ao tenta atualizar configura√ß√£o de imagem");
                 var msgErro = string.Join("\n\r", ObterNotificacoes("Config", "AtualizaConfigImagem", "Web"));
                 return View(model);
             }
@@ -182,15 +182,15 @@ namespace agilum.mvc.web.Controllers
 
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao editar configuraÁ„o" };
+                var retornoErro = new { mensagem = $"Erro ao editar configura√ß√£o" };
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
             await _configService.Salvar();
-            LogInformacao("Config", "AtualizaConfigImagem", "Web", $"ConfiguraÁ„o de imagem {model.CHAVE} atualizada com sucesso");
+            LogInformacao("Config", "AtualizaConfigImagem", "Web", $"Configura√ß√£o de imagem {model.CHAVE} atualizada com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
-            ViewBag.Mensagem = "OperaÁ„o realizada com sucesso";
+            ViewBag.Mensagem = "Opera√ß√£o realizada com sucesso";
             return RedirectToAction("IndexConfigImagem");
         }
 
@@ -201,7 +201,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<List<ConfigIndexViewModel>>(await _configService.ObterTodosPorEmpresa(idEmpresa));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n„o localizado";
+                var msgErro = $"{_nomeEntidade} n√£o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -239,15 +239,15 @@ namespace agilum.mvc.web.Controllers
 
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao editar configuraÁ„o" };
+                var retornoErro = new { mensagem = $"Erro ao editar configura√ß√£o" };
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
             await _configService.Salvar();
-          LogInformacao("Config", "AtualizaConfigCampos", "Web", $"ConfiguraÁıes atualizadas com sucesso");
+          LogInformacao("Config", "AtualizaConfigCampos", "Web", $"Configura√ß√µes atualizadas com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
-            ViewBag.Mensagem = "OperaÁ„o realizada com sucesso";
+            ViewBag.Mensagem = "Opera√ß√£o realizada com sucesso";
             return View(model);
         }
 
@@ -258,7 +258,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<ConfigIndexViewModel>(await _configService.ObterPorChave(chave, idEmpresa));
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} n„o localizado";
+                var msgErro = $"{_nomeEntidade} n√£o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
 
@@ -287,15 +287,15 @@ namespace agilum.mvc.web.Controllers
 
             if (!OperacaoValida())
             {
-                var retornoErro = new { mensagem = $"Erro ao editar configuraÁ„o" };
+                var retornoErro = new { mensagem = $"Erro ao editar configura√ß√£o" };
                 AdicionarErroValidacao(retornoErro.mensagem);
                 return View(model);
             }
 
-            LogInformacao("Config", "AtualizaConfigItem", "Web", $"ConfiguraÁ„o {model.Chave} atualizada com sucesso");
+            LogInformacao("Config", "AtualizaConfigItem", "Web", $"Configura√ß√£o {model.Chave} atualizada com sucesso");
             ViewBag.TipoMensagem = "success";
             ViewBag.Titulo = _nomeEntidade;
-            ViewBag.Mensagem = "OperaÁ„o realizada com sucesso";
+            ViewBag.Mensagem = "Opera√ß√£o realizada com sucesso";
             return RedirectToAction("Index", "Config", new { idEmpresa = model.IdEmpresa });
         }
 
@@ -307,7 +307,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = _mapper.Map<ConfigIndexViewModel>(await _configService.ObterPorChave(chaveCertificado, idEmpresa));
             if (objeto == null)
             {
-                var msgErro = $"{chaveCertificado} n„o foi localizada nas configuraÁıes";
+                var msgErro = $"{chaveCertificado} n√£o foi localizada nas configura√ß√µes";
                 AdicionarErroValidacao(msgErro);
                 TempData["TipoMensagem"] = "danger";
                 TempData["Mensagem"] = msgErro;
@@ -369,7 +369,7 @@ namespace agilum.mvc.web.Controllers
         {
             if (arquivo == null || arquivo.Length == 0)
             {
-                NotificarErro("ForneÁa uma imagem!");
+                NotificarErro("Forne√ßa uma imagem!");
                 return false;
             }
 
@@ -377,7 +377,7 @@ namespace agilum.mvc.web.Controllers
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/certificado", idEmpresa + arquivo.FileName);
             if (System.IO.File.Exists(path))
             {
-                NotificarErro("J· existe um arquivo com este nome!");
+                NotificarErro("J√° existe um arquivo com este nome!");
                 return false;
             }
 
@@ -569,11 +569,11 @@ namespace agilum.mvc.web.Controllers
 
             if (model.CHAVE.Trim().ToUpper() == "CAIXA_DSSUPRIMENTO")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "DescriÁ„o Padr„o Suprimento", EClassificacaoConfiguracao.Caixa).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Descri√ß√£o Padr√£o Suprimento", EClassificacaoConfiguracao.Caixa).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "CAIXA_VLSUPRIMENTO")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Numero, "Valor Padr„o Suprimento (R$)", EClassificacaoConfiguracao.Caixa).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Numero, "Valor Padr√£o Suprimento (R$)", EClassificacaoConfiguracao.Caixa).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "CERTIFICADO_SENHA")
             {
@@ -589,7 +589,7 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "CONTA_REALIZARCONTROLE")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "Realizar controle lanÁamentos contabeis", EClassificacaoConfiguracao.Contabil).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "Realizar controle lan√ßamentos contabeis", EClassificacaoConfiguracao.Contabil).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "COR_FINAL")
             {
@@ -629,7 +629,7 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "MAIL_AUTENTICA")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "Email - AutenticaÁ„o", EClassificacaoConfiguracao.Email).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "Email - Autentica√ß√£o", EClassificacaoConfiguracao.Email).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "MAIL_EMAIL")
             {
@@ -665,7 +665,7 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "MAIL_SSL")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "AutenticaÁ„o SSL- Email", EClassificacaoConfiguracao.Email).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.SimNao, "Autentica√ß√£o SSL- Email", EClassificacaoConfiguracao.Email).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_AMBIENTE")
             {
@@ -677,15 +677,15 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_MODELO_HOMOL")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Modelo - HomologaÁ„o", EClassificacaoConfiguracao.NFCe).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Modelo - Homologa√ß√£o", EClassificacaoConfiguracao.NFCe).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_NATOP")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Natureza OperaÁ„o", EClassificacaoConfiguracao.NFCe).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Natureza Opera√ß√£o", EClassificacaoConfiguracao.NFCe).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_NATOP_HOMOL")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Natureza OperaÁ„o - HomologaÁ„o", EClassificacaoConfiguracao.NFCe).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Natureza Opera√ß√£o - Homologa√ß√£o", EClassificacaoConfiguracao.NFCe).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_SERIE")
             {
@@ -693,7 +693,7 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "NFCE_SERIE_HOMOL")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Serie - HomologaÁ„o", EClassificacaoConfiguracao.NFCe).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "NFCe Serie - Homologa√ß√£o", EClassificacaoConfiguracao.NFCe).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "PASTA_FOTOS")
             {
@@ -709,7 +709,7 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "PDV_PREVENDA")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "PDV PrÈ-Venda", EClassificacaoConfiguracao.PDV).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "PDV Pr√©-Venda", EClassificacaoConfiguracao.PDV).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "PDV_TAMANHO_FONTE")
             {
@@ -733,15 +733,15 @@ namespace agilum.mvc.web.Controllers
             }
             else if (model.CHAVE.Trim().ToUpper() == "TXENTREGA_VLMINIMO")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Valor MÌnimo Taxa de entrega", EClassificacaoConfiguracao.Pedido).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Valor M√≠nimo Taxa de entrega", EClassificacaoConfiguracao.Pedido).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "VENDAS_DOC_FISCAL_PADRAO")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Padr„o Documento Valor Fiscal - Vendas", EClassificacaoConfiguracao.Pedido).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Padr√£o Documento Valor Fiscal - Vendas", EClassificacaoConfiguracao.Pedido).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "VENDAS_DOC_FISCAL_PADRAO_STR")
             {
-                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Padr„o Documento Valor Fiscal STR - Vendas", EClassificacaoConfiguracao.Pedido).Result;
+                return ConverterEditarChaveValorViewModel(model, idEmpresa, ETipoCompnenteConfig.Texto, "Padr√£o Documento Valor Fiscal STR - Vendas", EClassificacaoConfiguracao.Pedido).Result;
             }
             else if (model.CHAVE.Trim().ToUpper() == "CAIXA_TPABERTURA")
             {
