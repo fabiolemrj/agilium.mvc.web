@@ -1,52 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\AgiliumManagerMVC\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|c:\\agiliummanagermvc\\agilium-manager-azure-business\\services\\perdaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|solutionrelative:agilium-manager-azure-business\\services\\perdaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\perdacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\perdacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\estoquemapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\estoquemapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\usuariomapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\usuariomapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\perdamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\perdamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\views\\shared\\_asidemenu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\shared\\_asidemenu.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\maincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\empresacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -54,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -83,149 +38,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:15:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "EmpresaMapping.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
-              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAgwIkAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T21:14:57.712Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EstoqueMapping.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EstoqueMapping.cs",
-              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\EstoqueMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EstoqueMapping.cs",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\EstoqueMapping.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABwAAABBAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T19:50:47.41Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UsuarioMapping.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\UsuarioMapping.cs",
-              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\UsuarioMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\UsuarioMapping.cs",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\UsuarioMapping.cs",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T19:41:20.561Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "PerdaMapping.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\PerdaMapping.cs",
-              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\PerdaMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\PerdaMapping.cs",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\PerdaMapping.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T19:41:14.098Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PerdaService.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-azure-business\\Services\\PerdaService.cs",
-              "RelativeDocumentMoniker": "agilium-manager-azure-business\\Services\\PerdaService.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-azure-business\\Services\\PerdaService.cs",
-              "RelativeToolTip": "agilium-manager-azure-business\\Services\\PerdaService.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAawEcAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T19:32:13.509Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PerdaController.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\PerdaController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\PerdaController.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\PerdaController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\PerdaController.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAMwGYAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T19:17:15.894Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "_ASideMenu.cshtml",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Shared\\_ASideMenu.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Shared\\_ASideMenu.cshtml",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Shared\\_ASideMenu.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Shared\\_ASideMenu.cshtml",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAAALoAAAAxAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-26T19:16:55.201Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Home\\Index.cshtml",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-26T18:53:46Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ExceptionMiddleware.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAnwEAAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T17:35:22.956Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "MainController.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\MainController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\MainController.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\MainController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\MainController.cs",
-              "ViewState": "AgIAAJgAAAAAAAAAAAAnwLEAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T17:35:23.009Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "EmpresaController.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\EmpresaController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\EmpresaController.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\EmpresaController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\EmpresaController.cs",
-              "ViewState": "AgIAABIBAAAAAAAAAAArwCkBAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-25T14:42:58.824Z",
-              "EditorCaption": ""
             }
           ]
         }

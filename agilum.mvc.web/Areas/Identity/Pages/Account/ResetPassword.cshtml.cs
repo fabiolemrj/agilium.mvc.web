@@ -35,17 +35,17 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Senha")]
-            [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} e no máximo {1} caracteres.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} e no mï¿½ximo {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar Senha")]
-            [Compare("Password", ErrorMessage = "A senha e a senha de confirmação não correspondem.")]
+            [Compare("Password", ErrorMessage = "A senha e a senha de confirmaï¿½ï¿½o nï¿½o correspondem.")]
             public string ConfirmPassword { get; set; }
 
             public string Code { get; set; }
-            [Required(ErrorMessage = "Campo {0} obrigatório")]
+            [Required(ErrorMessage = "Campo {0} obrigatï¿½rio")]
             public string Empresa { get; set; }
         }
 
@@ -53,7 +53,7 @@ namespace agilum.mvc.web.Areas.Identity.Pages.Account
         {
             if (code == null)
             {
-                return BadRequest("Um código deve ser fornecido para redefinir a senha.");
+                return BadRequest("Um codigo deve ser fornecido para redefinir a senha.");
             }
             else
             {

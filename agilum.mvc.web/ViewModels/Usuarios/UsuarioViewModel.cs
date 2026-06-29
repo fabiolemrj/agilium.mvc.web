@@ -141,7 +141,7 @@ namespace agilum.mvc.web.ViewModels.Usuarios
             set { ativo = value ? "S" : "N"; }
         }
         public string idUserAspNet { get; set; }
-        [Display(Name = "Nome simplificado")]
+        [Display(Name = "Nome Usuario")]
         public string Usuario { get; set; }
 
         public string Foto { get; set; }
