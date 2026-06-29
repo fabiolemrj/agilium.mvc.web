@@ -257,28 +257,28 @@
     <Content Update="wwwroot\local\global.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\caixa.js">
+    <Content Update="wwwroot\local\processo\caixa.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\compra.js">
+    <Content Update="wwwroot\local\processo\compra.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\devolucao.js">
+    <Content Update="wwwroot\local\processo\devolucao.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\inventario.js">
+    <Content Update="wwwroot\local\processo\inventario.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\perda.js">
+    <Content Update="wwwroot\local\processo\perda.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\turno.js">
+    <Content Update="wwwroot\local\processo\turno.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\vale.js">
+    <Content Update="wwwroot\local\processo\vale.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="wwwroot\local\Processo\venda.js">
+    <Content Update="wwwroot\local\processo\venda.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

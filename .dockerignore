@@ -15,8 +15,6 @@
 *.cache
 *.log
 
-**/wwwroot/local/
-
 Dockerfile
 .dockerignore
 docker-compose*

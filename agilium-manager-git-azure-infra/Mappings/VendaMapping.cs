@@ -43,42 +43,42 @@ namespace agilium.api.infra.Mappings
             builder
                 .HasMany(venda => venda.VendaItem)
                 .WithOne(item => item.Venda)
-                .HasForeignKey(item => new { item.Id })
+                .HasForeignKey(item => new { item.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id })
                  .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(venda => venda.VendaMoeda)
                 .WithOne(moeda => moeda.Venda)
-                .HasForeignKey(moeda => new { moeda.Id })
+                .HasForeignKey(moeda => new { moeda.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id })
                  .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(venda => venda.VendaCancelada)
                 .WithOne(cancel => cancel.Venda)
-                .HasForeignKey(cancel => new { cancel.Id })
+                .HasForeignKey(cancel => new { cancel.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id })
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(venda => venda.VendaEspelho)
                 .WithOne(espelho => espelho.Venda)
-                .HasForeignKey(espelho => new { espelho.Id })
+                .HasForeignKey(espelho => new { espelho.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id })
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(venda => venda.VendaFiscal)
                 .WithOne(fiscal => fiscal.Venda)
-                .HasForeignKey(fiscal => new { fiscal.Id })
+                .HasForeignKey(fiscal => new { fiscal.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id })
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(venda => venda.Devolucao)
                 .WithOne(devolucao => devolucao.Venda)
-                .HasForeignKey(devolucao => new { devolucao.Id })
+                .HasForeignKey(devolucao => new { devolucao.IDVENDA })
                 .HasPrincipalKey(venda => new { venda.Id });
             //    .OnDelete(DeleteBehavior.Cascade);
 
@@ -112,7 +112,7 @@ namespace agilium.api.infra.Mappings
             builder
                 .HasMany(vendaItem => vendaItem.DevolucaoItem)
                 .WithOne(devolucaoItem => devolucaoItem.VendaItem)
-                .HasForeignKey(devolucaoItem => new { devolucaoItem.Id })
+                .HasForeignKey(devolucaoItem => new { devolucaoItem.IDVENDA_ITEM })
                 .HasPrincipalKey(vendaItem => new { vendaItem.Id });
             //    .OnDelete(DeleteBehavior.Cascade);
         }

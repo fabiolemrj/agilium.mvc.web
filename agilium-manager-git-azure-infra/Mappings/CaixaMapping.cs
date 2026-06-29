@@ -29,6 +29,24 @@ namespace agilium.api.infra.Mappings
 
             //chaves estrangeiras
             builder
+                .HasOne(caixa => caixa.Funcionario)
+                .WithMany(func => func.Caixas)
+                .HasForeignKey(caixa => new { caixa.IDFUNC })
+                .HasPrincipalKey(func => new { func.Id });
+
+            builder
+                .HasOne(caixa => caixa.Turno)
+                .WithMany(turno => turno.Caixas)
+                .HasForeignKey(caixa => new { caixa.IDTURNO })
+                .HasPrincipalKey(turno => new { turno.Id });
+
+            builder
+                .HasOne(caixa => caixa.Empresa)
+                .WithMany()
+                .HasForeignKey(caixa => new { caixa.IDEMPRESA })
+                .HasPrincipalKey(empresa => new { empresa.Id });
+
+            builder
                 .HasMany(caixa => caixa.CaixaMoeda)
                 .WithOne(moedas => moedas.Caixa)
                 .HasForeignKey(moedas => new { moedas.IDCAIXA })

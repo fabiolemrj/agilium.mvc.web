@@ -1,6 +1,7 @@
 ﻿using agilium.api.business.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace agilium.api.business.Models
@@ -14,6 +15,8 @@ namespace agilium.api.business.Models
         public string NMMAQUINA { get; private set; }
         public string DSCAMINHO_CERT { get; private set; }
         public string DSSENHA_CERT { get; private set; }
+        [Column("IDESTOQUE")]
+        [ForeignKey("Estoque")]
         public Int64? IDESTOQUE { get; private set; }
         public virtual Estoque Estoque { get; private set; }
         //NMIMPRESSORA varchar(100)

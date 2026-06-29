@@ -34,6 +34,12 @@ namespace agilium.api.infra.Mappings
             builder.Property(c => c.STGAVETA).HasColumnName("STGAVETA").HasColumnType("int");
 
             builder
+                .HasOne(pdv => pdv.Empresa)
+                .WithMany(empresa => empresa.PontosVendas)
+                .HasForeignKey(pdv => new { pdv.IDEMPRESA })
+                .HasPrincipalKey(empresa => new { empresa.Id });
+
+            builder
                 .HasMany(pdv => pdv.Caixas)
                 .WithOne(caixa => caixa.PontoVenda)
                 .HasForeignKey(caixa => new { caixa.IDPDV })
