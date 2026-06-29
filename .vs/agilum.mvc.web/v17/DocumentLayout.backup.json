@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\AgiliumManagerMVC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|c:\\agiliummanagermvc\\agilium-manager-azure-business\\services\\perdaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|solutionrelative:agilium-manager-azure-business\\services\\perdaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\perdacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\perdacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\empresamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\estoquemapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -86,12 +86,12 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "EmpresaMapping.cs",
               "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
               "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs*",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs*",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
+              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\EmpresaMapping.cs",
               "ViewState": "AgIAAGQAAAAAAAAAAAAgwIkAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-26T21:14:57.712Z",
@@ -138,7 +138,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "PerdaService.cs",
               "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-azure-business\\Services\\PerdaService.cs",
               "RelativeDocumentMoniker": "agilium-manager-azure-business\\Services\\PerdaService.cs",
@@ -151,7 +151,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "PerdaController.cs",
               "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\PerdaController.cs",
               "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\PerdaController.cs",
@@ -190,7 +190,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "ExceptionMiddleware.cs",
               "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
               "RelativeDocumentMoniker": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",

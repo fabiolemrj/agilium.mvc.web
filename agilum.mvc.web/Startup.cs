@@ -80,6 +80,9 @@ namespace agilum.mvc.web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            // Detecta se está rodando no Render (Render gerencia HTTPS no proxy)
+            var isRender = Environment.GetEnvironmentVariable("RENDER") != null;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -88,8 +91,11 @@ namespace agilum.mvc.web
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                // HSTS só em produção real (não atrás de proxy como Render)
+                if (!isRender)
+                {
+                    app.UseHsts();
+                }
             }
             app.Use(async (context, next) =>
             {
@@ -100,7 +106,11 @@ namespace agilum.mvc.web
                 await next.Invoke();
             });
 
-            app.UseHttpsRedirection();
+            // Render gerencia HTTPS - não redirecionar
+            if (!isRender)
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseStaticFiles();
 
             app.UseRouting();

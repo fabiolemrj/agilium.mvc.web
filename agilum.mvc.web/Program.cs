@@ -26,6 +26,9 @@ namespace agilum.mvc.web
                         options.Limits.MaxRequestHeadersTotalSize = 65536; // 64 KB
                     });
 
+                    // Render: usa a porta definida na variável de ambiente PORT
+                    var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+                    webBuilder.UseUrls($"http://0.0.0.0:{port}");
                 });
     }
 }

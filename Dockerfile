@@ -12,7 +12,7 @@ RUN dotnet publish -c Release -o /app/publish
 
 
 # ================================
-# 2) RUNTIME (.NET Core 3.1) - ARM friendly
+# 2) RUNTIME (.NET Core 3.1)
 # ================================
 FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS runtime
 
@@ -22,15 +22,20 @@ RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
     sed -i '/deb.*buster-updates/s/^/#/' /etc/apt/sources.list && \
     apt-get update
 
-# Instalar libgdiplus (obrigatório para System.Drawing no Linux ARM)
+# Instalar libgdiplus (obrigatório para System.Drawing no Linux)
 RUN apt-get install -y --allow-unauthenticated libgdiplus && \
-    ln -s /usr/lib/arm-linux-gnueabihf/libgdiplus.so /usr/lib/libgdiplus.so || true
-
-# Limpar apt
-RUN rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=build /app/publish .
 
+# Script de entrada que usa a variável PORT do Render (fallback para 80)
+RUN echo '#!/bin/bash\n\
+export ASPNETCORE_URLS="http://0.0.0.0:${PORT:-80}"\n\
+exec dotnet agilum.mvc.web.dll' > /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
+
 EXPOSE 80
-ENTRYPOINT ["dotnet", "agilum.mvc.web.dll"]
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV RENDER=true
+ENTRYPOINT ["/app/entrypoint.sh"]
