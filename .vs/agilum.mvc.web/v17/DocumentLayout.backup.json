@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\AgiliumManagerMVC\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\viewmodels\\usuarios\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\viewmodels\\usuarios\\usuarioviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\views\\usuario\\createedit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\usuario\\createedit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,6 +55,58 @@
             {
               "$type": "Bookmark",
               "Name": "ST:15:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuarioViewModel.cs",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\ViewModels\\Usuarios\\UsuarioViewModel.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\ViewModels\\Usuarios\\UsuarioViewModel.cs",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\ViewModels\\Usuarios\\UsuarioViewModel.cs",
+              "RelativeToolTip": "agilum.mvc.web\\ViewModels\\Usuarios\\UsuarioViewModel.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAmwIkAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T19:45:50.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateEdit.cshtml",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Usuario\\CreateEdit.cshtml",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Usuario\\CreateEdit.cshtml",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Usuario\\CreateEdit.cshtml",
+              "RelativeToolTip": "agilum.mvc.web\\Views\\Usuario\\CreateEdit.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-29T19:45:45.76Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ExceptionMiddleware.cs",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
+              "RelativeToolTip": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAnwDgAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T19:39:00.303Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAIAwwD8AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T19:39:20.928Z",
+              "EditorCaption": ""
             }
           ]
         }
