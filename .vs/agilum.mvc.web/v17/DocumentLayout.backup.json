@@ -3,28 +3,20 @@
   "WorkspaceRootPath": "C:\\AgiliumManagerMVC\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\vendamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\vendamapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|c:\\agiliummanagermvc\\agilium-manager-azure-business\\services\\vendaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{06C31DD8-D3E2-45EC-87E9-4DD51795ADCC}|agilium-manager-azure-business\\agilium-manager-azure-business.csproj|solutionrelative:agilium-manager-azure-business\\services\\vendaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\vendacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\vendacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\views\\usuario\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\usuario\\perfil.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\extensions\\exceptionmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\views\\inventario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\views\\inventario\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\usuariocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|c:\\agiliummanagermvc\\agilum.mvc.web\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E6D32F3B-F358-426E-86FE-E68A91BB8925}|agilum.mvc.web\\agilum.mvc.web.csproj|solutionrelative:agilum.mvc.web\\controllers\\produtocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|c:\\agiliummanagermvc\\agilium-manager-git-azure-infra\\mappings\\funcionariomapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3984B58F-CF59-4FDB-95B3-160E36BA4614}|agilium-manager-git-azure-infra\\agilium-manager-git-azure-infra.csproj|solutionrelative:agilium-manager-git-azure-infra\\mappings\\funcionariomapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -66,80 +58,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "VendaController.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\VendaController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\VendaController.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\VendaController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\VendaController.cs",
-              "ViewState": "AgIAAMUAAAAAAAAAAAAewMMBAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-29T20:21:36.763Z",
+              "DocumentIndex": 0,
+              "Title": "Perfil.cshtml",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Usuario\\Perfil.cshtml",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Usuario\\Perfil.cshtml",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Usuario\\Perfil.cshtml*",
+              "RelativeToolTip": "agilum.mvc.web\\Views\\Usuario\\Perfil.cshtml*",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAGAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-30T12:08:27.732Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "VendaService.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-azure-business\\Services\\VendaService.cs",
-              "RelativeDocumentMoniker": "agilium-manager-azure-business\\Services\\VendaService.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-azure-business\\Services\\VendaService.cs",
-              "RelativeToolTip": "agilium-manager-azure-business\\Services\\VendaService.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAApwHAAAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-29T20:21:06.486Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "VendaMapping.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\VendaMapping.cs",
-              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\VendaMapping.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\VendaMapping.cs",
-              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\VendaMapping.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAgwMAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-29T20:20:56.489Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Inventario\\Index.cshtml",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Views\\Inventario\\Index.cshtml",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Views\\Inventario\\Index.cshtml",
-              "RelativeToolTip": "agilum.mvc.web\\Views\\Inventario\\Index.cshtml",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-29T20:15:11.596Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ProdutoController.cs",
-              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "RelativeToolTip": "agilum.mvc.web\\Controllers\\ProdutoController.cs",
-              "ViewState": "AgIAAHwEAAAAAAAAAAAewBYGAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-29T20:01:27.001Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "ExceptionMiddleware.cs",
               "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
               "RelativeDocumentMoniker": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
               "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
               "RelativeToolTip": "agilum.mvc.web\\Extensions\\ExceptionMiddleware.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAnwDgAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAnwDkAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-29T19:39:00.303Z",
+              "WhenOpened": "2026-06-30T12:06:20.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FuncionarioMapping.cs",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\FuncionarioMapping.cs",
+              "RelativeDocumentMoniker": "agilium-manager-git-azure-infra\\Mappings\\FuncionarioMapping.cs",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilium-manager-git-azure-infra\\Mappings\\FuncionarioMapping.cs",
+              "RelativeToolTip": "agilium-manager-git-azure-infra\\Mappings\\FuncionarioMapping.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T20:25:57.8Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UsuarioController.cs",
+              "DocumentMoniker": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "RelativeDocumentMoniker": "agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "ToolTip": "C:\\AgiliumManagerMVC\\agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "RelativeToolTip": "agilum.mvc.web\\Controllers\\UsuarioController.cs",
+              "ViewState": "AgIAAEoBAAAAAAAAAAAYwHABAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-29T20:03:26.207Z",
               "EditorCaption": ""
             }
           ]

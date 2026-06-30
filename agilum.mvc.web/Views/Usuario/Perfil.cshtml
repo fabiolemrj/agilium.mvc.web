@@ -1,0 +1,100 @@
+@using agilum.mvc.web.ViewModels.Usuarios
+@model PerfilViewModel
+
+@{
+    ViewData["Title"] = "Meu Perfil";
+    var iniciais = !string.IsNullOrEmpty(Model.Nome) && Model.Nome != "Não informado"
+        ? string.Join("", Model.Nome.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(n => n[0])).ToUpper()
+        : "?";
+}
+<h4>@ViewData["Title"]</h4>
+<hr />
+<section class="barra-de-menu-principal">
+    <div class="barra-de-botoes-menu-principal">
+        <a href="javascript:history.go(-1)" title="Voltar" id="btnVoltar">
+            <span class="fas fa-reply sns-tool-action"></span>
+        </a>
+        <a href="#" title="Precisa de Ajuda?" id="btnAjuda">
+            <span class="fa fa-question sns-tool-action"></span>
+        </a>
+    </div>
+
+    <article>
+        <div class="barra-de-posicao-atual" id="breadcrumb">
+            <a href="@Url.Action("Index","Home")"><i class="fa fa-dashboard"></i> Home</a> /
+            <a> Meu Perfil </a>
+        </div>
+    </article>
+</section>
+<br />
+
+
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card">
+            <div class="card-body text-center pt-4 pb-2">
+
+                @if (Model.TemFoto)
+                {
+                    <img class="rounded-circle mb-3"
+                         src="~/Images/@Model.Foto"
+                         alt="Foto do usuário"
+                         style="width: 96px; height: 96px; object-fit: cover;"
+                         onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline-flex';" />
+                    <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white font-weight-bold mb-3"
+                         style="width: 96px; height: 96px; font-size: 36px; display: none;">
+                        @iniciais
+                    </div>
+                }
+                else
+                {
+                    <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white font-weight-bold mb-3"
+                         style="width: 96px; height: 96px; font-size: 36px;">
+                        @iniciais
+                    </div>
+                }
+
+                <h4 class="font-weight-bold mb-1">@Model.Nome</h4>
+                <p class="text-muted small mb-3">@Model.Email</p>
+            </div>
+
+            <div class="px-4">
+                <div class="d-flex justify-content-between align-items-center py-2 border-top">
+                    <span class="text-muted">
+                        <i class="fas fa-user text-muted mr-2"></i>Nome
+                    </span>
+                    <span class="font-weight-bold text-dark">@Model.Nome</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-top">
+                    <span class="text-muted">
+                        <i class="fas fa-envelope text-muted mr-2"></i>E-mail
+                    </span>
+                    <span class="font-weight-bold text-dark">@Model.Email</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-top">
+                    <span class="text-muted">
+                        <i class="fas fa-mobile-alt text-muted mr-2"></i>Celular
+                    </span>
+                    <span class="font-weight-bold text-dark">@Model.Celular</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center py-2 border-top">
+                    <span class="text-muted">
+                        <i class="fas fa-id-card text-muted mr-2"></i>CPF
+                    </span>
+                    <span class="font-weight-bold text-dark">@Model.Cpf</span>
+                </div>
+            </div>
+
+           @*  <div class="card-body pt-3">
+                <a asp-area="Identity" asp-page="/Account/ChangePassword"
+                   class="btn btn-primary btn-block">
+                    <i class="fas fa-key mr-1"></i> Mudar Senha
+                </a>
+            </div> *@
+        </div>
+    </div>
+</div>

@@ -341,6 +341,38 @@ namespace agilum.mvc.web.Controllers
             return await _usuarioService.Atualizar(usuario);
             
         }
+
+        #region perfil
+
+        [Route("perfil")]
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Perfil()
+        {
+            var idUserAspNet = AppUser.GetUserId().ToString();
+
+            var usuario = await _usuarioService.ObterPorUsuarioAspNetPorId(idUserAspNet);
+
+            if (usuario == null)
+            {
+                AdicionarErroValidacao("Usuário não encontrado.");
+                return View(new PerfilViewModel());
+            }
+
+            var model = new PerfilViewModel
+            {
+                Nome = !string.IsNullOrEmpty(usuario.nome) ? usuario.nome : "Não informado",
+                Email = !string.IsNullOrEmpty(usuario.email) ? usuario.email : "Não informado",
+                Celular = !string.IsNullOrEmpty(usuario.cel) ? usuario.cel : "Não informado",
+                Cpf = !string.IsNullOrEmpty(usuario.cpf) ? usuario.cpf : "Não informado",
+                Foto = usuario.foto,
+                TemFoto = !string.IsNullOrEmpty(usuario.foto)
+            };
+
+            return View(model);
+        }
+
+        #endregion
         #endregion
     }
 }
