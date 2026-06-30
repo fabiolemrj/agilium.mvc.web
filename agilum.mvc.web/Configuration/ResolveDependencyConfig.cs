@@ -41,7 +41,9 @@ namespace agilum.mvc.web.Configuration
         public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
         {
 
-            var connectionString = configuration.GetConnectionString("ConnectionDb");
+            var connectionString = configuration.GetConnectionString("ConnectionDb")
+                ?? Environment.GetEnvironmentVariable("ConnectionDb")
+                ?? Environment.GetEnvironmentVariable("ConnectionStrings__ConnectionDb");
 
             #region geral
             services.AddScoped<INotificador, Notificador>();

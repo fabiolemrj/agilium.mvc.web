@@ -26,6 +26,32 @@ namespace agilum.mvc.web
 
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Obtém a connection string do configuration provider ou diretamente de variável de ambiente.
+        /// Suporta tanto "ConnectionStrings__Nome" quanto "Nome" como nome da variável de ambiente.
+        /// </summary>
+        private string ObterConnectionString(string name)
+        {
+            var connStr = Configuration.GetConnectionString(name);
+            if (!string.IsNullOrEmpty(connStr))
+                return connStr;
+
+            // Fallback: tenta variável de ambiente direta (ex: "ConnectionDb")
+            connStr = Environment.GetEnvironmentVariable(name);
+            if (!string.IsNullOrEmpty(connStr))
+                return connStr;
+
+            // Fallback: tenta com prefixo ConnectionStrings__ (ex: "ConnectionStrings__ConnectionDb")
+            connStr = Environment.GetEnvironmentVariable($"ConnectionStrings__{name}");
+            if (!string.IsNullOrEmpty(connStr))
+                return connStr;
+
+            throw new InvalidOperationException(
+                $"Connection string '{name}' não encontrada. " +
+                $"Defina a variável de ambiente '{name}' ou 'ConnectionStrings__{name}' " +
+                $"ou restaure o valor em appsettings.json.");
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -37,11 +63,11 @@ namespace agilum.mvc.web
 
             services.AddDbContext<AgiliumContext>(options =>
             {
-                var versaobd_major = Convert.ToInt32(Configuration.GetConnectionString("versaobd-major"));
-                var versaobd_minor = Convert.ToInt32(Configuration.GetConnectionString("versaobd-minor"));
-                var versaobd_build = Convert.ToInt32(Configuration.GetConnectionString("versaobd-build"));
+                var versaobd_major = Convert.ToInt32(ObterConnectionString("versaobd-major"));
+                var versaobd_minor = Convert.ToInt32(ObterConnectionString("versaobd-minor"));
+                var versaobd_build = Convert.ToInt32(ObterConnectionString("versaobd-build"));
 
-                options.UseMySql(Configuration.GetConnectionString("ConnectionDb"),
+                options.UseMySql(ObterConnectionString("ConnectionDb"),
                       b => b.MigrationsAssembly("agilium.mvc.web"));
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled:true);
                 options.EnableDetailedErrors(detailedErrorsEnabled:true);

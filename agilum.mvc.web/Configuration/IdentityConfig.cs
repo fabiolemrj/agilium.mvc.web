@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace agilum.mvc.web.Configuration
 {
@@ -26,10 +27,17 @@ namespace agilum.mvc.web.Configuration
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Obtém connection string com fallback para variável de ambiente direta
+            var identityConnStr = configuration.GetConnectionString("dbIdentityContextConnection");
+            if (string.IsNullOrEmpty(identityConnStr))
+                identityConnStr = Environment.GetEnvironmentVariable("dbIdentityContextConnection");
+            if (string.IsNullOrEmpty(identityConnStr))
+                identityConnStr = Environment.GetEnvironmentVariable("ConnectionStrings__dbIdentityContextConnection");
+
             // Registra o DbContext do Identity
             services.AddDbContext<dbIdentityContext>(options =>
                 options.UseMySql(
-                    configuration.GetConnectionString("dbIdentityContextConnection"),
+                    identityConnStr,
                     b => b.MigrationsAssembly("agilium.mvc.web")));
 
             // Registra os serviços do Identity (UserManager, SignInManager, RoleManager, etc.)
