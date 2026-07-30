@@ -8,7 +8,6 @@ using agilium.api.infra.Repository.Dapper;
 using agilium.api.infra.Repository;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +21,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using agilum.mvc.web.Extensions;
 using agilum.mvc.web.Interfaces;
-using agilum.mvc.web.Services;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Retry;
@@ -46,16 +44,18 @@ namespace agilum.mvc.web.Configuration
                 ?? Environment.GetEnvironmentVariable("ConnectionStrings__ConnectionDb");
 
             #region geral
+            services.AddHttpClient(); // Habilita IHttpClientFactory
             services.AddScoped<INotificador, Notificador>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAutenticacaoService, AutenticacaoService>();
 
-            // Substitui UserManager/SignInManager do Identity pelo AuthService customizado
+            // Serviço de autenticação customizado (valida contra Usuario/ca_usuarios)
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<AgiliumContext>();
             services.AddScoped<IUtilDapperRepository, UtilDapperRepository>();
             services.AddScoped<DbSession>();
+            services.AddScoped<CardapioDigitalDbSession>();
             services.AddScoped<IDapperRepository, DapperRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILogDapper, LogDapperRepository>();
@@ -134,6 +134,7 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IProdutoPrecoRepository, ProdutoPrecoRepository>();
             services.AddScoped<IProdutoFotoRepository, ProdutoFotoRepository>();
             services.AddScoped<IProdutoDapper, ProdutoDapper>();
+            services.AddScoped<ICardapioDigitalRepository, CardapioDigitalRepository>();
 
             #endregion
 
@@ -285,6 +286,7 @@ namespace agilum.mvc.web.Configuration
             services.AddScoped<IPedidoVendaItemRepository, PedidoVendaItemRepository>();
             //  services.AddScoped<IPedidoService, PedidoService>();
             services.AddScoped<IPedidoDapperRepository, PedidoDapperRepository>();
+            services.AddScoped<IIntegracaoCardapioService, IntegracaoCardapioService>();
             #endregion
 
             #region Vale

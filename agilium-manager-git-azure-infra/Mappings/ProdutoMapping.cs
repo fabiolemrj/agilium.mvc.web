@@ -55,6 +55,7 @@ namespace agilium.api.infra.Mappings
             builder.Property(c => c.PCCOFINS_ALIQ).HasColumnName("PCCOFINS_ALIQ").HasColumnType("double");
             builder.Property(c => c.STESTOQUE).HasColumnName("STESTOQUE").HasColumnType("int");
             builder.Property(c => c.STBALANCA).HasColumnName("STBALANCA").HasColumnType("int");
+            builder.Property(c => c.STEXPORTARPEDIDO).HasColumnName("STEXPORTARPEDIDO").HasColumnType("int");
             builder.Property(c => c.IDDEP).HasColumnName("IDDEP").HasColumnType("bigint");
             builder.Property(c => c.IDMARCA).HasColumnName("IDMARCA").HasColumnType("bigint");
             builder.Property(c => c.IDSUBGRUPO).HasColumnName("IDSUBGRUPO").HasColumnType("bigint");

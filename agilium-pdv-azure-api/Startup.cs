@@ -30,7 +30,7 @@ namespace agilium.api.pdv
 
             if (hostEnvironment.IsDevelopment())
             {
-                //builder.AddUserSecrets<Startup>();
+                builder.AddUserSecrets<Startup>();
             }
 
             Configuration = builder.Build();

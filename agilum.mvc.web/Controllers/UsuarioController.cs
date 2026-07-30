@@ -15,13 +15,9 @@ using System.Linq;
 using agilium.api.business.Services;
 using System.Collections.Generic;
 using agilium.api.business.Enums;
-using Microsoft.AspNetCore.Identity;
 using System;
-using agilium.api.business.Models;
 using KissLog.RestClient.Requests.CreateRequestLog;
-using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
-using System.Text.Encodings.Web;
 using agilum.mvc.web.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using agilum.mvc.web.Extensions;
@@ -36,19 +32,17 @@ namespace agilum.mvc.web.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly IAutenticacaoService _autenticacaoService;
         private readonly ICaService _controleAcessoService;
-        private readonly UserManager<CaUsuarioIdentity> _userManager;
         private readonly IEmailSender _emailSender;
         private IEnumerable<CaPerfilManagerViewModel> ListaPerfis { get; set; } = new List<CaPerfilManagerViewModel>();
 
         #region construtor
         public UsuarioController(INotificador notificador, IConfiguration configuration, IUser appUser, IUtilDapperRepository utilDapperRepository,
             ILogService logService, IMapper mapper, IUsuarioService usuarioService, IAutenticacaoService autenticacaoService, ICaService controleAcessoService,
-            UserManager<CaUsuarioIdentity> userManager, IEmailSender emailSender, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
+            IEmailSender emailSender, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _usuarioService = usuarioService;
             _autenticacaoService = autenticacaoService;
             _controleAcessoService = controleAcessoService;
-            _userManager = userManager;
             _emailSender = emailSender;
         }
         #endregion
@@ -93,54 +87,33 @@ namespace agilum.mvc.web.Controllers
             }
 
             var novaSenhaTemporaria = "Agilium_123";
+            var idUserAspNet = Guid.NewGuid().ToString();
 
-            var userNewWeb = new CaUsuarioIdentity(usuario);
-            var result = await _userManager.CreateAsync(userNewWeb, novaSenhaTemporaria);
+            // Configura acesso web no Usuario
+            var senhaHash = _authService.ComputeMd5Hash(novaSenhaTemporaria);
+            usuario.ConfigurarAcessoWeb(idUserAspNet, senhaHash);
 
-            if (result.Succeeded)
+            await _usuarioService.Atualizar(usuario);
+
+            msgErro = "Usuario criado com sucesso";
+            sucesso = true;
+
+            // Envia email de boas-vindas (sem confirmação complexa)
+            try
             {
-                await AdicionarUsuario(usuario, userNewWeb.Id);
-
-                var returnUrl = Url.Content("~/");
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(userNewWeb);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
-                    "/Account/ConfirmarEmail",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = userNewWeb.Id, code = code, returnUrl = returnUrl },
-                    protocol: Request.Scheme);
-                try
+                var empresaSelecionada = ObterObjetoEmpresaSelecionada();
+                if (empresaSelecionada != null)
                 {
-                    var empresaSelecionada = ObterObjetoEmpresaSelecionada();
-                    if(empresaSelecionada == null)
-                    {
-                        msgErro = "Erro ao tentar enviar email";
-                        return Json(new { sucesso = sucesso, erro = msgErro });
-                    }
-                    await _emailSender.SendEmailAsync(userNewWeb.Email, "Agilium Manager",
-                       $"<h3>Confirme seu email</h3> Por favor, confirme sua conta para acesso ao sistema Agilium Manager Web <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.",
+                    var loginUrl = Url.Action("Login", "Identidade", null, Request.Scheme);
+                    await _emailSender.SendEmailAsync(usuario.email, "Agilium Manager",
+                       $"<h3>Bem-vindo ao Agilium Manager Web</h3> Sua conta foi criada. Acesse o sistema em: <a href='{loginUrl}'>clique aqui</a>.<br/>Sua senha temporária é: <strong>{novaSenhaTemporaria}</strong>",
                        empresaSelecionada.IDEMPRESA);
                 }
-                catch (Exception ex)
-                {                    
-                   msgErro = ex.Message;
-                    return Json(new { sucesso = sucesso, erro = msgErro });
-                }
-                
             }
-            else
+            catch (Exception ex)
             {
-              
-                result.Errors.ToList().ForEach (item =>
-                {
-                    msgErro += item.Description + "\r\n";
-                }) ;
-            }
-
-            if(result.Succeeded)
-            {
-                msgErro = "Usuario criado com sucesso";
-                sucesso = true;
+                // Email é secundário - não impede a criação
+                LogErro($"Erro ao enviar email: {ex.Message}", "Usuario", "CreateNovoUsuarioWeb", null, "Web");
             }               
             
             return Json(new { sucesso = sucesso, erro = msgErro });
@@ -169,22 +142,14 @@ namespace agilum.mvc.web.Controllers
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }
 
-            var appUserAgilium = await _userManager.FindByIdAsync(usuario.idUserAspNet);
-            
-            if(appUserAgilium == null)
+            // Verifica se o usuário tem idUserAspNet (acesso web)
+            if (string.IsNullOrEmpty(usuario.idUserAspNet))
             {
-                msgErro = "Usuario Web n�o criado";
+                msgErro = "Usuario Web não criado";
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }
 
-            var returnUrl = Url.Content("~/");
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(appUserAgilium);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmarEmail",
-                pageHandler: null,
-                values: new { area = "Identity", userId = appUserAgilium.Id, code = code, returnUrl = returnUrl },
-                protocol: Request.Scheme);
+            var loginUrl = Url.Action("Login", "Identidade", null, Request.Scheme);
             try
             {
                 var empresaSelecionada = ObterObjetoEmpresaSelecionada();
@@ -193,13 +158,13 @@ namespace agilum.mvc.web.Controllers
                     msgErro = "Erro ao tentar enviar email";
                     return Json(new { sucesso = sucesso, erro = msgErro });
                 }
-                await _emailSender.SendEmailAsync(appUserAgilium.Email, "Agilium Manager",
-                   $"<h3>Confirme seu email</h3> Por favor, confirme sua conta para acesso ao sistema Agilium Manager Web <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clique aqui</a>.",
+                await _emailSender.SendEmailAsync(usuario.email, "Agilium Manager",
+                   $"<h3>Acesso ao Sistema</h3> Para acessar o Agilium Manager Web, <a href='{loginUrl}'>clique aqui</a>.",
                    empresaSelecionada.IDEMPRESA);
 
                 msgErro = "Email enviado com sucesso";
                 sucesso = true;
-                LogInformacao($"sucesso: {Deserializar(appUserAgilium)}", "Usuario", "ReenviarEmailConfirmarUsuario", null);
+                LogInformacao($"Email reenviado para {usuario.email}", "Usuario", "ReenviarEmailConfirmarUsuario", null);
 
                 return Json(new { sucesso = sucesso, erro = msgErro });
             }

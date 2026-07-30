@@ -94,9 +94,6 @@
                     Nº Doc. Fiscal
                 </th>
                 <th>
-                    Série
-                </th>
-                <th>
                     Emissão
                 </th>
                 <th>
@@ -107,9 +104,6 @@
                 </th>
                 <th>
                     Cliente
-                </th>
-                <th>
-                    CPF Cliente
                 </th>
 
                 <th class="colunaacao-mudarsituacao"></th>
@@ -128,11 +122,21 @@
                 else if (item.Emissao.Value == ETipoEmissaoVenda.Cancelada)
                     emissao = "text-danger";
 
-                var data = item.Data.HasValue ? item.Data.Value.ToString("dd/MM/yyyy") : "";
+                var data = item.Data.HasValue ? item.Data.Value.ToString("dd/MM/yyyy hh:mm:ss") : "";
                 var valor = item.Valor.HasValue ? item.Valor.Value.ToString("N") : "0,00";
                 var valorDesc = item.ValorDesconto.HasValue ? item.ValorDesconto.Value.ToString("N") : "0,00";
                 var valorAcresc = item.ValorAcrescimo.HasValue ? item.ValorAcrescimo.Value.ToString("N") : "0,00";
                 var valorTotal = item.ValorTotal.HasValue ? item.ValorTotal.Value.ToString("N") : "0,00";
+                var notaFiscalSerie = item.NumeroNF.HasValue ? item.NumeroNF.Value.ToString() : "";
+                if(!string.IsNullOrEmpty( item.SerieNF))
+                {
+                    notaFiscalSerie = notaFiscalSerie + " / " + item.SerieNF;
+                }
+                var cliente = item.ClienteNome;
+                if (!string.IsNullOrEmpty(item.CpfCnpj))
+                {
+                    cliente = cliente + " | " + item.CpfCnpj;
+                }
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Sequencial)
@@ -159,10 +163,7 @@
                         <span class="@situacao">@Html.DisplayFor(modelItem => item.Situacao)</span>
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.NumeroNF)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SerieNF)
+                        @Html.Raw(notaFiscalSerie)
                     </td>
                     <td>
                         <span class="@emissao">@Html.DisplayFor(modelItem => item.Emissao)</span>
@@ -174,10 +175,7 @@
                         @Html.DisplayFor(modelItem => item.PDVNome)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ClienteNome)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CpfCnpj)
+                        @Html.Raw(cliente)
                     </td>
                     <td>
                         @* <a class="btn btn-default" asp-action="VendaDashboard" asp-route-idVenda="@item.Id" title="Dashboard da Venda" data-modal=""><spam class="fas fa-chart-line"></spam></a> *@
@@ -261,13 +259,6 @@
         </tfoot>
     </table>
 </div>
-<div id="myModal" class="modal fade in">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div id="myModalContent"></div>
-        </div>
-    </div>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -275,4 +266,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/local/processo/venda.js"></script>
 
+    <script>
+        $(function () {
+            // Loading ao submeter o filtro (consultar)
+            $('#frmIndexCaixa').on('submit', function () {
+                on();
+            });
+            // Loading ao clicar em paginação (consultar)
+            $(document).on('click', '.page-link', function () {
+                on();
+            });
+        });
+    </script>
 }

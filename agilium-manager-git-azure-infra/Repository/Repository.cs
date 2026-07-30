@@ -123,7 +123,12 @@ namespace agilium.api.infra.Repository
 
                 if (noBanco != null)
                 {
-                    Db.Entry(noBanco).CurrentValues.SetValues(entity);
+                    var entryBanco = Db.Entry(noBanco);
+                    entryBanco.CurrentValues.SetValues(entity);
+
+                    // Força estado Modified quando AutoDetectChangesEnabled = false
+                    if (entryBanco.State == EntityState.Unchanged)
+                        entryBanco.State = EntityState.Modified;
                 }
                 else
                 {

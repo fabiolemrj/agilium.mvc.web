@@ -342,6 +342,89 @@ namespace agilium.api.infra.Repository.Dapper
             return resultado;
         }
 
+        /// <summary>
+        /// Atualiza produto via Dapper comparando com valores existentes no banco.
+        /// Apenas colunas com valores diferentes são incluídas no UPDATE.
+        /// </summary>
+        public async Task<bool> AtualizarProduto(Produto produto)
+        {
+            // 1. Busca produto existente no banco para comparar
+            var existente = await ObterProdutoPorId(produto.Id);
+            if (existente == null)
+                return false;
+
+            // 2. Monta dicionário apenas com colunas que mudaram
+            var alteracoes = new Dictionary<string, (object? Valor, DbType Tipo)>();
+            CompararEAdicionar(alteracoes, "IDGRUPO",       existente.IDGRUPO,          produto.IDGRUPO,          DbType.Int64);
+            CompararEAdicionar(alteracoes, "CDPRODUTO",     existente.CDPRODUTO,        produto.CDPRODUTO,        DbType.String);
+            CompararEAdicionar(alteracoes, "NMPRODUTO",     existente.NMPRODUTO,        produto.NMPRODUTO,        DbType.String);
+            CompararEAdicionar(alteracoes, "CTPRODUTO",     existente.CTPRODUTO,        produto.CTPRODUTO,        DbType.String);
+            CompararEAdicionar(alteracoes, "TPPRODUTO",     existente.TPPRODUTO,        produto.TPPRODUTO,        DbType.Int32);
+            CompararEAdicionar(alteracoes, "UNCOMPRA",      existente.UNCOMPRA,         produto.UNCOMPRA,         DbType.String);
+            CompararEAdicionar(alteracoes, "UNVENDA",       existente.UNVENDA,          produto.UNVENDA,          DbType.String);
+            CompararEAdicionar(alteracoes, "NURELACAO",     existente.NURELACAO,        produto.NURELACAO,        DbType.Int32);
+            CompararEAdicionar(alteracoes, "NUPRECO",       existente.NUPRECO,          produto.NUPRECO,          DbType.Double);
+            CompararEAdicionar(alteracoes, "NUQTDMIN",      existente.NUQTDMIN,         produto.NUQTDMIN,         DbType.Double);
+            CompararEAdicionar(alteracoes, "CDSEFAZ",       existente.CDSEFAZ,          produto.CDSEFAZ,          DbType.String);
+            CompararEAdicionar(alteracoes, "CDANP",         existente.CDANP,            produto.CDANP,            DbType.String);
+            CompararEAdicionar(alteracoes, "CDNCM",         existente.CDNCM,            produto.CDNCM,            DbType.String);
+            CompararEAdicionar(alteracoes, "CDCEST",        existente.CDCEST,           produto.CDCEST,           DbType.String);
+            CompararEAdicionar(alteracoes, "CDSERV",        existente.CDSERV,           produto.CDSERV,           DbType.String);
+            CompararEAdicionar(alteracoes, "STPRODUTO",     existente.STPRODUTO,        produto.STPRODUTO,        DbType.Int32);
+            CompararEAdicionar(alteracoes, "VLULTIMACOMPRA",existente.VLULTIMACOMPRA,   produto.VLULTIMACOMPRA,   DbType.Double);
+            CompararEAdicionar(alteracoes, "VLCUSTOMEDIO",  existente.VLCUSTOMEDIO,     produto.VLCUSTOMEDIO,     DbType.Double);
+            CompararEAdicionar(alteracoes, "PCIBPTFED",     existente.PCIBPTFED,        produto.PCIBPTFED,        DbType.Double);
+            CompararEAdicionar(alteracoes, "PCIBPTEST",     existente.PCIBPTEST,        produto.PCIBPTEST,        DbType.Double);
+            CompararEAdicionar(alteracoes, "PCIBPTMUN",     existente.PCIBPTMUN,        produto.PCIBPTMUN,        DbType.Double);
+            CompararEAdicionar(alteracoes, "PCIBPTIMP",     existente.PCIBPTIMP,        produto.PCIBPTIMP,        DbType.Double);
+            CompararEAdicionar(alteracoes, "NUCFOP",        existente.NUCFOP,           produto.NUCFOP,           DbType.Int32);
+            CompararEAdicionar(alteracoes, "STORIGEMPROD",  existente.STORIGEMPROD,     produto.STORIGEMPROD,     DbType.Int32);
+            CompararEAdicionar(alteracoes, "DSICMS_CST",    existente.DSICMS_CST,       produto.DSICMS_CST,       DbType.String);
+            CompararEAdicionar(alteracoes, "PCICMS_ALIQ",   existente.PCICMS_ALIQ,      produto.PCICMS_ALIQ,      DbType.Double);
+            CompararEAdicionar(alteracoes, "PCICMS_REDUCBC",existente.PCICMS_REDUCBC,   produto.PCICMS_REDUCBC,   DbType.Double);
+            CompararEAdicionar(alteracoes, "PCICMSST_ALIQ", existente.PCICMSST_ALIQ,    produto.PCICMSST_ALIQ,    DbType.Double);
+            CompararEAdicionar(alteracoes, "PCICMSST_MVA",  existente.PCICMSST_MVA,     produto.PCICMSST_MVA,     DbType.Double);
+            CompararEAdicionar(alteracoes, "PCICMSST_REDUCBC", existente.PCICMSST_REDUCBC, produto.PCICMSST_REDUCBC, DbType.Double);
+            CompararEAdicionar(alteracoes, "DSIPI_CST",     existente.DSIPI_CST,        produto.DSIPI_CST,        DbType.String);
+            CompararEAdicionar(alteracoes, "PCIPI_ALIQ",    existente.PCIPI_ALIQ,       produto.PCIPI_ALIQ,       DbType.Double);
+            CompararEAdicionar(alteracoes, "DSPIS_CST",     existente.DSPIS_CST,        produto.DSPIS_CST,        DbType.String);
+            CompararEAdicionar(alteracoes, "PCPIS_ALIQ",    existente.PCPIS_ALIQ,       produto.PCPIS_ALIQ,       DbType.Double);
+            CompararEAdicionar(alteracoes, "DSCOFINS_CST",  existente.DSCOFINS_CST,     produto.DSCOFINS_CST,     DbType.String);
+            CompararEAdicionar(alteracoes, "PCCOFINS_ALIQ", existente.PCCOFINS_ALIQ,    produto.PCCOFINS_ALIQ,    DbType.Double);
+            CompararEAdicionar(alteracoes, "STESTOQUE",     existente.STESTOQUE,        produto.STESTOQUE,        DbType.Int32);
+            CompararEAdicionar(alteracoes, "STBALANCA",     existente.STBALANCA,        produto.STBALANCA,        DbType.Int32);
+            CompararEAdicionar(alteracoes, "STEXPORTARPEDIDO", existente.STEXPORTARPEDIDO, produto.STEXPORTARPEDIDO, DbType.Int32);
+            CompararEAdicionar(alteracoes, "IDDEP",         existente.IDDEP,            produto.IDDEP,            DbType.Int64);
+            CompararEAdicionar(alteracoes, "IDMARCA",       existente.IDMARCA,          produto.IDMARCA,          DbType.Int64);
+            CompararEAdicionar(alteracoes, "IDSUBGRUPO",    existente.IDSUBGRUPO,       produto.IDSUBGRUPO,       DbType.Int64);
+            CompararEAdicionar(alteracoes, "DSVOLUME",      existente.DSVOLUME,         produto.DSVOLUME,         DbType.String);
+
+            // 3. Se nada mudou, considera sucesso (não precisa de UPDATE)
+            if (alteracoes.Count == 0)
+                return true;
+
+            // 4. Monta SQL dinâmico apenas com colunas alteradas
+            var sets = string.Join(", ", alteracoes.Select(a => $"{a.Key} = @{a.Key}"));
+            var sql = $"UPDATE produto SET {sets} WHERE IDPRODUTO = @Id";
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@Id", produto.Id, DbType.Int64);
+            foreach (var alt in alteracoes)
+                parametros.Add($"@{alt.Key}", alt.Value.Valor ?? DBNull.Value, alt.Value.Tipo);
+
+            return _dbSession.Connection.Execute(sql, parametros) > 0;
+        }
+
+        /// <summary>
+        /// Compara dois valores (nullable-aware) e adiciona ao dicionário se forem diferentes.
+        /// </summary>
+        private static void CompararEAdicionar(Dictionary<string, (object? Valor, DbType Tipo)> alteracoes,
+            string coluna, object? valorExistente, object? valorNovo, DbType tipo)
+        {
+            if (!Equals(valorExistente, valorNovo))
+                alteracoes[coluna] = (valorNovo, tipo);
+        }
+
         public async Task<bool> InsereProdutoCodigoBarra(long idProduto, string cdBarra)
         {
             var queryAtualizaCustoMedio = $"INSERT INTO prod_barra (IDPROD_BARRA, IDPRODUTO, CDBARRA) VALUES (@IDPROD_BARRA, @IDPRODUTO, @CDBARRA)";

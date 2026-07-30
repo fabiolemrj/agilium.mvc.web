@@ -43,6 +43,8 @@ namespace agilum.mvc.web.Configuration
     {
         public AutomapperConfig()
         {
+            ShouldMapProperty = p => true;
+
             #region NFe
             CreateMap<agilium.api.business.Models.CustomReturn.ComprasNFEViewModel.NFeProc, agilum.mvc.web.ViewModels.Compra.NFeProc>()
                  .ForMember(dest => dest.NotaFiscalEletronica, opt => opt.MapFrom(src => src.NotaFiscalEletronica))
@@ -95,10 +97,6 @@ namespace agilum.mvc.web.Configuration
 
             // Mapeamento simples Empresa → EmpresaViewModel
             CreateMap<Empresa, EmpresaViewModel>().ReverseMap();
-
-            // Mapeamento usado no Identity
-            CreateMap<Empresa, agilum.mvc.web.Areas.Identity.Pages.Account.LoginModel.EmpresaViewModel>()
-                .ReverseMap();
 
             // Mapeamento principal Empresa → EmpresaCreateViewModel
             CreateMap<Empresa, EmpresaCreateViewModel>()
@@ -227,6 +225,7 @@ namespace agilum.mvc.web.Configuration
                 .ForMember(dest => dest.ValorUltimaCompra, opt => opt.MapFrom(src => src.VLULTIMACOMPRA))
                 .ForMember(dest => dest.RelacaoCompraVenda, opt => opt.MapFrom(src => src.NURELACAO))
                 .ForMember(dest => dest.UtilizaBalanca, opt => opt.MapFrom(src => src.STBALANCA))
+                .ForMember(dest => dest.ExportarPedido, opt => opt.MapFrom(src => src.STEXPORTARPEDIDO))
                 .ForMember(dest => dest.UnidadeVenda, opt => opt.MapFrom(src => src.UNVENDA))
                 .ForMember(dest => dest.UnidadeCompra, opt => opt.MapFrom(src => src.UNCOMPRA))
                 .ForMember(dest => dest.PCIBPTFED, opt => opt.MapFrom(src => src.PCIBPTFED))

@@ -50,6 +50,7 @@ namespace agilium.api.business.Models
         public int? STESTOQUE { get; private set; }
         public ESimNao? STBALANCA { get; private set; }
         public ESimNao? FLG_IFOOD { get; private set; }
+        public ESimNao? STEXPORTARPEDIDO { get; private set; }
         public long? IDMARCA { get; private set; }
         public virtual ProdutoMarca ProdutoMarca { get; private set; }
         public long? IDDEP { get; private set; }
@@ -96,7 +97,7 @@ namespace agilium.api.business.Models
             else if (categoriaProduto == ECategoriaProduto.Insumo)
                 CTPRODUTO = "4";           
         }
-        public Produto(long? idEmpresa, long? iDGRUPO, string cDPRODUTO, string nMPRODUTO, ECategoriaProduto cTPRODUTO, ETipoProduto? tPPRODUTO, string uNCOMPRA, string uNVENDA, int? nURELACAO, double? nUPRECO, double? nUQTDMIN, string cDSEFAZ, string cDANP, string cDNCM, string cDCEST, string cDSERV, EAtivo? sTPRODUTO, double? vLULTIMACOMPRA, double? vLCUSTOMEDIO, double? pCIBPTFED, double? pCIBPTEST, double? pCIBPTMUN, double? pCIBPTIMP, int? nUCFOP, EOrigemProduto? sTORIGEMPROD, string dSICMS_CST, double? pCICMS_ALIQ, double? pCICMS_REDUCBC, double? pCICMSST_ALIQ, double? pCICMSST_MVA, double? pCICMSST_REDUCBC, string dSIPI_CST, double? pCIPI_ALIQ, string dSPIS_CST, double? pCPIS_ALIQ, string dSCOFINS_CST, double? pCCOFINS_ALIQ, int? sTESTOQUE, ESimNao? sTBALANCA, ESimNao? fLG_IFOOD, long? iDMARCA, long? iDDEP, long? iDSUBGRUPO, string dSVOLUME)
+        public Produto(long? idEmpresa, long? iDGRUPO, string cDPRODUTO, string nMPRODUTO, ECategoriaProduto cTPRODUTO, ETipoProduto? tPPRODUTO, string uNCOMPRA, string uNVENDA, int? nURELACAO, double? nUPRECO, double? nUQTDMIN, string cDSEFAZ, string cDANP, string cDNCM, string cDCEST, string cDSERV, EAtivo? sTPRODUTO, double? vLULTIMACOMPRA, double? vLCUSTOMEDIO, double? pCIBPTFED, double? pCIBPTEST, double? pCIBPTMUN, double? pCIBPTIMP, int? nUCFOP, EOrigemProduto? sTORIGEMPROD, string dSICMS_CST, double? pCICMS_ALIQ, double? pCICMS_REDUCBC, double? pCICMSST_ALIQ, double? pCICMSST_MVA, double? pCICMSST_REDUCBC, string dSIPI_CST, double? pCIPI_ALIQ, string dSPIS_CST, double? pCPIS_ALIQ, string dSCOFINS_CST, double? pCCOFINS_ALIQ, int? sTESTOQUE, ESimNao? sTBALANCA, ESimNao? fLG_IFOOD, ESimNao? sTEXPORTARPEDIDO, long? iDMARCA, long? iDDEP, long? iDSUBGRUPO, string dSVOLUME)
         {
             this.idEmpresa = idEmpresa;
             IDGRUPO = iDGRUPO;
@@ -138,6 +139,7 @@ namespace agilium.api.business.Models
             STESTOQUE = sTESTOQUE;
             STBALANCA = sTBALANCA;
             FLG_IFOOD = fLG_IFOOD;
+            STEXPORTARPEDIDO = sTEXPORTARPEDIDO;
             IDMARCA = iDMARCA;
             IDDEP = iDDEP;
             IDSUBGRUPO = iDSUBGRUPO;

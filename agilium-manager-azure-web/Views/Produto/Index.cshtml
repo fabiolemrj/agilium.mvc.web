@@ -155,7 +155,7 @@
                         </div>
                     </td>
                     <td class="text-right">
-                        <a class="btn btn-default" asp-action="ListaFoto" asp-route-idProduto="@item.Id" title="Fotos"><spam class="fas fa-image" data-toggle="modal" data-target="#myModal"></spam></a>
+                        <a class="btn btn-default" asp-action="ListaFoto" asp-route-idProduto="@item.Id" title="Fotos" data-modal=""><spam class="fas fa-image"></spam></a>
                         <a class="btn btn-default" asp-route-id="@item.Id" title="Codigo de Barra" id="btnaddCodBarra" asp-action="ListaCodigoBarra" asp-route-idProduto="@item.Id"><spam class="fas fa-barcode"></spam></a>
                         <a class="btn btn-default" asp-route-id="@item.Id" title="Testar NFCe"><spam class="fas fa-check"></spam></a>
                         <a class="btn btn-warning" asp-action="EditProduto" asp-route-id="@item.Id" title="Editar"><spam class="fa fa-pencil-alt"></spam></a>

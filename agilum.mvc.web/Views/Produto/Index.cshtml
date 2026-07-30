@@ -14,6 +14,8 @@
         <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
 
         <a asp-action="AtualizarIBPT" onclick="on()" title="Atualizar IBPT dos Produtos"><span class="fas fa-retweet" id="btnIBPT"></span>IBPT</a>
+
+        <a asp-action="ExportarParaCardapio" onclick="return confirm('Deseja exportar os produtos marcados com STEXPORTARPEDIDO = Sim para o CardapioDigital?');" title="Exportar Produtos para Cardápio Digital" id="btnExportarCardapio"><span class="fas fa-cloud-upload-alt sns-tool-action"></span>Exportar Cardápio</a>
     </div>
 
     <article>
@@ -25,7 +27,7 @@
 </section>
 <br />
 <div class="row">
-    <div class="col-md-8" id="areaFiltro">
+    <div class="col-12" id="areaFiltro">
         <form asp-action="Index" class="sidebar-form" method="get">
             <input type="hidden" asp-for="PageSize" id="PageSize" />
             <input type="hidden" asp-for="PageIndex " id="PageIndex" />
@@ -73,6 +75,7 @@
                 <th>
                     Situação
                 </th>
+                 <th>Exporta</th>
                 <th>Estoque</th>
                 <th>Preço Diferenciado</th>
                 <th class="limited-cell-actions"></th>
@@ -123,7 +126,9 @@
                             <span class="text-danger">Inativo</span>
                         }
                     </td>
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ExportarPedido)
+                    </td>
                     <td>
                         <a class="btn btn-default" asp-action="ListaEstoque" asp-route-idProduto="@item.Id" title="Estoques em que o produto está cadastrado "><i class="fas fa-cubes"></i></a>
                         <a class="btn btn-default" asp-action="ListaEstoqueHistorico" asp-route-idProduto="@item.Id" title="Historico de estoque"><i class="fas fa-list-alt"></i></a>

@@ -132,7 +132,14 @@
             document.getElementById("overlay").style.display = "none";
         }
 
-        // ----------------- MODAL CONTROL (�nico handler) -----------------
+        // Loading ao navegar pelo menu lateral (apenas links válidos, ignora # e dropdowns)
+        $(function () {
+            $(document).on('click', '.sidebar .nav-link[href]:not([href="#"]):not([data-toggle]):not([data-modal])', function () {
+                on();
+            });
+        });
+
+        // ----------------- MODAL CONTROL (único handler) -----------------
         function SetModal() {
             // remover binds antigos evita duplica��o
             $(document).off("click", "a[data-modal]");

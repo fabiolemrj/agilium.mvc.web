@@ -20,7 +20,7 @@ O **Agilium Manager** é um sistema ERP (Enterprise Resource Planning) web direc
 ### Módulos Principais
 
 | Módulo | Propósito |
-|--------|-----------|
+| --- | --- |
 | **Empresa** | Cadastro multi-empresa, configurações fiscais |
 | **Produto/Estoque** | Cadastro de produtos, controle de estoque, código de barras (EAN-13), QR Code |
 | **Venda (PDV)** | Ponto de venda, emissão de NFC-e/NFe, múltiplas formas de pagamento |
@@ -41,7 +41,7 @@ O **Agilium Manager** é um sistema ERP (Enterprise Resource Planning) web direc
 ### 3.1 Tecnologias Utilizadas
 
 | Camada | Tecnologia | Versão |
-|--------|-----------|--------|
+| --- | --- | --- |
 | **Runtime** | .NET Core | 3.1 (⚠️ EOL desde dez/2022) |
 | **Framework Web** | ASP.NET Core MVC | 3.1 |
 | **ORM Principal** | Entity Framework Core | 3.1.32 |
@@ -58,9 +58,9 @@ O **Agilium Manager** é um sistema ERP (Enterprise Resource Planning) web direc
 
 ### 3.2 Padrão Arquitetural
 
-**Padrão: MVC com camadas separadas (Clean Architecture-like)**
+#### Padrão: MVC com camadas separadas (Clean Architecture-like)
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │  Camada de Apresentação (agilum.mvc.web)            │
 │  ┌───────────┐  ┌──────────┐  ┌──────────────────┐ │
@@ -92,7 +92,7 @@ O **Agilium Manager** é um sistema ERP (Enterprise Resource Planning) web direc
 
 ### 3.3 Diagrama de Rotas e Endpoints
 
-```
+```text
 /                          → HomeController.Index()
 /licenca                   → HomeController.Licenca()
 /ObterVersaoSistema        → HomeController.ObterVersaoSistema() [AllowAnonymous]
@@ -247,7 +247,7 @@ graph LR
 ### 5.2 Principais Interfaces e Implementações
 
 | Interface | Implementação | Projeto |
-|-----------|--------------|---------|
+| --- | --- | --- |
 | `IUser` | `AspNetUser` | web |
 | `INotificador` | `Notificador` | business |
 | `IAutenticacaoService` | `AutenticacaoService` ⚠️ | web |
@@ -297,7 +297,7 @@ graph LR
 ### 🔴 Críticos
 
 | Risco | Detalhe | Localização |
-|-------|---------|-------------|
+| --- | --- | --- |
 | **.NET Core 3.1 EOL** | Fora de suporte desde dez/2022. Sem patches de segurança. | `agilum.mvc.web.csproj:3` |
 | **Credenciais hardcoded** | Senha do MySQL e email em texto plano nos appsettings. | `appsettings.json:10-12` e `:17-21` |
 | **AutenticacaoService não implementado** | Todos os métodos lançam `NotImplementedException`. | `Services/AutenticacaoService.cs:15-24` |
@@ -307,7 +307,7 @@ graph LR
 ### 🟠 Altos
 
 | Risco | Detalhe | Localização |
-|-------|---------|-------------|
+| --- | --- | --- |
 | **Acoplamento Controller→Repository** | Vários Controllers importam namespaces de Repository (viola DIP). | `UsuarioController.cs:10`, `ProdutoController.cs:5` |
 | **Construtor com MUITOS parâmetros** | `CompraController`: 16 parâmetros. `ProdutoController`: 17 parâmetros. | `Controllers/CompraController.cs:68-72` |
 | **Dapper duplicado no DI** | `ICaRepositoryDapper` registrado 2x. `IPlanoConta*` registrado 2x. | `Configuration/ResolveDependencyConfig.cs:69,85,240-245` |
@@ -317,7 +317,7 @@ graph LR
 ### 🟡 Médios
 
 | Risco | Detalhe | Localização |
-|-------|---------|-------------|
+| --- | --- | --- |
 | **Nomenclatura inconsistente** | Mistura de inglês e português. Namespace `agilum` vs `agilium`. | Diversos arquivos |
 | **Exceção genérica no middleware** | `catch (Exception ex)` redireciona tudo como circuit breaker, mascara erros reais. | `Extensions/ExceptionMiddleware.cs:44-47` |
 | **Código comentado extenso** | Grande quantidade de código comentado não removido. | `Controllers/HomeController.cs:47-56`, `Services/ServiceEmail.cs:71-86` |
@@ -327,7 +327,7 @@ graph LR
 ### 🟢 Baixos
 
 | Risco | Detalhe |
-|-------|---------|
+| --- | --- |
 | **Estado brasileiro duplicado** | "RS" aparece 2x na lista. "Paraíba" está com sigla "RS" em vez de "PB". |
 | **Erro de digitação** | `Crtl` ao invés de `Ctrl` nas teclas de atalho. |
 | **Propriedades privadas órfãs** | `MainController` tem campos privados `notificador`, `configuration`, `utilDapperRepository`, `logService`, `mapper` nunca usados (shadowing dos `protected readonly`). |
@@ -337,7 +337,7 @@ graph LR
 ## 8. Mapa de Permissões (Tags Numéricas)
 
 | Tag | Módulo | Ação |
-|-----|--------|------|
+| --- | --- | --- |
 | 1000 | Usuário | Listar |
 | 1002 | Usuário | Criar usuário web |
 | 1015 | Config | Listar/Editar |
@@ -360,7 +360,7 @@ graph LR
 
 ## 9. Estrutura de Diretórios (agilum.mvc.web)
 
-```
+```text
 agilum.mvc.web/
 ├── Program.cs                    # Entry point
 ├── Startup.cs                    # Configuração do pipeline
@@ -473,10 +473,10 @@ graph LR
     G --> H[8. Refatorar Construtores]
 ```
 
-### Por ordem de prioridade:
+### Por ordem de prioridade
 
 | # | Ação | Severidade | Esforço |
-|---|------|-----------|---------|
+| --- | --- | --- | --- |
 | 1 | Remover credenciais hardcoded dos `appsettings.json` (usar Azure Key Vault ou User Secrets) | 🔴 Crítico | Baixo |
 | 2 | Planejar migração do .NET Core 3.1 para .NET 8 | 🔴 Crítico | Alto |
 | 3 | Corrigir registros duplicados no `ResolveDependencyConfig` | 🟠 Alto | Baixo |
@@ -491,7 +491,7 @@ graph LR
 ## 11. Avaliação de Maturidade
 
 | Dimensão | Nota (1-5) | Observação |
-|----------|-----------|------------|
+| --- | --- | --- |
 | Organização do código | 3 | Estrutura de diretórios clara, mas acoplamento entre camadas |
 | Padrões de projeto | 3 | MVC + Repository + DI bem aplicados, mas com violações |
 | Segurança | 2 | Credenciais expostas, auth incompleto, .NET EOL |
@@ -501,14 +501,14 @@ graph LR
 | Testabilidade | 1 | Zero testes automatizados |
 | Atualização tecnológica | 1 | .NET Core 3.1 EOL + pacotes com vulnerabilidades |
 
-**Nota geral: 2.1 / 5**
+**Nota geral:** 2.1 / 5
 
 ---
 
 ## 12. Arquivos Ainda Necessários para Análise Completa
 
 | Arquivo | Motivo |
-|---------|--------|
+| --- | --- |
 | `agilium-manager-azure-business/Models/*.cs` | Entender modelo de domínio completo e relacionamentos |
 | `agilium-manager-azure-business/Services/*.cs` | Entender lógica de negócio real |
 | `agilium-manager-azure-business/Enums/` | Mapear enums de negócio completos |
@@ -522,4 +522,4 @@ graph LR
 
 ---
 
-*Relatório gerado em 24/06/2026 — Análise arquitetural do sistema Agilium Manager*
+Relatório gerado em 24/06/2026 — Análise arquitetural do sistema Agilium Manager

@@ -68,6 +68,8 @@ namespace agilum.mvc.web.Controllers
             }
             else _dtFim = Convert.ToDateTime(DataFinal);
 
+          
+
             if (_dtini > _dtFim)
             {
                 AdicionarErroValidacao("Data Final deve ser maior ou igual a data inicial");

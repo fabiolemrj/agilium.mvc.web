@@ -56,6 +56,12 @@ namespace agilium.api.business.Models
             ativo = _ativo.ToString();
         }
 
+        public void ConfigurarAcessoWeb(string idUserAspNet, string senhaHash)
+        {
+            this.idUserAspNet = idUserAspNet;
+            this.senha = senhaHash;
+        }
+
         public Usuario(string nome, string cpf, string ender, int? num, string compl, string bairro, string cep, string cidade, string uf, string tel1, string cel, DateTime? dtnasc, string usuario, string senha, string email, string foto, string tel2, string ativo, DateTime? dtcad, int? id_perfil, string idUserAspNet)
         {
             this.nome = nome;

@@ -24,6 +24,8 @@ namespace agilium.api.pdv.Configuration
     {
         public AutomapperConfig()
         {
+            ShouldMapProperty = p => true;
+
             #region Usuario
             CreateMap<Usuario, UsuarioFotoViewModel>()
                .ForMember(dest => dest.Ativo, opt => opt.MapFrom(src => src.ativo == "1" || src.ativo == "S" ? "Ativo" : "Inativo"))
@@ -219,6 +221,7 @@ namespace agilium.api.pdv.Configuration
                 .ForMember(dest => dest.ValorUltimaCompra, opt => opt.MapFrom(src => src.VLULTIMACOMPRA))
                 .ForMember(dest => dest.RelacaoCompraVenda, opt => opt.MapFrom(src => src.NURELACAO))
                 .ForMember(dest => dest.UtilizaBalanca, opt => opt.MapFrom(src => src.STBALANCA))
+                .ForMember(dest => dest.ExportarPedido, opt => opt.MapFrom(src => src.STEXPORTARPEDIDO))
                 .ForMember(dest => dest.UnidadeVenda, opt => opt.MapFrom(src => src.UNVENDA))
                 .ForMember(dest => dest.UnidadeCompra, opt => opt.MapFrom(src => src.UNCOMPRA))
                 .ForMember(dest => dest.PCIBPTFED, opt => opt.MapFrom(src => src.PCIBPTFED))
@@ -232,7 +235,8 @@ namespace agilium.api.pdv.Configuration
                 .ForMember(dest => dest.Tipo, opt => opt.MapFrom(src => src.TPPRODUTO))
                 .ForMember(dest => dest.Volume, opt => opt.MapFrom(src => src.DSVOLUME))
 
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.STEXPORTARPEDIDO, opt => opt.MapFrom(src => src.ExportarPedido));
 
             CreateMap<ProdutoPesqReturnViewModel, ProdutoPesqViewModel>().ReverseMap();
             #endregion

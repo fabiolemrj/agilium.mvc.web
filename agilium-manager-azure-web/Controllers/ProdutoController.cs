@@ -13,6 +13,7 @@ using agilium.webapp.manager.mvc.ViewModels.UnidadeViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace agilium.webapp.manager.mvc.Controllers
         private readonly IEstoqueService _estoqueService;
         private readonly IClienteService _clienteService;
         private readonly ITurnoService _turnoService;
+        private readonly ILogger<ProdutoController> _logger;
+        private readonly string _nomeEntidade = "Produto";
 
         private readonly string _nomeEntidadeDepart = "Departamento";
         private readonly string _nomeEntidadeMarca = "Marca";
@@ -55,7 +58,8 @@ namespace agilium.webapp.manager.mvc.Controllers
         #endregion
 
         public ProdutoController(IProdutoService produtoService, IEmpresaService empresaService, ITabelaAuxiliarFiscalService tabelaAuxiliarFiscalService,
-            IUnidadeService unidadeService, IEstoqueService estoqueService, IClienteService clienteService, ITurnoService turnoService)
+            IUnidadeService unidadeService, IEstoqueService estoqueService, IClienteService clienteService, ITurnoService turnoService,
+            ILogger<ProdutoController> logger)
         {
             _produtoService = produtoService;
             _empresaService = empresaService;
@@ -64,6 +68,7 @@ namespace agilium.webapp.manager.mvc.Controllers
             _estoqueService = estoqueService;
             _clienteService = clienteService;
             _turnoService = turnoService;
+            _logger = logger;
 
             listaEmpresaViewModels = _empresaService.ObterTodas().Result.ToList();
             var tabelasAuxiliares = tabelaAuxiliarFiscalService.ObterTabelasAuxiliaresFiscal().Result;
@@ -240,6 +245,53 @@ namespace agilium.webapp.manager.mvc.Controllers
             TempData["Mensagem"] = "Operação realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Edição de produto — padrão EmpresaController.
+        /// Roteamento por convenção MVC (GET/POST sem [Route] explícito).
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "Edit";
+            var objeto = await _produtoService.ObterProdutoPorId(id);
+            if (objeto == null)
+            {
+                var msgErro = $"{_nomeEntidade} não localizado";
+                _logger.LogError(msgErro);
+                AdicionarErroValidacao(msgErro);
+                TempData["Erros"] = msgErro;
+
+                ViewBag.TipoMensagem = "danger";
+                ViewBag.Titulo = _nomeEntidade;
+                ViewBag.Mensagem = msgErro;
+                return RedirectToAction("Index");
+            }
+            PreencherListaAxuliaresProdutos(objeto);
+            return View("CreateEditProduto", objeto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProdutoViewModel model)
+        {
+            ViewBag.operacao = "E";
+            ViewBag.acao = "Edit";
+            PreencherListaAxuliaresProdutos(model);
+
+            if (!ModelState.IsValid) return View("CreateEditProduto", model);
+
+            var resposta = await _produtoService.Atualizar(model.Id, model);
+
+            if (ResponsePossuiErros(resposta))
+            {
+                var retornoErro = new { mensagem = $"Erro ao editar {_nomeEntidade}" };
+                _logger.LogError(retornoErro.ToString());
+                AdicionarErroValidacao(retornoErro.mensagem);
+                return View("CreateEditProduto", model);
+            }
             return RedirectToAction("Index");
         }
 

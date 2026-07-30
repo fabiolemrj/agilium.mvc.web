@@ -85,6 +85,24 @@ namespace agilium.api.business.Services
             await _produtoRepository.AtualizarSemSalvar(produto);
         }
 
+        public async Task Atualizar(Produto produto, object model)
+        {
+            if (!ExecutarValidacao(new ProdutoValidation(), produto))
+                return;
+
+            await _produtoRepository.AtualizarComSetValues(produto, model);
+        }
+        /// <summary>
+        /// Atualiza produto diretamente via Dapper (UPDATE completo).
+        /// Útil quando AutoDetectChangesEnabled = false impede o EF Core de detectar mudanças.
+        /// </summary>
+        public async Task<bool> AtualizarViaDapper(Produto produto)
+        {
+            if (!ExecutarValidacao(new ProdutoValidation(), produto))
+                return false;
+
+            return await _produtoDapperRepository.AtualizarProduto(produto);
+        }
         public async Task Apagar(long id)
         {
             if (await ExisteProdutoUtilizado(id))

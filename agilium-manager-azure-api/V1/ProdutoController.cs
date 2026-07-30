@@ -36,12 +36,14 @@ namespace agilium.api.manager.V1
         private readonly IProdutoDapper _produtoDapper;
         private readonly IUnidadeRepository _unidadeRepository;
         private readonly ILogger<ProdutoController> _logger;
+        private readonly IIntegracaoCardapioService _integracaoCardapioService;
 
         public ProdutoController(INotificador notificador, IUser appUser,
             IMapper mapper, IProdutoService produtoService, IEmpresaService empresaService,
             IUnidadeRepository unidadeRepository,IConfiguration configuration, IProdutoDapper produtoDapper, 
             IUtilDapperRepository utilDapperRepository, ILogger<ProdutoController> logger,
-            ILogService logService) : base(notificador, appUser,configuration, utilDapperRepository, logService)
+            ILogService logService, IIntegracaoCardapioService integracaoCardapioService)
+            : base(notificador, appUser,configuration, utilDapperRepository, logService)
         {
             _mapper = mapper;
             _produtoService = produtoService;
@@ -49,6 +51,7 @@ namespace agilium.api.manager.V1
             _unidadeRepository = unidadeRepository;
             _produtoDapper = produtoDapper;
             _logger = logger;
+            _integracaoCardapioService = integracaoCardapioService;
         }
 
         #region Produto
@@ -128,8 +131,87 @@ namespace agilium.api.manager.V1
             }
 
             await _produtoService.Salvar();
+
+            // Se produto foi configurado como STEXPORTARPEDIDO=Não ou STPRODUTO=Inativo,
+            // desativa-o no CardapioDigital
+            await SincronizarCardapioDigital(produto);
+
             LogInformacao($"sucesso: {Deserializar(viewModel)}", "Produto", "Atualizar", null);
             return CustomResponse(viewModel);
+        }
+
+        /// <summary>
+        /// Atualiza produto diretamente via Dapper (UPDATE nativo, sem EF Core).
+        /// Contorna o problema de AutoDetectChangesEnabled = false.
+        /// </summary>
+        [HttpPut("dapper/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> AtualizarViaDapper(string id, [FromBody] ProdutoViewModel viewModel)
+        {
+            if (id != viewModel.Id.ToString())
+            {
+                NotificarErro("O id informado não é o mesmo que foi passado na query");
+                return CustomResponse(viewModel);
+            }
+
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var produto = _mapper.Map<Produto>(viewModel);
+            var precoAtual = _produtoService.ObterPrecoAtual(viewModel.Id).Result;
+
+            if (viewModel.Categoria.HasValue && string.IsNullOrEmpty(produto.CTPRODUTO))
+                produto.AdicionarCategoria(viewModel.Categoria.Value);
+
+            // Histórico de preços (EF Core — operação pequena e pontual)
+            if (precoAtual != produto.NUPRECO)
+                await _produtoService.Adicionar(new ProdutoPreco(produto.Id, AppUser.GetUserEmail(), Convert.ToDecimal(produto.NUPRECO), Convert.ToDecimal(precoAtual), DateTime.Now));
+
+            // UPDATE principal via Dapper — direto no banco, sem depender de AutoDetectChanges
+            var atualizado = await _produtoService.AtualizarViaDapper(produto);
+
+            if (!atualizado && !OperacaoValida())
+            {
+                var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "AtualizarViaDapper", "Web", Deserializar(viewModel)));
+                return CustomResponse(msgErro);
+            }
+
+            if (!atualizado)
+            {
+                NotificarErro("Nenhum produto foi atualizado. Verifique se o ID existe.");
+                return CustomResponse(viewModel);
+            }
+
+            // Salva histórico de preços (se houve alteração)
+            if (precoAtual != produto.NUPRECO)
+                await _produtoService.Salvar();
+
+            // Se produto foi configurado como STEXPORTARPEDIDO=Não ou STPRODUTO=Inativo,
+            // desativa-o no CardapioDigital
+            await SincronizarCardapioDigital(produto);
+
+            LogInformacao($"sucesso (dapper): {Deserializar(viewModel)}", "Produto", "AtualizarViaDapper", null);
+            return CustomResponse(viewModel);
+        }
+
+        /// <summary>
+        /// Se o produto está com STEXPORTARPEDIDO = Não ou STPRODUTO = Inativo,
+        /// desativa-o no banco do CardapioDigital.
+        /// </summary>
+        private async Task SincronizarCardapioDigital(Produto produto)
+        {
+            if (produto.STEXPORTARPEDIDO == ESimNao.Nao || produto.STPRODUTO == EAtivo.Inativo)
+            {
+                try
+                {
+                    await _integracaoCardapioService.DesativarProdutoNoCardapioAsync(produto.Id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Erro ao desativar produto {IdProduto} no CardapioDigital", produto.Id);
+                }
+            }
         }
 
         [HttpGet("{id}")]

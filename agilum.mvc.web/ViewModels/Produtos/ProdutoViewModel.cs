@@ -77,6 +77,8 @@ namespace agilum.mvc.web.ViewModels.Produtos
         [Display(Name = "Utiliza Balança?")]
         public ESimNao? UtilizaBalanca { get; set; }
         public int? FLG_IFOOD { get; set; }
+        [Display(Name = "Exportar para Pedido?")]
+        public ESimNao? ExportarPedido { get; set; }
         [Display(Name = "Marca")]
         public long? IDMARCA { get; set; }
         [Display(Name = "Departamento")]

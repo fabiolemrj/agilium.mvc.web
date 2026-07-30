@@ -45,6 +45,8 @@ namespace agilium.api.manager.Configuration
     {
         public AutomapperConfig()
         {
+            ShouldMapProperty = p => true;
+
             #region Controle Acessso / Usuarios
             CreateMap<Usuario, UsuarioViewModel>().ReverseMap();
             CreateMap<business.Models.PagedResult<Usuario>, business.Models.PagedResult<UsuarioViewModel>>().ReverseMap();
@@ -214,6 +216,7 @@ namespace agilium.api.manager.Configuration
                 .ForMember(dest => dest.ValorUltimaCompra, opt => opt.MapFrom(src => src.VLULTIMACOMPRA))
                 .ForMember(dest => dest.RelacaoCompraVenda, opt => opt.MapFrom(src => src.NURELACAO))
                 .ForMember(dest => dest.UtilizaBalanca, opt => opt.MapFrom(src => src.STBALANCA))
+                .ForMember(dest => dest.ExportarPedido, opt => opt.MapFrom(src => src.STEXPORTARPEDIDO))
                 .ForMember(dest => dest.UnidadeVenda, opt => opt.MapFrom(src => src.UNVENDA))
                 .ForMember(dest => dest.UnidadeCompra, opt => opt.MapFrom(src => src.UNCOMPRA))
                 .ForMember(dest => dest.PCIBPTFED, opt => opt.MapFrom(src => src.PCIBPTFED))
@@ -230,7 +233,8 @@ namespace agilium.api.manager.Configuration
                 .ForMember(dest => dest.Cfops, act => act.Ignore())
                 .ForMember(dest => dest.Csts, act => act.Ignore())
                 .ForMember(dest => dest.Cests, act => act.Ignore())
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.STEXPORTARPEDIDO, opt => opt.MapFrom(src => src.ExportarPedido));
 
             CreateMap<ProdutoDepartamento, ProdutoDepartamentoViewModel>()
                 .ForMember(dest => dest.Codigo, opt => opt.MapFrom(src => src.CDDEP))

@@ -19,6 +19,9 @@ namespace agilium.api.business.Interfaces.IService
         Task<List<Produto>> ObterTodas(long idEmpresa);
 
         Task<double> ObterPrecoAtual(long idProduto);
+        Task Atualizar(Produto produto, object model);
+        /// <summary>Atualiza produto diretamente via Dapper (sem EF Core), retorna true se afetou linha.</summary>
+        Task<bool> AtualizarViaDapper(Produto produto);
         #endregion
 
         #region ProdutoDepartamento

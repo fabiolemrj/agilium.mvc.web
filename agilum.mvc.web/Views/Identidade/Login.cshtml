@@ -1,0 +1,114 @@
+@model agilum.mvc.web.Controllers.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agilium Manager — Login</title>
+    <link rel="icon" type="image/x-icon" href="~/Images/logo_v3c_SIMBOLO.png" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <link rel="stylesheet" href="~/dist/plugins/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css" />
+    <style>
+        body { background: #f4f6f9; }
+        #loading-overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        #loading-overlay.active { display: flex; }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @@keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="hold-transition login-page">
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
+<div class="login-page" style="min-height:100vh; display:flex; align-items:center; justify-content:center;">
+    <div class="login-box">
+        <div class="login-logo">
+            <b>Agilium</b> Manager
+        </div>
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Faça login para acessar o sistema</p>
+
+                <form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="input-group mb-3">
+                        <input asp-for="Login" class="form-control" placeholder="Usuário" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Login" class="text-danger"></span>
+
+                    <div class="input-group mb-3">
+                        <input asp-for="Senha" type="password" class="form-control" placeholder="Senha" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Senha" class="text-danger"></span>
+
+                    <div class="form-group mb-3">
+                        <label for="Empresa">Empresa</label>
+                        <select asp-for="Empresa" asp-items="Model.Empresas" class="form-control" required>
+                            <option value="">-- Selecione a Empresa --</option>
+                        </select>
+                        <span asp-validation-for="Empresa" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input asp-for="LembrarMe" id="remember" />
+                                <label for="remember">Lembrar-me</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(function () {
+        $('form').on('submit', function () {
+            $('#loading-overlay').addClass('active');
+        });
+    });
+</script>
+</body>
+</html>

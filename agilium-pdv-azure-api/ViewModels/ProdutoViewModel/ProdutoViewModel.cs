@@ -111,6 +111,8 @@ namespace agilium.api.pdv.ViewModels.ProdutoViewModel
         [Display(Name = "Utiliza Balança?")]
         public ESimNao? UtilizaBalanca { get; set; }
         public int? FLG_IFOOD { get; set; }
+        [Display(Name = "Exportar para Pedido?")]
+        public ESimNao? ExportarPedido { get; set; }
         [Display(Name = "Marca")]
         public string IDMARCA { get; set; }
         [Display(Name = "Departamento")]

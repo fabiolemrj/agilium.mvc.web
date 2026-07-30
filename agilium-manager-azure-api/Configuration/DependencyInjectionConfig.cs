@@ -141,6 +141,13 @@ namespace agilium.api.manager.Configuration
 
             #endregion
 
+            #region Integração CardapioDigital
+            services.AddHttpClient(); // Habilita IHttpClientFactory
+            services.AddScoped<CardapioDigitalDbSession>();
+            services.AddScoped<ICardapioDigitalRepository, CardapioDigitalRepository>();
+            services.AddScoped<IIntegracaoCardapioService, IntegracaoCardapioService>();
+            #endregion
+
             #region Devolucao
             services.AddScoped<IDevolucaoDapperRepository, DevolucaoDapperRepository>();
             services.AddScoped<IDevolucaoItemRepository, DevolucaoItemRepository>();

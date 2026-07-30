@@ -110,7 +110,7 @@ namespace agilium.api.business.Services
         {
             int pagina = page > 0 ? page : 1;
 
-            var lista = _vendaRepository.Obter(x => x.DTHRVENDA.Value >= dtIni && x.DTHRVENDA <= dtFim, "Caixa", "Caixa.PontoVenda", "Caixa.Funcionario", "Cliente").Result;
+            var lista = _vendaRepository.Obter(x => x.DTHRVENDA.Value >= dtIni.Date && x.DTHRVENDA < dtFim.Date.AddDays(1), "Caixa", "Caixa.PontoVenda", "Caixa.Funcionario", "Cliente").Result.OrderByDescending(x=>x.DTHRVENDA);
 
             return new PagedResult<Venda>
             {
@@ -138,7 +138,7 @@ namespace agilium.api.business.Services
         public async Task<List<Venda>> ObterVendaPorData(DateTime dtIni, DateTime dtFim)
         {
 
-            var lista = _vendaRepository.Obter(x => x.DTHRVENDA.Value >= dtIni && x.DTHRVENDA <= dtFim, "Caixa", "Caixa.PontoVenda", "Caixa.Funcionario", "Cliente").Result;
+            var lista = _vendaRepository.Obter(x => x.DTHRVENDA.Value >= dtIni.Date && x.DTHRVENDA < dtFim.Date.AddDays(1), "Caixa", "Caixa.PontoVenda", "Caixa.Funcionario", "Cliente").Result;
             return lista.ToList();
         }
         #endregion

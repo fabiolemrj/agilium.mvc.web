@@ -99,14 +99,6 @@
                     }
                 </td>
                 <td class="text-right">
-                    @if (!item.UsuarioPossuiAcessoWeb)
-                    {
-                        <a class="btn btn-secondary" title="Criar/Associar usuario web" id="btnCriarWeb" onclick="NovoUsuarioWeb('@item.id')"><spam class="fa fa-globe"></spam></a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-info" title="Reenviar email de confirmação" id="btnReenviarEmailConfirma" onclick="ReenviarEmail('@item.id')"><spam class="fa fa-reply"></spam></a>
-                    }
                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.id" title="Editar Usuario" id="btnEditarClaim"><spam class="fa fa-pencil-alt"></spam></a>
                 </td>
             </tr>
@@ -122,15 +114,6 @@
 
     </tfoot>
 </table>
-
-<div id="myModal" class="modal fade in">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div id="myModalContent"></div>
-        </div>
-    </div>
-</div>
-
 
 
 <script src="~/dist/plugins/jquery/jquery.min.js"></script>

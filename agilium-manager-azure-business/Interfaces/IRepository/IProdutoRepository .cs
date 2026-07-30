@@ -30,6 +30,7 @@ namespace agilium.api.business.Interfaces.IRepository
         Task AtualizarIBPTPorProduto(Produto produto);
         Task<List<Produto>> ObterTodosProdutos_IdDescricao(long idEmpresa);
         Task<List<Produto>> BuscarProdutosJson(long idEmpresa, string filtro);
+        Task<bool> AtualizarProduto(Produto produto);
     }
 
 }
