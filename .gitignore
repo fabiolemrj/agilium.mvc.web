@@ -449,3 +449,6 @@ FodyWeavers.xsd
 /agilium-manager-azure-api/obj/project.nuget.cache
 /agilium-manager-azure-api/obj/Release/netcoreapp3.1/agilium-manager-azure-api.assets.cache
 /agilium-manager-azure-api/obj/Release/netcoreapp3.1/apphost.exe
+/agilium-manager-azure-api/obj/agilium-manager-azure-api.csproj.nuget.g.props
+/agilium-manager-azure-business/obj/Debug/netcoreapp3.1/agilium-manager-azure-business.GeneratedMSBuildEditorConfig.editorconfig
+/agilium-manager-git-azure-infra/obj/Debug/netcoreapp3.1/agilium-manager-git-azure-infra.GeneratedMSBuildEditorConfig.editorconfig
