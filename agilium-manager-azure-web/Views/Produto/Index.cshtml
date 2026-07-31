@@ -129,24 +129,18 @@
                     </td>
                    
                     <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default"><i class="fas fa-cubes"></i></button>
-                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu" role="menu">
+                        <div class="tbl-drop">
+                            <button type="button" class="btn btn-default tbl-drop-btn"><i class="fas fa-cubes"></i> ▾</button>
+                            <div class="tbl-drop-menu">
                                 <a class="dropdown-item" asp-action="ListaEstoque" asp-route-idProduto="@item.Id">Detalhes</a>
                                 <a class="dropdown-item" asp-action="ListaEstoqueHistorico" asp-route-idProduto="@item.Id">Historico Mov</a>                                
                             </div>
                         </div>
                     </td>
                     <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default"><i class="fas fa-hand-holding-usd"></i></button>
-                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu" role="menu">
+                        <div class="tbl-drop">
+                            <button type="button" class="btn btn-default tbl-drop-btn"><i class="fas fa-hand-holding-usd"></i> ▾</button>
+                            <div class="tbl-drop-menu">
                                 <a class="dropdown-item" asp-action="ListaPreco" asp-route-idProduto="@item.Id">Historico</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-action="ListaClientePreco" asp-route-idProduto="@item.Id">por Cliente</a>
@@ -182,6 +176,20 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="~/local/cadastros/principal/produto.js"></script>
+    <style>
+        .tbl-drop{position:relative;display:inline-block}
+        .tbl-drop-menu{display:none!important;position:absolute;top:100%;left:0;z-index:9999;min-width:12rem;background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:.25rem;padding:.5rem 0;box-shadow:0 .5rem 1rem rgba(0,0,0,.175)}
+        .tbl-drop.open .tbl-drop-menu{display:block!important}
+    </style>
+    <script>
+        $(document).on('click', '.tbl-drop-btn', function(e){
+            e.preventDefault(); e.stopPropagation();
+            var d=$(this).closest('.tbl-drop');
+            $('.tbl-drop.open').not(d).removeClass('open');
+            d.toggleClass('open');
+        });
+        $(document).click(function(){$('.tbl-drop.open').removeClass('open')});
+    </script>
     <script>
         $(document).ready(function () {
             SetModal();

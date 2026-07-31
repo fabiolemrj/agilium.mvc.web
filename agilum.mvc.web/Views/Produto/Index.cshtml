@@ -15,7 +15,7 @@
 
         <a asp-action="AtualizarIBPT" onclick="on()" title="Atualizar IBPT dos Produtos"><span class="fas fa-retweet" id="btnIBPT"></span>IBPT</a>
 
-        <a asp-action="ExportarParaCardapio" onclick="return confirm('Deseja exportar os produtos marcados com STEXPORTARPEDIDO = Sim para o CardapioDigital?');" title="Exportar Produtos para Cardápio Digital" id="btnExportarCardapio"><span class="fas fa-cloud-upload-alt sns-tool-action"></span>Exportar Cardápio</a>
+    
     </div>
 
     <article>
@@ -130,14 +130,24 @@
                         @Html.DisplayFor(modelItem => item.ExportarPedido)
                     </td>
                     <td>
-                        <a class="btn btn-default" asp-action="ListaEstoque" asp-route-idProduto="@item.Id" title="Estoques em que o produto está cadastrado "><i class="fas fa-cubes"></i></a>
-                        <a class="btn btn-default" asp-action="ListaEstoqueHistorico" asp-route-idProduto="@item.Id" title="Historico de estoque"><i class="fas fa-list-alt"></i></a>
-                     
+                        <div class="tbl-drop">
+                            <button type="button" class="btn btn-default tbl-drop-btn"><i class="fas fa-cubes"></i> ▾</button>
+                            <div class="tbl-drop-menu">
+                                <a class="dropdown-item" asp-action="ListaEstoque" asp-route-idProduto="@item.Id">Detalhes</a>
+                                <a class="dropdown-item" asp-action="ListaEstoqueHistorico" asp-route-idProduto="@item.Id">Historico Mov</a>
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        <a class="btn btn-default" asp-action="ListaPreco" asp-route-idProduto="@item.Id"><i class="fas fa-list-alt" title="Historico de Preço diferenciado"></i></a>
-                        <a class="btn btn-default" asp-action="ListaClientePreco" asp-route-idProduto="@item.Id"><i class="fas fa-user-tie" title="Preço diferenciado por cliente"></i></a>
-                        <a class="btn btn-default" asp-action="ListaTurnoPreco" asp-route-idProduto="@item.Id" title="Preço diferenciado por turno"><i class="far fa-clock"></i></a>
+                        <div class="tbl-drop">
+                            <button type="button" class="btn btn-default tbl-drop-btn"><i class="fas fa-hand-holding-usd"></i> ▾</button>
+                            <div class="tbl-drop-menu">
+                                <a class="dropdown-item" asp-action="ListaPreco" asp-route-idProduto="@item.Id">Historico</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-action="ListaClientePreco" asp-route-idProduto="@item.Id">por Cliente</a>
+                                <a class="dropdown-item" asp-action="ListaTurnoPreco" asp-route-idProduto="@item.Id">por Turno</a>
+                            </div>
+                        </div>
                     </td>
                     <td class="text-right limited-cell-actions">
                         <a class="btn btn-default" asp-action="ListaFoto" asp-route-idProduto="@item.Id" title="Fotos"><spam class="fas fa-image" data-toggle="modal" data-target="#myModal"></spam></a>
@@ -148,9 +158,13 @@
                                    
                     </td>
                     <td>
-                        <a class="btn btn-default" asp-action="MostrarCodigo" asp-route-id="@item.Id" asp-route-tipo="qrcode" title="Etiqueta tipo QR Code "><i class="fa fa-qrcode"></i></a>
-                        <a class="btn btn-default" asp-action="MostrarCodigo" asp-route-id="@item.Id" asp-route-tipo="barcode" title="Etiqueta tipo Codigo de barras "><i class="fas fa-barcode"></i></a>
-                
+                        <div class="tbl-drop">
+                            <button type="button" class="btn btn-default tbl-drop-btn"><i class="fa fa-qrcode"></i> ▾</button>
+                            <div class="tbl-drop-menu">
+                                <a class="dropdown-item" asp-action="MostrarCodigo" asp-route-id="@item.Id" asp-route-tipo="qrcode">QR Code</a>
+                                <a class="dropdown-item" asp-action="MostrarCodigo" asp-route-id="@item.Id" asp-route-tipo="barcode">Codigo Barras</a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
@@ -174,16 +188,25 @@
 
     
     <script src="~/local/cadastros/principal/produto.js"></script>
+    <style>
+        .tbl-drop{position:relative;display:inline-block}
+        .tbl-drop-menu{display:none!important;position:absolute;top:100%;left:0;z-index:9999;min-width:12rem;background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:.25rem;padding:.5rem 0;box-shadow:0 .5rem 1rem rgba(0,0,0,.175)}
+        .tbl-drop.open .tbl-drop-menu{display:block!important}
+    </style>
+    <script>
+        $(document).on('click', '.tbl-drop-btn', function(e){
+            e.preventDefault(); e.stopPropagation();
+            var d=$(this).closest('.tbl-drop');
+            $('.tbl-drop.open').not(d).removeClass('open');
+            d.toggleClass('open');
+        });
+        $(document).click(function(){$('.tbl-drop.open').removeClass('open')});
+    </script>
 
     <script>
 
         $(document).ready(function () {
             SetModal();
-        });
-
-        $(function () {
-            $('.dropdown-toggle').dropdown();
-           
         });
 
     </script>

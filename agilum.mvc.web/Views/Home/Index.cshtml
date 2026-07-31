@@ -5,6 +5,13 @@
 <div class="text-center">
     <h1 class="display-4">Agilium Manager</h1>
     <h1 class="display-5">Painel Administrativo</h1>
-    <img src="~/Images/logo_Agilium_svg.svg" alt="Agilium Manager" class="home-logo" />
+    @if (!string.IsNullOrEmpty(ViewBag.LogoCliente))
+    {
+        <img src="data:image/png;base64,@ViewBag.LogoCliente" alt="Logo" class="home-logo img-fluid" style="max-width:90%; max-height:50vh; height:50vh;" />
+    }
+    else
+    {
+        <img src="~/Images/logo_Agilium_svg.svg" alt="Agilium Manager" class="home-logo img-fluid" style="max-width:90%; max-height:50vh" />
+    }
     <div id="teste"></div>
 </div>

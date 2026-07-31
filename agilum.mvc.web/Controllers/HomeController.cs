@@ -14,9 +14,11 @@ using AutoMapper;
 using agilum.mvc.web.ViewModels.Licenca;
 using PassCrypto;
 using agilium_manager_azure_business.Services;
+using agilium.api.business.Interfaces.IRepository;
 using agilium.api.business.Models;
 using agilium.api.business.Services;
 using agilum.mvc.web.Services;
+using System.Linq;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -25,12 +27,14 @@ namespace agilum.mvc.web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IConfigImagemRepository _configImagemRepository;
 
 
         public HomeController(ILicencaService licenca,INotificador notificador,  IUser appUser, IUtilDapperRepository utilDapperRepository, IEmailSender emailSender,
-        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, IAuthService authService) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
+        ILogService logService, IMapper mapper, IConfiguration configuration, ILicencaService licencaService, IAuthService authService, IConfigImagemRepository configImagemRepository) : base(notificador, configuration, appUser, utilDapperRepository, logService, mapper, licencaService, authService)
         {
             _emailSender = emailSender;
+            _configImagemRepository = configImagemRepository;
         }
 
         [Route("licenca")]
@@ -84,6 +88,19 @@ namespace agilum.mvc.web.Controllers
                 TempData["Titulo"] = "Empresa";
                 TempData["Mensagem"] = "Selecione uma empresa para acessar o sistema";
                 return RedirectToAction("ObterListasEmpresasPorUsuario", "Empresa");
+            }
+
+            ViewBag.LogoCliente = null;
+            try
+            {
+                var configImagem = (await _configImagemRepository.Obter(x => x.CHAVE == "IMG_LOGO" && x.IDEMPRESA == Convert.ToInt64(empresaSelecionada.IDEMPRESA)))
+                    .FirstOrDefault();
+                if (configImagem?.IMG != null && configImagem.IMG.Length > 0)
+                    ViewBag.LogoCliente = Convert.ToBase64String(configImagem.IMG);
+            }
+            catch
+            {
+                // fallback para logo padrão
             }
 
 //            await VerificarValidadeLicenca();

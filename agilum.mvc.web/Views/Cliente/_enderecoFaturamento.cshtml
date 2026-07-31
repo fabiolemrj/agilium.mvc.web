@@ -5,14 +5,14 @@
 
         <div class="col-2">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Cep" class="control-label" id="labelCep"></label>
+                    <label asp-for="EnderecoFaturamento.Cep" class="control-label" id="labelCepFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Cep" class="form-control cep padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Cep" class="text-danger"></span>
             </div>
         </div>
         <div class="col-4">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Logradouro" class="control-label" id="labelEndereco"></label>
+                    <label asp-for="EnderecoFaturamento.Logradouro" class="control-label" id="labelLogradouroFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Logradouro" class="form-control Logradouro padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Logradouro" class="text-danger"></span>
             </div>
@@ -21,7 +21,7 @@
 
         <div class="col-2">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Numero" class="control-label" id="labelNumero"></label>
+                    <label asp-for="EnderecoFaturamento.Numero" class="control-label" id="labelNumeroFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Numero" class="form-control padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Numero" class="text-danger"></span>
             </div>
@@ -29,7 +29,7 @@
 
         <div class="col-3">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Complemento" class="control-label" id="labelComplemento"></label>
+                    <label asp-for="EnderecoFaturamento.Complemento" class="control-label" id="labelComplementoFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Complemento" class="form-control padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Complemento" class="text-danger"></span>
             </div>
@@ -37,7 +37,7 @@
 
         <div class="col-2">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Bairro" class="control-label" id="labelBairro"></label>
+                    <label asp-for="EnderecoFaturamento.Bairro" class="control-label" id="labelBairroFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Bairro" class="form-control Bairro padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Bairro" class="text-danger"></span>
             </div>
@@ -45,14 +45,14 @@
 
         <div class="col-2">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Cidade" class="control-label" id="labelCidade"></label>
+                    <label asp-for="EnderecoFaturamento.Cidade" class="control-label" id="labelCidadeFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.Cidade" class="form-control Cidade padrao" />
                 <span asp-validation-for="EnderecoFaturamento.Cidade" class="text-danger"></span>
             </div>
         </div>
         <div class="col-2">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.Uf" class="control-label" id="labelUf"></label>
+                    <label asp-for="EnderecoFaturamento.Uf" class="control-label" id="labelUfFaturamento"></label>
                 <select asp-for="EnderecoFaturamento.Uf"
                         asp-items="ViewBag.estados"
                         class="form-control Uf padrao"></select>
@@ -64,7 +64,7 @@
 
         <div class="col-3">
             <div class="form-group">
-                <label asp-for="EnderecoFaturamento.PontoReferencia" class="control-label" id="labelPontoRef"></label>
+                    <label asp-for="EnderecoFaturamento.PontoReferencia" class="control-label" id="labelPontoRefFaturamento"></label>
                 <input asp-for="EnderecoFaturamento.PontoReferencia" class="form-control" />
                 <span asp-validation-for="EnderecoFaturamento.PontoReferencia" class="text-danger"></span>
             </div>

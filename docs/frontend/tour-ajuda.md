@@ -521,8 +521,191 @@ Tour.onresize = function() { /* ao redimensionar */ };
 
 ---
 
+## Metodologia de Análise e Correção de Tours (para Agentes de IA)
+
+Esta seção documenta o processo sistemático para analisar e corrigir tours de ajuda em qualquer tela do Agilium Manager. Deve ser seguida por agentes de IA ao receber solicitações de análise/correção de `btnAjuda`.
+
+### Fluxo de Trabalho
+
+```
+1. Análise de Impacto
+      │
+      ▼
+2. Mapeamento View × Tour
+      │
+      ▼
+3. Identificação de Problemas
+      │
+      ▼
+4. Correção (View + JS)
+      │
+      ▼
+5. Validação
+```
+
+---
+
+### Passo 1: Análise de Impacto
+
+Identificar:
+- Qual tela (Index, Create/Edit, ambas — JS é compartilhado?)
+- Quais arquivos estão envolvidos: View (.cshtml), JS (wwwroot/local/**/*.js)
+- Projetos afetados: azure-web e/ou mvc.web (ambos geralmente)
+
+---
+
+### Passo 2: Mapeamento View × Tour
+
+#### 2.1 Extrair TODOS os IDs da View
+
+Varrer a View (.cshtml) incluindo todas as partials referenciadas, coletando cada `id="..."` no HTML. Anotar a posição visual (linha, ordem left→right).
+
+#### 2.2 Extrair TODOS os steps do Tour
+
+Ler o `Tour.run([...])` no arquivo JS e listar cada `element: $('#...')`.
+
+#### 2.3 Cruzamento
+
+Criar tabela comparando:
+- Elementos que existem na View e no Tour → ✅ OK
+- Elementos que existem na View mas NÃO no Tour → ❌ Faltando
+- Elementos no Tour que NÃO existem na View → 🔴 Lixo (copy-paste)
+- Elementos duplicados (mesmo ID em 2+ steps) → 🔴 Duplicado
+
+---
+
+### Passo 3: Identificação de Problemas (Checklist)
+
+Ao analisar, verificar cada item:
+
+| # | Problema | Como identificar | Severidade |
+|---|----------|------------------|------------|
+| 1 | **Copy-paste de outro módulo** | Steps referenciam IDs de outra entidade (ex: `#labelRazSoc`, `#labelCnpj` em Cliente) ou textos mencionam "fornecedor"/"especialidade"/"empresas" | 🔴 Grave |
+| 2 | **IDs duplicados na View** | Mesmo `id` usado em múltiplos labels/campos | 🔴 Grave |
+| 3 | **IDs duplicados no Tour** | Mesmo `element: $('#...')` em 2+ steps (ex: `breadcrumb` no Index e no Create/Edit) | 🔴 Grave |
+| 4 | **Elementos ocultos no Tour** | Steps referenciam elementos dentro de `display:none`, `fade` (Bootstrap tabs inativas), ou partials condicionais (`@if ViewBag.operacao == "E"`) | 🔴 Grave |
+| 5 | **Ordem incorreta** | Ordem dos steps não segue fluxo visual top→bottom, left→right | 🟡 Moderado |
+| 6 | **Textos genéricos/errados** | "Incluir novo registro" em vez de "Cadastrar novo cliente", "especialidade" em vez de "cliente" | 🟡 Moderado |
+| 7 | **`btnReturn` vs `btnVoltar`** | O JS referencia `$('#btnReturn')` mas a View usa `id="btnVoltar"` (ou o span interno tem `id="btnReturn"`) | 🟡 Moderado |
+
+---
+
+### Passo 4: Regras de Correção
+
+#### 4.1 IDs duplicados na View
+
+Cada label/campo deve ter ID **único** na página. Padrão de nomenclatura:
+- Campos simples: `labelNomeDoCampo`
+- Campos em partials/abas: `labelNomeDoCampo` + sufixo do contexto
+
+```
+Exemplo (Cliente Create/Edit com 4 abas de endereço):
+  Aba Padrão:    labelCepEndereco, labelLogradouroEndereco, ...
+  Aba Cobrança:  labelCepCobranca, labelLogradouroCobranca, ...
+  Aba Faturamento: labelCepFaturamento, labelLogradouroFaturamento, ...
+  Aba Entrega:   labelCepEntrega, labelLogradouroEntrega, ...
+```
+
+#### 4.2 Remoção de copy-paste
+
+Remover TODOS os steps que referenciam elementos inexistentes na View. Não manter "para compatibilidade" — o `Tour.run()` já filtra por existência no DOM.
+
+#### 4.3 Elementos ocultos — NUNCA incluir no Tour
+
+**Regra absoluta:** NUNCA incluir steps para elementos que:
+- Estão dentro de `display:none` (ex: `divPF`/`divPJ` toggle)
+- Estão em abas Bootstrap inativas (classe `fade` sem `show active`)
+- São condicionais que só existem em Edit mas não em Create (ex: `labelSituacao`, `ContatoTarget`)
+
+> ⚠️ O `dknotus-tour.js` verifica apenas `$('#id').length` (existência no DOM), NÃO verifica visibilidade. Elementos com `opacity:0` ou `display:none` quebram o posicionamento do popover e escondem os botões Next/Previous.
+
+**Exceção:** Steps condicionais (só no Edit) são aceitáveis se o elemento existe no DOM com dimensões visíveis — o `Tour.run()` simplesmente pula o step quando não encontra o elemento.
+
+#### 4.4 Ordem visual
+
+Steps DEVEM seguir o fluxo visual da tela:
+1. Barra superior (left→right): `btnVoltar` → `btnSalvar` → `breadcrumb`
+2. Formulário (top→bottom, left→right dentro de cada row)
+3. Seções inferiores (abas, partials)
+
+#### 4.5 Textos
+
+- Substituir "registro" pelo nome da entidade ("cliente", "funcionário", "produto")
+- Substituir "empresas"/"fornecedor"/"especialidade" pelo domínio correto
+- Texto do step deve descrever claramente a função do elemento
+
+#### 4.6 Breadcrumb duplicado
+
+Se o mesmo JS é compartilhado entre Index e Create/Edit, o `breadcrumb` aparece em AMBAS as telas. Manter apenas UMA definição no Tour (preferencialmente na seção Create/Edit, após os botões da barra).
+
+---
+
+### Passo 5: Validação
+
+Após correções, verificar:
+- [ ] Nenhum ID duplicado na View (buscar por `id="label"` e confirmar unicidade)
+- [ ] Nenhum step referencia elemento inexistente
+- [ ] Nenhum step referencia elemento oculto (`fade`, `display:none`)
+- [ ] Ordem dos steps segue fluxo visual da tela
+- [ ] Textos mencionam o domínio correto (não "fornecedor" em tela de cliente)
+- [ ] Ambos os projetos (azure-web + mvc.web) foram atualizados
+- [ ] As partials referenciadas também foram verificadas
+
+---
+
+### Padrões de Código
+
+#### Template de step do Tour
+
+```javascript
+{
+    element: $('#idDoElemento'),
+    content: '<strong><div align="center" class="text-info">TÍTULO</div></strong><p><div align="center">Descrição clara da função do elemento.</div></p>',
+    position: 'top'  // 'top' | 'bottom' | 'left' | 'right'
+}
+```
+
+#### Estrutura recomendada do Tour.run
+
+```javascript
+$('#btnAjuda').click(function () {
+    Tour.run([
+        // === Tela de Listagem (Index) ===
+        { element: $('#btnNovoCadastro'), ... },
+        { element: $('#areaFiltro'), ... },
+        { element: $('#search-btn'), ... },
+        { element: $('#divGridResultado'), ... },
+
+        // === Tela de Cadastro/Edição (Create/Edit) ===
+        { element: $('#btnVoltar'), ... },
+        { element: $('#btnSalvar'), ... },
+        { element: $('#breadcrumb'), ... },  // ÚNICO, não repetir na seção Index
+        // ... campos do formulário em ordem visual ...
+        // ... partials em ordem visual ...
+    ]);
+});
+```
+
+---
+
+### Arquivos Tipicamente Envolvidos
+
+| Camada | Padrão de Caminho |
+|--------|-------------------|
+| View Index | `Views/{Entidade}/Index.cshtml` |
+| View Create/Edit | `Views/{Entidade}/CreateEdit{Entidade}.cshtml` |
+| Partials | `Views/{Entidade}/_*.cshtml` |
+| JS (azure-web) | `agilium-manager-azure-web/wwwroot/local/**/{entidade}.js` |
+| JS (mvc.web) | `agilum.mvc.web/wwwroot/local/**/{entidade}.js` |
+
+> ⚠️ Ambos os projetos (azure-web e mvc.web) devem ser atualizados. As views podem ter layouts diferentes — verificar cada uma separadamente.
+
+---
+
 ## Documentação Relacionada
 
 - `docs/frontend/javascript.md` — Arquitetura JavaScript geral
 - `knowledge/frontend/javascript.md` — Organização dos scripts
 - `knowledge/frontend/components.md` — Componentes reutilizáveis
+- `docs/templates/system-mechanism-discovery.md` — Template usado como base para este documento
+- `docs/prompts/system-mechanism-discovery.md` — Prompt usado para o levantamento deste mecanismo

@@ -90,7 +90,7 @@
                         {
                             <div class="col-2">
                                 <div class="form-group">
-                                    <label asp-for="Situacao" id="labelativo"></label>
+                                    <label asp-for="Situacao" id="labelSituacao"></label>
                                     <select asp-for="Situacao"
                                             asp-items="Html.GetEnumSelectList<agilium.api.business.Enums.EAtivo>()"
                                             class="form-control"></select>
@@ -116,7 +116,7 @@
                         </div>
                         <div class="col-2">
                             <div class="form-group">
-                                <label asp-for="PublicaEmail" id="labelativo"></label>
+                                <label asp-for="PublicaEmail" id="labelPublicaEmail"></label>
                                 <select asp-for="PublicaEmail"
                                         asp-items="Html.GetEnumSelectList<ESimNao>()"
                                         class="form-control"></select>
@@ -126,7 +126,7 @@
                         </div>
                         <div class="col-2">
                             <div class="form-group">
-                                <label asp-for="PublicaSMS" id="labelativo"></label>
+                                <label asp-for="PublicaSMS" id="labelPublicaSMS"></label>
                                 <select asp-for="PublicaSMS"
                                         asp-items="Html.GetEnumSelectList<ESimNao>()"
                                         class="form-control"></select>

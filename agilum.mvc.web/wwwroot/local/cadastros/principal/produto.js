@@ -46,39 +46,48 @@ $(function () {
     $('#btnAjuda').click(function () {
 
         Tour.run([
+            // === Tela de Listagem (Index) ===
             {
                 element: $('#btnNovoCadastro'),
-                content: '<strong><div align="center" class="text-info">Botão adicionar</div></strong><p><div align="center">Incluir novo registro.</div></p>',
+                content: '<strong><div align="center" class="text-info">Novo Produto</div></strong><p><div align="center">Cadastrar novo produto.</div></p>',
                 position: 'top'
             },
             {
-                element: $('#breadcrumb'),
-                content: '<strong><div align="center" class="text-info">Breadcrumb</div></strong><p><div align="center">Area de Breadcrumb para navegação.</div></p>',
+                element: $('#btnIBPT'),
+                content: '<strong><div align="center" class="text-info">IBPT</div></strong><p><div align="center">Atualizar IBPT dos produtos.</div></p>',
                 position: 'top'
             },
+        
             {
                 element: $('#areaFiltro'),
-                content: '<strong><div align="center" class="text-info">Filtro</div></strong><p><div align="center">Area de filtro para lista.</div></p>',
+                content: '<strong><div align="center" class="text-info">Filtro</div></strong><p><div align="center">Área de filtro para pesquisa de produtos.</div></p>',
                 position: 'left'
             },
             {
                 element: $('#search-btn'),
-                content: '<strong><div align="center" class="text-info">Botão de filtro</div></strong><p><div align="center">Faz a pesquisa de especialidade de acordo com o filtro.</div></p>',
+                content: '<strong><div align="center" class="text-info">Pesquisar</div></strong><p><div align="center">Pesquisar produto pela descrição.</div></p>',
                 position: 'bottom'
             },
             {
                 element: $('#divGridResultado'),
-                content: '<strong><div align="center" class="text-info">Resultado</div></strong><p><div align="center">Retorna os dados da consulta.</div></p>',
+                content: '<strong><div align="center" class="text-info">Resultado</div></strong><p><div align="center">Lista de produtos cadastrados.</div></p>',
                 position: 'top'
             },
+
+            // === Tela de Cadastro/Edição (Create/Edit) ===
             {
-                element: $('#btnReturn'),
-                content: '<strong><div align="center" class="text-info">Botão Voltar</div></strong><p><div align="center">Voltar para pagina anterior.</div></p>',
+                element: $('#btnVoltar'),
+                content: '<strong><div align="center" class="text-info">Botão Voltar</div></strong><p><div align="center">Voltar para página anterior.</div></p>',
                 position: 'top'
             },
             {
                 element: $('#btnSalvar'),
-                content: '<strong><div align="center" class="text-info">Botão Salvar</div></strong><p><div align="center">Confirmar gravação dos dados.</div></p>',
+                content: '<strong><div align="center" class="text-info">Botão Salvar</div></strong><p><div align="center">Confirmar gravação dos dados do produto.</div></p>',
+                position: 'top'
+            },
+            {
+                element: $('#breadcrumb'),
+                content: '<strong><div align="center" class="text-info">Breadcrumb</div></strong><p><div align="center">Área de navegação (breadcrumb).</div></p>',
                 position: 'top'
             },
             {
@@ -129,17 +138,12 @@ $(function () {
             },
             {
                 element: $('#labelTipo'),
-                content: '<strong><div align="center" class="text-info">Tipo</div></strong><p><div align="center">Campo para seleção do tipo  do produto.</div></p>',
+                content: '<strong><div align="center" class="text-info">Tipo</div></strong><p><div align="center">Campo para seleção do tipo do produto.</div></p>',
                 position: 'top'
             },
             {
                 element: $('#labelCateg'),
                 content: '<strong><div align="center" class="text-info">Categoria</div></strong><p><div align="center">Campo para seleção da categoria do produto.</div></p>',
-                position: 'top'
-            },
-            {
-                element: $('#labelOrigem'),
-                content: '<strong><div align="center" class="text-info">Origem</div></strong><p><div align="center">Campo para seleção da Origem do produto.</div></p>',
                 position: 'top'
             },
             {
@@ -163,6 +167,11 @@ $(function () {
                 position: 'top'
             },
             {
+                element: $('#labelBalanca'),
+                content: '<strong><div align="center" class="text-info">Utiliza Balança</div></strong><p><div align="center">Campo para configurar se o produto utiliza balança (valor por peso).</div></p>',
+                position: 'top'
+            },
+            {
                 element: $('#labelUnidCompra'),
                 content: '<strong><div align="center" class="text-info">Unidade Compra</div></strong><p><div align="center">Campo para configurar a unidade utilizado nas compras do produto.</div></p>',
                 position: 'top'
@@ -179,25 +188,26 @@ $(function () {
                 position: 'top'
             },
             {
+                element: $('#labelQuantMinima'),
+                content: '<strong><div align="center" class="text-info">Quantidade Minima</div></strong><p><div align="center">Campo para configurar a quantidade minima do produto no estoque, caso parametrizado como "SIM" ao atingir o valor, realiza bloqueio da venda ou aviso ao usuario.</div></p>',
+                position: 'top'
+            },
+            {
                 element: $('#labelCFOPVenda'),
                 content: '<strong><div align="center" class="text-info">CFOP Venda</div></strong><p><div align="center">Campo para selecionar o codigo CFOP a ser utilizada nas vendas.</div></p>',
                 position: 'top'
             },
+         
             {
-                element: $('#labelBalanca'),
-                content: '<strong><div align="center" class="text-info">Utiliza Balança</div></strong><p><div align="center">Campo para configurar se o produto utiliza balança (valor por peso).</div></p>',
+                element: $('#labelExportarPedido'),
+                content: '<strong><div align="center" class="text-info">Exportar Pedido</div></strong><p><div align="center">Campo para configurar se o produto será exportado nos pedidos.</div></p>',
                 position: 'top'
             },
             {
                 element: $('#labelEstoque'),
                 content: '<strong><div align="center" class="text-info">Cancelamento de Venda</div></strong><p><div align="center">Campo para configurar o que acontecerá com o produto nos cancelamentos da venda (volta para o estoque ou não).</div></p>',
                 position: 'top'
-            },
-            {
-                element: $('#labelQuantMinima'),
-                content: '<strong><div align="center" class="text-info">Quantidade Minima</div></strong><p><div align="center">Campo para configurar a quantidade minima do produto no estoque, caso parametrizado como "SIM" ao atingir o valor, realiza bloqueio da venda ou aviso ao usuario.</div></p>',
-                position: 'top'
-            },
+            },          
             {
                 element: $('#divAreaImposto'),
                 content: '<strong><div align="center" class="text-info">Area para configurar impostos </div></strong><p><div align="center">Area reservada a configuração de impostos relacionados ao produto.</div></p>',

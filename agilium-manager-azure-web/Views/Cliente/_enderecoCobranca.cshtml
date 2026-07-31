@@ -6,14 +6,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Cep" class="control-label" id="labelCep"></label>
+                    <label asp-for="EnderecoCobranca.Cep" class="control-label" id="labelCepCobranca"></label>
                 <input asp-for="EnderecoCobranca.Cep" class="form-control cep cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Cep" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Logradouro" class="control-label" id="labelEndereco"></label>
+                    <label asp-for="EnderecoCobranca.Logradouro" class="control-label" id="labelLogradouroCobranca"></label>
                     <input asp-for="EnderecoCobranca.Logradouro" class="form-control Logradouro cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Logradouro" class="text-danger"></span>
                 </div>
@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Numero" class="control-label" id="labelNumero"></label>
+                    <label asp-for="EnderecoCobranca.Numero" class="control-label" id="labelNumeroCobranca"></label>
                 <input asp-for="EnderecoCobranca.Numero" class="form-control cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Numero" class="text-danger"></span>
                 </div>
@@ -30,7 +30,7 @@
 
             <div class="col-md-8">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Complemento" class="control-label" id="labelComplemento"></label>
+                    <label asp-for="EnderecoCobranca.Complemento" class="control-label" id="labelComplementoCobranca"></label>
                 <input asp-for="EnderecoCobranca.Complemento" class="form-control cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Complemento" class="text-danger"></span>
                 </div>
@@ -41,7 +41,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Bairro" class="control-label" id="labelBairro"></label>
+                    <label asp-for="EnderecoCobranca.Bairro" class="control-label" id="labelBairroCobranca"></label>
                     <input asp-for="EnderecoCobranca.Bairro" class="form-control Bairro cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Bairro" class="text-danger"></span>
                 </div>
@@ -49,14 +49,14 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Cidade" class="control-label" id="labelCidade"></label>
+                    <label asp-for="EnderecoCobranca.Cidade" class="control-label" id="labelCidadeCobranca"></label>
                 <input asp-for="EnderecoCobranca.Cidade" class="form-control Cidade cobranca" />
                     <span asp-validation-for="EnderecoCobranca.Cidade" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.Uf" class="control-label" id="labelUf"></label>
+                    <label asp-for="EnderecoCobranca.Uf" class="control-label" id="labelUfCobranca"></label>
                     <select asp-for="EnderecoCobranca.Uf"
                             asp-items="ViewBag.estados"
                         class="form-control Uf cobranca"></select>
@@ -69,7 +69,7 @@
 
             <div class="col-md-10">
                 <div class="form-group">
-                    <label asp-for="EnderecoCobranca.PontoReferencia" class="control-label" id="labelPontoRef"></label>
+                    <label asp-for="EnderecoCobranca.PontoReferencia" class="control-label" id="labelPontoRefCobranca"></label>
                 <input asp-for="EnderecoCobranca.PontoReferencia" class="form-control cobranca" />
                     <span asp-validation-for="EnderecoCobranca.PontoReferencia" class="text-danger"></span>
                 </div>

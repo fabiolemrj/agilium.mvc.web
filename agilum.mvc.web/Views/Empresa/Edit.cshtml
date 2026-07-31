@@ -56,12 +56,12 @@
                     <!-- =================== CÓDIGO E TIPO =================== -->
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="CDEMPRESA"></label>
+                            <label asp-for="CDEMPRESA" id="labelCodigo"></label>
                             <input asp-for="CDEMPRESA" class="form-control" readonly />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="TPEMPRESA"></label>
+                            <label asp-for="TPEMPRESA" id="labeltpempresa"></label>
                             <select asp-for="TPEMPRESA"
                                     asp-items="Html.GetEnumSelectList<ETipoEmpresa>()"
                                     class="form-control"></select>
@@ -71,7 +71,7 @@
                     <!-- =================== RAZÃO SOCIAL =================== -->
                     <div class="row">
                         <div class="col-md-9">
-                            <label asp-for="NMRZSOCIAL"></label>
+                            <label asp-for="NMRZSOCIAL" id="labelRazSoc"></label>
                             <input asp-for="NMRZSOCIAL" class="form-control" />
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                     <!-- =================== NOME FANTASIA =================== -->
                     <div class="row">
                         <div class="col-md-9">
-                            <label asp-for="NMFANTASIA"></label>
+                            <label asp-for="NMFANTASIA" id="labelNomFant"></label>
                             <input asp-for="NMFANTASIA" class="form-control" />
                         </div>
                     </div>
@@ -87,22 +87,22 @@
                     <!-- =================== DOCUMENTAÇÃO =================== -->
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="NUCNPJ"></label>
+                            <label asp-for="NUCNPJ" id="labelCnpj"></label>
                             <input asp-for="NUCNPJ" class="form-control cnpj" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="DSINSCREST"></label>
+                            <label asp-for="DSINSCREST" id="labelInscrEstad"></label>
                             <input asp-for="DSINSCREST" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="DSINSCRESTVINC"></label>
+                            <label asp-for="DSINSCRESTVINC" id="labelInscrEstadVinc"></label>
                             <input asp-for="DSINSCRESTVINC" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="DSINSCRMUN"></label>
+                            <label asp-for="DSINSCRMUN" id="labelInscrMunicip"></label>
                             <input asp-for="DSINSCRMUN" class="form-control" />
                         </div>
                     </div>
@@ -110,17 +110,17 @@
                     <!-- =================== SITE MERCADO =================== -->
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="CLIENTID_SITEMERCADO"></label>
+                            <label asp-for="CLIENTID_SITEMERCADO" id="labelClienteIdMerc"></label>
                             <input asp-for="CLIENTID_SITEMERCADO" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="CLIENTSECRET_SITEMERCADO"></label>
+                            <label asp-for="CLIENTSECRET_SITEMERCADO" id="labelClienteSecret_SM"></label>
                             <input asp-for="CLIENTSECRET_SITEMERCADO" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="IDLOJA_SITEMARCADO"></label>
+                            <label asp-for="IDLOJA_SITEMARCADO" id="labelLojaSM"></label>
                             <input asp-for="IDLOJA_SITEMARCADO" class="form-control" />
                         </div>
                     </div>
@@ -128,17 +128,17 @@
                     <!-- =================== CNAE / CSC =================== -->
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="NUCNAE"></label>
+                            <label asp-for="NUCNAE" id="labelCnae"></label>
                             <input asp-for="NUCNAE" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="IDCSC"></label>
+                            <label asp-for="IDCSC" id="labelIdCsc"></label>
                             <input asp-for="IDCSC" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="CSC"></label>
+                            <label asp-for="CSC" id="labelCSC"></label>
                             <input asp-for="CSC" class="form-control" />
                         </div>
                     </div>
@@ -146,12 +146,12 @@
                     <!-- =================== TRIBUTAÇÃO =================== -->
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="NUREGJUNTACOM"></label>
+                            <label asp-for="NUREGJUNTACOM" id="labelJuntaCom"></label>
                             <input asp-for="NUREGJUNTACOM" class="form-control" />
                         </div>
 
                         <div class="col-md-4">
-                            <label asp-for="CRT"></label>
+                            <label asp-for="CRT" id="labelCrt"></label>
                             <select asp-for="CRT"
                                     asp-items="Html.GetEnumSelectList<ECodigoRegimeTributario>()"
                                     class="form-control"></select>
@@ -161,19 +161,19 @@
                     <!-- =================== DISTRIBUIÇÃO =================== -->
                     <div class="row">
                         <div class="col-md-6">
-                            <label asp-for="NMDISTRIBUIDORA"></label>
+                            <label asp-for="NMDISTRIBUIDORA" id="labelDistrib"></label>
                             <input asp-for="NMDISTRIBUIDORA" class="form-control" />
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="STLUCROPRESUMIDO"></label>
+                            <label asp-for="STLUCROPRESUMIDO" id="labelLucroPres"></label>
                             <select asp-for="STLUCROPRESUMIDO"
                                     asp-items="Html.GetEnumSelectList<ESimNao>()"
                                     class="form-control"></select>
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="STMICROEMPRESA"></label>
+                            <label asp-for="STMICROEMPRESA" id="labelMicroEmp"></label>
                             <select asp-for="STMICROEMPRESA"
                                     asp-items="Html.GetEnumSelectList<ESimNao>()"
                                     class="form-control"></select>
@@ -205,7 +205,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/local/empresaCreate.js"></script>
+    <script src="~/local/empresaEdit.js"></script>
 
     <script>
         $(document).ready(function () {

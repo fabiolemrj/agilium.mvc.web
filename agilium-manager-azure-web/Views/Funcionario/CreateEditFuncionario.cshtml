@@ -11,7 +11,7 @@
 <section class="barra-de-menu-principal">
     <div class="barra-de-botoes-menu-principal">
 
-        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action"></span></a>
         <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
 
         <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="TipoFuncionario" id="labelCapacidade"></label>
+                                <label asp-for="TipoFuncionario" id="labelTipoFunc"></label>
                                 <select asp-for="TipoFuncionario"
                                         asp-items="@Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ETipoFuncionario>()"
                                         class="form-control"></select>
@@ -96,7 +96,7 @@
                     <div class="row">
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label asp-for="Nome" id="labelCodigo"></label>
+                                <label asp-for="Nome" id="labelNome"></label>
                                 <input asp-for="Nome" class="form-control" size="70" />
                                 <span asp-validation-for="Nome" class="text-danger"></span>
                             </div>
@@ -112,14 +112,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="Documento" id="labelCpf"></label>
+                                <label asp-for="Documento" id="labelDocumento"></label>
                                 <input asp-for="Documento" class="form-control cpf" size="20" />
                                 <span asp-validation-for="Documento" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="DSRFID" id="labelCpf"></label>
+                                <label asp-for="DSRFID" id="labelRfid"></label>
                                 <input asp-for="DSRFID" class="form-control cpf" size="50" />
                                 <span asp-validation-for="DSRFID" class="text-danger"></span>
                             </div>
@@ -128,14 +128,14 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="Turno" id="labelCapacidade"></label>
+                                <label asp-for="Turno" id="labelTurno"></label>
                                 <input asp-for="Turno" class="form-control" size="20" />
                                 <span asp-validation-for="Turno" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="Noturno" id="labelCapacidade"></label>
+                                <label asp-for="Noturno" id="labelNoturno"></label>
                                 <select asp-for="Noturno"
                                         asp-items="@Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
                                         class="form-control"></select>
@@ -147,14 +147,14 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="DataAdmissao" id="labelCodigo"></label>
+                                <label asp-for="DataAdmissao" id="labelDtAdmissao"></label>
                                 <input asp-for="DataAdmissao" class="form-control" size="12" />
                                 <span asp-validation-for="DataAdmissao" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="DataDemissao" id="labelCodigo"></label>
+                                <label asp-for="DataDemissao" id="labelDtDemissao"></label>
                                 <input asp-for="DataDemissao" class="form-control" size="12" />
                                 <span asp-validation-for="DataDemissao" class="text-danger"></span>
                             </div>
@@ -162,7 +162,7 @@
                     </div>
                     <div class="row">
                         <div class="card  col-9">
-                            <div class="card-header">Usuario (Controle Acesso)</div>
+                            <div class="card-header" id="labelUsuario">Usuario (Controle Acesso)</div>
                             <div class="card-body">
                                 <div class="col-md-12">
                                     <div class="form-group">

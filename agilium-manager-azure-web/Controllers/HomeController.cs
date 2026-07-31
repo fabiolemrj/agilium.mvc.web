@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using agilium.webapp.manager.mvc.Models;
+using agilium.webapp.manager.mvc.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace agilium.webapp.manager.mvc.Controllers
@@ -14,8 +15,25 @@ namespace agilium.webapp.manager.mvc.Controllers
     public class HomeController : MainController
     {
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index([FromServices] IConfigServices configServices)
         {
+            ViewBag.LogoCliente = null;
+
+            var idEmpresa = ObterIdEmpresaSelecionada();
+            if (idEmpresa > 0)
+            {
+                try
+                {
+                    var configImagem = await configServices.ObterConfigImagemPorId(idEmpresa, "IMG_LOGO");
+                    if (configImagem?.IMG != null && configImagem.IMG.Length > 0)
+                        ViewBag.LogoCliente = Convert.ToBase64String(configImagem.IMG);
+                }
+                catch
+                {
+                    // fallback para logo padrão
+                }
+            }
+
             return View();
         }
 

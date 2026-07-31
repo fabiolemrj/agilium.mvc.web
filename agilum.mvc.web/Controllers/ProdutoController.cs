@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace agilum.mvc.web.Controllers
 {
@@ -1037,12 +1038,11 @@ namespace agilum.mvc.web.Controllers
                 var listaCodigoBaarras = ObterCodigoBarra(id).Result;
 
                 if (!listaCodigoBaarras.Any())
-                    NotificarErro("Produto n�o encontrado.");
-
-                if (!OperacaoValida())
                 {
-                    var msgErro = string.Join("\n\r", ObterNotificacoes("Produto", "Adicionar", "Web", "Produto"));
-                    AdicionarErroValidacao(msgErro);
+                    NotificarErro("Nenhum código de barras encontrado para este produto.");
+                    TempData["TipoMensagem"] = "warning";
+                    TempData["Titulo"] = "Produto";
+                    TempData["Mensagem"] = "Nenhum código de barras encontrado para este produto.";
                     return RedirectToAction("Index");
                 }
 
@@ -1083,12 +1083,23 @@ namespace agilum.mvc.web.Controllers
         [Route("codigo-barra")]
         public async Task<IActionResult> ListaCodigoBarra(long idProduto)
         {
+         
             var produto = Obter(idProduto.ToString()).Result;
+           
 
             ViewBag.NomeProduto = produto.Nome;
             ViewBag.idProduto = idProduto;
 
             var lista = ObterCodigoBarra(idProduto).Result;
+
+            if (lista == null || !lista.Any())
+            {
+                NotificarErro("Nenhum código de barras encontrado para este produto.");
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Produto";
+                TempData["Mensagem"] = "Nenhum código de barras encontrado para este produto.";
+                return RedirectToAction("Index");
+            }
 
             return View("_codigoBarra", lista);
         }
@@ -1205,6 +1216,15 @@ namespace agilum.mvc.web.Controllers
 
             var lista = _mapper.Map<List<ProdutoPrecoViewModel>>(_produtoService.ObterPrecoPorProduto(idProduto).Result);
 
+            if (lista == null || !lista.Any())
+            {
+                NotificarErro("Nenhum preço encontrado para este produto.");
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Produto";
+                TempData["Mensagem"] = "Nenhum preço encontrado para este produto.";
+                return RedirectToAction("Index");
+            }
+
             return View("_historicoPreco", lista);
         }
         #endregion
@@ -1220,6 +1240,15 @@ namespace agilum.mvc.web.Controllers
 
             var lista = ObterPreco(idProduto).Result;
 
+            if (lista == null || !lista.Any())
+            {
+                NotificarErro("Nenhum estoque encontrado para este produto.");
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Produto";
+                TempData["Mensagem"] = "Nenhum estoque encontrado para este produto.";
+                return RedirectToAction("Index");
+            }
+
             return View("_historicoEstoque", lista);
         }
         #endregion
@@ -1234,7 +1263,14 @@ namespace agilum.mvc.web.Controllers
             ViewBag.idProduto = idProduto;
 
             var lista = ObterHistoricoPorIdProduto(idProduto).Result;
-
+            if (lista == null || !lista.Any())
+            {
+                NotificarErro("Nenhum historico de estoque encontrado para este produto.");
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Produto";
+                TempData["Mensagem"] = "Nenhum historico de estoque  encontrado para este produto.";
+                return RedirectToAction("Index");
+            }
             return View("_historicoMovEstoque", lista);
         }
         #endregion
@@ -1593,6 +1629,15 @@ namespace agilum.mvc.web.Controllers
 
                      listaConvertida.Add(model);
                 });
+
+            if (listaConvertida == null || !listaConvertida.Any())
+            {
+                NotificarErro("Nenhuma foto encontrada para este produto.");
+                TempData["TipoMensagem"] = "warning";
+                TempData["Titulo"] = "Produto";
+                TempData["Mensagem"] = "Nenhuma foto encontrado para este produto.";
+                return RedirectToAction("Index");
+            }
 
             return View("_fotoProduto", listaConvertida);
         }

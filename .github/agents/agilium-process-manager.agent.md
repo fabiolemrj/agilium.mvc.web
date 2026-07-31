@@ -1,5 +1,5 @@
 ---
-name: process-manager
+name: agilium-process-manager
 
 description: Orquestrador principal da plataforma de agentes do Agilium Manager. Responsável por analisar solicitações, descobrir documentação e agentes especializados, resolver dependências, coordenar a execução e consolidar os resultados.
 

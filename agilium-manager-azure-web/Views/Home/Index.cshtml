@@ -5,6 +5,14 @@
 <vc:Summary></vc:Summary>
 <div class="text-center">
     <h1 class="display-4">Bem vindo</h1>
+    @if (!string.IsNullOrEmpty(ViewBag.LogoCliente))
+    {
+        <img src="data:image/png;base64,@ViewBag.LogoCliente" alt="Logo" class="home-logo" style="width:90%; height:50vh; object-fit:fill" />
+    }
+    else
+    {
+        <img src="~/Images/logo_v3c_SIMBOLO.png" alt="Agilium Manager" class="home-logo img-fluid" style="max-width:90%; max-height:50vh" />
+    }
     <p>AGILIUM MANAGER</p>
 </div>
 <script src="~/dist/plugins/jquery/jquery.min.js"></script>

@@ -117,10 +117,10 @@ namespace agilum.mvc.web.Controllers
             ViewBag.acao = "CreateFuncionario";
             if (!ModelState.IsValid) return View("CreateEditFuncionario", model);
 
-            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade ï¿½ obrigatï¿½rio");
 
 
             ValidarFuncionario(model);
@@ -156,7 +156,7 @@ namespace agilum.mvc.web.Controllers
             await _funcionarioService.Salvar();
             LogInformacao($"sucesso: {Deserializar(funcionario)}", "Funcionario", "Adicionar", null);
 
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -174,7 +174,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} não localizado";
+                var msgErro = $"{_nomeEntidade} nï¿½o localizado";
 
                 AdicionarErroValidacao(msgErro);
                 TempData["Erros"] = msgErro;
@@ -196,12 +196,12 @@ namespace agilum.mvc.web.Controllers
             ViewBag.operacao = "E";
             ViewBag.acao = "EditFuncionario";
 
-            if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
+            if (!ModelState.IsValid) return View("CreateEditFuncionario", model);
 
-            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf é obrigatório");
-            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade é obrigatório");
+            if (string.IsNullOrEmpty(model.Endereco.Logradouro)) AdicionarErroValidacao("Campo Logradouro ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Cep)) AdicionarErroValidacao("Campo Cep ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Uf)) AdicionarErroValidacao("Campo Uf ï¿½ obrigatï¿½rio");
+            if (string.IsNullOrEmpty(model.Endereco.Cidade)) AdicionarErroValidacao("Campo Cidade ï¿½ obrigatï¿½rio");
 
             if (!OperacaoValida())
                 View("CreateEditFuncionario", model);
@@ -229,7 +229,7 @@ namespace agilum.mvc.web.Controllers
             await _funcionarioService.Salvar();
             LogInformacao($"sucesso: {Deserializar(model)}", "Funcionario", "Atualizar", null);
 
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");
@@ -244,7 +244,7 @@ namespace agilum.mvc.web.Controllers
             var objeto = await Obter(id.ToString());
             if (objeto == null)
             {
-                var msgErro = $"{_nomeEntidade} não localizado";
+                var msgErro = $"{_nomeEntidade} nï¿½o localizado";
                 AdicionarErroValidacao(msgErro);
                 TempData["Mensagem"] = msgErro;
                 TempData["TipoMensagem"] = "danger";
@@ -277,7 +277,7 @@ namespace agilum.mvc.web.Controllers
             
             LogInformacao($"sucesso: {Deserializar(model)}", "Funcionario", "Excluir", null);
             
-            TempData["Mensagem"] = "Operação realizada com sucesso";
+            TempData["Mensagem"] = "Operaï¿½ï¿½o realizada com sucesso";
             TempData["TipoMensagem"] = "success";
 
             return RedirectToAction("Index");

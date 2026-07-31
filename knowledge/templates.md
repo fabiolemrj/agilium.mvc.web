@@ -71,6 +71,8 @@ prompt.md
 
 service.md
 
+system-mechanism-discovery.md
+
 test.md
 ```
 
@@ -298,6 +300,35 @@ docs/templates/prompt.md
 
 ---
 
+## System Mechanism Discovery
+
+Utilizado para documentar mecanismos transversais e funcionalidades internas descobertos via análise de código. Diferente do template de módulo (focado em negócio), este template foca em **mecanismos internos**: sistemas de ajuda, notificações, logging, caching, validação cross-cutting, etc.
+
+Conteúdo típico:
+
+- Arquitetura em camadas
+- Componentes envolvidos
+- Fluxo de execução
+- Distribuição no código (estatísticas)
+- API / Contrato de uso
+- Problemas conhecidos
+- Checklist de extensão
+- Referência rápida para agentes de IA
+
+Documentação:
+
+```text
+docs/templates/system-mechanism-discovery.md
+```
+
+Prompt de discovery:
+
+```text
+docs/prompts/system-mechanism-discovery.md
+```
+
+---
+
 ## Issue
 
 Utilizado para abertura de demandas.
@@ -353,6 +384,7 @@ docs/templates/pull-request.md
 | Novo serviço | Service |
 | Novos testes | Test |
 | Novo prompt | Prompt |
+| Descoberta de mecanismo interno | System Mechanism Discovery |
 | Nova demanda | Issue |
 | Revisão de código | Pull Request |
 

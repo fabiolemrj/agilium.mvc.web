@@ -78,6 +78,7 @@ Exemplos:
 - Levantamento funcional
 - Mapeamento de dependências
 - Identificação de impactos
+- Discovery de mecanismos internos (system-mechanism-discovery)
 
 Objetivo:
 

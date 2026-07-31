@@ -25,7 +25,6 @@ namespace agilum.mvc.web.ViewModels.Estoque
         [Range(0, double.MaxValue, ErrorMessage = "O valor de {0} deve ser maior que {1}")]
         public decimal Capacidade { get; set; }
         [Display(Name = "Situação")]
-        [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         public EAtivo? situacao { get; set; }
         public List<EmpresaViewModel> Empresas { get; set; } = new List<EmpresaViewModel> { };
     }

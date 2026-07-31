@@ -11,7 +11,7 @@
 <section class="barra-de-menu-principal">
     <div class="barra-de-botoes-menu-principal">
 
-        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action" id="btnReturn"></span></a>
+        <a href="javascript:history.go(-1)" type="button" as title="Voltar" id="btnVoltar"><span class="fas fa-reply sns-tool-action"></span></a>
         <a href="#" type="button" title="Salvar dados" id="btnSalvar"><span class="fa fa-save sns-tool-action"></span></a>
 
         <a href="#" title="Precisa de Ajuda?" id="btnAjuda"><span class="fa fa-question sns-tool-action"></span></a>
@@ -93,7 +93,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="PublicaEmail" id="labelativo"></label>
+                                <label asp-for="PublicaEmail" id="labelPublicaEmail"></label>
                                 <select asp-for="PublicaEmail"
                                         asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
                                         class="form-control"></select>
@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label asp-for="PublicaSMS" id="labelativo"></label>
+                                <label asp-for="PublicaSMS" id="labelPublicaSMS"></label>
                                 <select asp-for="PublicaSMS"
                                         asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.ESimNao>()"
                                         class="form-control"></select>
@@ -115,7 +115,7 @@
                         {                           
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label asp-for="Situacao" id="labelativo"></label>
+                                        <label asp-for="Situacao" id="labelSituacao"></label>
                                         <select asp-for="Situacao"
                                             asp-items="Html.GetEnumSelectList<agilium.webapp.manager.mvc.Enums.EAtivo>()"
                                                 class="form-control"></select>

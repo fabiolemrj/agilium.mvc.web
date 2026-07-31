@@ -5,14 +5,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Cep" class="control-label" id="labelCep"></label>
+                    <label asp-for="EnderecoEntrega.Cep" class="control-label" id="labelCepEntrega"></label>
                     <input asp-for="EnderecoEntrega.Cep" class="form-control cep entrega" />
                     <span asp-validation-for="EnderecoEntrega.Cep" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Logradouro" class="control-label" id="labelEndereco"></label>
+                    <label asp-for="EnderecoEntrega.Logradouro" class="control-label" id="labelLogradouroEntrega"></label>
                 <input asp-for="EnderecoEntrega.Logradouro" class="form-control Logradouro entrega" />
                     <span asp-validation-for="EnderecoEntrega.Logradouro" class="text-danger"></span>
                 </div>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Numero" class="control-label" id="labelNumero"></label>
+                    <label asp-for="EnderecoEntrega.Numero" class="control-label" id="labelNumeroEntrega"></label>
                 <input asp-for="EnderecoEntrega.Numero" class="form-control entrega" />
                     <span asp-validation-for="EnderecoEntrega.Numero" class="text-danger"></span>
                 </div>
@@ -29,7 +29,7 @@
 
             <div class="col-md-8">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Complemento" class="control-label" id="labelComplemento"></label>
+                    <label asp-for="EnderecoEntrega.Complemento" class="control-label" id="labelComplementoEntrega"></label>
                 <input asp-for="EnderecoEntrega.Complemento" class="form-control entrega" />
                     <span asp-validation-for="EnderecoEntrega.Complemento" class="text-danger"></span>
                 </div>
@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Bairro" class="control-label" id="labelBairro"></label>
+                    <label asp-for="EnderecoEntrega.Bairro" class="control-label" id="labelBairroEntrega"></label>
                 <input asp-for="EnderecoEntrega.Bairro" class="form-control Bairro entrega" />
                     <span asp-validation-for="EnderecoEntrega.Bairro" class="text-danger"></span>
                 </div>
@@ -48,14 +48,14 @@
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Cidade" class="control-label" id="labelCidade"></label>
+                    <label asp-for="EnderecoEntrega.Cidade" class="control-label" id="labelCidadeEntrega"></label>
                 <input asp-for="EnderecoEntrega.Cidade" class="form-control Cidade entrega" />
                     <span asp-validation-for="EnderecoEntrega.Cidade" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.Uf" class="control-label" id="labelUf"></label>
+                    <label asp-for="EnderecoEntrega.Uf" class="control-label" id="labelUfEntrega"></label>
                     <select asp-for="EnderecoEntrega.Uf"
                             asp-items="ViewBag.estados"
                         class="form-control Uf entrega"></select>
@@ -68,7 +68,7 @@
 
             <div class="col-md-10">
                 <div class="form-group">
-                    <label asp-for="EnderecoEntrega.PontoReferencia" class="control-label" id="labelPontoRef"></label>
+                    <label asp-for="EnderecoEntrega.PontoReferencia" class="control-label" id="labelPontoRefEntrega"></label>
                 <input asp-for="EnderecoEntrega.PontoReferencia" class="form-control entrega" />
                     <span asp-validation-for="EnderecoEntrega.PontoReferencia" class="text-danger"></span>
                 </div>

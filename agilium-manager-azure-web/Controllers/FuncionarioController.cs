@@ -130,7 +130,7 @@ namespace agilium.webapp.manager.mvc.Controllers
             ViewBag.operacao = "E";
             ViewBag.acao = "EditFuncionario";
 
-            if (!ModelState.IsValid) return View("CreateEditFornecedor", model);
+            if (!ModelState.IsValid) return View("CreateEditFuncionario", model);
 
             if (model.Endereco != null && model.Endereco.Id == null)
             {
